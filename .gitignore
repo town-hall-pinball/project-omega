@@ -1,0 +1,6 @@
+.coverage
+.vagrant
+build
+var
+*.pyc
+*.pyp
