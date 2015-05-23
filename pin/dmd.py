@@ -25,6 +25,7 @@ class DMD(object):
 
     def __init__(self):
         self.frame = pygame.Surface((p.dmd_width, p.dmd_height))
+        self.previous = pygame.Surface((p.dmd_width, p.dmd_height))
         self.standard = []
         self.interrupts = []
         self.overlays = []
@@ -47,12 +48,12 @@ class DMD(object):
         return pygame.PixelArray(frame)
 
     def render(self):
-        rendered = self.frame
+        self.frame, self.previous = self.previous, self.frame
         if len(self.interrupts) > 0:
-            rendered = self.interrupts[0].render()
+            self.interrupts[0].render(self.frame)
         elif len(self.standard) > 0:
-            rendered = self.standard[-1].render()
-        return rendered
+            self.standard[-1].render(self.frame)
+        return self.frame
 
 
 

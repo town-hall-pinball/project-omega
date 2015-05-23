@@ -31,7 +31,7 @@ class Engine(object):
     run_time = 0
     sleep_time = 0
     overruns = 0
-    fps = 40
+    fps = 35
 
     def __init__(self, handlers=None):
         self.log = logging.getLogger("pin.engine")
@@ -49,7 +49,7 @@ class Engine(object):
                 run = (self.run_time / self.loops) * 1000
                 sleep = (self.sleep_time / self.loops) * 1000
                 overruns = (float(self.overruns) / self.loops) * 100
-                self.log.info("run: {:.2f}fps, sleep: {:.0f}ms, late: {:.1f}%"
+                self.log.info("run: {:.2f}ms, sleep: {:.0f}ms, late: {:.1f}%"
                         .format(run, sleep, overruns))
 
     def loop(self):

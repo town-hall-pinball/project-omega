@@ -19,6 +19,8 @@
 # DEALINGS IN THE SOFTWARE.
 
 import pygame
+
+import p
 from . import display
 
 class DMD(object):
@@ -53,6 +55,9 @@ class DMD(object):
             (self.border_height * 2)
         )
         display.init(self.width, self.height)
+
+        self.dots = []
+        self.previous = pygame.Surface((p.dmd_width, p.dmd_height))
         self.invalidate()
 
     def invalidate(self):
@@ -68,21 +73,30 @@ class DMD(object):
         if self.debug:
             target.fill(0xffffff, pygame.Rect(0, 0, self.width, self.height))
 
-    def update(self, matrix):
-        source = pygame.PixelArray(matrix)
-        target = display.get()
-
-        for x in xrange(0, self.dot_width):
-            for y in xrange(0, self.dot_height):
-                index = source[x, y] & 0xf
+        for x in xrange(p.dmd_width):
+            self.dots += [[]]
+            for y in xrange(p.dmd_height):
                 px = (self.border_width + self.padding +
                         (self.padding + self.multiplier) * x)
                 py = (self.border_height + self.padding +
                         (self.padding + self.multiplier) * y)
                 rect = pygame.Rect(px, py, self.multiplier, self.multiplier)
-                target.fill(self.palette[index], rect)
-
+                self.dots[x] += [rect]
         pygame.display.update()
+
+    def update(self, frame):
+        source = pygame.PixelArray(frame)
+        previous = pygame.PixelArray(self.previous)
+        target = display.get()
+        updates = []
+        for x in xrange(0, self.dot_width):
+            for y in xrange(0, self.dot_height):
+                if source[x, y] != previous[x, y]:
+                    index = source[x, y] & 0xf
+                    target.fill(self.palette[index], self.dots[x][y])
+                    updates += [self.dots[x][y]]
+        pygame.display.update(updates)
+        self.previous = frame
 
 
     palettes = {

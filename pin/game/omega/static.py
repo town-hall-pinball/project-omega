@@ -35,11 +35,11 @@ class Mode(BaseMode):
     def start(self):
         p.dmd.add(self)
 
-    def render(self):
+    def render(self, frame):
+        dots = p.dmd.create_dots(frame)
         for x in xrange(0, p.dmd_width):
             for y in xrange(0, p.dmd_height):
-                self.dots[x, y] = random.choice((0x0, 0xf))
-        return self.frame
+                dots[x, y] = random.choice((0x0, 0xf))
 
 
 
