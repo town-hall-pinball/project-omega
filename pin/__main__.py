@@ -22,7 +22,7 @@ import argparse
 import logging
 import logging.handlers
 import os
-from . import brand, config, dmd, processor, virtual
+from . import brand, config, dmd, engine, keyboard, proc
 import p
 
 def parse_arguments():
@@ -43,7 +43,7 @@ def parse_arguments():
 
 def init_logging():
     log_file = os.path.join("var", "{}.log".format(brand.PROG))
-    log_format = "%(asctime)s [%(levelname)s]: %(message)s"
+    log_format = "%(asctime)s %(name)s: %(message)s"
     date_format = "%Y-%m-%d %H:%M:%S"
 
     formatter = logging.Formatter(log_format, date_format)
@@ -64,7 +64,7 @@ def init_logging():
 
 def init_proc():
     if p.options["simulate"]:
-        p.proc = virtual.PROC()
+        p.proc = proc.Virtual()
     else:
         from pinproc import PinPROC
         p.proc = PinPROC(p.platform["name"])
@@ -74,9 +74,9 @@ def init_proc():
 def init_machine():
     config.init()
     p.machine.init()
-    p.dmd = dmd.DMD()
+    p.dmd = dmd.Handler()
     if p.options["develop"]:
-        p.dmd_virtual = virtual.DMD()
+        p.dmd_virtual = dmd.Virtual()
     p.game.init()
 
 
@@ -90,8 +90,10 @@ def init():
 
 def run():
     init()
-    engine = processor.Engine()
-    engine.handlers += [processor.PROC()]
-    engine.run()
+    main = engine.Main()
+    main.handlers += [proc.Handler()]
+    if p.options["develop"]:
+        main.handlers += [keyboard]
+    main.run()
 
 run()

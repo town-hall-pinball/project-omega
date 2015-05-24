@@ -18,10 +18,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame
+from pin import keyboard
 
-def init(width, height):
-    pygame.display.set_mode([width, height])
+def init():
+    keyboard.register({
+        "a": keyboard.event("foo")
+    })
 
-def get():
-    return pygame.display.get_surface()

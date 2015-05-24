@@ -23,7 +23,7 @@ import logging
 
 import p
 
-class Engine(object):
+class Main(object):
 
     handlers = None
     exit = False
@@ -73,19 +73,5 @@ class Engine(object):
             time.sleep(remaining)
 
 
-class PROC(object):
-
-    DMD_READY = 5
-
-    def __init__(self):
-        pass
-
-    def handle(self):
-        events = p.proc.get_events()
-        for event in events:
-            if event["type"] == self.DMD_READY:
-                frame = p.dmd.render()
-                if p.dmd_virtual:
-                    p.dmd_virtual.update(frame)
 
 

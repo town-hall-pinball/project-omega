@@ -18,5 +18,43 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .dmd import *
-from .proc import *
+import logging
+import pygame
+import pygame.locals
+
+import p
+
+log = logging.getLogger("pin.keyboard")
+keys = {}
+
+def handle():
+    for event in pygame.event.get():
+        if event.type == pygame.locals.KEYDOWN:
+            name = pygame.key.name(event.key)
+            log.debug("down: {}".format(name))
+            if name in keys:
+                keys[name]["down"]()
+        elif event.type == pygame.locals.KEYUP:
+            name = pygame.key.name(event.key)
+            log.debug("up  : {}".format(name))
+            if name in keys:
+                keys[name]["up"]()
+
+
+def event(name, *args, **kwargs):
+    def post():
+        p.events.post(name, *args, **kwargs)
+
+    return {
+        "down": post,
+        "up": lambda : None,
+    }
+
+def register(config):
+    for key, function in config.items():
+        if key in keys:
+            raise ValueError("Duplicate key mapping: {}".format(key))
+        keys[key] = function
+
+
+

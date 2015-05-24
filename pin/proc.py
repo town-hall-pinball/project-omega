@@ -18,9 +18,25 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-class PROC(object):
+import p
 
-    DMD_READY = 5
+DMD_READY = 5
+
+class Handler(object):
+
+    def __init__(self):
+        pass
+
+    def handle(self):
+        events = p.proc.get_events()
+        for event in events:
+            if event["type"] == DMD_READY:
+                frame = p.dmd.render()
+                if p.dmd_virtual:
+                    p.dmd_virtual.update(frame)
+
+
+class Virtual(object):
 
     def __init__(self):
         pass
@@ -30,5 +46,5 @@ class PROC(object):
 
     def get_events(self):
         return [
-            { "type": self.DMD_READY }
+            { "type": DMD_READY }
         ]

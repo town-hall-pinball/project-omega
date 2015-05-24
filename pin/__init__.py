@@ -18,4 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
+
 from .mode import BaseMode
+
+#logging.getLogger("pin.event").setLevel(logging.DEBUG)
+#logging.getLogger("pin.keyboard").setLevel(logging.DEBUG)
