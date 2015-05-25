@@ -18,5 +18,12 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .counter import *
-from .events import *
+import random
+import pygame
+
+from pin import dmd, events
+from pin.render import static
+
+def start():
+    dmd.add(static.render)
+

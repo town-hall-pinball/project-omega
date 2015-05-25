@@ -18,8 +18,52 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import coils, switches
+class Handler(object):
 
-def init():
-    coils.init()
-    switches.init()
+    def __init__(self):
+        self.name = None
+        self.setup()
+        self.listeners = {}
+        self.enabled = False
+
+    def setup(self):
+        pass
+
+    def on(self, event, listener):
+        if event in self.listeners:
+            raise ValueError("Listener already registered for {}"
+                    .format(event))
+        self.listeners[event] = listener
+        if self.active:
+            p.events.on(event, listener)
+
+    def off(self, event, listener):
+        self.listeners.remove(event)
+        p.events.off(event, listener)
+
+    def enable(self):
+        if self.enabled:
+            return
+        for event, listener in self.listeners.items():
+            p.events.on(event, listener)
+        self.start()
+
+    def start(self):
+        pass
+
+    def disable(self):
+        if not self.enabled:
+            return
+        for event, listener in self.listeners.items():
+            p.events.off(event, listener)
+        self.stop()
+
+    def stop(self):
+        pass
+
+    def render(self, frame):
+        pass
+
+
+
+

@@ -20,58 +20,54 @@
 
 import time
 import logging
+import pin
 
-import p
+processors = []
+exit = False
+loops = 0
+run_time = 0
+sleep_time = 0
+overruns = 0
+fps = 35
 
-class Main(object):
+log = logging.getLogger("pin.engine")
 
-    handlers = None
-    exit = False
-    loops = 0
-    run_time = 0
-    sleep_time = 0
-    overruns = 0
-    fps = 35
+def run():
+    try:
+        pin.events.post("reset")
+        while not exit:
+            frame()
+    except KeyboardInterrupt as ki:
+        pass
+    finally:
+        if pin.options["metrics"] and loops > 0:
+            run = (run_time / loops) * 1000
+            sleep = (sleep_time / loops) * 1000
+            overruns = (float(overruns) / loops) * 100
+            log.info("run: {:.2f}ms, sleep: {:.0f}ms, late: {:.1f}%"
+                    .format(run, sleep, overruns))
 
-    def __init__(self, handlers=None):
-        self.log = logging.getLogger("pin.engine")
-        self.handlers = handlers or []
+def frame():
+    start = time.time()
+    pin.now = start
+    max_time = 1.0 / fps
+    for processor in processors:
+        processor.process()
+    elapsed = time.time() - start
+    remaining = max_time - elapsed
+    pin.events.dispatch()
 
-    def run(self):
-        try:
-            p.events.post("reset")
-            while not self.exit:
-                self.loop()
-        except KeyboardInterrupt as ki:
-            pass
-        finally:
-            if p.options["metrics"] and self.loops > 0:
-                run = (self.run_time / self.loops) * 1000
-                sleep = (self.sleep_time / self.loops) * 1000
-                overruns = (float(self.overruns) / self.loops) * 100
-                self.log.info("run: {:.2f}ms, sleep: {:.0f}ms, late: {:.1f}%"
-                        .format(run, sleep, overruns))
-
-    def loop(self):
-        start = time.time()
-        p.now = start
-        max_time = 1.0 / self.fps
-        for handler in self.handlers:
-            handler.handle()
-        elapsed = time.time() - start
-        remaining = max_time - elapsed
-        p.events.dispatch()
-
-        if p.options["metrics"]:
-            self.loops += 1
-            self.run_time += elapsed
-            if elapsed > max_time:
-                self.overruns += 1
-            if remaining > 0:
-                self.sleep_time += remaining
-
+    if pin.options["metrics"]:
+        global loops, run_time, overruns, sleep_time
+        loops += 1
+        run_time += elapsed
+        if elapsed > max_time:
+            overruns += 1
         if remaining > 0:
-            time.sleep(remaining)
+            sleep_time += remaining
+
+    if remaining > 0:
+        time.sleep(remaining)
 
 
 

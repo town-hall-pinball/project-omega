@@ -15,13 +15,13 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-# DEALINGS IN THE SOFTWARE.
+# FROM, OUT OF OR IN CONNECTION WITH TH
 
-class Counter(object):
+import random
+from pin import dmd
 
-    ident = 0
-
-    def next(self):
-        self.ident += 1
-        return self.ident
+def render(frame):
+    dots = dmd.create_dots(frame)
+    for x in xrange(0, dmd.width):
+        for y in xrange(0, dmd.height):
+            dots[x, y] = random.choice((0x0, 0xf))

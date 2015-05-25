@@ -20,7 +20,7 @@
 
 import pygame
 import p
-from pin import keyboard
+from pin import events, keyboard
 
 from mock import Mock, patch
 import unittest
@@ -36,16 +36,16 @@ class TestKeyboard(unittest.TestCase):
 
     @patch("pygame.event.get")
     @patch("pygame.key.name")
-    def test_event(self, name, events):
+    def test_event(self, name, keys):
         name.return_value = "a"
-        events.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {
+        keys.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {
             "key": pygame.locals.K_a,
         })]
         listener = Mock()
-        p.events.on("a_event", listener)
+        events.on("a_event", listener)
         keyboard.register({"a": keyboard.event("a_event", foo=1)})
         keyboard.handle()
-        p.events.dispatch()
+        events.dispatch()
         listener.assert_called_with(foo=1)
 
     @patch("pygame.event.get")
@@ -56,9 +56,9 @@ class TestKeyboard(unittest.TestCase):
             "key": pygame.locals.K_a,
         })]
         listener = Mock()
-        p.events.on("a_event", listener)
+        events.on("a_event", listener)
         keyboard.register({"a": keyboard.event("a_event")})
         keyboard.clear()
         keyboard.handle()
-        p.events.dispatch()
+        events.dispatch()
         self.assertFalse(listener.called)

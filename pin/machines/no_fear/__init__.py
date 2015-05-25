@@ -18,9 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import keyboard, static
+from . import coils, keyboard, switches
 
 def init():
+    coils.init()
     keyboard.init()
-    static.Mode()
-
+    switches.init()

@@ -60,8 +60,8 @@ def doc():
 @task
 def clean():
     removes = (
-        ("pinlib", "*.pyc"),
-        ("pinlib", "*.pyo"),
+        ("pin", "*.pyc"),
+        ("pin", "*.pyo"),
         ("tests", "*.pyc"),
         ("tests", "*.pyo")
     )

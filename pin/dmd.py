@@ -19,7 +19,6 @@
 # DEALINGS IN THE SOFTWARE.
 
 import pygame
-import p
 
 width = 128
 height = 32
@@ -52,9 +51,9 @@ def render():
     global frame, previous
     frame, previous = previous, frame
     if len(interrupts) > 0:
-        interrupts[0].render(frame)
+        interrupts[0](frame)
     elif len(standard) > 0:
-        standard[-1].render(frame)
+        standard[-1](frame)
     return frame
 
 

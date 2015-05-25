@@ -18,7 +18,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
+from pin import platform
+
+switches = {}
+coils = {}
 
 class Device(object):
 
@@ -38,14 +41,14 @@ class Coil(Driver):
 
     def __init__(self, name, **config):
         super(Coil, self).__init__(name, **config)
-        self.number = p.platform["map"]["coils"][self.device]
+        self.number = platform.coils[self.device]
 
 
 class Switch(Device):
 
     def __init__(self, name, **config):
         super(Switch, self).__init__(name, **config)
-        self.number = p.platform["map"]["switches"][self.device]
+        self.number = platform.switches[self.device]
         self.debounce = self.number < 192
 
     def enable(self, enable=True):
@@ -66,9 +69,9 @@ class Switch(Device):
 
 def add_switches(configs):
     for name, config in configs.items():
-        p.switches[name] = Switch(name, **config)
+        switches[name] = Switch(name, **config)
 
 def add_coils(configs):
     for name, config in configs.items():
-        p.coils[name] = Coil(name, **config)
+        coils[name] = Coil(name, **config)
 

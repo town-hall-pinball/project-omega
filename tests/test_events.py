@@ -21,45 +21,46 @@
 from mock import Mock
 import unittest
 
-from pin.util import Events
+from pin import events
 
 class TestEvents(unittest.TestCase):
 
     def setUp(self):
-        self.events = Events()
+        events.reset()
+
+    def tearDown(self):
+        events.reset()
 
     def test_on(self):
         listener = Mock()
-        self.events.on("foo", listener)
-        self.events.post("foo")
-        self.events.dispatch()
+        events.on("foo", listener)
+        events.post("foo")
+        events.dispatch()
         self.assertTrue(listener.called)
 
     def test_off(self):
         listener = Mock()
-        self.events.on("foo", listener)
-        self.events.post("foo")
-        self.events.dispatch()
-        self.events.off("foo", listener)
-        self.events.post("foo")
-        self.events.dispatch()
+        events.on("foo", listener)
+        events.post("foo")
+        events.dispatch()
+        events.off("foo", listener)
+        events.post("foo")
+        events.dispatch()
         self.assertEquals(1, listener.call_count)
 
     def test_multiple_dispatch(self):
         listener1 = Mock()
         listener2 = Mock()
-        self.events.on("foo", listener1)
-        self.events.on("foo", listener2)
-        self.events.post("foo")
-        self.events.dispatch()
+        events.on("foo", listener1)
+        events.on("foo", listener2)
+        events.post("foo")
+        events.dispatch()
         self.assertTrue(listener1.called)
         self.assertTrue(listener2.called)
 
     def test_arguments(self):
         listener = Mock()
-        self.events.on("foo", listener)
-        self.events.post("foo", 1, bar=2)
-        self.events.dispatch()
+        events.on("foo", listener)
+        events.post("foo", 1, bar=2)
+        events.dispatch()
         listener.assert_called_with(1, bar=2)
-
-

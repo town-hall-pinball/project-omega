@@ -18,17 +18,18 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import dmd
+import pin
 from pin.virtual import dmd as virtual_dmd
 
 DMD_READY = 5
 
-def handle():
-    events = p.proc.get_events()
+api = None
+
+def process():
+    events = api.get_events()
     for event in events:
         if event["type"] == DMD_READY:
-            frame = dmd.render()
-            if p.options["virtual"]:
+            frame = pin.dmd.render()
+            if pin.options["virtual"]:
                 virtual_dmd.update(frame)
 

@@ -18,59 +18,11 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.util import Events
+class Counter(object):
 
+    ident = 0
 
-events = Events()
-"""
-Global :class:`pin.util.Events` queue
-"""
-
-coils = {}
-"""
-Dictionary of coils/solienoids, keyed by device name.
-"""
-
-dmd = None
-
-game = None
-"""
-TODO
-"""
-
-options = None
-"""
-Dictionary of command line options used when invoking the program, keyed
-by option name.
-"""
-
-machine = None
-"""
-TODO
-"""
-
-modes = {}
-"""
-TODO
-"""
-
-now = 0
-"""
-TODO
-"""
-
-platform = None
-"""
-TODO
-"""
-
-switches = {}
-"""
-Dictionary of switches, keyed by device name.
-"""
-
-timers = None
-"""
-TODO
-"""
+    def next(self):
+        self.ident += 1
+        return self.ident
 

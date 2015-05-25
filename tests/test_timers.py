@@ -18,8 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import timers
+import pin
 
 import unittest
 from mock import Mock
@@ -27,29 +26,29 @@ from mock import Mock
 class TestTimers(unittest.TestCase):
 
     def setUp(self):
-        p.now = 0
+        pin.now = 0
 
     def test_set_called(self):
         callback = Mock()
         timers.set(1.0, callback)
-        p.now = 2.0
+        pin.now = 2.0
         timers.handle()
         self.assertTrue(callback.called)
 
     def test_set_not_called(self):
         callback = Mock()
         timers.set(1.0, callback)
-        p.now = 0.5
+        pin.now = 0.5
         timers.handle()
         self.assertFalse(callback.called)
 
     def test_set_not_called_twice(self):
         callback = Mock()
         timers.set(1.0, callback)
-        p.now = 2.0
+        pin.now = 2.0
         timers.handle()
         self.assertEquals(1, callback.call_count)
-        p.now = 3.0
+        pin.now = 3.0
         timers.handle()
         self.assertEquals(1, callback.call_count)
 
@@ -59,7 +58,7 @@ class TestTimers(unittest.TestCase):
         ident2 = timers.tick(callback)
         timers.clear(ident1)
         timers.clear(ident2)
-        p.now = 2.0
+        pin.now = 2.0
         timers.handle()
         self.assertFalse(callback.called)
 

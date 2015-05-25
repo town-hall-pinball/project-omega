@@ -18,7 +18,6 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
 from pin import util
 
 counter = util.Counter()
@@ -58,7 +57,7 @@ def clear(ident):
     if ident in tickers:
         del tickers[ident]
 
-def handle():
+def service():
     """
     Service all active timers.
     """
@@ -69,3 +68,10 @@ def handle():
                 timer["callback"]()
     for ticker in tickers.values():
         ticker()
+
+
+def process():
+    """
+    Called by the main processor on each loop to service all timers.
+    """
+    service()

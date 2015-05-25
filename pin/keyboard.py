@@ -22,12 +22,12 @@ import logging
 import pygame
 import pygame.locals
 
-import p
+from pin import events
 
 log = logging.getLogger("pin.keyboard")
 keys = {}
 
-def handle():
+def process():
     for event in pygame.event.get():
         if event.type == pygame.locals.KEYDOWN:
             name = pygame.key.name(event.key)
@@ -43,7 +43,7 @@ def handle():
 
 def event(name, *args, **kwargs):
     def post():
-        p.events.post(name, *args, **kwargs)
+        events.post(name, *args, **kwargs)
 
     return {
         "down": post,
