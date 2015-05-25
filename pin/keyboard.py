@@ -30,6 +30,7 @@ keys = {}
 def handle():
     for event in pygame.event.get():
         if event.type == pygame.locals.KEYDOWN:
+            print event.key
             name = pygame.key.name(event.key)
             log.debug("down: {}".format(name))
             if name in keys:
@@ -55,6 +56,10 @@ def register(config):
         if key in keys:
             raise ValueError("Duplicate key mapping: {}".format(key))
         keys[key] = function
+
+def clear():
+    keys.clear()
+
 
 
 

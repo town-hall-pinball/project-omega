@@ -23,4 +23,4 @@ import logging
 from .mode import BaseMode
 
 #logging.getLogger("pin.event").setLevel(logging.DEBUG)
-#logging.getLogger("pin.keyboard").setLevel(logging.DEBUG)
+logging.getLogger("pin.keyboard").setLevel(logging.DEBUG)

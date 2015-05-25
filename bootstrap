@@ -27,7 +27,7 @@ NAME="project-omega"
 apt-get update
 apt-get install -y curl git python-dev
 
-sudo pip install \
+pip install \
     coverage \
     docutils \
     mock \
