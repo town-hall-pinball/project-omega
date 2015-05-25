@@ -19,32 +19,16 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
+from pin import dmd
+from pin.virtual import dmd as virtual_dmd
 
 DMD_READY = 5
 
-class Handler(object):
+def handle():
+    events = p.proc.get_events()
+    for event in events:
+        if event["type"] == DMD_READY:
+            frame = dmd.render()
+            if p.options["virtual"]:
+                virtual_dmd.update(frame)
 
-    def __init__(self):
-        pass
-
-    def handle(self):
-        events = p.proc.get_events()
-        for event in events:
-            if event["type"] == DMD_READY:
-                frame = p.dmd.render()
-                if p.dmd_virtual:
-                    p.dmd_virtual.update(frame)
-
-
-class Virtual(object):
-
-    def __init__(self):
-        pass
-
-    def reset(self, *args, **kwargs):
-        pass
-
-    def get_events(self):
-        return [
-            { "type": DMD_READY }
-        ]

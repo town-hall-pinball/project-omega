@@ -23,6 +23,7 @@ import logging
 import logging.handlers
 import os
 from . import brand, config, dmd, engine, keyboard, proc, timers
+from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
 import p
 
 def parse_arguments():
@@ -39,7 +40,7 @@ def parse_arguments():
     p.options = vars(parser.parse_args())
     if p.options["develop"]:
         p.options["console"] = True
-
+        p.options["virtual"] = True
 
 def init_logging():
     log_file = os.path.join("var", "{}.log".format(brand.PROG))
@@ -64,7 +65,7 @@ def init_logging():
 
 def init_proc():
     if p.options["simulate"]:
-        p.proc = proc.Virtual()
+        p.proc = virtual_proc
     else:
         from pinproc import PinPROC
         p.proc = PinPROC(p.platform["name"])
@@ -74,9 +75,9 @@ def init_proc():
 def init_machine():
     config.init()
     p.machine.init()
-    p.dmd = dmd.Handler()
-    if p.options["develop"]:
-        p.dmd_virtual = dmd.Virtual()
+    p.dmd = dmd
+    if p.options["virtual"]:
+        virtual_dmd.init()
     p.game.init()
     p.timers = timers
 
@@ -92,7 +93,7 @@ def init():
 def run():
     init()
     main = engine.Main()
-    main.handlers += [proc.Handler()]
+    main.handlers += [proc]
     main.handlers += [timers]
     if p.options["develop"]:
         main.handlers += [keyboard]

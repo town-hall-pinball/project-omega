@@ -18,59 +18,12 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.util import Events
+from pin import proc
 
+def reset(*args, **kwargs):
+    pass
 
-events = Events()
-"""
-Global :class:`pin.util.Events` queue
-"""
-
-coils = {}
-"""
-Dictionary of coils/solienoids, keyed by device name.
-"""
-
-dmd = None
-
-game = None
-"""
-TODO
-"""
-
-options = None
-"""
-Dictionary of command line options used when invoking the program, keyed
-by option name.
-"""
-
-machine = None
-"""
-TODO
-"""
-
-modes = {}
-"""
-TODO
-"""
-
-now = 0
-"""
-TODO
-"""
-
-platform = None
-"""
-TODO
-"""
-
-switches = {}
-"""
-Dictionary of switches, keyed by device name.
-"""
-
-timers = None
-"""
-TODO
-"""
-
+def get_events():
+    return [
+        { "type": proc.DMD_READY }
+    ]
