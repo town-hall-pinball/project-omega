@@ -18,5 +18,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .counter import *
-from .events import *
+class Counter(object):
+
+    ident = 0
+
+    def next(self):
+        self.ident += 1
+        return self.ident

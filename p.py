@@ -72,6 +72,11 @@ modes = {}
 TODO
 """
 
+now = 0
+"""
+TODO
+"""
+
 platform = None
 """
 TODO
@@ -81,3 +86,9 @@ switches = {}
 """
 Dictionary of switches, keyed by device name.
 """
+
+timers = None
+"""
+TODO
+"""
+

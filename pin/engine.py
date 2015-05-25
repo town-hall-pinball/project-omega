@@ -54,6 +54,7 @@ class Main(object):
 
     def loop(self):
         start = time.time()
+        p.now = start
         max_time = 1.0 / self.fps
         for handler in self.handlers:
             handler.handle()

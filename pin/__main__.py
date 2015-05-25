@@ -22,7 +22,7 @@ import argparse
 import logging
 import logging.handlers
 import os
-from . import brand, config, dmd, engine, keyboard, proc
+from . import brand, config, dmd, engine, keyboard, proc, timers
 import p
 
 def parse_arguments():
@@ -78,6 +78,7 @@ def init_machine():
     if p.options["develop"]:
         p.dmd_virtual = dmd.Virtual()
     p.game.init()
+    p.timers = timers
 
 
 def init():
@@ -92,6 +93,7 @@ def run():
     init()
     main = engine.Main()
     main.handlers += [proc.Handler()]
+    main.handlers += [timers]
     if p.options["develop"]:
         main.handlers += [keyboard]
     main.run()

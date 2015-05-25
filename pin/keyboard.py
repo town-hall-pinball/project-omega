@@ -30,7 +30,6 @@ keys = {}
 def handle():
     for event in pygame.event.get():
         if event.type == pygame.locals.KEYDOWN:
-            print event.key
             name = pygame.key.name(event.key)
             log.debug("down: {}".format(name))
             if name in keys:
