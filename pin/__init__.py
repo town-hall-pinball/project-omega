@@ -21,12 +21,13 @@
 import logging
 
 from . import brand, engine, events, keyboard, modes, proc, timers
+from .resources import *
 
-from .mode import BaseMode
 from .platforms import wpc as platform
 
-options = []
+options = {}
 now = 0
 
 #logging.getLogger("pin.event").setLevel(logging.DEBUG)
-logging.getLogger("pin.keyboard").setLevel(logging.DEBUG)
+#logging.getLogger("pin.keyboard").setLevel(logging.DEBUG)
+logging.getLogger("pin.resources").setLevel(logging.DEBUG)

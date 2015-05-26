@@ -94,10 +94,10 @@ def run():
     init()
     pin.modes.init()
     if pin.options["develop"]:
-        pin.engine.processors += [pin.keyboard]
-    pin.engine.processors += [pin.proc]
-    pin.engine.processors += [pin.timers]
-    pin.engine.processors += [pin.events]
+        pin.engine.processors += [pin.keyboard.process]
+    pin.engine.processors += [pin.proc.process]
+    pin.engine.processors += [pin.timers.process]
+    pin.engine.processors += [pin.events.process]
     pin.engine.run()
 
 run()

@@ -6,8 +6,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   api/p
-   api/pin/util
+   api/pin/engine
+   api/pin/events
+   api/pin/timers
+   api/pin/virtual/dmd
 
 
 Indices and tables

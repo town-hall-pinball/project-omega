@@ -19,6 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import pin
+from pin import timers
 
 import unittest
 from mock import Mock
@@ -32,24 +33,24 @@ class TestTimers(unittest.TestCase):
         callback = Mock()
         timers.set(1.0, callback)
         pin.now = 2.0
-        timers.handle()
+        timers.process()
         self.assertTrue(callback.called)
 
     def test_set_not_called(self):
         callback = Mock()
         timers.set(1.0, callback)
         pin.now = 0.5
-        timers.handle()
+        timers.process()
         self.assertFalse(callback.called)
 
     def test_set_not_called_twice(self):
         callback = Mock()
         timers.set(1.0, callback)
         pin.now = 2.0
-        timers.handle()
+        timers.process()
         self.assertEquals(1, callback.call_count)
         pin.now = 3.0
-        timers.handle()
+        timers.process()
         self.assertEquals(1, callback.call_count)
 
     def test_clear(self):
@@ -59,12 +60,12 @@ class TestTimers(unittest.TestCase):
         timers.clear(ident1)
         timers.clear(ident2)
         pin.now = 2.0
-        timers.handle()
+        timers.process()
         self.assertFalse(callback.called)
 
     def test_tick(self):
         callback = Mock()
         timers.tick(callback)
-        timers.handle()
-        timers.handle()
+        timers.process()
+        timers.process()
         self.assertEquals(2, callback.call_count)

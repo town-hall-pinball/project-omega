@@ -19,7 +19,17 @@
 # DEALINGS IN THE SOFTWARE.
 
 PROG = "pingame"
-NAME = "Project Omega"
-VERSION = "0.0.0"
+"""
+Name used on the command line to invoke this program.
+"""
 
+NAME = "Project Omega"
+"""
+Offical name of this game.
+"""
+
+VERSION = "0.0.0"
+"""
+Version string.
+"""
 

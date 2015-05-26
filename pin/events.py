@@ -20,7 +20,7 @@
 
 import logging
 
-__all__ = ["on", "off", "post", "dispatch", "service", "reset"]
+__all__ = ["on", "off", "post", "dispatch", "process", "reset"]
 
 listeners = {}
 queue = []
@@ -69,11 +69,15 @@ def dispatch():
 
 def process():
     """
-    Called by the main processor on eacn loop dispatch all events in the queue.
+    Called by the main processor on each loop to dispatch all events in the
+    queue.
     """
     dispatch()
 
 def reset():
+    """
+    Removes all registered listeners and clears the event queue.
+    """
     global listeners, queue
     listeners = {}
     queue = []

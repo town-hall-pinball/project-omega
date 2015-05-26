@@ -18,6 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import pin
 from pin import util
 
 counter = util.Counter()
@@ -33,7 +34,7 @@ def set(duration, callback):
     ident = counter.next()
     active[ident] = {
         "duration": duration,
-        "end": p.now + duration,
+        "end": pin.now + duration,
         "callback": callback
     }
     return ident
@@ -63,7 +64,7 @@ def service():
     """
     if len(active) > 0:
         for ident, timer in active.items():
-            if p.now > timer["end"] and ident in active:
+            if pin.now > timer["end"] and ident in active:
                 del active[ident]
                 timer["callback"]()
     for ticker in tickers.values():

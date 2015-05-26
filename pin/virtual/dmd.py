@@ -24,13 +24,45 @@ from pin import dmd
 from pin.virtual import palettes
 
 multiplier = 4
+"""
+Each dot in the virutal displayed is multiplied by this number of pixels.
+"""
+
 background_color = [0, 0, 0]
+"""
+Background color as a list of red, green, and blue values between 0 and 255.
+"""
+
 border_color = [80, 80, 80]
+"""
+Border color as a list of red, green, and blue values between 0 and 255.
+"""
+
 border_width = 20
+"""
+Width of the border in pixels.
+"""
+
 border_height = 20
+"""
+Height of the border in pixels.
+"""
+
 x_padding = 1
+"""
+Padding, in pixels, between each dot in the horizontal direction.
+"""
+
 y_padding = 1
+"""
+Padding, in pixels, between each dot in the vertical direction.
+"""
+
 palette = palettes.orange
+"""
+An array that maps DMD brightness values (0 - 15) to RGB values for
+the virtual display.
+"""
 
 width = 0
 height = 0
@@ -38,9 +70,16 @@ dots = []
 previous = pygame.Surface((dmd.width, dmd.height))
 
 def init():
+    """
+    Creates and displays the virtual dot-matrix display.
+    """
     invalidate()
 
 def invalidate():
+    """
+    Call this function to invalidate the display when any of the styling
+    parameters have changed.
+    """
     global width, height, dots
     width = (
         (dmd.width * multiplier) +
@@ -75,6 +114,9 @@ def invalidate():
     pygame.display.update()
 
 def update(frame):
+    """
+    Update the virtual dot-matrix display to show the contents of `frame`.
+    """
     global previous
     source = pygame.PixelArray(frame)
     previous = pygame.PixelArray(previous)

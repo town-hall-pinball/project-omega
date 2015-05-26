@@ -19,15 +19,9 @@
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THE SOFTWARE.
 
-=============================
-:mod:`pin.util` --- Utilities
-=============================
+=====================================================
+:mod:`pin.virtual.dmd` --- Virtual Dot-Matrix Display
+=====================================================
 
-.. module:: pin.util
-
-
-Events
-------
-
-.. autoclass:: Events
+.. automodule:: pin.virtual.dmd
    :members:

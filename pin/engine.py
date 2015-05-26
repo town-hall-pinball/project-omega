@@ -22,17 +22,70 @@ import time
 import logging
 import pin
 
+__all__ = [
+    "processors", "fps", "exit", "loops", "run_time", "sleep_time",
+    "overruns", "run"
+]
+
 processors = []
-exit = False
-loops = 0
-run_time = 0
-sleep_time = 0
-overruns = 0
+"""
+Functions invoked on each run loop.
+"""
+
 fps = 35
+"""
+Number of loops per second that the engine should execute. If a loop
+completes early, the engine sleeps for the remaining time. If a loop
+completes late, the engine starts the next loop immediately.
+"""
+
+exit = False
+"""
+If `True`, the engine will exit after the current loop completes.
+"""
+
+loops = 0
+"""
+Number of loops exceuted. This value is only updated when starting the
+program with the ``--metrics`` option.
+"""
+
+run_time = 0
+"""
+Average time, in milliseconds, spent in the run loop. This value is only
+updated when starting the program with the ``--metrics`` option.
+"""
+
+sleep_time = 0
+"""
+Average time, in milliseconds, spent sleeping after executing the run loop.
+This value is only updated when starting the program with the ``--metrics``
+option.
+"""
+
+overruns = 0
+"""
+Total number of times the run loop was late.
+"""
 
 log = logging.getLogger("pin.engine")
 
+def reset():
+    """
+    Clears the processor run list and resets all metrics.
+    """
+    global processors, exit, loops, run_time, overruns, sleep_time
+    processors = []
+    exit = False
+    loops = 0
+    run_time = 0
+    overruns = 0
+    sleep_time = 0
+
 def run():
+    """
+    Executes the run loop until `exit` is `True` or an exception is raised.
+    """
     try:
         pin.events.post("reset")
         while not exit:
@@ -40,24 +93,25 @@ def run():
     except KeyboardInterrupt as ki:
         pass
     finally:
-        if pin.options["metrics"] and loops > 0:
+        metrics = pin.options.get("metrics", False)
+        if metrics and loops > 0:
             run = (run_time / loops) * 1000
             sleep = (sleep_time / loops) * 1000
-            overruns = (float(overruns) / loops) * 100
+            late = (float(overruns) / loops) * 100
             log.info("run: {:.2f}ms, sleep: {:.0f}ms, late: {:.1f}%"
-                    .format(run, sleep, overruns))
+                    .format(run, sleep, late))
 
 def frame():
     start = time.time()
     pin.now = start
     max_time = 1.0 / fps
     for processor in processors:
-        processor.process()
+        processor()
     elapsed = time.time() - start
     remaining = max_time - elapsed
-    pin.events.dispatch()
 
-    if pin.options["metrics"]:
+    metrics = pin.options.get("metrics", False)
+    if metrics:
         global loops, run_time, overruns, sleep_time
         loops += 1
         run_time += elapsed

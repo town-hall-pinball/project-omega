@@ -19,7 +19,6 @@
 # DEALINGS IN THE SOFTWARE.
 
 import pygame
-import p
 from pin import events, keyboard
 
 from mock import Mock, patch
@@ -44,7 +43,7 @@ class TestKeyboard(unittest.TestCase):
         listener = Mock()
         events.on("a_event", listener)
         keyboard.register({"a": keyboard.event("a_event", foo=1)})
-        keyboard.handle()
+        keyboard.process()
         events.dispatch()
         listener.assert_called_with(foo=1)
 
@@ -59,6 +58,6 @@ class TestKeyboard(unittest.TestCase):
         events.on("a_event", listener)
         keyboard.register({"a": keyboard.event("a_event")})
         keyboard.clear()
-        keyboard.handle()
+        keyboard.process()
         events.dispatch()
         self.assertFalse(listener.called)

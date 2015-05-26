@@ -18,18 +18,21 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import random
+import os
+import re
+import logging
 import pygame
 
-import pin
-from pin import dmd, events
-from pin.render import static
+__all__ = ["fonts", "load_font"]
 
-def start():
-    dmd.add(static.render)
+fonts = {}
 
-"""
-def render(frame):
-    text = pin.fonts["title"].render("Hello", False, [255, 255, 255], [0x04, 0x04, 0x4])
-    frame.blit(text, [0, 0])
-"""
+log = logging.getLogger("pin.resources")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "resources")
+
+pygame.font.init()
+
+def load_font(key, filename, size):
+    path = os.path.join(base_dir, filename)
+    log.debug("Loading font {}: {}".format(key, filename))
+    fonts[key] = pygame.font.Font(path, size)
