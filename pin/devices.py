@@ -18,8 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import platform
+from pin import platform, proc
 
+flashers = {}
 switches = {}
 coils = {}
 
@@ -37,11 +38,26 @@ class Driver(Device):
         super(Driver, self).__init__(name, **config)
 
 
+
 class Coil(Driver):
 
     def __init__(self, name, **config):
         super(Coil, self).__init__(name, **config)
         self.number = platform.coils[self.device]
+
+
+class Flasher(Driver):
+
+    def __init__(self, name, **config):
+        super(Flasher, self).__init__(name, **config)
+        self.number = platform.coils[self.device]
+
+
+class Lamp(Driver):
+
+    def __init__(self, name, **config):
+        super(Lamp, self).__init__(name, **config)
+        self.number = platform.lamps[self.device]
 
 
 class Switch(Device):
@@ -52,13 +68,13 @@ class Switch(Device):
         self.debounce = self.number < 192
 
     def enable(self, enable=True):
-        if switch.debounce:
+        if self.debounce:
             events = ["closed_debounced", "open_debounced"]
         else:
             events = ["closed_nondebounced", "open_nondebounced"]
 
         for event in events:
-            p.proc.switch_update_rule(switch.number, event, {
+            proc.api.switch_update_rule(self.number, event, {
                 "notifyHost": enable,
                 "reloadActive": False
             }, [], False)
@@ -74,4 +90,8 @@ def add_switches(configs):
 def add_coils(configs):
     for name, config in configs.items():
         coils[name] = Coil(name, **config)
+
+def add_flashers(configs):
+    for name, config in configs.items():
+        flashers[name] = Flasher(name, **config)
 

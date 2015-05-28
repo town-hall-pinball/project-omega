@@ -18,18 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import random
-import pygame
+from . import attract
 
-import pin
-from pin import dmd, events
-from pin.render import static
-
-def start():
-    dmd.add(static.render)
-
-"""
-def render(frame):
-    text = pin.fonts["title"].render("Hello", False, [255, 255, 255], [0x04, 0x04, 0x4])
-    frame.blit(text, [0, 0])
-"""
+def init():
+    attract.start()

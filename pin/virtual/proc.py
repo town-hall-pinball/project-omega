@@ -27,3 +27,6 @@ def get_events():
     return [
         { "type": proc.DMD_READY }
     ]
+
+def switch_update_rule(*args, **kwargs):
+    pass

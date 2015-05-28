@@ -18,42 +18,27 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame
+__all__ = ["Cycle"]
 
-width = 128
-height = 32
+class Cycle():
 
-frame = pygame.Surface((width, height))
-previous = pygame.Surface((width, height))
+    index = 0
+    items = None
 
-standard = []
-interrupts = []
-overlays = []
+    def __init__(self, items):
+        self.items = list(items)
 
-def add(renderer):
-    standard.append(renderer)
+    def get(self):
+        return self.items[self.index]
 
-def remove(renderer):
-    standard.remove(renderer)
-    interrupts.remove(renderer)
-    overlays.remove(renderer)
+    def next(self):
+        self.index += 1
+        if self.index >= len(self.items):
+            self.index = 0
+        return self.get()
 
-def interrupt(renderer):
-    interrupts.append(renderer)
-
-def create_frame(width=width, height=height):
-    return pygame.Surface((width, height))
-
-def create_dots(frame):
-    return pygame.PixelArray(frame)
-
-def render():
-    global frame, previous
-    frame, previous = previous, frame
-    if len(interrupts) > 0:
-        interrupts[0](frame)
-    elif len(standard) > 0:
-        standard[-1](frame)
-    return frame
-
-
+    def previous(self):
+        self.index -= 1
+        if self.index < 0:
+            self.index = len(self.items) - 1
+        return self.get()

@@ -18,42 +18,22 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame
+from pin import util
+import unittest
 
-width = 128
-height = 32
+class TestCycle(unittest.TestCase):
 
-frame = pygame.Surface((width, height))
-previous = pygame.Surface((width, height))
+    def setUp(self):
+        self.iter = util.Cycle([1, 2, 3])
 
-standard = []
-interrupts = []
-overlays = []
+    def test_next(self):
+        self.assertEquals(1, self.iter.get())
+        self.assertEquals(2, self.iter.next())
+        self.assertEquals(3, self.iter.next())
+        self.assertEquals(1, self.iter.next())
 
-def add(renderer):
-    standard.append(renderer)
-
-def remove(renderer):
-    standard.remove(renderer)
-    interrupts.remove(renderer)
-    overlays.remove(renderer)
-
-def interrupt(renderer):
-    interrupts.append(renderer)
-
-def create_frame(width=width, height=height):
-    return pygame.Surface((width, height))
-
-def create_dots(frame):
-    return pygame.PixelArray(frame)
-
-def render():
-    global frame, previous
-    frame, previous = previous, frame
-    if len(interrupts) > 0:
-        interrupts[0](frame)
-    elif len(standard) > 0:
-        standard[-1](frame)
-    return frame
-
+    def test_previous(self):
+        self.assertEquals(1, self.iter.get())
+        self.assertEquals(3, self.iter.previous())
+        self.assertEquals(2, self.iter.previous())
 

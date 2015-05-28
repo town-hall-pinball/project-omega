@@ -31,7 +31,7 @@ class TestKeyboard(unittest.TestCase):
     """
 
     def tearDown(self):
-        keyboard.clear()
+        keyboard.reset()
 
     @patch("pygame.event.get")
     @patch("pygame.key.name")
@@ -49,7 +49,7 @@ class TestKeyboard(unittest.TestCase):
 
     @patch("pygame.event.get")
     @patch("pygame.key.name")
-    def test_clear(self, name, events):
+    def test_reset(self, name, events):
         name.return_value = "a"
         events.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {
             "key": pygame.locals.K_a,
@@ -57,7 +57,7 @@ class TestKeyboard(unittest.TestCase):
         listener = Mock()
         events.on("a_event", listener)
         keyboard.register({"a": keyboard.event("a_event")})
-        keyboard.clear()
+        keyboard.reset()
         keyboard.process()
         events.dispatch()
         self.assertFalse(listener.called)

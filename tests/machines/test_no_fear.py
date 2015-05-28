@@ -18,42 +18,17 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame
+# Coverage only
 
-width = 128
-height = 32
+from pin.machines import no_fear
+from pin import keyboard
+import unittest
 
-frame = pygame.Surface((width, height))
-previous = pygame.Surface((width, height))
+class TestNoFear(unittest.TestCase):
 
-standard = []
-interrupts = []
-overlays = []
+    def tearDown(self):
+        keyboard.reset()
 
-def add(renderer):
-    standard.append(renderer)
-
-def remove(renderer):
-    standard.remove(renderer)
-    interrupts.remove(renderer)
-    overlays.remove(renderer)
-
-def interrupt(renderer):
-    interrupts.append(renderer)
-
-def create_frame(width=width, height=height):
-    return pygame.Surface((width, height))
-
-def create_dots(frame):
-    return pygame.PixelArray(frame)
-
-def render():
-    global frame, previous
-    frame, previous = previous, frame
-    if len(interrupts) > 0:
-        interrupts[0](frame)
-    elif len(standard) > 0:
-        standard[-1](frame)
-    return frame
-
+    def test(self):
+        no_fear.init()
 

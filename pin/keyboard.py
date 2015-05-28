@@ -56,7 +56,7 @@ def register(config):
             raise ValueError("Duplicate key mapping: {}".format(key))
         keys[key] = function
 
-def clear():
+def reset():
     keys.clear()
 
 

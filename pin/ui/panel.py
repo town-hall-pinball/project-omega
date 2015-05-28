@@ -18,11 +18,23 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-class Counter(object):
+import pin
+from .component import Component
 
-    ident = 0
+class Panel(Component):
 
-    def next(self):
-        self.ident += 1
-        return self.ident
+    def __init__(self, defaults=None, **style):
+        defaults = defaults or {}
+        defaults["width"] = defaults.get("width", pin.dmd.width)
+        defaults["height"] = defaults.get("height", pin.dmd.height)
+        super(Panel, self).__init__(defaults, style)
 
+    def add(self, component):
+        self.children += [component]
+        self.invalidate()
+
+    def draw(self):
+        super(Panel, self).draw()
+        for child in self.children:
+            self.frame.blit(child,
+                    (child.x, child.y, child.width, child.height))

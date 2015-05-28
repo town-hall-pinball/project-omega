@@ -22,10 +22,14 @@ import os
 import re
 import logging
 import pygame
+import struct
 
-__all__ = ["fonts", "load_font"]
+from pin import dmd
+
+__all__ = ["fonts", "images", "load_font", "load_image"]
 
 fonts = {}
+images = {}
 
 log = logging.getLogger("pin.resources")
 base_dir = os.path.join(os.path.dirname(__file__), "..", "resources")
@@ -36,3 +40,35 @@ def load_font(key, filename, size):
     path = os.path.join(base_dir, filename)
     log.debug("Loading font {}: {}".format(key, filename))
     fonts[key] = pygame.font.Font(path, size)
+
+def load_image(key, filename):
+    path = os.path.join(base_dir, filename)
+    log.debug("Loading image {}: {}".format(key, filename))
+    images[key] = load_dmd_animation(path)[0]
+
+def load_dmd_animation(path):
+    frames = []
+    # Derived from
+    # https://github.com/preble/pyprocgame/blob/master/procgame/dmd/animation.py
+    with open(path) as f:
+        f.seek(0, os.SEEK_END) # Go to the end of the file to get its length
+        file_length = f.tell()
+        f.seek(4) # Skip over the 4 byte DMD header.
+        frame_count = struct.unpack("I", f.read(4))[0]
+        width = struct.unpack("I", f.read(4))[0]
+        height = struct.unpack("I", f.read(4))[0]
+        if file_length != 16 + width * height * frame_count:
+            raise ValueError("Corrupt DMD file")
+        for frame_index in range(frame_count):
+            str_frame = f.read(width * height)
+            new_frame = dmd.create_frame(width, height)
+            new_dots = dmd.create_dots(new_frame)
+            for x in xrange(width):
+                for y in xrange(height):
+                    i = (y * width) + x
+                    new_dots[x, y] = ord(str_frame[i])
+            frames.append(new_frame)
+    return frames
+
+
+

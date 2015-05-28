@@ -15,45 +15,35 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-# DEALINGS IN THE SOFTWARE.
+# FROM, OUT OF OR IN CONNECTION WITH TH
 
-import pygame
+import pin
+from .component import Component
 
-width = 128
-height = 32
+class Image(Component):
 
-frame = pygame.Surface((width, height))
-previous = pygame.Surface((width, height))
+    def __init__(self, **style):
+        super(Image, self).__init__(defaults={
+            "image": None,
+            "reverse": False
+        }, **style)
 
-standard = []
-interrupts = []
-overlays = []
+    def auto_size(self):
+        if self.style["image"] != None:
+            image =  pin.images[self.style["image"]]
+            width = image.get_width()
+            height = image.get_height()
+        else:
+            width = 0
+            height = 0
+        if self.width == None:
+            self.width = width
+        if self.height == None:
+            self.height = height
 
-def add(renderer):
-    standard.append(renderer)
-
-def remove(renderer):
-    standard.remove(renderer)
-    interrupts.remove(renderer)
-    overlays.remove(renderer)
-
-def interrupt(renderer):
-    interrupts.append(renderer)
-
-def create_frame(width=width, height=height):
-    return pygame.Surface((width, height))
-
-def create_dots(frame):
-    return pygame.PixelArray(frame)
-
-def render():
-    global frame, previous
-    frame, previous = previous, frame
-    if len(interrupts) > 0:
-        interrupts[0](frame)
-    elif len(standard) > 0:
-        standard[-1](frame)
-    return frame
-
-
+    def draw(self):
+        super(Image, self).draw()
+        if self.width == 0 or self.height == 0:
+            return
+        image = pin.images[self.style["image"]]
+        self.frame.blit(image, (0, 0))

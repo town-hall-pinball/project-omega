@@ -25,14 +25,6 @@ import os
 import pin
 from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
 
-def config():
-    from pin.platforms import wpc
-    from pin.machines import no_fear
-
-    pin.platform = wpc
-    pin.machine = no_fear
-
-
 def parse_arguments():
     parser = argparse.ArgumentParser(prog=pin.brand.PROG)
     parser.add_argument("-c", "--console", action="store_true", default=False,
@@ -47,7 +39,7 @@ def parse_arguments():
     pin.options = vars(parser.parse_args())
     if pin.options["develop"]:
         pin.options["console"] = True
-        pin.options["virtual"] = True
+    pin.options["virtual"] = pin.options["develop"]
 
 def init_logging():
     log_file = os.path.join("var", "{}.log".format(pin.brand.PROG))
@@ -75,16 +67,16 @@ def init_proc():
         pin.proc.api = virtual_proc
     else:
         from pinproc import PinPROC
-        pin.proc.api = PinPROC(p.platform["name"])
-    pin.proc.api.reset(1)
-
+        pin.proc.api = PinPROC(pin.platform["name"])
+    pin.proc.init()
 
 def init():
     parse_arguments()
     log = init_logging()
     log.info("{}, Version {}".format(pin.brand.NAME, pin.brand.VERSION))
-    config()
     pin.machine.init()
+    pin.switches = pin.devices.switches
+    pin.coils = pin.devices.coils
     if pin.options["virtual"]:
         virtual_dmd.init()
     init_proc()
@@ -92,7 +84,7 @@ def init():
 
 def run():
     init()
-    pin.modes.init()
+    pin.game.init()
     if pin.options["develop"]:
         pin.engine.processors += [pin.keyboard.process]
     pin.engine.processors += [pin.proc.process]

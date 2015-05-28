@@ -21,61 +21,53 @@
 from ... import devices
 
 def init():
-    devices.add_coils({
-        "auto_plunger": {
-            "label": "Auto Plunger",
-            "device": "02"
+    devices.add_flashers({
+        "auto_fire": {
+            "label": "Auto Fire",
+            "device": "25",
         },
-        "drop_target_down": {
-            "label": "Drop Target, Down",
-            "device": "08"
+        "circle_center": {
+            "label": "Circle, Center",
+            "device": "19",
         },
-        "drop_target_up": {
-            "label": "Drop Target, Up",
-            "device": "12"
+        "flipper_return": {
+            "label": "Flipper Return",
+            "device": "17",
         },
-        "kickback": {
-            "label": "Kickback",
-            "device": "04"
+        "insert_explode": {
+            "label": "Insert, Explode",
+            "device": "22",
         },
-        "knocker": {
-            "label": "Knocker",
-            "device": "07"
+        "insert_top_left": {
+            "label": "Insert, Top Left",
+            "device": "26",
         },
-        "magnet_left": {
-            "label": "Magnet, Left",
-            "device": "06"
+        "insert_top_right": {
+            "label": "Insert, Top Right",
+            "device": "27",
         },
-        "magnet_center": {
-            "label": "Magnet, Center",
-            "device": "05"
-        },
-        "magnet_right": {
-            "label": "Magnet, Right",
-            "device": "03"
+        "outside": {
+            "label": "Outside",
+            "device": "24",
         },
         "popper": {
             "label": "Popper",
-            "device": "01"
+            "device": "28",
         },
-        "saucer": {
-            "label": "Saucer",
-            "device": "15"
+        "ramp_left": {
+            "label": "Ramp, Left",
+            "device": "23",
         },
-        "slingshot_left": {
-            "label": "Slingshot, Left",
-            "device": "11"
-        },
-        "slingshot_right": {
-            "label": "Slingshot, Right",
-            "device": "10"
+        "ramp_right": {
+            "label": "Ramp, Right",
+            "device": "20",
         },
         "toy": {
             "label": "Toy",
-            "device": "16"
+            "device": "21",
         },
-        "trough": {
-            "label": "Trough",
-            "device": "14"
-        }
+        "spinner": {
+            "label": "Spinner",
+            "device": "18",
+        },
     })

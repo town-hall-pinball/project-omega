@@ -18,10 +18,11 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import itertools
 import pin
 from pin import util
 
-counter = util.Counter()
+counter = itertools.count()
 active = {}
 tickers = {}
 
