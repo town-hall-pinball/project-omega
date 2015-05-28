@@ -24,58 +24,58 @@ def init():
     devices.add_coils({
         "auto_plunger": {
             "label": "Auto Plunger",
-            "device": "02"
+            "device": "C02"
         },
         "drop_target_down": {
             "label": "Drop Target, Down",
-            "device": "08"
+            "device": "C08"
         },
         "drop_target_up": {
             "label": "Drop Target, Up",
-            "device": "12"
+            "device": "C12"
         },
         "kickback": {
             "label": "Kickback",
-            "device": "04"
+            "device": "C04"
         },
         "knocker": {
             "label": "Knocker",
-            "device": "07"
+            "device": "C07"
         },
         "magnet_left": {
             "label": "Magnet, Left",
-            "device": "06"
+            "device": "C06"
         },
         "magnet_center": {
             "label": "Magnet, Center",
-            "device": "05"
+            "device": "C05"
         },
         "magnet_right": {
             "label": "Magnet, Right",
-            "device": "03"
+            "device": "C03"
         },
         "popper": {
             "label": "Popper",
-            "device": "01"
+            "device": "C01"
         },
         "saucer": {
             "label": "Saucer",
-            "device": "15"
+            "device": "C15"
         },
         "slingshot_left": {
             "label": "Slingshot, Left",
-            "device": "11"
+            "device": "C11"
         },
         "slingshot_right": {
             "label": "Slingshot, Right",
-            "device": "10"
+            "device": "C10"
         },
         "toy": {
             "label": "Toy",
-            "device": "16"
+            "device": "C16"
         },
         "trough": {
             "label": "Trough",
-            "device": "14"
+            "device": "C14"
         }
     })

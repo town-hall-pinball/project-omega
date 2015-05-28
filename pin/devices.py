@@ -20,16 +20,23 @@
 
 from pin import platform, proc
 
+devices = {}
 flashers = {}
 switches = {}
 coils = {}
 
 class Device(object):
 
+    type = "unknown"
+
     def __init__(self, name, **config):
         self.name = name
         self.label = config.get("label", name)
         self.device = config["device"]
+        self.number = platform.devices[self.device]
+
+    def __str__(self):
+        return "{}:{}".format(self.type, self.name)
 
 
 class Driver(Device):
@@ -38,33 +45,32 @@ class Driver(Device):
         super(Driver, self).__init__(name, **config)
 
 
-
 class Coil(Driver):
 
     def __init__(self, name, **config):
         super(Coil, self).__init__(name, **config)
-        self.number = platform.coils[self.device]
+        self.type = "coil"
 
 
 class Flasher(Driver):
 
     def __init__(self, name, **config):
         super(Flasher, self).__init__(name, **config)
-        self.number = platform.coils[self.device]
+        self.type = "flasher"
 
 
 class Lamp(Driver):
 
     def __init__(self, name, **config):
         super(Lamp, self).__init__(name, **config)
-        self.number = platform.lamps[self.device]
+        self.type = "lamp"
 
 
 class Switch(Device):
 
     def __init__(self, name, **config):
         super(Switch, self).__init__(name, **config)
-        self.number = platform.switches[self.device]
+        self.type = "switch"
         self.debounce = self.number < 192
 
     def enable(self, enable=True):
@@ -83,15 +89,24 @@ class Switch(Device):
         self.enable(False)
 
 
-def add_switches(configs):
+def add(collection, clazz, configs):
     for name, config in configs.items():
-        switches[name] = Switch(name, **config)
+        obj = clazz(name, **config)
+        if name in collection:
+            raise ValeuError("Duplicate {}: {}".format(obj.type, key))
+        if obj.device in devices:
+            other = devices[obj.device]
+            raise ValueError("{} also maps to {}".format(obj, other))
+        devices[obj.device] = obj
+        collection[name] = obj
+
+def add_switches(configs):
+    add(switches, Switch, configs)
 
 def add_coils(configs):
-    for name, config in configs.items():
-        coils[name] = Coil(name, **config)
+    add(coils, Coil, configs)
 
 def add_flashers(configs):
-    for name, config in configs.items():
-        flashers[name] = Flasher(name, **config)
+    add(flashers, Flasher, configs)
+
 

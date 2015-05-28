@@ -24,213 +24,213 @@ def init():
     devices.add_switches({
         "ball_launch_button": {
             "label": "Ball Launch Button",
-            "device": "11",
+            "device": "S11",
         },
         "buy_extra_ball_button": {
             "label": "Buy Extra Ball Button",
-            "device": "23",
+            "device": "S23",
         },
         "coin_door": {
             "label": "Coin Door",
-            "device": "D1",
+            "device": "S22",
         },
         "coin_left": {
             "label": "Coin, Left",
-            "device": "D1",
+            "device": "SD1",
         },
         "coin_center": {
             "label": "Coin, Center",
-            "device": "D2"
+            "device": "SD2"
         },
         "coin_right": {
             "label": "Coin, Right",
-            "device": "D3"
+            "device": "SD3"
         },
         "coin_fourth": {
             "label": "Coin, Fourth",
-            "device": "D4",
+            "device": "SD4",
         },
         "drop_target": {
             "label": "Drop Target",
-            "device": "51",
+            "device": "S51",
         },
         "flipper_left": {
             "label": "Flipper, Left",
-            "device": "F4",
+            "device": "SF4",
         },
         "flipper_right": {
             "label": "Flipper, Right",
-            "device": "F2",
+            "device": "SF2",
         },
         "flipper_right_up": {
             "label": "Flipper, Upper Right",
-            "device": "F6",
+            "device": "SF6",
         },
         "kickback": {
             "label": "Kickback",
-            "device": "25",
+            "device": "S25",
         },
         "magnet_left": {
             "label": "Magnet, Left",
-            "device": "47",
+            "device": "S46",
             "opto": True,
         },
         "magnet_center": {
             "label": "Magnet, Center",
-            "device": "47",
+            "device": "S47",
             "opto": True,
         },
         "magnet_right": {
             "label": "Magnet, Right",
-            "device": "48",
+            "device": "S48",
             "opto": True,
         },
         "orbit_left": {
             "label": "Orbit, Left",
-            "device": "62",
+            "device": "S62",
         },
         "orbit_right": {
             "label": "Orbit, Right",
-            "device": "58",
+            "device": "S58",
         },
         "outlane_right": {
             "label": "Outlane, Right",
-            "device": "17",
+            "device": "S17",
         },
         "popper": {
             "label": "Popper",
-            "device": "41",
+            "device": "S41",
             "opto": True,
         },
         "popper_2": {
             "label": "Popper, #2",
-            "device": "42",
+            "device": "S42",
             "opto": True,
         },
         "ramp_left_enter": {
             "label": "Ramp, Left Enter",
-            "device": "63",
+            "device": "S63",
         },
         "ramp_left_middle": {
             "label": "Ramp, Left Middle",
-            "device": "64",
+            "device": "S64",
         },
         "ramp_right_enter": {
             "label": "Ramp, Right Enter",
-            "device": "66",
+            "device": "S66",
         },
         "ramp_right_exit": {
             "label": "Ramp, Right Exit",
-            "device": "67",
+            "device": "S67",
         },
         "return_left": {
             "label": "Return, Left",
-            "device": "26",
+            "device": "S26",
         },
         "return_right": {
             "label": "Return, Right",
-            "device": "18",
+            "device": "S18",
         },
         "saucer": {
             "label": "Saucer",
-            "device": "61",
+            "device": "S61",
         },
         "service_down": {
             "label": "Service, Down",
-            "device": "D6"
+            "device": "SD6"
         },
         "service_enter": {
             "label": "Service, Enter",
-            "device": "D8",
+            "device": "SD8",
         },
         "service_exit": {
             "label": "Service, Exit",
-            "device": "D5",
+            "device": "SD5",
         },
         "service_up": {
             "label": "Service, Up",
-            "device": "D7",
+            "device": "SD7",
         },
         "shooter_lane": {
             "label": "Shooter Lane",
-            "device": "15",
+            "device": "S15",
         },
         "slingshot_left": {
             "label": "Slingshot, Left",
-            "device": "27",
+            "device": "S27",
         },
         "slingshot_right": {
             "label": "Slingshot, Right",
-            "device": "28",
+            "device": "S28",
         },
         "spinner": {
             "label": "Spinner",
-            "device": "16",
+            "device": "S16",
         },
         "standup_target_bottom": {
             "label": "Standup Target, Bottom",
-            "device": "56",
+            "device": "S56",
         },
         "startup_target_top": {
             "label": "Standup Target, Top",
-            "device": "57",
+            "device": "S57",
         },
         "start_button": {
             "label": "Start Button",
-            "device": "13",
+            "device": "S13",
         },
         "subway_left": {
             "label": "Subway, Left",
-            "device": "38",
+            "device": "S38",
             "opto": True,
         },
         "subway_center": {
             "label": "Subway, Center",
-            "device": "37",
+            "device": "S37",
             "opto": True,
         },
         "tilt": {
             "label": "Tilt",
-            "device": "14",
+            "device": "S14",
             "opto": True,
         },
         "tilt_slam": {
             "label": "Tilt, Slam",
-            "device": "21",
+            "device": "S21",
         },
         "trough_jam": {
             "label": "Trough, Jam",
-            "device": "31",
+            "device": "S31",
             "opto": True,
         },
         "trough": {
             "label": "Trough",
-            "device": "32",
+            "device": "S32",
             "opto": True,
         },
         "trough_2": {
             "label": "Trough, 2",
-            "device": "33",
+            "device": "S33",
             "opto": True
         },
         "trough_3": {
             "label": "Trough, 3",
-            "device": "34",
+            "device": "S34",
             "opto": True,
         },
         "trough_4": {
             "label": "Trough, 4",
-            "device": "35",
+            "device": "S35",
             "opto": True
         },
         "u_turn": {
             "label": "U-Turn",
-            "device": "55",
+            "device": "S55",
             "opto": True,
         },
         "wireform_left": {
             "label": "Wireform, Left",
-            "device": "54",
+            "device": "S54",
         }
    })
 

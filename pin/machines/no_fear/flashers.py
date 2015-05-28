@@ -24,50 +24,50 @@ def init():
     devices.add_flashers({
         "auto_fire": {
             "label": "Auto Fire",
-            "device": "25",
+            "device": "C25",
         },
         "circle_center": {
             "label": "Circle, Center",
-            "device": "19",
+            "device": "C19",
         },
         "flipper_return": {
             "label": "Flipper Return",
-            "device": "17",
+            "device": "C17",
         },
         "insert_explode": {
             "label": "Insert, Explode",
-            "device": "22",
+            "device": "C22",
         },
         "insert_top_left": {
             "label": "Insert, Top Left",
-            "device": "26",
+            "device": "C26",
         },
         "insert_top_right": {
             "label": "Insert, Top Right",
-            "device": "27",
+            "device": "C27",
         },
         "outside": {
             "label": "Outside",
-            "device": "24",
+            "device": "C24",
         },
         "popper": {
             "label": "Popper",
-            "device": "28",
+            "device": "C28",
         },
         "ramp_left": {
             "label": "Ramp, Left",
-            "device": "23",
+            "device": "C23",
         },
         "ramp_right": {
             "label": "Ramp, Right",
-            "device": "20",
+            "device": "C20",
         },
         "toy": {
             "label": "Toy",
-            "device": "21",
+            "device": "C21",
         },
         "spinner": {
             "label": "Spinner",
-            "device": "18",
+            "device": "C18",
         },
     })
