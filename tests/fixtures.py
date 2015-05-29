@@ -18,22 +18,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-# Coverage only
+import pin
+from pin.virtual import proc as virtual_proc
 
-from pin.machines import no_fear
-from pin import devices
-
-import unittest
-from tests import fixtures
-
-class TestNoFear(unittest.TestCase):
-
-    def setUp(self):
-        fixtures.reset()
-
-    def test(self):
-        no_fear.init()
-        for switch in devices.switches.values():
-            switch.enable()
-
-
+def reset():
+    print "**** RESET"
+    pin.keyboard.reset()
+    pin.proc.api = virtual_proc

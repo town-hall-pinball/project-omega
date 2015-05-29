@@ -23,6 +23,7 @@ from pin import events, keyboard
 
 from mock import Mock, patch
 import unittest
+from tests import fixtures
 
 class TestKeyboard(unittest.TestCase):
     """
@@ -30,8 +31,8 @@ class TestKeyboard(unittest.TestCase):
     every key until the display is initialized
     """
 
-    def tearDown(self):
-        keyboard.reset()
+    def setUp(self):
+        fixtures.reset()
 
     @patch("pygame.event.get")
     @patch("pygame.key.name")
