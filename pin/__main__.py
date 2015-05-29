@@ -89,7 +89,7 @@ def run():
         pin.engine.processors += [pin.keyboard.process]
     pin.engine.processors += [pin.proc.process]
     pin.engine.processors += [pin.timers.process]
-    pin.engine.processors += [pin.events.process]
+    pin.engine.processors += [pin.events.dispatch]
     pin.engine.run()
 
 run()

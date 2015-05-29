@@ -67,13 +67,6 @@ def dispatch():
         for listener in listeners.get(item["event"], []):
             listener(*item["args"], **item["kwargs"])
 
-def process():
-    """
-    Called by the main processor on each loop to dispatch all events in the
-    queue.
-    """
-    dispatch()
-
 def reset():
     """
     Removes all registered listeners and clears the event queue.

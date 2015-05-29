@@ -38,13 +38,6 @@ class TestEvents(unittest.TestCase):
         events.dispatch()
         self.assertTrue(listener.called)
 
-    def test_process(self):
-        listener = Mock()
-        events.on("foo", listener)
-        events.post("foo")
-        events.process()
-        self.assertTrue(listener.called)
-
     def test_off(self):
         listener = Mock()
         events.on("foo", listener)
