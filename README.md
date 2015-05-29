@@ -1,4 +1,12 @@
 # project-omega
 
-Having way too much fun!
+Go forth and explore:
+
+```bash
+vagrant up
+vagrant ssh
+cd /vagrant
+python -m pin -d -s
+```
+
 
