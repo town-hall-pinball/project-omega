@@ -20,7 +20,7 @@
 
 import logging
 
-__all__ = ["on", "off", "post", "dispatch", "process", "reset"]
+__all__ = ["on", "off", "post", "dispatch", "reset"]
 
 listeners = {}
 queue = []
