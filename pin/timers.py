@@ -19,24 +19,28 @@
 # DEALINGS IN THE SOFTWARE.
 
 import itertools
-import pin
+import p
 from pin import util
+
+__all__ = ["set", "tick", "clear", "service"]
 
 counter = itertools.count()
 active = {}
 tickers = {}
 
-def set(duration, callback):
+def set(duration, callback, with_ident=False):
     """
     Register `callback` to be invoked one time after `duration` seconds
     have elapsed. Returns an identifier that can be used to cancel this
-    registration using :meth:`clear`.
+    registration using :meth:`clear`. If `with_ident` is `True`, the callback
+    will be inovked with one argument, the identifier of the timer.
     """
     ident = counter.next()
     active[ident] = {
         "duration": duration,
-        "end": pin.now + duration,
-        "callback": callback
+        "end": p.now + duration,
+        "callback": callback,
+        "with_ident": with_ident
     }
     return ident
 
@@ -65,15 +69,12 @@ def service():
     """
     if len(active) > 0:
         for ident, timer in active.items():
-            if pin.now > timer["end"] and ident in active:
+            if p.now > timer["end"] and ident in active:
                 del active[ident]
-                timer["callback"]()
+                args = []
+                if timer["with_ident"]:
+                    args += [ident]
+                timer["callback"](*args)
     for ticker in tickers.values():
         ticker()
 
-
-def process():
-    """
-    Called by the main processor on each loop to service all timers.
-    """
-    service()

@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pin
+import p
 from pin import engine
 
 import unittest
@@ -39,7 +39,6 @@ class TestEngine(unittest.TestCase):
         p1 = Mock()
         engine.processors = [p1, exit]
         engine.run()
-        print "P1 CALLED", p1.called
         self.assertTrue(p1.called)
 
     def test_keyboard_interrupt(self):
@@ -52,7 +51,7 @@ class TestEngine(unittest.TestCase):
         self.assertFalse(p2.called)
 
     def test_metrics_enabled(self):
-        pin.options["metrics"] = True
+        p.options["metrics"] = True
         p1 = Mock(side_effect=[1, 2, KeyboardInterrupt])
         engine.processors = [p1]
         engine.run()
@@ -60,7 +59,7 @@ class TestEngine(unittest.TestCase):
         self.assertTrue(engine.run_time > 0)
 
     def test_metrics_disabled(self):
-        pin.options["metrics"] = False
+        p.options["metrics"] = False
         p1 = Mock(side_effect=[1, 2, KeyboardInterrupt])
         engine.processors = [p1]
         engine.run()
@@ -69,7 +68,7 @@ class TestEngine(unittest.TestCase):
 
     @patch("time.time")
     def test_overrun(self, mock_time):
-        pin.options["metrics"] = True
+        p.options["metrics"] = True
         mock_time.side_effect=[0, 1000, 2000]
         engine.processors = [exit]
         engine.run()

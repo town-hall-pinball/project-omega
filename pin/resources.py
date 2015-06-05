@@ -26,7 +26,7 @@ import struct
 
 from pin import dmd
 
-__all__ = ["fonts", "images", "load_font", "load_image"]
+__all__ = ["fonts", "images", "font", "image"]
 
 fonts = {}
 images = {}
@@ -36,15 +36,17 @@ base_dir = os.path.join(os.path.dirname(__file__), "..", "resources")
 
 pygame.font.init()
 
-def load_font(key, filename, size):
-    path = os.path.join(base_dir, filename)
-    log.debug("Loading font {}: {}".format(key, filename))
-    fonts[key] = pygame.font.Font(path, size)
+def load_fonts(*args):
+    for key, filename, size in args:
+        path = os.path.join(base_dir, filename)
+        log.debug("Loading font {}: {}".format(key, filename))
+        fonts[key] = pygame.font.Font(path, size)
 
-def load_image(key, filename):
-    path = os.path.join(base_dir, filename)
-    log.debug("Loading image {}: {}".format(key, filename))
-    images[key] = load_dmd_animation(path)[0]
+def load_images(*args):
+    for key, filename in args:
+        path = os.path.join(base_dir, filename)
+        log.debug("Loading image {}: {}".format(key, filename))
+        images[key] = load_dmd_animation(path)[0]
 
 def load_dmd_animation(path):
     frames = []

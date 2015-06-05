@@ -18,39 +18,40 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pin
+import p
 from pin import timers
 
 import unittest
 from mock import Mock
+from tests import fixtures
 
 class TestTimers(unittest.TestCase):
 
     def setUp(self):
-        pin.now = 0
+        fixtures.reset()
 
     def test_set_called(self):
         callback = Mock()
         timers.set(1.0, callback)
-        pin.now = 2.0
-        timers.process()
+        p.now = 2.0
+        timers.service()
         self.assertTrue(callback.called)
 
     def test_set_not_called(self):
         callback = Mock()
         timers.set(1.0, callback)
-        pin.now = 0.5
-        timers.process()
+        p.now = 0.5
+        timers.service()
         self.assertFalse(callback.called)
 
     def test_set_not_called_twice(self):
         callback = Mock()
         timers.set(1.0, callback)
-        pin.now = 2.0
-        timers.process()
+        p.now = 2.0
+        timers.service()
         self.assertEquals(1, callback.call_count)
-        pin.now = 3.0
-        timers.process()
+        p.now = 3.0
+        timers.service()
         self.assertEquals(1, callback.call_count)
 
     def test_clear(self):
@@ -59,13 +60,13 @@ class TestTimers(unittest.TestCase):
         ident2 = timers.tick(callback)
         timers.clear(ident1)
         timers.clear(ident2)
-        pin.now = 2.0
-        timers.process()
+        p.now = 2.0
+        timers.service()
         self.assertFalse(callback.called)
 
     def test_tick(self):
         callback = Mock()
         timers.tick(callback)
-        timers.process()
-        timers.process()
+        timers.service()
+        timers.service()
         self.assertEquals(2, callback.call_count)

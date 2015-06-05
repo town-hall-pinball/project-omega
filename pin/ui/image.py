@@ -17,20 +17,20 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH TH
 
-import pin
+import p
 from .component import Component
 
 class Image(Component):
 
-    def __init__(self, **style):
+    def __init__(self, image=None, **style):
+        style["image"] = image
         super(Image, self).__init__(defaults={
-            "image": None,
             "reverse": False
         }, **style)
 
     def auto_size(self):
         if self.style["image"] != None:
-            image =  pin.images[self.style["image"]]
+            image =  p.images[self.style["image"]]
             width = image.get_width()
             height = image.get_height()
         else:
@@ -45,5 +45,5 @@ class Image(Component):
         super(Image, self).draw()
         if self.width == 0 or self.height == 0:
             return
-        image = pin.images[self.style["image"]]
+        image = p.images[self.style["image"]]
         self.frame.blit(image, (0, 0))

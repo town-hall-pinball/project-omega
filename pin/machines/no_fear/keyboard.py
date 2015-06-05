@@ -22,6 +22,7 @@ from pin import keyboard
 
 def init():
     keyboard.register({
-        "a": keyboard.event("foo")
+        "a": keyboard.event("foo"),
+        "7": keyboard.switch("service_enter")
     })
 

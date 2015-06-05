@@ -18,8 +18,36 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .component import *
-from .image import *
-from .panel import *
-from .slides import *
-from .text import *
+import p
+from pin import ui
+from pin.ui.transitions import SlideIn, SlideOut
+from pin.handler import Handler
+
+class Mode(Handler):
+
+    thp = ui.Image("thp_logo")
+    presents = ui.Text("Presents")
+    title = ui.Text("Project Omega")
+    game_over = ui.Text("Game Over")
+
+    def setup(self):
+        self.show = ui.Slides("attract.show", (
+            (self.thp,           3.0),
+            (self.presents,      3.0, SlideOut(direction="left")),
+            (self.title,         3.0),
+            (self.game_over,     3.0)),
+            repeat=True)
+        self.handlers += [self.show]
+
+    def enabled(self):
+        self.show.start()
+
+mode = None
+
+def init():
+    global mode
+    mode = Mode("attract.mode")
+
+
+
+

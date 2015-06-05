@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pin
+import p
 from pin.virtual import dmd as virtual_dmd
 
 DMD_READY = 5
@@ -27,14 +27,14 @@ api = None
 
 def init():
     api.reset(1)
-    for switch in pin.switches.values():
+    for switch in p.switches.values():
         switch.enable()
 
 def process():
     events = api.get_events()
     for event in events:
         if event["type"] == DMD_READY:
-            frame = pin.dmd.render()
-            if pin.options["virtual"]:
+            frame = p.dmd.render()
+            if p.options["virtual"]:
                 virtual_dmd.update(frame)
 

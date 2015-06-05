@@ -17,16 +17,16 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH TH
 
-import pin
+import p
 from .component import Component
 
 class Text(Component):
 
-    def __init__(self, **style):
+    def __init__(self, text="", **style):
+        style["text"] = text
         super(Text, self).__init__(defaults={
             "font": "title",
             "reverse": False,
-            "text": "",
             "color": 0xf,
             "x_align": "left",
         }, **style)
@@ -37,7 +37,7 @@ class Text(Component):
         self.enable()
 
     def auto_size(self):
-        font = pin.fonts[self.style["font"]]
+        font = p.fonts[self.style["font"]]
         metrics = font.metrics(self.style["text"])
 
         # Crop as tight as possible and only go below the baseline if
@@ -60,7 +60,7 @@ class Text(Component):
 
     def draw(self):
         super(Text, self).draw()
-        font = pin.fonts[self.style["font"]]
+        font = p.fonts[self.style["font"]]
         x = self.x
         y = self.y
         if self.style["x_align"] == "center":

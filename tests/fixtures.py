@@ -18,10 +18,23 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import p
 import pin
 from pin.virtual import proc as virtual_proc
 
 def reset():
-    print "**** RESET"
+    from pin.platforms import wpc as platform
+    from pin.machines import no_fear as machine
+    from pin.games import omega as game
+
+    p.platform = platform
+    p.machine = machine
+    p.game = game
+
     pin.keyboard.reset()
-    pin.proc.api = virtual_proc
+    pin.events.reset()
+
+    p.events = pin.events
+    p.now = 0
+    p.proc = pin.proc
+    p.proc.api = virtual_proc

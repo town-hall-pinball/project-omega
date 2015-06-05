@@ -20,7 +20,7 @@
 
 import time
 import logging
-import pin
+import p
 
 __all__ = [
     "processors", "fps", "exit", "loops", "run_time", "sleep_time",
@@ -32,7 +32,7 @@ processors = []
 Functions invoked on each run loop.
 """
 
-fps = 35
+fps = 40
 """
 Number of loops per second that the engine should execute. If a loop
 completes early, the engine sleeps for the remaining time. If a loop
@@ -87,13 +87,13 @@ def run():
     Executes the run loop until `exit` is `True` or an exception is raised.
     """
     try:
-        pin.events.post("reset")
+        p.events.post("reset")
         while not exit:
             frame()
     except KeyboardInterrupt as ki:
         pass
     finally:
-        metrics = pin.options.get("metrics", False)
+        metrics = p.options.get("metrics", False)
         if metrics and loops > 0:
             run = (run_time / loops) * 1000
             sleep = (sleep_time / loops) * 1000
@@ -103,14 +103,14 @@ def run():
 
 def frame():
     start = time.time()
-    pin.now = start
+    p.now = start
     max_time = 1.0 / fps
     for processor in processors:
         processor()
     elapsed = time.time() - start
     remaining = max_time - elapsed
 
-    metrics = pin.options.get("metrics", False)
+    metrics = p.options.get("metrics", False)
     if metrics:
         global loops, run_time, overruns, sleep_time
         loops += 1

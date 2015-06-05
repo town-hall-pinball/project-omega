@@ -18,8 +18,13 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .component import *
-from .image import *
-from .panel import *
-from .slides import *
-from .text import *
+import p
+
+def init():
+    from .platforms import wpc as platform
+    from .machines import no_fear as machine
+    from .games import omega as game
+
+    p.platform = platform
+    p.machine = machine
+    p.game = game

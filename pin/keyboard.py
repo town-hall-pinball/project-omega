@@ -50,6 +50,23 @@ def event(name, *args, **kwargs):
         "up": lambda : None,
     }
 
+def switch(name, *args, **kwargs):
+    def active():
+        events.post("switch_{}".format(name))
+        events.post("switch_{}_active".format(name))
+        events.post("switch_active", name)
+        events.post("switch", name, True)
+
+    def inactive():
+        events.post("switch_{}_inactive".format(name))
+        events.post("switch_inactive", name)
+        events.post("switch", name, False)
+
+    return {
+        "down": active,
+        "up": inactive
+    }
+
 def register(config):
     for key, function in config.items():
         if key in keys:

@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import platform, proc
+import p
 
 devices = {}
 flashers = {}
@@ -33,7 +33,7 @@ class Device(object):
         self.name = name
         self.label = config.get("label", name)
         self.device = config["device"]
-        self.number = platform.devices[self.device]
+        self.number = p.platform.devices[self.device]
 
     def __str__(self):
         return "{}:{}".format(self.type, self.name)
@@ -80,7 +80,7 @@ class Switch(Device):
             events = ["closed_nondebounced", "open_nondebounced"]
 
         for event in events:
-            proc.api.switch_update_rule(self.number, event, {
+            p.proc.api.switch_update_rule(self.number, event, {
                 "notifyHost": enable,
                 "reloadActive": False
             }, [], False)

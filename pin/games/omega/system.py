@@ -18,8 +18,16 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .component import *
-from .image import *
-from .panel import *
-from .slides import *
-from .text import *
+import p
+from pin import ui
+from pin.handler import Handler
+
+class Mode(Handler):
+
+    def setup(self):
+        self.on("switch_service_enter", self.service_enter)
+
+    def service_enter(self):
+        print "ENTER"
+
+mode = Mode("system.mode")

@@ -18,8 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .component import *
-from .image import *
-from .panel import *
-from .slides import *
-from .text import *
+import time
+
+coils = None
+dmd = None
+events = None
+fonts = None
+game = None
+images = None
+machine = None
+now = time.time()
+options = {}
+proc = None
+platform = None
+switches = None
+timers = None
+

@@ -18,13 +18,23 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
+import p
+
+log = logging.getLogger("pin.handler")
+
 class Handler(object):
 
-    def __init__(self):
-        self.name = None
-        self.setup()
+    frame = None
+
+    def __init__(self, name):
+        self.name = name
         self.listeners = {}
-        self.enabled = False
+        self.timers = set()
+        self.active = False
+        self.handlers = []
+        self.renderer = None
+        self.setup()
 
     def setup(self):
         pass
@@ -41,28 +51,51 @@ class Handler(object):
         self.listeners.remove(event)
         p.events.off(event, listener)
 
+    def wait(self, duration, callback):
+        def expire(expired):
+            self.timers.remove(expired)
+            callback()
+        ident = p.timers.set(duration, expire, with_ident=True)
+        self.timers.add(ident)
+
+    def cancel(self, ident):
+        if ident:
+            self.timers.remove(ident)
+            p.timers.clear(ident)
+
     def enable(self):
-        if self.enabled:
+        if self.active:
             return
+        self.active = True
+        for handler in self.handlers:
+            handler.enable()
         for event, listener in self.listeners.items():
             p.events.on(event, listener)
-        self.start()
+        self.enabled()
+        log.debug("{} enabled".format(self.name))
 
-    def start(self):
+    def enabled(self):
         pass
 
     def disable(self):
-        if not self.enabled:
+        if not self.active:
             return
+        self.active = False
+        for handler in self.handlers:
+            self.disable()
         for event, listener in self.listeners.items():
             p.events.off(event, listener)
-        self.stop()
+        self.disabled()
+        log.debug("{} disabled".format(self.name))
 
-    def stop(self):
+    def disabled(self):
         pass
 
     def render(self, frame):
-        pass
+        for handler in self.handlers:
+            handler.render(frame)
+        if self.renderer:
+            self.renderer.render(frame)
 
 
 

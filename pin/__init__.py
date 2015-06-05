@@ -18,23 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .platforms import wpc as platform
-from .machines import no_fear as machine
-from .games import test as game
+from . import ui, config, brand, engine, events, keyboard, proc, timers
 
-import logging
 
-#logging.getLogger("pin.event").setLevel(logging.DEBUG)
-#logging.getLogger("pin.keyboard").setLevel(logging.DEBUG)
-logging.getLogger("pin.resources").setLevel(logging.DEBUG)
-
-# =============================================================================
-
-from . import ui, brand, engine, events, keyboard, proc, timers
-from .resources import *
-
-switches = None
-coils = None
-options = {}
-now = 0
 

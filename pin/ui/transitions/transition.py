@@ -18,8 +18,36 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .component import *
-from .image import *
-from .panel import *
-from .slides import *
-from .text import *
+import p
+
+class Transition(object):
+
+    def __init__(self, duration=1.0):
+        self.duration = duration
+        self.start = p.now
+        self.progress = 0
+        self.before = None
+        self.after = None
+        self.frame = None
+        self.done = False
+
+    def render(self, target, before, after):
+        self.frame = target
+        self.before = before
+        self.after = after
+        self.progress = (p.now - self.start) / self.duration
+        if self.progress >= 1.0:
+            self.progress = 1.0
+            self.done = True
+        self.draw()
+
+    def reset(self):
+        self.start = p.now
+        self.progress = 0
+        self.done = False
+
+    def draw():
+        pass
+
+
+

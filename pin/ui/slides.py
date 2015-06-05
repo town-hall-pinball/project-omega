@@ -18,8 +18,36 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .component import *
-from .image import *
-from .panel import *
-from .slides import *
-from .text import *
+import pygame
+import pin
+from pin import util
+
+class Slides(util.Show):
+
+    def __init__(self, name, slides, **kwargs):
+        self.slides = []
+        self.transitions = []
+        timings = []
+        for item in slides:
+            self.slides += [item[0]]
+            timings += [item[1]]
+            self.transitions += [None if len(item) != 3 else item[2]]
+        self.name = None
+        super(Slides, self).__init__(name, timings, **kwargs)
+
+    def started(self):
+        self.name = pin.dmd.add(self.slides[0])
+
+    def stopped(self):
+        pin.dmd.remove(self.name)
+
+    def action(self):
+        pin.dmd.replace(self.slides[self.index], self.name)
+        transition = self.transitions[self.index]
+        if transition:
+            transition.reset()
+            pin.dmd.transition = transition
+
+
+
+
