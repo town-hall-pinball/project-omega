@@ -18,13 +18,26 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import util
+from pin import util, ui
 import unittest
 
-class TestToList(unittest.TestCase):
+class TestValign(unittest.TestCase):
 
-    def test_to_list(self):
-        self.assertEquals([1], util.to_list(1))
+    def test_single(self):
+        c = ui.Component(height=12)
+        ui.valign([c])
+        self.assertEquals(10, c.style["top"])
 
-    def test_already_list(self):
-        self.assertEquals([1], util.to_list([1]))
+    def test_multiple(self):
+        c1 = ui.Component(height=12)
+        c2 = ui.Component(height=10)
+        ui.valign([c1, c2], padding=0)
+        self.assertEquals(5, c1.style["top"])
+        self.assertEquals(17, c2.style["top"])
+
+    def test_padding(self):
+        c1 = ui.Component(height=12)
+        c2 = ui.Component(height=10)
+        ui.valign([c1, c2], padding=2)
+        self.assertEquals(4, c1.style["top"])
+        self.assertEquals(18, c2.style["top"])
