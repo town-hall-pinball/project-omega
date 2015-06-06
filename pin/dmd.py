@@ -23,84 +23,132 @@ import itertools
 import logging
 import pygame
 
-log = logging.getLogger("pin.dmd")
-
 width = 128
 height = 32
 
-current_frame = pygame.Surface((width, height))
-previous_frame = pygame.Surface((width, height))
-previous_renderer = None
-frame_after = pygame.Surface((width, height))
-frame_before = pygame.Surface((width, height))
+log = logging.getLogger("pin.dmd")
 
-stack = OrderedDict()
-interrupts = OrderedDict()
-overlays = OrderedDict()
-counter = itertools.count()
+class Renderer(object):
 
-transition = None
+    def __init__(self, renderer, name, delegate=None):
+        self.renderer = renderer
+        self.name = name
+        self.delegate = delegate
 
-def add(renderer, name=None):
-    if not name:
-        name = counter.next()
-    stack[name] = get_renderer(renderer)
-    log.debug("{} added".format(name))
-    return name
+    def __call__(self, frame):
+        self.renderer.render(frame)
 
-def remove(name):
-    if name in stack:
-        stack.remove(name)
-    if name in interrupts:
-        interrupts.remove(name)
-    if name in overlays:
-        overlays.remove(name)
-    log.debug("{} removed".format(name))
+    def start(self):
+        if self.delegate:
+            self.delegate.render_started()
+        else:
+            self.renderer.render_started()
 
-def replace(renderer, name):
-    if name in stack:
-        stack[name] = get_renderer(renderer)
-    if name in interrupts:
-        interrupts[name] = get_renderer(renderer)
-    if name in overlays:
-        overlays[name] = get_renderer(renderer)
+    def restart(self):
+        if self.delegate:
+            self.delegate.render_restarted()
+        else:
+            self.renderer.render_restarted()
 
-def interrupt(renderer, name=None):
-    if not name:
-        name = counter.next()
-    interrupts[name] = renderer
-    return name
+    def stop(self):
+        if self.delegate:
+            self.delegate.render_stopped()
+        else:
+            self.renderer.render_stopped()
+
+
+class DMD(object):
+
+    def __init__(self):
+        self.renderer = None
+        self.previous_renderer = None
+
+        self.frame = pygame.Surface((width, height))
+        self.previous_frame = pygame.Surface((width, height))
+
+        self.frame_from = pygame.Surface((width, height))
+        self.frame_to = pygame.Surface((width, height))
+
+        self.transition = None
+        self.stacked = OrderedDict()
+        self.queued = OrderedDict()
+
+    def stack(self, name, renderer, transition=None, delegate=None):
+        self.add(self.stacked, Renderer(renderer, name, delegate), transition)
+
+    def enqueue(self, name, renderer, transition=None, delegate=None):
+        self.add(self.queued, Renderer(renderer, name, delegate), transition)
+
+    def add(self, collection, renderer, transition=None):
+        trans = "using {}".format(transition.name) if transition else ""
+        replaced = renderer.name in collection
+        action = "replaced" if replaced else "added"
+        log.debug("{} {} {}".format(renderer.name, action, trans))
+        collection[renderer.name] = renderer
+        self.shift_renderer(transition)
+        if replaced:
+            renderer.restart()
+
+    def remove(self, name):
+        if name in self.stacked:
+            self.stacked.pop(name)
+        if name in self.queued:
+            self.queued.pop(name)
+        self.shift_renderer()
+
+    def shift_renderer(self, transition=None):
+        if len(self.queued) > 0:
+            renderer = self.queued.values()[0]
+        else:
+            renderer = self.stacked.values()[-1]
+        notify = not(self.renderer and self.renderer.name == renderer.name)
+        if self.previous_renderer:
+            if notify:
+                self.previous_renderer.stop()
+            self.previous_renderer = None
+        if transition:
+            self.previous_renderer = self.renderer
+            transition.reset()
+        elif self.renderer:
+            if notify:
+                self.renderer.stop()
+        self.renderer = renderer
+        self.transition = transition
+        if notify:
+            self.renderer.start()
+
+    def render(self):
+        self.frame, self.previous_frame = self.previous_frame, self.frame
+        self.frame.fill(0)
+
+        if self.transition and self.transition.done:
+            self.transition = None
+            if self.renderer.name != self.previous_renderer.name:
+                self.previous_renderer.stop()
+            self.previous_renderer = None
+
+        if self.transition:
+            self.frame_from.fill(0)
+            self.frame_to.fill(0)
+            self.renderer(self.frame_to)
+            self.previous_renderer(self.frame_from)
+            self.transition.render(self.frame, self.frame_from, self.frame_to)
+        else:
+            self.renderer(self.frame)
+
+        return self.frame
+
+
+dmd = DMD()
+
+stack = dmd.stack
+remove = dmd.remove
+enqueue = dmd.enqueue
+render = dmd.render
 
 def create_frame(width=width, height=height):
     return pygame.Surface((width, height))
 
 def create_dots(frame):
     return pygame.PixelArray(frame)
-
-def render():
-    global current_frame, previous_frame, previous_renderer, transition
-    current_frame, previous_frame = previous_frame, current_frame
-    current_frame.fill(0)
-
-    if len(interrupts) > 0:
-        current_renderer = interrupts.values()[0]
-    elif len(stack) > 0:
-        current_renderer = stack.values()[-1]
-
-    if transition and transition.done:
-        transition = None
-    if transition:
-        frame_after.fill(0)
-        frame_before.fill(0)
-        current_renderer(frame_after)
-        previous_renderer(frame_before)
-        transition.render(current_frame, frame_before, frame_after)
-    else:
-        current_renderer(current_frame)
-        previous_renderer = current_renderer
-
-    return current_frame
-
-def get_renderer(r):
-    return r.render if hasattr(r, "render") else r
 

@@ -18,40 +18,32 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame
 import p
-from pin import util
-from pin.handler import Handler
+from .panel import Panel
 
+class Notice(Panel):
 
-class Slides(util.Show):
+    def __init__(self, name, duration=2.0, defaults=None, **style):
+        defaults = defaults or {}
+        style["duration"] = duration
+        super(Notice, self).__init__(defaults, **style)
+        self.name = name
+        self.timer = None
 
-    def __init__(self, name, slides, **kwargs):
-        timings = [x[1] for x in slides]
-        super(Slides, self).__init__(name, timings, **kwargs)
-        self.slides = []
-        self.transitions = []
-        for i, item in enumerate(slides):
-            self.slides += [item[0]]
-            self.transitions += [None if len(item) != 3 else item[2]]
-
-    def setup(self):
-        self.on("switch_flipper_left", self.next)
-        self.on("switch_flipper_right", self.next)
-
-    def action(self):
-        p.dmd.stack(self.name, self.slides[self.index],
-                self.transitions[self.index], delegate=self)
-
-    def render_stopped(self):
-        self.disable()
-        self.stop()
+    def enqueue(self):
+        p.dmd.enqueue(self.name, self)
 
     def render_started(self):
-        self.enable()
-        self.start()
+        self.timer = p.timers.set(self.style["duration"], self.done)
 
+    def render_stopped(self):
+        p.timers.clear(self.timer)
 
+    def render_restarted(self):
+        p.timers.clear(self.timer)
+        self.timer = p.timers.set(self.style["duration"], self.done)
 
+    def done(self):
+        p.dmd.remove(self.name)
 
 

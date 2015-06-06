@@ -57,13 +57,19 @@ class Handler(object):
             callback()
         ident = p.timers.set(duration, expire, with_ident=True)
         self.timers.add(ident)
+        return ident
 
     def cancel(self, ident):
         if ident:
-            self.timers.remove(ident)
+            if ident in self.timers:
+                self.timers.remove(ident)
             p.timers.clear(ident)
 
-    def enable(self):
+
+    def enable(self, enabled=True):
+        if not enabled:
+            self.disable()
+            return
         if self.active:
             return
         self.active = True
@@ -85,6 +91,8 @@ class Handler(object):
             self.disable()
         for event, listener in self.listeners.items():
             p.events.off(event, listener)
+        for ident in self.timers:
+            p.timers.clear(ident)
         self.disabled()
         log.debug("{} disabled".format(self.name))
 
@@ -92,10 +100,22 @@ class Handler(object):
         pass
 
     def render(self, frame):
+        if not self.active:
+            return
         for handler in self.handlers:
             handler.render(frame)
         if self.renderer:
             self.renderer.render(frame)
+
+    def render_started(self):
+        pass
+
+    def render_stopped(self):
+        pass
+
+    def render_restarted(self):
+        pass
+
 
 
 

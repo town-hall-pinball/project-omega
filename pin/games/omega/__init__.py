@@ -23,13 +23,24 @@ from ... import resources
 
 def init():
     resources.load_fonts(
-        ("title",   "fonts/pf_arma_five.ttf", 16),
-        ("title12", "fonts/pf_arma_five.ttf", 16),
+        ("titlel",    "fonts/pf_tempesta_five_extended_bold.ttf", 8),
+        ("titlek",    "fonts/pf_tempesta_five_extended.ttf", 8),
+        ("titlej",    "fonts/pf_tempesta_five_condensed_bold.ttf", 8),
+        ("titlei",    "fonts/pf_tempesta_five_condensed.ttf", 8),
+        ("titleh",    "fonts/pf_tempesta_five_compressed_bold.ttf", 8),
+        ("titleg",    "fonts/pf_tempesta_five_compressed.ttf", 8),
+        ("titlef",    "fonts/pf_tempesta_five_bold.ttf", 8),
+        ("titlee",    "fonts/pf_tempesta_five.ttf", 8),
+        ("titled",    "fonts/pf_ronda_seven_bold.ttf", 8),
+        ("title",    "fonts/pf_ronda_seven.ttf", 8),
+        ("titleb",    "fonts/pf_arma_five.ttf", 8),
+        ("titlea",    "fonts/PetMe128.ttf", 8),
     )
     resources.load_images(
         ("thp_logo", "images/thp_logo.dmd"),
     )
 
+    system.init()
     attract.init()
 
     system.mode.enable()

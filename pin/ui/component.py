@@ -74,8 +74,8 @@ class Component(object):
 
     def revalidate(self):
         for child in self.children:
-            if component.dirty:
-                component.revalidate()
+            if child.dirty:
+                child.revalidate()
         self.layout()
         self.draw()
         self.dirty = False
@@ -132,6 +132,15 @@ class Component(object):
         if self.dirty:
             self.revalidate()
         target.blit(self.frame, (self.x, self.y))
+
+    def render_started(self):
+        pass
+
+    def render_stopped(self):
+        pass
+
+    def render_restarted(self):
+        pass
 
     def draw(self):
         if ( not self.frame or self.width > self.frame.get_width() or

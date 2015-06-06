@@ -18,40 +18,33 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame
 import p
-from pin import util
+from pin import ui
 from pin.handler import Handler
 
-
-class Slides(util.Show):
-
-    def __init__(self, name, slides, **kwargs):
-        timings = [x[1] for x in slides]
-        super(Slides, self).__init__(name, timings, **kwargs)
-        self.slides = []
-        self.transitions = []
-        for i, item in enumerate(slides):
-            self.slides += [item[0]]
-            self.transitions += [None if len(item) != 3 else item[2]]
+class Mode(Handler):
 
     def setup(self):
-        self.on("switch_flipper_left", self.next)
-        self.on("switch_flipper_right", self.next)
+        self.credits = ui.Notice("credit_display")
+        self.amount = ui.Text("CREDITS 0", top=0)
+        self.message = ui.Text("INSERT COINS", bottom=0)
+        self.credits.add(self.amount, self.message)
 
-    def action(self):
-        p.dmd.stack(self.name, self.slides[self.index],
-                self.transitions[self.index], delegate=self)
+        self.more = ui.Notice("more")
+        self.more2 = ui.Text("MORE STUFF")
+        self.more.add(self.more2)
 
-    def render_stopped(self):
-        self.disable()
-        self.stop()
+        self.on("switch_start_button", self.start_button)
+        self.on("switch_coin_left", self.other)
 
-    def render_started(self):
-        self.enable()
-        self.start()
+    def start_button(self):
+        self.credits.enqueue()
 
+    def other(self):
+        self.more.enqueue()
 
+mode = None
 
-
-
+def init():
+    global mode
+    mode = Mode("system.coin.mode")

@@ -19,10 +19,15 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin import keyboard
+from pin.keyboard import event, switch
 
 def init():
     keyboard.register({
-        "a": keyboard.event("foo"),
-        "7": keyboard.switch("service_enter")
+        "a": event("foo"),
+        "s": switch("start_button"),
+        "1": switch("coin_left"),
+        "7": switch("service_enter"),
+        "[": switch("flipper_left"),
+        "]": switch("flipper_right")
     })
 

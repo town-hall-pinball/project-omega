@@ -27,8 +27,8 @@ __all__ = ["SlideIn", "SlideOut"]
 
 class Slide(Transition):
 
-    def __init__(self, direction="left", duration=1.0):
-        super(Slide, self).__init__(duration)
+    def __init__(self, name, direction="left", duration=1.0):
+        super(Slide, self).__init__(name, duration)
         self.direction = direction
         self.start_x = 0
         self.start_y = 0
@@ -47,6 +47,9 @@ class Slide(Transition):
 
 
 class SlideIn(Slide):
+
+    def __init__(self, direction="left", duration=1.0):
+        super(SlideIn, self).__init__("slide_in", direction, duration)
 
     def setup(self):
         if self.direction == "left":
@@ -69,6 +72,9 @@ class SlideIn(Slide):
 
 
 class SlideOut(Slide):
+
+    def __init__(self, direction="lefT", duration=1.0):
+        super(SlideOut, self).__init__("slide_out", direction, duration)
 
     def setup(self):
         if self.direction == "left":

@@ -27,14 +27,15 @@ class Panel(Component):
         defaults = defaults or {}
         defaults["width"] = defaults.get("width", pin.dmd.width)
         defaults["height"] = defaults.get("height", pin.dmd.height)
-        super(Panel, self).__init__(defaults, style)
+        super(Panel, self).__init__(defaults, **style)
 
-    def add(self, component):
-        self.children += [component]
-        self.invalidate()
+    def add(self, *components):
+        for component in components:
+            self.children += [component]
+            self.invalidate()
 
     def draw(self):
         super(Panel, self).draw()
         for child in self.children:
-            self.frame.blit(child,
+            self.frame.blit(child.frame,
                     (child.x, child.y, child.width, child.height))

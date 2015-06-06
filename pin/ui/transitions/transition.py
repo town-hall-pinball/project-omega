@@ -22,7 +22,8 @@ import p
 
 class Transition(object):
 
-    def __init__(self, duration=1.0):
+    def __init__(self, name, duration=1.0):
+        self.name = name
         self.duration = duration
         self.start = p.now
         self.progress = 0

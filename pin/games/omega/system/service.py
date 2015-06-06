@@ -18,40 +18,20 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame
 import p
-from pin import util
+from pin import ui
 from pin.handler import Handler
 
-
-class Slides(util.Show):
-
-    def __init__(self, name, slides, **kwargs):
-        timings = [x[1] for x in slides]
-        super(Slides, self).__init__(name, timings, **kwargs)
-        self.slides = []
-        self.transitions = []
-        for i, item in enumerate(slides):
-            self.slides += [item[0]]
-            self.transitions += [None if len(item) != 3 else item[2]]
+class Mode(Handler):
 
     def setup(self):
-        self.on("switch_flipper_left", self.next)
-        self.on("switch_flipper_right", self.next)
+        self.on("switch_service_enter", self.service_enter)
 
-    def action(self):
-        p.dmd.stack(self.name, self.slides[self.index],
-                self.transitions[self.index], delegate=self)
+    def service_enter(self):
+        print "ENTER"
 
-    def render_stopped(self):
-        self.disable()
-        self.stop()
+mode = None
 
-    def render_started(self):
-        self.enable()
-        self.start()
-
-
-
-
-
+def init():
+    global mode
+    mode = Mode("system.service.mode")

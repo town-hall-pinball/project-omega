@@ -34,14 +34,18 @@ class Show(Handler):
         super(Show, self).__init__(name)
         self.timings = timings
         self.repeat = repeat
+        self.timer = None
 
     def start(self):
         if not self.running:
             self.running = True
             log.debug("{} started".format(self.name))
-            self.index = 0
-            self.next()
             self.started()
+            self.next()
+
+    def reset(self):
+        self.index = 0
+        self.start()
 
     def started(self):
         pass
@@ -58,6 +62,7 @@ class Show(Handler):
         pass
 
     def next(self):
+        self.cancel(self.timer)
         if self.index == len(self.timings):
             if self.repeat:
                 self.index = 0
@@ -67,6 +72,7 @@ class Show(Handler):
         self.action()
         self.timer = self.wait(self.timings[self.index], self.next)
         self.index += 1
+
 
     def action(self):
         pass
