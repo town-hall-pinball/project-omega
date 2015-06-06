@@ -20,23 +20,47 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+set -e
 
-NAME="project-omega"
+PROG=$(basename "$0")
+cd $(dirname "$0")
+
+if [ "$(id -u)" != "0" ] ; then
+    echo "$PROG: Must run as root" 2>&1
+    exit 1
+fi
 
 apt-get update
-apt-get install -y curl git
 
-cd /vagrant
+apt-get install -y \
+    alsa-utils \
+	curl \
+	dos2unix \
+	libboost-dev \
+	python \
+	python-imaging \
+    python-pip \
+    python-pygame \
+    stow
 
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
+pip install \
+    cherrypy \
+    ws4py
 
-mkdir -p /vagrant/var
+PACKAGES=$(ls dist/*.tar.gz)
+for package in $PACKAGES; do
+    echo "Installing $package"
+    ./local-stow $package
+done
+install -m 755 ../../bin/pingame /usr/local/bin/pingame
+dos2unix /usr/local/bin/pingame
+ldconfig
 
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
-EOF
+if [ $(arch) == "x86_64" ] ; then
+    amixer -c 0 -- sset Master 100% unmute
+fi
+amixer -c 0 -- sset PCM 100% unmute
 
-
+if getent passwd vagrant >/dev/null ; then
+    usermod -a -G audio vagrant
+fi

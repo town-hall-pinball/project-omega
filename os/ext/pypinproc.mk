@@ -1,6 +1,5 @@
-#!/bin/bash
 #
-# Copyright (c) 2014 - 2015 townhallpinball.org
+# Copyright (c) 2014 townhallpinball.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,23 +19,21 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+include include.mk
 
-NAME="project-omega"
+NAME=pypinproc
 
-apt-get update
-apt-get install -y curl git
+download: $(DOWNLOAD)/$(NAME)
 
-cd /vagrant
+$(DOWNLOAD)/$(NAME):
+	( cd $(DOWNLOAD) ; git clone --depth 1 https://github.com/preble/pypinproc.git )
 
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
+compile: download $(DIST)/$(NAME).$(ARCH).tar.gz
 
-mkdir -p /vagrant/var
-
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
-EOF
-
-
+$(DIST)/$(NAME).$(ARCH).tar.gz:
+	cp -r $(DOWNLOAD)/$(NAME) $(BUILD)/$(NAME)
+	( cd $(BUILD)/$(NAME) ; \
+		python setup.py build ; \
+		python setup.py install --prefix=$(BUILDROOT)/$(NAME) )
+	( cd $(BUILDROOT)/$(NAME)/lib/python*; mv site-packages dist-packages )
+	tar czf $(DIST)/$(NAME).$(ARCH).tar.gz -C $(BUILDROOT) $(NAME)

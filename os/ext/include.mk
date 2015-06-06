@@ -1,6 +1,5 @@
-#!/bin/bash
 #
-# Copyright (c) 2014 - 2015 townhallpinball.org
+# Copyright (c) 2014 townhallpinball.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,23 +19,25 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+ARCH=$(shell arch)
+BASEDIR=$(PWD)
 
-NAME="project-omega"
+DOWNLOAD=$(BASEDIR)/download
+BUILD=$(BASEDIR)/build
+BUILDROOT=$(BASEDIR)/build/buildroot
+DIST=$(BASEDIR)/dist
 
-apt-get update
-apt-get install -y curl git
+all: init buildclean compile
 
-cd /vagrant
+init:
+	mkdir -p $(DOWNLOAD)
+	mkdir -p $(BUILD)
+	mkdir -p $(BUILDROOT)
+	mkdir -p $(DIST)
 
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
+buildclean:
+	rm -rf $(BUILD)/$(NAME)
+	rm -rf $(BUILDROOT)/$(NAME)
 
-mkdir -p /vagrant/var
-
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
-EOF
-
-
+clean: buildclean
+	rm -f $(DIST)/$(NAME)

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2014 - 2015 townhallpinball.org
+# Copyright (c) 2014 townhallpinball.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,23 +20,33 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+set -e
 
-NAME="project-omega"
+PROG=$(basename "$0")
 
-apt-get update
-apt-get install -y curl git
+if [ "$(id -u)" != "0" ] ; then
+    echo "$PROG: Must run as root" 2>&1
+    exit 1
+fi
 
-cd /vagrant
+usage() {
+cat <<EOF
+Usage: $PROG <tarball>
 
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
-
-mkdir -p /vagrant/var
-
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
+Unpacks the <tarball> to /usr/local/stow and installs
 EOF
+}
 
+if [ "$#" -ne 1 ] ; then
+    usage
+    exit 1
+fi
 
+FILE=$1
+NAME=$(echo "$FILE" | sed -e 's|.*/||g' | sed -e 's|\.[^\.]*\.tar\.gz||g')
+
+mkdir -p /usr/local/stow
+rm -rf /usr/local/stow/$NAME
+tar xf "$FILE" -C /usr/local/stow
+( cd /usr/local/stow ; stow -R $NAME )
+ldconfig

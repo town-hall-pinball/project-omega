@@ -1,6 +1,5 @@
-#!/bin/bash
 #
-# Copyright (c) 2014 - 2015 townhallpinball.org
+# Copyright (c) 2014 townhallpinball.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,23 +19,22 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+include include.mk
 
-NAME="project-omega"
+VERSION=0.1.12
+NAME=libusb-$(VERSION)
 
-apt-get update
-apt-get install -y curl git
+download: $(DOWNLOAD)/$(NAME).tar.gz
 
-cd /vagrant
+$(DOWNLOAD)/$(NAME).tar.gz:
+	( cd $(DOWNLOAD) ; curl -L -O "http://softlayer-dal.dl.sourceforge.net/project/libusb/libusb-0.1%20%28LEGACY%29/$(VERSION)/$(NAME).tar.gz" )
 
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
+compile: download $(DIST)/$(NAME).$(ARCH).tar.gz
 
-mkdir -p /vagrant/var
-
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
-EOF
-
-
+$(DIST)/$(NAME).$(ARCH).tar.gz:
+	tar xf $(DOWNLOAD)/$(NAME).tar.gz -C $(BUILD)
+	( cd $(BUILD)/$(NAME) ; \
+		./configure --prefix=/ ; \
+		make ; \
+		make install DESTDIR=$(BUILDROOT)/$(NAME) )
+	tar czf $(DIST)/$(NAME).$(ARCH).tar.gz -C $(BUILDROOT) $(NAME)

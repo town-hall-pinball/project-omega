@@ -20,23 +20,13 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+set -e
 
-NAME="project-omega"
+. /etc/default/pingame
 
-apt-get update
-apt-get install -y curl git
-
-cd /vagrant
-
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
-
-mkdir -p /vagrant/var
-
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
-EOF
-
+cd $DIR
+if [ -z "$DISPLAY" ] ; then
+    export DISPLAY=$(ip route show default | head -1 | awk '{print $3}'):0
+fi
+( cd /vagrant ; exec python -m pin "$@" )
 

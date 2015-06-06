@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2014 - 2015 townhallpinball.org
+# Copyright (c) 2014 townhallpinball.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,23 +20,14 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+set -e
 
-NAME="project-omega"
+DEPS="libftdi-0.16 libpinproc libusb-0.1.12 pypinproc yaml-cpp-0.3.0"
 
-apt-get update
-apt-get install -y curl git
+cd $(dirname "$0")
 
-cd /vagrant
-
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
-
-mkdir -p /vagrant/var
-
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
-EOF
-
-
+mkdir -p dist
+for dep in $DEPS; do
+    rm -f dist/$dep.tar.gz
+    ( cd dist ; curl -O http://blackchip.org/town-hall-pinball/$dep.$(arch).tar.gz )
+done

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2014 - 2015 townhallpinball.org
+# Copyright (c) 2014 townhallpinball.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,23 +20,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+set -e
 
-NAME="project-omega"
+PROG=$(basename "$0")
+
+if [ "$(id -u)" != "0" ] ; then
+    echo "$PROG: Must run as root" 2>&1
+    exit 1
+fi
 
 apt-get update
-apt-get install -y curl git
-
-cd /vagrant
-
-os/ext/download-dependencies
-os/ext/install-build-dependencies
-os/ext/install-run-dependencies
-
-mkdir -p /vagrant/var
-
-cat > /etc/default/pingame <<EOF
-OPTIONS=""
-EOF
-
-
+apt-get install -y stow ccache
+mkdir -p /usr/local/stow/ccache/bin
+for exe in gcc g++ cc c++; do
+    ln -s /usr/bin/ccache /usr/local/stow/ccache/bin/${exe}
+done
+( cd /usr/local/stow ; stow -R ccache )
