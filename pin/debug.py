@@ -25,6 +25,7 @@ loggers = [
     #"pin.event",
     #"pin.keyboard",
     "pin.handler",
+    "pin.mixer",
     "pin.resources",
     "pin.shows",
 ]

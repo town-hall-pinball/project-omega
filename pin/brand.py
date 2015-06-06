@@ -18,18 +18,22 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-PROG = "pingame"
+prog = "pingame"
 """
 Name used on the command line to invoke this program.
 """
 
-NAME = "Project Omega"
+name = "Project Omega"
 """
 Offical name of this game.
 """
 
-VERSION = "0.0.0"
+version = "0.0.0"
 """
 Version string.
 """
 
+release = "June 6, 2015"
+"""
+Release string.
+"""

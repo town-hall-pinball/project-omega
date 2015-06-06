@@ -30,23 +30,36 @@ __all__ = ["fonts", "images", "font", "image"]
 
 fonts = {}
 images = {}
+sounds = {}
 
 log = logging.getLogger("pin.resources")
 base_dir = os.path.join(os.path.dirname(__file__), "..", "resources")
 
 pygame.font.init()
+pygame.mixer.init()
 
 def load_fonts(*args):
     for key, filename, size in args:
         path = os.path.join(base_dir, filename)
         log.debug("Loading font {}: {}".format(key, filename))
-        fonts[key] = pygame.font.Font(path, size)
+        add("font", fonts, key, pygame.font.Font(path, size))
+
+def alias_fonts(*args):
+    for source, target in args:
+        log.debug("Aliasing font {} to {}".format(source, target))
+        add("font", fonts, target, fonts[source])
 
 def load_images(*args):
     for key, filename in args:
         path = os.path.join(base_dir, filename)
         log.debug("Loading image {}: {}".format(key, filename))
-        images[key] = load_dmd_animation(path)[0]
+        add("image", images, key, load_dmd_animation(path)[0])
+
+def load_sounds(*args):
+    for key, filename in args:
+        path = os.path.join(base_dir, filename)
+        log.debug("Loading sound {}: {}".format(key, filename))
+        add("sound", sounds, key, pygame.mixer.Sound(path))
 
 def load_dmd_animation(path):
     frames = []
@@ -72,5 +85,8 @@ def load_dmd_animation(path):
             frames.append(new_frame)
     return frames
 
-
+def add(what, to, key, value):
+    if key in to:
+        raise ValueError("Duplicate {}: {}".format(what, key))
+    to[key] = value
 

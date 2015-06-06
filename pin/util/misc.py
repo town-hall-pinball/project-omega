@@ -19,6 +19,6 @@
 # DEALINGS IN THE SOFTWARE.
 
 def to_list(value):
-    return value if isinstance(value, list) else [value]
+    return value if isinstance(value, list) or isinstance(value, tuple) else [value]
 
 

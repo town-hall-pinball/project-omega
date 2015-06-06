@@ -24,16 +24,18 @@ from .panel import Panel
 
 class Notice(Panel):
 
-    def __init__(self, name, duration=2.0, defaults=None, **style):
+    def __init__(self, name, duration=2.0, callback=None,
+            defaults=None, **style):
         defaults = defaults or {}
         style["duration"] = duration
         style["padding"] = style.get("padding", 2)
         super(Notice, self).__init__(defaults, **style)
         self.name = name
         self.timer = None
+        self.callback = callback
 
-    def add(self, *components):
-        super(Notice, self).add(*components)
+    def add(self, components):
+        super(Notice, self).add(components)
         valign(self.children)
 
     def enqueue(self):
@@ -50,6 +52,10 @@ class Notice(Panel):
         self.timer = p.timers.set(self.style["duration"], self.done)
 
     def done(self):
+        p.timers.clear(self.timer)
         p.dmd.remove(self.name)
+        if self.callback:
+            self.callback()
+
 
 

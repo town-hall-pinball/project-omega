@@ -18,30 +18,37 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import attract, system
+from . import attract, banner, system
 from ... import resources
 
 def init():
+    resources.load_sounds(
+        ("boot",        "sounds/boot.ogg"),
+    )
     resources.load_fonts(
-        ("titlel",    "fonts/pf_tempesta_five_extended_bold.ttf", 8),
-        ("titlek",    "fonts/pf_tempesta_five_extended.ttf", 8),
-        ("titlej",    "fonts/pf_tempesta_five_condensed_bold.ttf", 8),
-        ("titlei",    "fonts/pf_tempesta_five_condensed.ttf", 8),
-        ("titleh",    "fonts/pf_tempesta_five_compressed_bold.ttf", 8),
-        ("titleg",    "fonts/pf_tempesta_five_compressed.ttf", 8),
-        ("titlef",    "fonts/pf_tempesta_five_bold.ttf", 8),
-        ("titlee",    "fonts/pf_tempesta_five.ttf", 8),
-        ("title",    "fonts/pf_ronda_seven_bold.ttf", 8),
-        #("title",    "fonts/pf_ronda_seven.ttf", 8),
-        ("titleb",    "fonts/pf_arma_five.ttf", 8),
-        ("titlea",    "fonts/PetMe128.ttf", 8),
+        ("t5exb",    "fonts/pf_tempesta_five_extended_bold.ttf", 8),
+        ("t5ex",     "fonts/pf_tempesta_five_extended.ttf", 8),
+        ("t5cdb",    "fonts/pf_tempesta_five_condensed_bold.ttf", 8),
+        ("t5cd",     "fonts/pf_tempesta_five_condensed.ttf", 8),
+        ("t5cpb",    "fonts/pf_tempesta_five_compressed_bold.ttf", 8),
+        ("t5cp",     "fonts/pf_tempesta_five_compressed.ttf", 8),
+        ("t5b",     "fonts/pf_tempesta_five_bold.ttf", 8),
+        ("t5",      "fonts/pf_tempesta_five.ttf", 8),
+        ("r7b",     "fonts/pf_ronda_seven_bold.ttf", 8),
+        ("r7",      "fonts/pf_ronda_seven.ttf", 8),
+        ("a5",      "fonts/pf_arma_five.ttf", 8),
+        ("c128",    "fonts/PetMe128.ttf", 8),
+    )
+    resources.alias_fonts(
+        ("r7b",     "title")
     )
     resources.load_images(
         ("thp_logo", "images/thp_logo.dmd"),
     )
 
-    system.init()
     attract.init()
+    banner.init()
+    system.init()
 
     system.mode.enable()
-    attract.mode.enable()
+    banner.mode.enable()

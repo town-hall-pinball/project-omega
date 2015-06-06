@@ -26,28 +26,17 @@ from pin.handler import Handler
 class Mode(Handler):
 
     thp = ui.Image("thp_logo")
-    texta = ui.Panel()
-    text1 = ui.Text("ABCDEFGHIJKLM", top=5)
-    text2 = ui.Text("NOPQRSTUVWXYZ", bottom=5)
-    textb = ui.Panel()
-    text3 = ui.Text("0123456789", top=5)
-    text4 = ui.Text("1,2.3@#)", bottom=5)
     presents = ui.Text("Presents")
     title = ui.Text("Project Omega")
     game_over = ui.Text("Game Over")
 
     def setup(self):
-        self.texta.add(self.text1, self.text2)
-        self.textb.add(self.text3, self.text4)
         self.show = ui.Slides("attract.show", (
-            #(self.thp,           3.0),
-            (self.texta,          3.0),
-            (self.textb,          3.0),
+            (self.thp,           3.0),
             (self.presents,      3.0, SlideIn(direction="left")),
             (self.title,         3.0),
-            (self.game_over,     3.0)),
+            (self.game_over,     6.0)),
             repeat=True)
-        self.handlers += [self.show]
 
     def enabled(self):
         self.show.start()

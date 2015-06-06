@@ -28,7 +28,7 @@ from pin import debug
 from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(prog=pin.brand.PROG)
+    parser = argparse.ArgumentParser(prog=pin.brand.prog)
     parser.add_argument("-c", "--console", action="store_true", default=False,
         help="also print log file to console")
     parser.add_argument("-d", "--develop", action="store_true", default=False,
@@ -44,7 +44,7 @@ def parse_arguments():
     p.options["virtual"] = p.options["develop"]
 
 def init_logging():
-    log_file = os.path.join("var", "{}.log".format(pin.brand.PROG))
+    log_file = os.path.join("var", "{}.log".format(pin.brand.prog))
     log_format = "%(asctime)s %(name)s: %(message)s"
     date_format = "%Y-%m-%d %H:%M:%S"
 
@@ -80,6 +80,8 @@ def bind():
     p.events = pin.events
     p.fonts = pin.resources.fonts
     p.images = pin.resources.images
+    p.mixer = pin.mixer
+    p.sounds = pin.resources.sounds
     p.switches = pin.devices.switches
     p.proc = pin.proc
     p.timers = pin.timers
@@ -88,7 +90,7 @@ def run():
     parse_arguments()
     debug.init()
     log = init_logging()
-    log.info("{}, Version {}".format(pin.brand.NAME, pin.brand.VERSION))
+    log.info("{}, Version {}".format(pin.brand.name, pin.brand.version))
 
     pin.config.init()
     p.machine.init()
