@@ -19,4 +19,5 @@
 # DEALINGS IN THE SOFTWARE.
 
 from .cycle import *
+from .misc import *
 from .show import *

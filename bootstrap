@@ -20,7 +20,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-set -x
+set -x -e
 
 NAME="project-omega"
 
@@ -38,6 +38,8 @@ pip install \
 git clone https://github.com/town-hall-pinball/PinOS.git
 PinOS/ext/download-dependencies
 PinOS/ext/install-run-dependencies
+
+mkdir /vagrant/var
 
 #cat > /etc/default/pingame <<EOF
 #GAME=$NAME

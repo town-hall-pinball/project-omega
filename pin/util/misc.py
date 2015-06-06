@@ -18,33 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import ui
-from pin.handler import Handler
+def to_list(value):
+    return value if isinstance(value, list) else [value]
 
-class Mode(Handler):
 
-    def setup(self):
-        self.credits = ui.Notice("credit_display")
-        self.amount = ui.Text("CREDITS 0")
-        self.message = ui.Text("INSERT COINS")
-        self.credits.add(self.amount, self.message)
-
-        self.more = ui.Notice("more")
-        self.more2 = ui.Text("MORE STUFF")
-        self.more.add(self.more2)
-
-        self.on("switch_start_button", self.start_button)
-        self.on("switch_coin_left", self.other)
-
-    def start_button(self):
-        self.credits.enqueue()
-
-    def other(self):
-        self.more.enqueue()
-
-mode = None
-
-def init():
-    global mode
-    mode = Mode("system.coin.mode")

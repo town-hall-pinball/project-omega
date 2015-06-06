@@ -18,33 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import ui
-from pin.handler import Handler
+import math
+from pin import dmd
 
-class Mode(Handler):
+__all__ = ["valign"]
 
-    def setup(self):
-        self.credits = ui.Notice("credit_display")
-        self.amount = ui.Text("CREDITS 0")
-        self.message = ui.Text("INSERT COINS")
-        self.credits.add(self.amount, self.message)
+def valign(components, padding=4):
+    height = 0
+    for component in components:
+        component.layout()
+        height += component.height
+    height += (len(components) - 1) * padding
+    y = math.floor((dmd.height - height) / 2.0)
+    for component in components:
+        component.update(top=y)
+        y += component.height + padding
 
-        self.more = ui.Notice("more")
-        self.more2 = ui.Text("MORE STUFF")
-        self.more.add(self.more2)
-
-        self.on("switch_start_button", self.start_button)
-        self.on("switch_coin_left", self.other)
-
-    def start_button(self):
-        self.credits.enqueue()
-
-    def other(self):
-        self.more.enqueue()
-
-mode = None
-
-def init():
-    global mode
-    mode = Mode("system.coin.mode")

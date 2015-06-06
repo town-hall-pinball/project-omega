@@ -21,7 +21,7 @@
 import logging
 
 loggers = [
-    "pin.dmd",
+    #"pin.dmd",
     #"pin.event",
     #"pin.keyboard",
     "pin.handler",

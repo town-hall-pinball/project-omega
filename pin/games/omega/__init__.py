@@ -31,8 +31,8 @@ def init():
         ("titleg",    "fonts/pf_tempesta_five_compressed.ttf", 8),
         ("titlef",    "fonts/pf_tempesta_five_bold.ttf", 8),
         ("titlee",    "fonts/pf_tempesta_five.ttf", 8),
-        ("titled",    "fonts/pf_ronda_seven_bold.ttf", 8),
-        ("title",    "fonts/pf_ronda_seven.ttf", 8),
+        ("title",    "fonts/pf_ronda_seven_bold.ttf", 8),
+        #("title",    "fonts/pf_ronda_seven.ttf", 8),
         ("titleb",    "fonts/pf_arma_five.ttf", 8),
         ("titlea",    "fonts/PetMe128.ttf", 8),
     )

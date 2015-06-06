@@ -20,6 +20,7 @@
 
 import math
 import pin
+from pin import util
 
 class Component(object):
 
