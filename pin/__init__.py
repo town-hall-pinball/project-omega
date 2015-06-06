@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import ui, config, brand, engine, events, keyboard, proc, timers
+from . import ui, config, brand, engine, events, keyboard, mixer, proc, timers
 
 
 

@@ -19,6 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import pin
+from pin import util
 from .component import Component
 
 class Panel(Component):
@@ -29,7 +30,8 @@ class Panel(Component):
         defaults["height"] = defaults.get("height", pin.dmd.height)
         super(Panel, self).__init__(defaults, **style)
 
-    def add(self, *components):
+    def add(self, components):
+        components = util.to_list(components)
         for component in components:
             self.children += [component]
             self.invalidate()

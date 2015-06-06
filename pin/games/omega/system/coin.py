@@ -26,9 +26,9 @@ class Mode(Handler):
 
     def setup(self):
         self.credits = ui.Notice("credit_display")
-        self.amount = ui.Text("CREDITS 0", top=0)
-        self.message = ui.Text("INSERT COINS", bottom=0)
-        self.credits.add(self.amount, self.message)
+        self.amount = ui.Text("CREDITS 0")
+        self.message = ui.Text("INSERT COINS")
+        self.credits.add((self.amount, self.message))
 
         self.more = ui.Notice("more")
         self.more2 = ui.Text("MORE STUFF")

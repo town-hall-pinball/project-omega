@@ -57,6 +57,24 @@ class Renderer(object):
             self.renderer.render_stopped()
 
 
+class NullRenderer(Renderer):
+
+    def __init__(self):
+        super(NullRenderer, self).__init__(None, "null")
+
+    def __call__(self, frame):
+        pass
+
+    def start(self):
+        pass
+
+    def restart(self):
+        pass
+
+    def stop(self):
+        pass
+
+
 class DMD(object):
 
     def __init__(self):
@@ -72,6 +90,9 @@ class DMD(object):
         self.transition = None
         self.stacked = OrderedDict()
         self.queued = OrderedDict()
+
+        null = NullRenderer()
+        self.stacked[null.name] = null
 
     def stack(self, name, renderer, transition=None, delegate=None):
         self.add(self.stacked, Renderer(renderer, name, delegate), transition)
@@ -151,4 +172,5 @@ def create_frame(width=width, height=height):
 
 def create_dots(frame):
     return pygame.PixelArray(frame)
+
 

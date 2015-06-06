@@ -18,21 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import time
+def to_list(value):
+    return value if isinstance(value, list) or isinstance(value, tuple) else [value]
 
-coils = None
-dmd = None
-events = None
-fonts = None
-game = None
-images = None
-machine = None
-mixer = None
-now = time.time()
-options = {}
-proc = None
-platform = None
-switches = None
-sounds = None
-timers = None
 

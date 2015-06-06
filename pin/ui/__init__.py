@@ -24,3 +24,4 @@ from .notice import *
 from .panel import *
 from .slides import *
 from .text import *
+from .misc import *

@@ -18,21 +18,29 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import time
+import itertools
+import logging
+import pygame
+import p
 
-coils = None
-dmd = None
-events = None
-fonts = None
-game = None
-images = None
-machine = None
-mixer = None
-now = time.time()
-options = {}
-proc = None
-platform = None
-switches = None
-sounds = None
-timers = None
+pygame.mixer.init()
+
+log = logging.getLogger("pin.mixer")
+
+channels = {
+    "master": pygame.mixer.Channel(0)
+}
+
+ident = itertools.count(1)
+
+def play(sound_name, channel="master"):
+    if channel not in channels:
+        log.debug("Creating mixer channel: {}".format(channel))
+        channels[channel] = pygame.mixer.Channel(ident.next())
+    sound = p.sounds[sound_name]
+    log.debug("{}: Playing {}".format(channel, sound_name))
+    channels[channel].play(sound)
+
+def stop(channel="master"):
+    channels[channel].stop()
 

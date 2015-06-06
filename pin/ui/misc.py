@@ -18,21 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import time
+import math
+from pin import dmd
 
-coils = None
-dmd = None
-events = None
-fonts = None
-game = None
-images = None
-machine = None
-mixer = None
-now = time.time()
-options = {}
-proc = None
-platform = None
-switches = None
-sounds = None
-timers = None
+__all__ = ["valign"]
+
+def valign(components, padding=4):
+    height = 0
+    for component in components:
+        component.layout()
+        height += component.height
+    height += (len(components) - 1) * padding
+    y = math.floor((dmd.height - height) / 2.0)
+    for component in components:
+        component.update(top=y)
+        y += component.height + padding
 

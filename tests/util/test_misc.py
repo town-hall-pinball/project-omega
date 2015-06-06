@@ -18,21 +18,13 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import time
+from pin import util
+import unittest
 
-coils = None
-dmd = None
-events = None
-fonts = None
-game = None
-images = None
-machine = None
-mixer = None
-now = time.time()
-options = {}
-proc = None
-platform = None
-switches = None
-sounds = None
-timers = None
+class TestToList(unittest.TestCase):
 
+    def test_to_list(self):
+        self.assertEquals([1], util.to_list(1))
+
+    def test_already_list(self):
+        self.assertEquals([1], util.to_list([1]))
