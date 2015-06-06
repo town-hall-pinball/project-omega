@@ -41,7 +41,8 @@ apt-get install -y \
 	python-imaging \
     python-pip \
     python-pygame \
-    stow
+    stow \
+    timidity
 
 pip install \
     cherrypy \

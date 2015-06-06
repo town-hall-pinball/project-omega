@@ -30,8 +30,8 @@ apt-get install -y curl git
 cd /vagrant
 
 os/ext/download-dependencies
-os/ext/install-build-dependencies
 os/ext/install-run-dependencies
+os/ext/install-build-dependencies
 
 mkdir -p /vagrant/var
 
