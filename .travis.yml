@@ -1,5 +1,8 @@
 language: python
 python:
     - "2.7"
+before_install:
+    - apt-get update
+    - apt-get install -y python-pygame
 install: "pip install -r requirements.txt"
-script: "paver test"
+script: "nosetests -w tests --with-coverage --cover-package=pin"
