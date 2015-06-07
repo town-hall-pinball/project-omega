@@ -4,3 +4,4 @@ build
 var
 *.pyc
 *.pyp
+os/ext/dist
