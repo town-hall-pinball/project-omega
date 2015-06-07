@@ -1,6 +1,7 @@
 # project-omega
 
 [![Build Status](https://travis-ci.org/town-hall-pinball/project-omega.svg)](https://travis-ci.org/town-hall-pinball/project-omega)
+[![Coverage Status](https://coveralls.io/repos/town-hall-pinball/project-omega/badge.svg?branch=master)](https://coveralls.io/r/town-hall-pinball/project-omega?branch=master)
 
 Visit our blog for news, updates, and videos:
 
