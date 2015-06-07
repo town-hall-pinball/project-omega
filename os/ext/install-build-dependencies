@@ -45,11 +45,4 @@ apt-get install -y \
     stow \
 	swig
 
-pip install \
-    coverage \
-    docutils \
-    mock \
-    nose \
-    paver \
-    Sphinx
 

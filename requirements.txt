@@ -1,0 +1,6 @@
+coverage
+docutils
+mock
+nose
+paver
+Sphinx

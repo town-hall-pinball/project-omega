@@ -1,5 +1,7 @@
 # project-omega
 
+[![Build Status](https://travis-ci.org/town-hall-pinball/project-omega.svg)](https://travis-ci.org/town-hall-pinball/project-omega)
+
 Visit our blog for news, updates, and videos:
 
 http://townhallpinball.org

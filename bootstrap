@@ -33,6 +33,8 @@ os/ext/download-dependencies
 os/ext/install-run-dependencies
 os/ext/install-build-dependencies
 
+pip install -r requirements.txt
+
 mkdir -p /vagrant/var
 
 cat > /etc/default/pingame <<EOF
