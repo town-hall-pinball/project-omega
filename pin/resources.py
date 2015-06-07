@@ -24,9 +24,7 @@ import logging
 import pygame
 import struct
 
-from pin import dmd
-
-__all__ = ["fonts", "images", "font", "image"]
+from pin import dmd, util
 
 fonts = {}
 images = {}

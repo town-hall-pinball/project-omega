@@ -32,11 +32,13 @@ def reset():
     p.platform = platform
     p.machine = machine
     p.game = game
+    p.defaults = p.game.defaults
 
     pin.keyboard.reset()
     pin.events.reset()
 
     p.dmd = pin.dmd
+    p.data = pin.data
     p.events = pin.events
     p.fonts = pin.resources.fonts
     p.mixer = pin.mixer
@@ -46,6 +48,13 @@ def reset():
     p.proc.api = virtual_proc
     p.sounds = pin.resources.sounds
     p.timers = pin.timers
+
+    p.data.reset(p.defaults)
+
+    p.options = {
+        "fast": False,
+        "quiet": False
+    }
 
     pin.devices.reset()
     machine.init()

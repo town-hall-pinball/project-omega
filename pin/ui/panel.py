@@ -34,6 +34,7 @@ class Panel(Component):
         components = util.to_list(components)
         for component in components:
             self.children += [component]
+            component.parent = self
             self.invalidate()
 
     def draw(self):

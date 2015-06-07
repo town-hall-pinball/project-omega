@@ -18,14 +18,42 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import random
-from pin import dmd, ui
+import json
+import logging
+import os
+from . import util
 
-def render(frame):
-    dots = dmd.create_dots(frame)
-    for x in xrange(0, dmd.width):
-        for y in xrange(0, dmd.height):
-            dots[x, y] = random.choice((0x0, 0xf))
+__all__ = ["data"]
+
+log = logging.getLogger("pin.data")
+path = os.path.join(os.path.dirname(__file__), "..", "var", "data.json")
+
+class Data(dict):
+
+    def load(self, defaults):
+        log.debug("Loading data from {}".format(path))
+        util.dict_merge(self, defaults)
+        try:
+            with open(path) as fp:
+                saved = json.load(fp)
+                saved["cleared"] = False
+                util.dict_merge(self, saved)
+        except Exception as ie:
+            log.error("Unable to load data file: {}".format(ie))
+
+    def save(self):
+        log.debug("Saving data to {}".format(path))
+        try:
+            with open(path, "w") as fp:
+                json.dump(self, fp)
+        except Exception as ie:
+            log.error("Unable to save data file: {}".format(ie))
+
+    def reset(self, defaults):
+        log.debug("Resetting data to defaults")
+        self.clear()
+        util.dict_merge(self, defaults)
 
 
+data = Data()
 

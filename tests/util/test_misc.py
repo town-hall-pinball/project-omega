@@ -28,3 +28,18 @@ class TestToList(unittest.TestCase):
 
     def test_already_list(self):
         self.assertEquals([1], util.to_list([1]))
+
+
+class TestDictMerge(unittest.TestCase):
+
+    def test_simple(self):
+        a = { "x": 1 }
+        b = { "y": 2 }
+        expected = { "x": 1, "y": 2 }
+        self.assertEquals(expected, util.dict_merge(a, b))
+
+    def test_deep(self):
+        a = { "x": { "one": 1 } }
+        b = { "x": { "two": 2 } }
+        expected = { "x": { "one": 1, "two": 2 } }
+        self.assertEquals(expected, util.dict_merge(a, b))

@@ -33,7 +33,12 @@ class Show(Handler):
     def __init__(self, name, timings, repeat=False):
         super(Show, self).__init__(name)
         self.timings = timings
-        self.repeat = repeat
+        if repeat == True:
+            self.repeat = -1
+        elif repeat == False:
+            self.repeat = 0
+        else:
+            self.repeat = repeat
         self.timer = None
 
     def start(self):
@@ -64,8 +69,10 @@ class Show(Handler):
     def next(self):
         self.cancel(self.timer)
         if self.index == len(self.timings):
-            if self.repeat:
+            if self.repeat != 0:
                 self.index = 0
+                if self.repeat > 0:
+                    self.repeat -= 1
             else:
                 self.stop()
                 return

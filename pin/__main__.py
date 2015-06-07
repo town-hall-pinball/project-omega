@@ -34,10 +34,14 @@ def parse_arguments():
         help="also print log file to console")
     parser.add_argument("-d", "--develop", action="store_true", default=False,
         help="enable debugging options used for development")
+    parser.add_argument("-f", "--fast", action="store_true", default=False,
+        help="fast startup, immediately go to attract mode")
     parser.add_argument("-m", "--metrics", action="store_true", default=False,
         help="collect execution metrics and display at program end")
     parser.add_argument("-s", "--simulate", action="store_true", default=False,
         help="Simulate the P-ROC")
+    parser.add_argument("-q", "--quiet", action="store_true", default=False,
+        help="Do not emit any sounds")
 
     p.options = vars(parser.parse_args())
     if p.options["develop"]:
@@ -65,6 +69,8 @@ def init_logging():
     return root
 
 def init():
+    p.data.load(p.defaults)
+    p.data.save()
     if p.options["virtual"]:
         virtual_dmd.init()
     if p.options["simulate"]:
@@ -76,6 +82,7 @@ def init():
 
 def bind():
     p.coils = pin.devices.coils
+    p.data = pin.data
     p.dmd = pin.dmd
     p.engine = pin.engine
     p.events = pin.events

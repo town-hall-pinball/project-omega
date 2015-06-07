@@ -18,24 +18,27 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import attract, banner, system
+import p
+from . import attract, banner, post, system
+from .defaults import *
 from ... import resources
 
 def init():
     resources.load_sounds(
-        ("boot",        "sounds/boot.ogg"),
+        ("boot",                "sounds/boot.ogg"),
+        ("settings_cleared",    "sounds/settings_cleared.ogg")
     )
     resources.register_music(
         ("introduction", "music/Introduction.ogg", { "start_time": 0.50 }),
         ("credits",      "music/Credits.ogg",      { "start_time": 2.25 })
     )
     resources.load_fonts(
-        ("t5exb",    "fonts/pf_tempesta_five_extended_bold.ttf", 8),
-        ("t5ex",     "fonts/pf_tempesta_five_extended.ttf", 8),
-        ("t5cdb",    "fonts/pf_tempesta_five_condensed_bold.ttf", 8),
-        ("t5cd",     "fonts/pf_tempesta_five_condensed.ttf", 8),
-        ("t5cpb",    "fonts/pf_tempesta_five_compressed_bold.ttf", 8),
-        ("t5cp",     "fonts/pf_tempesta_five_compressed.ttf", 8),
+        ("t5exb",   "fonts/pf_tempesta_five_extended_bold.ttf", 8),
+        ("t5ex",    "fonts/pf_tempesta_five_extended.ttf", 8),
+        ("t5cdb",   "fonts/pf_tempesta_five_condensed_bold.ttf", 8),
+        ("t5cd",    "fonts/pf_tempesta_five_condensed.ttf", 8),
+        ("t5cpb",   "fonts/pf_tempesta_five_compressed_bold.ttf", 8),
+        ("t5cp",    "fonts/pf_tempesta_five_compressed.ttf", 8),
         ("t5b",     "fonts/pf_tempesta_five_bold.ttf", 8),
         ("t5",      "fonts/pf_tempesta_five.ttf", 8),
         ("r7b",     "fonts/pf_ronda_seven_bold.ttf", 8),
@@ -52,7 +55,11 @@ def init():
 
     attract.init()
     banner.init()
+    post.init()
     system.init()
 
     system.mode.enable()
-    banner.mode.enable()
+    if p.options["fast"]:
+        attract.mode.enable()
+    else:
+        post.mode.enable()

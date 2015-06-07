@@ -51,9 +51,11 @@ class Text(Component):
         text_width -= metrics[-1][4] - metrics[-1][1] - metrics[-1][0]
 
         if self.width == None:
-            self.width = text_width
+            self.width = (text_width + self.style["padding_left"] +
+                    self.style["padding_right"])
         if self.height == None:
-            self.height = text_height
+            self.height = (text_height + self.style["padding_top"] +
+                    self.style["padding_bottom"])
 
         self.area = (0, font.get_ascent() - self.height + descent, self.width,
                 self.height)
@@ -63,10 +65,12 @@ class Text(Component):
         font = p.fonts[self.style["font"]]
         x = self.x
         y = self.y
+        offset_x = self.style["padding_left"]
+        offset_y = self.style["padding_top"]
         if self.style["x_align"] == "center":
             x += round((self.width / 2.0) - (text_width / 2.0))
         color = (0, 0, self.style["color"])
         text = font.render(self.style["text"], False, color)
-        self.frame.blit(text, (0, 0), self.area)
+        self.frame.blit(text, (offset_x, -offset_y), self.area)
 
 

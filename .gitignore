@@ -5,3 +5,5 @@ var
 *.pyc
 *.pyp
 os/ext/dist
+*.nosync
+.DS_Store

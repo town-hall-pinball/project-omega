@@ -18,13 +18,35 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import random
-import pygame
+import p
+from pin import ui
+from pin.ui import effects
+from pin.handler import Handler
+from . import banner
 
-import pin
-from pin import dmd, events
-from pin.render import static
+class Mode(Handler):
 
-def start():
-    dmd.add(static.render)
+    def setup(self):
+        self.panel = ui.Notice(duration=4.0, callback=self.done)
+        self.message = ui.Text("SETTINGS CLEARED", padding=2)
+        self.panel.add(self.message)
 
+    def enabled(self):
+        if p.data.get("cleared", False):
+            p.mixer.play("settings_cleared")
+            effects.fill_blink(self.message, duration=0.25, repeat=2)
+            self.panel.enqueue()
+        else:
+            self.disable()
+
+    def disabled(self):
+        banner.mode.enable()
+
+    def done(self):
+        self.disable()
+
+mode = None
+
+def init():
+    global mode
+    mode = Mode("post.mode")

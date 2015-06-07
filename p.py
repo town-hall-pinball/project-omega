@@ -21,6 +21,8 @@
 import time
 
 coils = None
+data = None
+defaults = None
 dmd = None
 events = None
 fonts = None
@@ -34,6 +36,7 @@ now = time.time()
 options = {}
 proc = None
 platform = None
+save = None
 switches = None
 sounds = None
 timers = None

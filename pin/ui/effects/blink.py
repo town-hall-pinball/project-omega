@@ -18,14 +18,32 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
+from pin import util
 
-def init():
-    from .platforms import wpc as platform
-    from .machines import no_fear as machine
-    from .games import omega as game
+class FillBlink(util.Show):
 
-    p.platform = platform
-    p.machine = machine
-    p.game = game
-    p.defaults = game.defaults
+    def __init__(self, target, duration=0.5, repeat=False):
+        super(FillBlink, self).__init__("fill_blink",
+                [duration, duration], repeat)
+        self.target = target
+
+    def action(self):
+        if self.index % 2 == 1:
+            self.target.update(color=0xf, fill=0x0)
+        else:
+            self.target.update(color=0x0, fill=0x0f)
+
+    def render_stopped(self):
+        self.disable()
+        self.stop()
+
+    def render_started(self):
+        self.enable()
+        self.start()
+
+
+def fill_blink(target, duration=0.5, repeat=False):
+    FillBlink(target, duration, repeat).start()
+
+
+

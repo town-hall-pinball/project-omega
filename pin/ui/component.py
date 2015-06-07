@@ -60,7 +60,6 @@ class Component(object):
         self.style.clear()
         self.update(**self.defaults)
         self.update(**style)
-        self.invalidate()
 
     def update(self, **style):
         self.style.update(style)

@@ -72,13 +72,13 @@ class Handler(object):
             return
         if self.active:
             return
+        log.debug("{} enabled".format(self.name))
         self.active = True
         for handler in self.handlers:
             handler.enable()
         for event, listener in self.listeners.items():
             p.events.on(event, listener)
         self.enabled()
-        log.debug("{} enabled".format(self.name))
 
     def enabled(self):
         pass
@@ -86,6 +86,7 @@ class Handler(object):
     def disable(self):
         if not self.active:
             return
+        log.debug("{} disabled".format(self.name))
         self.active = False
         for handler in self.handlers:
             self.disable()
@@ -94,7 +95,6 @@ class Handler(object):
         for ident in self.timers:
             p.timers.clear(ident)
         self.disabled()
-        log.debug("{} disabled".format(self.name))
 
     def disabled(self):
         pass

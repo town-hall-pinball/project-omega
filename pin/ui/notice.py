@@ -21,10 +21,11 @@
 import p
 from .misc import valign
 from .panel import Panel
+from .text import Text
 
 class Notice(Panel):
 
-    def __init__(self, name, duration=2.0, callback=None,
+    def __init__(self, name="notice", duration=2.0, callback=None,
             defaults=None, **style):
         defaults = defaults or {}
         style["duration"] = duration
@@ -57,5 +58,10 @@ class Notice(Panel):
         if self.callback:
             self.callback()
 
+
+def notify(message, duration=2.0, callback=None):
+    panel = Notice(duration=duration, callback=callback)
+    panel.add(Text(message))
+    panel.enqueue()
 
 
