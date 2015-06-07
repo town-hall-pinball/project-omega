@@ -47,6 +47,13 @@ def play(sound_name, channel="master"):
         log.debug("{}: Playing {}".format(channel, sound_name))
         channels[channel].play(sound)
 
-def stop(channel="master"):
-    channels[channel].stop()
+def stop(channel=None):
+    if channel is None:
+        for channel in channels.values():
+            channel.stop()
+        pygame.mixer.music.stop()
+    elif channel in channels:
+        channels[channel].stop()
+    else:
+        pygame.mixser.music.stop()
 
