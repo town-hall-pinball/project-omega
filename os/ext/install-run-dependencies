@@ -36,11 +36,13 @@ apt-get install -y \
     alsa-utils \
 	curl \
 	dos2unix \
+    libav-tools \
 	libboost-dev \
 	python \
 	python-imaging \
     python-pip \
     python-pygame \
+    sox \
     stow \
     timidity
 

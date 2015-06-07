@@ -28,6 +28,7 @@ game = None
 images = None
 machine = None
 mixer = None
+music = None
 now = time.time()
 options = {}
 proc = None

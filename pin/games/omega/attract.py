@@ -40,6 +40,10 @@ class Mode(Handler):
 
     def enabled(self):
         self.show.start()
+        p.mixer.play("introduction")
+
+    def disabled(self):
+        pass
 
 mode = None
 

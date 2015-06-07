@@ -25,6 +25,10 @@ def init():
     resources.load_sounds(
         ("boot",        "sounds/boot.ogg"),
     )
+    resources.register_music(
+        ("introduction", "music/Introduction.ogg", { "start_time": 0.50 }),
+        ("credits",      "music/Credits.ogg",      { "start_time": 2.25 })
+    )
     resources.load_fonts(
         ("t5exb",    "fonts/pf_tempesta_five_extended_bold.ttf", 8),
         ("t5ex",     "fonts/pf_tempesta_five_extended.ttf", 8),

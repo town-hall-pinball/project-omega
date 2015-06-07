@@ -31,12 +31,20 @@ __all__ = ["fonts", "images", "font", "image"]
 fonts = {}
 images = {}
 sounds = {}
+music = {}
 
 log = logging.getLogger("pin.resources")
 base_dir = os.path.join(os.path.dirname(__file__), "..", "resources")
 
 pygame.font.init()
 pygame.mixer.init()
+
+class Music(object):
+
+    def __init__(self, path, start_time=0):
+        self.path = path
+        self.start_time = start_time
+
 
 def load_fonts(*args):
     for key, filename, size in args:
@@ -60,6 +68,15 @@ def load_sounds(*args):
         path = os.path.join(base_dir, filename)
         log.debug("Loading sound {}: {}".format(key, filename))
         add("sound", sounds, key, pygame.mixer.Sound(path))
+
+def register_music(*args):
+    for arg in args:
+        key = arg[0]
+        filename = arg[1]
+        options = arg[2] if len(arg) == 3 else {}
+        path = os.path.join(base_dir, filename)
+        log.debug("Registering music {}: {}".format(key, filename))
+        add("music", music, key, Music(path, **options))
 
 def load_dmd_animation(path):
     frames = []
