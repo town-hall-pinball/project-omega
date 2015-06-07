@@ -26,6 +26,7 @@ events = None
 fonts = None
 game = None
 images = None
+lamps = None
 machine = None
 mixer = None
 music = None

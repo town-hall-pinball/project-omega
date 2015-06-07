@@ -22,6 +22,7 @@ import p
 
 devices = {}
 flashers = {}
+lamps = {}
 switches = {}
 coils = {}
 
@@ -93,7 +94,7 @@ def add(collection, clazz, configs):
     for name, config in configs.items():
         obj = clazz(name, **config)
         if name in collection:
-            raise ValeuError("Duplicate {}: {}".format(obj.type, key))
+            raise ValueError("Duplicate {}: {}".format(obj.type, name))
         if obj.device in devices:
             other = devices[obj.device]
             raise ValueError("{} also maps to {}".format(obj, other))
@@ -106,7 +107,16 @@ def add_switches(configs):
 def add_coils(configs):
     add(coils, Coil, configs)
 
+def add_lamps(configs):
+    add(lamps, Lamp, configs)
+
 def add_flashers(configs):
     add(flashers, Flasher, configs)
 
+def reset():
+    devices.clear()
+    lamps.clear()
+    flashers.clear()
+    switches.clear()
+    coils.clear()
 

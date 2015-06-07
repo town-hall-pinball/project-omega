@@ -18,21 +18,15 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-# Coverage only
-
-from pin.machines import no_fear
-from pin import devices
+from pin import config
 
 import unittest
 from tests import fixtures
 
-class TestNoFear(unittest.TestCase):
+class TestConfig(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
 
-    def test(self):
-        for switch in devices.switches.values():
-            switch.enable()
-
-
+    def test_coverage(self):
+        config.init()

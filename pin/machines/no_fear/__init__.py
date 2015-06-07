@@ -18,10 +18,11 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import coils, flashers, keyboard, switches
+from . import coils, flashers, lamps, keyboard, switches
 
 def init():
     coils.init()
     flashers.init()
+    lamps.init()
     keyboard.init()
     switches.init()

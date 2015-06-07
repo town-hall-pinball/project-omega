@@ -81,6 +81,7 @@ def bind():
     p.events = pin.events
     p.fonts = pin.resources.fonts
     p.images = pin.resources.images
+    p.lamps = pin.devices.lamps
     p.mixer = pin.mixer
     p.music = pin.resources.music
     p.sounds = pin.resources.sounds

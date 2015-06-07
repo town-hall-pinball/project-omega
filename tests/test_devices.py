@@ -18,21 +18,31 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-# Coverage only
-
-from pin.machines import no_fear
 from pin import devices
 
 import unittest
 from tests import fixtures
 
-class TestNoFear(unittest.TestCase):
+class TestDevices(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
 
-    def test(self):
-        for switch in devices.switches.values():
-            switch.enable()
+    def test_to_string(self):
+        self.assertEquals("switch:start_button",
+                str(devices.switches["start_button"]))
 
+    def test_disable(self):
+        devices.switches["start_button"].disable()
+
+    def test_duplicate_mapping(self):
+        with self.assertRaises(ValueError) as cm:
+            devices.add_switches({
+                "foo": {
+                    "label": "Foo Button",
+                    "device": "S13"
+                }
+            })
+        self.assertEquals("switch:foo also maps to switch:start_button",
+                str(cm.exception))
 

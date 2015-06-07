@@ -38,3 +38,9 @@ def reset():
     p.now = 0
     p.proc = pin.proc
     p.proc.api = virtual_proc
+
+    pin.devices.reset()
+    machine.init()
+
+
+
