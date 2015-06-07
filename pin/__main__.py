@@ -22,6 +22,7 @@ import argparse
 import logging
 import logging.handlers
 import os
+import pygame
 import p
 import pin
 from pin import debug
@@ -93,6 +94,7 @@ def run():
     log = init_logging()
     log.info("{}, Version {}".format(pin.brand.name, pin.brand.version))
 
+    pygame.init()
     pin.config.init()
     p.machine.init()
     bind()

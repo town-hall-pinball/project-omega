@@ -23,15 +23,10 @@ import logging
 import pygame
 import p
 
-pygame.mixer.init()
-
 log = logging.getLogger("pin.mixer")
 
-channels = {
-    "master": pygame.mixer.Channel(0)
-}
-
-ident = itertools.count(1)
+channels = {}
+ident = itertools.count(0)
 
 def play(sound_name, channel="master"):
     if sound_name in p.music:

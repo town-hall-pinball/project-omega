@@ -36,9 +36,6 @@ music = {}
 log = logging.getLogger("pin.resources")
 base_dir = os.path.join(os.path.dirname(__file__), "..", "resources")
 
-pygame.font.init()
-pygame.mixer.init()
-
 class Music(object):
 
     def __init__(self, path, start_time=0):
