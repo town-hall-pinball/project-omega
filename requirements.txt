@@ -3,4 +3,5 @@ docutils
 mock
 nose
 paver
+pygame
 Sphinx
