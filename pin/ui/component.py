@@ -129,6 +129,8 @@ class Component(object):
     def render(self, target):
         if not self.enabled:
             return
+        if self.width <= 0 or self.height <= 0:
+            return
         if self.dirty:
             self.revalidate()
         target.blit(self.frame, (self.x, self.y))
@@ -143,8 +145,8 @@ class Component(object):
         pass
 
     def draw(self):
-        if self.width == 0 or self.height == 0:
-            self.frame = None
+        if self.width < 0 or self.height < 0:
+            self.frame = pin.dmd.create_frame(1, 1)
             return
         if ( not self.frame or self.width > self.frame.get_width() or
                 self.height > self.frame.get_height() ):

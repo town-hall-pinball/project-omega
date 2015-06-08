@@ -23,6 +23,7 @@ import p
 import pin
 
 import unittest
+from mock import Mock, patch
 from tests import fixtures
 
 class TestPROC(unittest.TestCase):
@@ -36,7 +37,9 @@ class TestPROC(unittest.TestCase):
     def test_process(self):
         pin.proc.process()
 
-    def test_process_virtual(self):
+    @patch("pygame.display.get_surface")
+    @patch("pygame.display.update")
+    def test_process_virtual(self, *args):
         p.options["virtual"] = True
         pin.proc.process()
 
