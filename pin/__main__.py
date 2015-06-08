@@ -83,18 +83,15 @@ def init():
     p.proc.init()
 
 def bind():
-    p.coils = pin.devices.coils
     p.data = pin.data
     p.dmd = pin.dmd
     p.engine = pin.engine
     p.events = pin.events
     p.fonts = pin.resources.fonts
     p.images = pin.resources.images
-    p.lamps = pin.devices.lamps
     p.mixer = pin.mixer
     p.music = pin.resources.music
     p.sounds = pin.resources.sounds
-    p.switches = pin.devices.switches
     p.proc = pin.proc
     p.timers = pin.timers
 

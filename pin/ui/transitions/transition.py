@@ -36,7 +36,7 @@ class Transition(object):
         self.frame = target
         self.before = before
         self.after = after
-        self.progress = (p.now - self.start) / self.duration
+        self.progress = (p.now - self.start) / float(self.duration)
         if self.progress >= 1.0:
             self.progress = 1.0
             self.done = True
@@ -47,7 +47,7 @@ class Transition(object):
         self.progress = 0
         self.done = False
 
-    def draw():
+    def draw(self):
         pass
 
 

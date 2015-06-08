@@ -22,6 +22,9 @@ import logging
 
 def init():
     loggers = [
+        #"pin.gi",
+        #"pin.switch",
+
         #"pin.data",
         #"pin.dmd",
         #"pin.event",

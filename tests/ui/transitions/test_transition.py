@@ -18,24 +18,36 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import pygame
+
 import p
-from pin import devices
-from . import coils, flashers, gi, lamps, keyboard, switches
+from pin.ui.transitions import Transition
 
-def init():
-    coils.init()
-    p.coils = devices.coils
+import unittest
+from tests import fixtures
 
-    flashers.init()
-    p.flashers = devices.flashers
+class TestTransition(unittest.TestCase):
 
-    gi.init()
-    p.gi = devices.gi
+    def setUp(self):
+        fixtures.reset()
 
-    lamps.init()
-    p.lamps = devices.lamps
+    def test_progress(self):
+        trans = Transition("name", duration=10)
+        trans.render(None, None, None)
+        self.assertEquals(0, trans.progress)
 
-    switches.init()
-    p.switches = devices.switches
+        p.now = 5
+        trans.render(None, None, None)
+        self.assertEquals(0.5, trans.progress)
 
-    keyboard.init()
+        p.now = 15
+        trans.render(None, None, None)
+        self.assertEquals(1, trans.progress)
+
+    def test_reset(self):
+        trans = Transition("name", duration=10)
+        p.now = 15
+        trans.render(None, None, None)
+        trans.reset()
+        self.assertEquals(0, trans.progress)
+

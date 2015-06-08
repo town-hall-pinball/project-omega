@@ -43,3 +43,12 @@ class TestDictMerge(unittest.TestCase):
         b = { "x": { "two": 2 } }
         expected = { "x": { "one": 1, "two": 2 } }
         self.assertEquals(expected, util.dict_merge(a, b))
+
+    def test_many(self):
+        a = { "x": { "one": 1 } }
+        b = { "x": { "two": 2 } }
+        c = { "x": { "three": 3 } }
+        expected = { "x": { "one": 1, "two": 2, "three": 3 } }
+        self.assertEquals(expected, util.dict_merge(a, b, c))
+
+

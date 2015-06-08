@@ -27,6 +27,7 @@ dmd = None
 events = None
 fonts = None
 game = None
+gi = None
 images = None
 lamps = None
 machine = None

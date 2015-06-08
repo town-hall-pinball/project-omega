@@ -58,6 +58,9 @@ def init():
     post.init()
     system.init()
 
+    for gi in p.gi.values():
+        gi.enable()
+
     if p.options["fast"]:
         attract.mode.enable()
     else:

@@ -47,8 +47,10 @@ class Data(dict):
         try:
             with open(path, "w") as fp:
                 json.dump(self, fp)
+                data.pop("save_failure", None)
         except Exception as ie:
             log.error("Unable to save data file: {}".format(ie))
+            data["save_failure"] = True
 
     def reset(self, defaults):
         log.debug("Resetting data to defaults")

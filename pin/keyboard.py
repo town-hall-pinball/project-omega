@@ -22,7 +22,7 @@ import logging
 import pygame
 import pygame.locals
 
-from pin import events
+import p
 
 log = logging.getLogger("pin.keyboard")
 keys = {}
@@ -43,7 +43,7 @@ def process():
 
 def event(name, *args, **kwargs):
     def post():
-        events.post(name, *args, **kwargs)
+        p.events.post(name, *args, **kwargs)
 
     return {
         "down": post,
@@ -51,16 +51,15 @@ def event(name, *args, **kwargs):
     }
 
 def switch(name, *args, **kwargs):
+    switch = p.switches[name]
+
     def active():
-        events.post("switch_{}".format(name))
-        events.post("switch_{}_active".format(name))
-        events.post("switch_active", name)
-        events.post("switch", name, True)
+        event = p.proc.SWITCH_OPENED if switch.opto else p.proc.SWITCH_CLOSED
+        p.proc.artificial_events += [{"type": event, "value": switch.number}]
 
     def inactive():
-        events.post("switch_{}_inactive".format(name))
-        events.post("switch_inactive", name)
-        events.post("switch", name, False)
+        event = p.proc.SWITCH_CLOSED if switch.opto else p.proc.SWITCH_OPENED
+        p.proc.artificial_events += [{"type": event, "value": switch.number}]
 
     return {
         "down": active,

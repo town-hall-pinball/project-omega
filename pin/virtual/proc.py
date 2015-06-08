@@ -30,3 +30,15 @@ def get_events():
 
 def switch_update_rule(*args, **kwargs):
     pass
+
+def flush():
+    pass
+
+def dmd_draw(*args, **kwargs):
+    pass
+
+def driver_pulse(*args, **kwargs):
+    pass
+
+def driver_disable(*args, **kwargs):
+    pass

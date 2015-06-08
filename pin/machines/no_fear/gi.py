@@ -18,24 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import devices
-from . import coils, flashers, gi, lamps, keyboard, switches
+from ... import devices
 
 def init():
-    coils.init()
-    p.coils = devices.coils
-
-    flashers.init()
-    p.flashers = devices.flashers
-
-    gi.init()
-    p.gi = devices.gi
-
-    lamps.init()
-    p.lamps = devices.lamps
-
-    switches.init()
-    p.switches = devices.switches
-
-    keyboard.init()
+    devices.add_gi({
+        "gi01": {
+            "label": "Illumination, Playfield Top",
+            "device": "G01",
+        },
+        "gi02": {
+            "label": "Illumination, Playfield Right",
+            "device": "G02",
+        },
+        "gi03": {
+            "label": "Illumination, Playfield Left",
+            "device": "G03",
+        },
+        "gi04": {
+            "label": "Illumination, Insert Title",
+            "device": "G04",
+        },
+        "gi05": {
+            "label": "Illumination, Insert Background",
+            "device": "G05",
+        }
+    })

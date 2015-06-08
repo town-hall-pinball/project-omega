@@ -55,15 +55,17 @@ class SlideIn(Slide):
         if self.direction == "left":
             self.start_x = p.dmd.width
             self.direction_x = -1
-        if self.direction == "right":
+        elif self.direction == "right":
             self.start_x = -p.dmd.width
             self.direction_x = 1
-        if self.direction == "down":
+        elif self.direction == "down":
             self.start_y = -p.dmd.height
             self.direction_y = 1
-        if self.direction == "up":
+        elif self.direction == "up":
             self.start_y = p.dmd.height
             self.direction_y = -1
+        else:
+            raise ValueError("Invalid direction: {}".format(self.direction))
 
     def draw(self):
         x, y = self.calc()
@@ -73,18 +75,20 @@ class SlideIn(Slide):
 
 class SlideOut(Slide):
 
-    def __init__(self, direction="lefT", duration=1.0):
+    def __init__(self, direction="left", duration=1.0):
         super(SlideOut, self).__init__("slide_out", direction, duration)
 
     def setup(self):
         if self.direction == "left":
             self.direction_x = -1
-        if self.direction == "right":
+        elif self.direction == "right":
             self.direction_x = 1
-        if self.direction == "down":
+        elif self.direction == "down":
             self.direction_y = 1
-        if self.direction == "up":
+        elif self.direction == "up":
             self.direction_y = -1
+        else:
+            raise ValueError("Invalid direction: {}".format(self.direction))
 
     def draw(self):
         x, y = self.calc()
