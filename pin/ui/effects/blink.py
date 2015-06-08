@@ -20,7 +20,24 @@
 
 from pin import util
 
-class FillBlink(util.Show):
+class Blink(util.Show):
+
+    def __init__(self, target, duration=0.5, repeat=False):
+        super(Blink, self).__init__("blink",
+                [duration, duration], repeat)
+        self.target = target
+
+    def action(self):
+        if self.index % 2 == 1:
+            self.target.update(color=0xf)
+        else:
+            self.target.update(color=0x0)
+
+def blink(target, duration=0.5, repeat=False):
+    Blink(target, duration, repeat).start()
+
+
+class FillBlink(util.DMDShow):
 
     def __init__(self, target, duration=0.5, repeat=False):
         super(FillBlink, self).__init__("fill_blink",
@@ -32,15 +49,6 @@ class FillBlink(util.Show):
             self.target.update(color=0xf, fill=0x0)
         else:
             self.target.update(color=0x0, fill=0x0f)
-
-    def render_stopped(self):
-        self.disable()
-        self.stop()
-
-    def render_started(self):
-        self.enable()
-        self.start()
-
 
 def fill_blink(target, duration=0.5, repeat=False):
     FillBlink(target, duration, repeat).start()

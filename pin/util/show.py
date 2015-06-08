@@ -85,5 +85,15 @@ class Show(Handler):
         pass
 
 
+class DMDShow(Show):
+
+    def render_stopped(self):
+        self.disable()
+        self.stop()
+
+    def render_started(self):
+        self.enable()
+        self.start()
+
 
 
