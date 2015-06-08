@@ -26,7 +26,8 @@ from . import util
 __all__ = ["data"]
 
 log = logging.getLogger("pin.data")
-path = os.path.join(os.path.dirname(__file__), "..", "var", "data.json")
+path = os.path.abspath(os.path.join(os.path.dirname(__file__),
+        "..", "var", "data.json"))
 
 class Data(dict):
 
