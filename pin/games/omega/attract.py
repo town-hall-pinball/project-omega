@@ -26,8 +26,8 @@ from pin.handler import Handler
 class Mode(Handler):
 
     thp = ui.Image("thp_logo")
-    presents = ui.Text("Presents")
-    title = ui.Text("Project Omega")
+    presents = ui.Text("PRESENTS")
+    title = ui.Text("Project Omega", font="t5exb")
     game_over = ui.Text("Game Over")
 
     def setup(self):
