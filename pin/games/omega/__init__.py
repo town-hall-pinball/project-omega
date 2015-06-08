@@ -58,7 +58,6 @@ def init():
     post.init()
     system.init()
 
-    system.mode.enable()
     if p.options["fast"]:
         attract.mode.enable()
     else:

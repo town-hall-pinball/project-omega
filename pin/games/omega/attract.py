@@ -20,6 +20,7 @@
 
 import p
 from pin import brand, ui
+from . import system
 from pin.ui.transitions import SlideIn, SlideOut
 from pin.handler import Handler
 
@@ -39,6 +40,7 @@ class Mode(Handler):
             repeat=True)
 
     def enabled(self):
+        system.mode.enable()
         self.show.start()
         p.mixer.play("introduction")
 
