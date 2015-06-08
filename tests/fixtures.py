@@ -41,6 +41,7 @@ def reset():
     p.data = pin.data
     p.events = pin.events
     p.fonts = pin.resources.fonts
+    p.images = pin.resources.images
     p.mixer = pin.mixer
     p.music = pin.resources.music
     p.now = 0
