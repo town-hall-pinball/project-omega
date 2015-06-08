@@ -127,7 +127,7 @@ class Component(object):
             self.height = pin.dmd.height
 
     def render(self, target):
-        if not self.enabled or not self.frame:
+        if not self.enabled:
             return
         if self.dirty:
             self.revalidate()
