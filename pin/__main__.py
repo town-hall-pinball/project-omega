@@ -18,6 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
+
+loggers = [
+    "pin.data",
+    #"pin.dmd",
+    #"pin.event",
+    #"pin.keyboard",
+    "pin.handler",
+    "pin.mixer",
+    "pin.resources",
+    "pin.shows",
+]
+
 import argparse
 import logging
 import logging.handlers
@@ -25,7 +38,6 @@ import os
 import pygame
 import p
 import pin
-from pin import debug
 from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
 
 def parse_arguments():
@@ -34,6 +46,7 @@ def parse_arguments():
         help="also print log file to console")
     parser.add_argument("-d", "--develop", action="store_true", default=False,
         help="enable debugging options used for development")
+    parser
     parser.add_argument("-f", "--fast", action="store_true", default=False,
         help="fast startup, immediately go to attract mode")
     parser.add_argument("-m", "--metrics", action="store_true", default=False,
@@ -65,6 +78,9 @@ def init_logging():
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
         root.addHandler(console_handler)
+
+    for logger in loggers:
+        logging.getLogger(logger).setLevel(logging.DEBUG)
 
     return root
 
@@ -98,7 +114,6 @@ def bind():
 
 def run():
     parse_arguments()
-    debug.init()
     log = init_logging()
     log.info("{}, Version {}".format(pin.brand.name, pin.brand.version))
 
