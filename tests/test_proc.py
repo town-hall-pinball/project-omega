@@ -35,11 +35,12 @@ class TestPROC(unittest.TestCase):
         pin.proc.init()
 
     def test_process(self):
+        p.dmd.render = Mock()
         pin.proc.process()
 
-    @patch("pygame.display.get_surface")
-    @patch("pygame.display.update")
+    @patch("pin.proc.virtual_dmd")
     def test_process_virtual(self, *args):
+        p.dmd.render = Mock()
         p.options["virtual"] = True
         pin.proc.process()
 

@@ -129,8 +129,6 @@ class Component(object):
     def render(self, target):
         if not self.enabled:
             return
-        if self.width <= 0 or self.height <= 0:
-            return
         if self.dirty:
             self.revalidate()
         target.blit(self.frame, (self.x, self.y))
