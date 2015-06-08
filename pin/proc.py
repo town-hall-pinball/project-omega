@@ -44,7 +44,7 @@ def init():
     dmd_buffer = create_buffer()
 
 def create_buffer():
-    import xpinproc
+    import pinproc
     return pinproc.DMDBuffer(p.dmd.width, p.dmd.height)
 
 def switch_active(switch):
