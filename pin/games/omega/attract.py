@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import ui
+from pin import brand, ui
 from pin.ui.transitions import SlideIn, SlideOut
 from pin.handler import Handler
 
@@ -27,7 +27,7 @@ class Mode(Handler):
 
     thp = ui.Image("thp_logo")
     presents = ui.Text("PRESENTS")
-    title = ui.Text("Project Omega", font="t5exb")
+    title = ui.Text(brand.name, font="t5exb")
     game_over = ui.Text("Game Over")
 
     def setup(self):
