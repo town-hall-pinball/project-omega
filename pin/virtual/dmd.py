@@ -20,7 +20,7 @@
 
 import pygame
 
-from pin import dmd
+from pin import brand, dmd
 from pin.virtual import palettes
 
 multiplier = 4
@@ -95,6 +95,7 @@ def invalidate():
     )
 
     pygame.display.set_mode([width, height])
+    pygame.display.set_caption(brand.name)
     target = pygame.display.get_surface()
 
     target.fill(border_color, pygame.Rect(0, 0, width, height))
