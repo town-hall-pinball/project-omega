@@ -20,16 +20,6 @@
 
 import logging
 
-loggers = [
-    "pin.data",
-    #"pin.dmd",
-    #"pin.event",
-    #"pin.keyboard",
-    "pin.handler",
-    "pin.mixer",
-    "pin.resources",
-    "pin.shows",
-]
 
 import argparse
 import logging
@@ -46,7 +36,6 @@ def parse_arguments():
         help="also print log file to console")
     parser.add_argument("-d", "--develop", action="store_true", default=False,
         help="enable debugging options used for development")
-    parser
     parser.add_argument("-f", "--fast", action="store_true", default=False,
         help="fast startup, immediately go to attract mode")
     parser.add_argument("-m", "--metrics", action="store_true", default=False,
@@ -78,9 +67,6 @@ def init_logging():
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
         root.addHandler(console_handler)
-
-    for logger in loggers:
-        logging.getLogger(logger).setLevel(logging.DEBUG)
 
     return root
 
@@ -116,6 +102,12 @@ def run():
     parse_arguments()
     log = init_logging()
     log.info("{}, Version {}".format(pin.brand.name, pin.brand.version))
+
+    try:
+        import debug
+        debug.init()
+    except ImportError as ie:
+        pass
 
     pygame.init()
     pin.config.init()

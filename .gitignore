@@ -7,3 +7,4 @@ var
 os/ext/dist
 *.nosync
 .DS_Store
+debug.py
