@@ -127,7 +127,7 @@ class Component(object):
             self.height = pin.dmd.height
 
     def render(self, target):
-        if not self.enabled:
+        if not self.enabled or not self.frame:
             return
         if self.dirty:
             self.revalidate()
@@ -143,6 +143,9 @@ class Component(object):
         pass
 
     def draw(self):
+        if self.width == 0 or self.height == 0:
+            self.frame = None
+            return
         if ( not self.frame or self.width > self.frame.get_width() or
                 self.height > self.frame.get_height() ):
             self.frame = pin.dmd.create_frame(self.width, self.height)

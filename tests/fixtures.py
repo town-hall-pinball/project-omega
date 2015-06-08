@@ -48,13 +48,15 @@ def reset():
     p.proc = pin.proc
     p.proc.api = virtual_proc
     p.sounds = pin.resources.sounds
+    p.switches = pin.devices.switches
     p.timers = pin.timers
 
     p.data.reset(p.defaults)
 
     p.options = {
         "fast": False,
-        "quiet": False
+        "virtual": False,
+        "quiet": False,
     }
 
     pin.devices.reset()
