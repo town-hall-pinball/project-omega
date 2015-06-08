@@ -19,7 +19,6 @@
 # DEALINGS IN THE SOFTWARE.
 
 import logging
-import pinproc
 
 import p
 from pin import devices
@@ -42,7 +41,11 @@ def init():
     api.reset(1)
     for switch in p.switches.values():
         switch.enable()
-    dmd_buffer = pinproc.DMDBuffer(p.dmd.width, p.dmd.height)
+    dmd_buffer = create_buffer()
+
+def create_buffer():
+    import xpinproc
+    return pinproc.DMDBuffer(p.dmd.width, p.dmd.height)
 
 def switch_active(switch):
     p.events.post("switch_{}".format(switch.name))

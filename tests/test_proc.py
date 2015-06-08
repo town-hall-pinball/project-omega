@@ -31,7 +31,8 @@ class TestPROC(unittest.TestCase):
     def setUp(self):
         fixtures.reset()
 
-    def test_init(self):
+    @patch("pin.proc.create_buffer")
+    def test_init(self, *args):
         pin.proc.init()
 
     @patch("pygame.PixelArray")
@@ -110,6 +111,7 @@ class TestPROC(unittest.TestCase):
         pin.proc.process()
         p.events.dispatch()
         self.assertTrue(listener.called)
+
 
     @patch("pygame.PixelArray")
     def test_inactive_opto_switch_event(self, *args):
