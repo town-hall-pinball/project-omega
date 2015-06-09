@@ -28,7 +28,7 @@ log = logging.getLogger("pin.mixer")
 channels = {}
 ident = itertools.count(0)
 
-def play(sound_name, channel="master"):
+def play(sound_name, channel="master", duration=0):
     if sound_name in p.music:
         log.debug("music: Playing {}".format(sound_name))
         music = p.music[sound_name]
@@ -42,7 +42,7 @@ def play(sound_name, channel="master"):
         sound = p.sounds[sound_name]
         log.debug("{}: Playing {}".format(channel, sound_name))
         if not p.options["quiet"]:
-            channels[channel].play(sound)
+            channels[channel].play(sound, maxtime=int(duration * 1000))
 
 def stop(channel=None):
     if channel is None:

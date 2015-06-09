@@ -18,20 +18,11 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import ui
-from pin.handler import Handler
-
-class Mode(Handler):
-
-    def setup(self):
-        self.on("switch_service_enter", self.service_enter)
-
-    def service_enter(self):
-        print "ENTER"
+from . import service
 
 mode = None
 
 def init():
     global mode
-    mode = Mode("system.service.mode")
+    service.init()
+    mode = service.mode

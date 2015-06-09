@@ -22,29 +22,28 @@ import p
 from pin import ui
 from pin.handler import Handler
 
-class Coin(Handler):
+class Service(Handler):
+
+    text = ui.Text("Service Mode")
 
     def setup(self):
-        self.credits = ui.Notice("credit_display")
-        self.amount = ui.Text("CREDITS 0")
-        self.message = ui.Text("INSERT COINS")
-        self.credits.add((self.amount, self.message))
+        self.text = ui.Text("Service Mode")
+        self.on("switch_service_exit", self.stop_service_mode)
 
-        self.more = ui.Notice("more")
-        self.more2 = ui.Text("MORE STUFF")
-        self.more.add(self.more2)
+    def enabled(self):
+        p.dmd.stack("service", self.text)
 
-        self.on("switch_start_button", self.start_button)
-        self.on("switch_coin_left", self.other)
+    def disabled(self):
+        p.dmd.remove("service")
 
-    def start_button(self):
-        self.credits.enqueue()
+    def stop_service_mode(self):
+        from .. import attract
+        attract.mode.enable()
+        self.disable()
 
-    def other(self):
-        self.more.enqueue()
 
-handler = None
+mode = None
 
 def init():
-    global handler
-    handler = Coin("system.coin.handler")
+    global mode
+    mode = Service("service.mode")

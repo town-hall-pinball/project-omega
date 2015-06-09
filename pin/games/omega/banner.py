@@ -48,6 +48,8 @@ class Mode(Handler):
         self.on("switch_flipper_left", self.bypass)
         self.on("switch_flipper_right", self.bypass)
         self.on("switch_start_button", self.bypass)
+        self.on("switch_service_enter", self.bypass)
+        self.on("switch_service_exit", self.bypass)
 
     def enabled(self):
         self.panel.enqueue()

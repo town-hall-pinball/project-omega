@@ -19,14 +19,19 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from . import attract, banner, post, system
+from . import attract, banner, post, service, system
 from .defaults import *
 from ... import resources
 
 def init():
     resources.load_sounds(
         ("boot",                "sounds/boot.ogg"),
-        ("settings_cleared",    "sounds/settings_cleared.ogg")
+        ("settings_cleared",    "sounds/settings_cleared.ogg"),
+        ("service_cancel",      "sounds/service/cancel.ogg"),
+        ("service_enter",       "sounds/service/enter.ogg"),
+        ("service_exit",        "sounds/service/exit.ogg"),
+        ("service_save",        "sounds/service.save.ogg"),
+        ("service_select",      "sounds/service.select.ogg"),
     )
     resources.register_music(
         ("introduction", "music/Introduction.ogg", { "start_time": 0.50 }),
@@ -56,6 +61,7 @@ def init():
     attract.init()
     banner.init()
     post.init()
+    service.init()
     system.init()
 
     for gi in p.gi.values():

@@ -24,7 +24,7 @@ from . import system
 from pin.ui.transitions import SlideIn, SlideOut
 from pin.handler import Handler
 
-class Mode(Handler):
+class Attract(Handler):
 
     thp = ui.Image("thp_logo")
     presents = ui.Text("PRESENTS")
@@ -38,6 +38,7 @@ class Mode(Handler):
             (self.title,         3.0),
             (self.game_over,     6.0)),
             repeat=True)
+        self.on("switch_service_enter", self.start_service_mode)
 
     def enabled(self):
         system.mode.enable()
@@ -45,13 +46,19 @@ class Mode(Handler):
         p.mixer.play("introduction")
 
     def disabled(self):
-        pass
+        p.mixer.stop()
+
+    def start_service_mode(self):
+        from . import service
+        service.mode.enable()
+        self.disable()
+        p.mixer.play("service_enter")
 
 mode = None
 
 def init():
     global mode
-    mode = Mode("attract.mode")
+    mode = Attract("attract.mode")
 
 
 

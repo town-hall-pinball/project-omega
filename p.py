@@ -31,6 +31,7 @@ gi = None
 images = None
 lamps = None
 machine = None
+mode = None
 mixer = None
 music = None
 now = time.time()

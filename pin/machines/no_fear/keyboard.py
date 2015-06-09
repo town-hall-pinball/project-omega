@@ -26,7 +26,10 @@ def init():
         "s": switch("start_button"),
         "1": switch("coin_left"),
         "7": switch("service_enter"),
+        "8": switch("service_down"),
+        "9": switch("service_up"),
+        "0": switch("service_exit"),
         "[": switch("flipper_left"),
-        "]": switch("flipper_right")
+        "]": switch("flipper_right"),
     })
 

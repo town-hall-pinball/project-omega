@@ -21,17 +21,16 @@
 import p
 from pin import ui
 from pin.handler import Handler
-from . import coin, service
+from . import coin
 
 class Mode(Handler):
 
     def setup(self):
-        self.handlers += [coin.mode, service.mode]
+        self.handlers += [coin.handler]
 
 mode = None
 
 def init():
     global mode
     coin.init()
-    service.init()
     mode = Mode("system.mode")
