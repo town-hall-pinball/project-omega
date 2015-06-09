@@ -31,6 +31,7 @@ class Service(Handler):
         self.on("switch_service_exit", self.stop_service_mode)
 
     def enabled(self):
+        p.dmd.clear()
         p.dmd.stack("service", self.text)
 
     def disabled(self):

@@ -100,6 +100,11 @@ class DMD(object):
     def enqueue(self, name, renderer, transition=None, delegate=None):
         self.add(self.queued, Renderer(renderer, name, delegate), transition)
 
+    def clear(self):
+        for renderer in self.queued.values():
+            renderer.stop()
+        self.queued[:] = []
+
     def add(self, collection, renderer, transition=None):
         trans = "using {}".format(transition.name) if transition else ""
         replaced = renderer.name in collection
@@ -165,6 +170,7 @@ dmd = DMD()
 stack = dmd.stack
 remove = dmd.remove
 enqueue = dmd.enqueue
+clear = dmd.clear
 render = dmd.render
 
 def create_frame(width=width, height=height):
