@@ -79,7 +79,7 @@ def init():
         p.proc.api = virtual_proc
     else:
         from pinproc import PinPROC
-        p.proc.api = PinPROC(p.platform["name"])
+        p.proc.api = PinPROC(p.platform.name)
     p.proc.init()
 
 def bind():

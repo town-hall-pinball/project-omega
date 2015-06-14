@@ -72,7 +72,8 @@ def refresh_dmd(frame):
     dots = p.dmd.create_dots(frame)
     for x in xrange(p.dmd.width):
         for y in xrange(p.dmd.height):
-            dmd_buffer.set_dot(x, y, dots[x, y])
+            v = (dots[x, y] >> 4) & 0xf
+            dmd_buffer.set_dot(x, y, v)
     api.dmd_draw(dmd_buffer)
 
 def handle_events(events):
@@ -90,6 +91,7 @@ def handle_events(events):
 def process():
     handle_events(api.get_events())
     handle_events(artificial_events)
+    api.watchdog_tickle()
     api.flush()
     artificial_events[:] = []
 

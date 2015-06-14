@@ -34,6 +34,9 @@ def switch_update_rule(*args, **kwargs):
 def flush():
     pass
 
+def watchdog_tickle():
+    pass
+
 def dmd_draw(*args, **kwargs):
     pass
 
