@@ -65,6 +65,7 @@ def reset():
     pygame.mixer.Sound = Mock(pygame.mixer.Sound)
     pygame.mixer.Channel = Mock(pygame.mixer.Channel)
     pygame.font.Font = Mock(pygame.font.Font)
+    pygame.movie.Movie = Mock(pygame.movie.Movie)
 
     font = pygame.font.Font.return_value
     font.metrics.return_value = ((5, 5, 5, 5, 5),)

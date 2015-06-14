@@ -18,12 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import service, animations
+import p
+from pin.handler import Handler
+from pin import ui
 
-mode = None
+class Browser(Handler):
+
+    def setup(self):
+        self.panel = ui.Text("Animations")
+        self.on("switch_service_exit",  self.exit)
+
+    def enabled(self):
+        print "stacking"
+        p.dmd.stack("animation_browser", self.panel)
+
+    def disabled(self):
+        p.dmd.remove("animation_browser")
+
+    def exit(self):
+        self.disable()
+
+handler = None
 
 def init():
-    global mode
-    animations.init()
-    service.init()
-    mode = service.mode
+    global handler
+    handler = Browser("service.animation_browser")

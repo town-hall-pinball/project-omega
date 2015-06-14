@@ -33,6 +33,7 @@ class Component(object):
     parent = None
     children = None
     enabled = True
+    has_alpha = True
 
     def __init__(self, defaults=None, **style):
         self.style = {}
@@ -65,6 +66,10 @@ class Component(object):
         self.style.update(style)
         if "padding" in style:
             self.expand4("padding", util.to_list(style["padding"]))
+        self.invalidate()
+
+    def hide(self):
+        self.enabled = False
         self.invalidate()
 
     def invalidate(self):
@@ -132,6 +137,10 @@ class Component(object):
         if self.dirty:
             self.revalidate()
         target.blit(self.frame, (self.x, self.y))
+        self.on_render()
+
+    def on_render(self):
+        pass
 
     def render_started(self):
         pass
@@ -148,10 +157,16 @@ class Component(object):
             return
         if ( not self.frame or self.width > self.frame.get_width() or
                 self.height > self.frame.get_height() ):
-            self.frame = pin.dmd.create_frame(self.width, self.height)
+            self.frame = pin.dmd.create_frame(self.width, self.height,
+                    self.has_alpha)
 
-        fill = self.style["fill"]
-        self.frame.fill(fill, (0, 0, self.width, self.height))
+        fill = self.style.get("fill", None)
+
+        self.frame.fill((0, 0, 0, 0), (0, 0, self.frame.get_width(),
+                self.frame.get_height()))
+        if fill is not None:
+            self.frame.fill((fill * 16, fill * 16, fill * 16, 0xff),
+                    (0, 0, self.width, self.height))
 
     def expand4(self, key, value):
         if len(value) == 1:

@@ -74,8 +74,8 @@ class Handler(object):
             return
         log.debug("{} enabled".format(self.name))
         self.active = True
-        for handler in self.handlers:
-            handler.enable()
+        #for handler in self.handlers:
+        #    handler.enable()
         for event, listener in self.listeners.items():
             p.events.on(event, listener)
         self.enabled()

@@ -27,7 +27,7 @@ class Blink(util.Show):
                 [duration, duration], repeat)
         self.target = target
 
-    def action(self):
+    def action(self, *args, **kwargs):
         if self.index % 2 == 1:
             self.target.update(color=0xf)
         else:
@@ -44,7 +44,7 @@ class FillBlink(util.DMDShow):
                 [duration, duration], repeat)
         self.target = target
 
-    def action(self):
+    def action(self, *args, **kwargs):
         if self.index % 2 == 1:
             self.target.update(color=0xf, fill=0x0)
         else:

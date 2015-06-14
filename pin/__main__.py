@@ -90,6 +90,7 @@ def bind():
     p.fonts = pin.resources.fonts
     p.images = pin.resources.images
     p.mixer = pin.mixer
+    p.movies = pin.resources.movies
     p.music = pin.resources.music
     p.sounds = pin.resources.sounds
     p.proc = pin.proc

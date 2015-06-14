@@ -30,9 +30,11 @@ class Attract(Handler):
     presents = ui.Text("PRESENTS")
     title = ui.Text(brand.name, font="t5exb")
     game_over = ui.Text("Game Over")
+    anim = ui.Movie("x2")
 
     def setup(self):
         self.show = ui.Slides("attract.show", (
+            (self.anim,          None),
             (self.thp,           3.0),
             (self.presents,      3.0, SlideIn(direction="left")),
             (self.title,         3.0),
