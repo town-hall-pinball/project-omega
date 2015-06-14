@@ -104,6 +104,7 @@ class Switch(Device):
         if self.debounce:
             events = ["closed_debounced", "open_debounced"]
         else:
+            raise ValueError("Non-debounced switch")
             events = ["closed_nondebounced", "open_nondebounced"]
 
         for event in events:

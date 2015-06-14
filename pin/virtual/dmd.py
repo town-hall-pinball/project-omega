@@ -58,7 +58,7 @@ y_padding = 1
 Padding, in pixels, between each dot in the vertical direction.
 """
 
-palette = palettes.orange
+palette = palettes.green
 """
 An array that maps DMD brightness values (0 - 15) to RGB values for
 the virtual display.

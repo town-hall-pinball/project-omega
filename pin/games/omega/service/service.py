@@ -90,7 +90,7 @@ class Service(Handler):
         self.icons = ui.Panel(top=5, fill=None)
         self.icons.add(ui.Image("service_settings"))
         self.default = ui.Text(bottom=2, right=2, font="t5cd")
-        self.result = ui.Text(bottom=2, fill=0x6, padding=[1, 3], font="t5cpb")
+        self.result = ui.Text(bottom=2, fill=0x2, padding=[1, 3], font="t5cpb")
 
         self.panel = ui.Panel(name="root")
         self.panel.add([self.breadcrumbs, self.name, self.value, self.icons,
