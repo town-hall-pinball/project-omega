@@ -28,6 +28,7 @@ def init():
         ("thp_logo",                "images/thp_logo.dmd"),
         ("service_animations",      "images/service/animations.dmd"),
         ("service_audits",          "images/service/audits.dmd"),
+        ("service_browse",          "images/service/browse.dmd"),
         ("service_clear",           "images/service/clear.dmd"),
         ("service_coils",           "images/service/coils.dmd"),
         ("service_debug",           "images/service/debug.dmd"),

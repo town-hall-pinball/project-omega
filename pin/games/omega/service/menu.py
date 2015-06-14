@@ -147,6 +147,14 @@ utilities = {
             "action": "clear_audits",
             "confirm": True
         }]
+    },{
+        "name": "Browser",
+        "icon": "service_browse",
+        "menu": [{
+            "name": "Animations",
+            "icon": "service_animations",
+            "action": "animation_browser"
+        }]
     }]
 }
 

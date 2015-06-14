@@ -20,10 +20,13 @@
 
 defaults = {
     "cleared": True,
+    "earnings": 0,
     "free_play": False,
+    "paid_credits": 0,
     "pricing": 0.25,
     "server_enabled": False,
     "server_publish_events": False,
     "server_remote_control": False,
+    "service_credits": 0,
     "tilt_warnings": 2,
 }

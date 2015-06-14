@@ -23,7 +23,7 @@ from collections import deque
 import p
 from pin import ui, util
 from pin.handler import Handler
-from . import menu
+from . import menu, animations
 
 def option_tuple(option):
     if isinstance(option, list):
@@ -89,16 +89,23 @@ class Service(Handler):
         self.value = ui.Text(top=12, padding=[1, 5])
         self.icons = ui.Panel(top=5, fill=None)
         self.icons.add(ui.Image("service_settings"))
-        self.default = ui.Text(bottom=2, right=2, font="t5cpb", fill=4)
+        self.default = ui.Text(bottom=2, right=2, font="t5cd")
+        self.result = ui.Text(bottom=2, fill=0x6, padding=[1, 3], font="t5cpb")
 
         self.panel = ui.Panel(name="root")
         self.panel.add([self.breadcrumbs, self.name, self.value, self.icons,
-                self.default])
+                self.default, self.result])
+
+        self.result_timer = None
 
         self.on("switch_service_enter", self.enter)
         self.on("switch_service_up",    self.up)
         self.on("switch_service_down",  self.down)
         self.on("switch_service_exit",  self.exit)
+
+        self.handlers += [
+            animations.handler
+        ]
 
     def push_menu(self, node):
         self.depth += 1
@@ -146,8 +153,14 @@ class Service(Handler):
         elif "menu" in item or "options" in item:
             p.mixer.play("service_enter")
             self.push_menu(item)
+        elif "action" in item:
+            p.mixer.play("service_enter")
+            getattr(self, item["action"])()
 
     def exit(self):
+        self.pop_menu()
+
+    def pop_menu(self):
         self.depth -= 1
         self.key_stack.pop()
         self.menu_stack.pop()
@@ -208,6 +221,30 @@ class Service(Handler):
             if "format" in selected:
                 value = selected["format"].format(value)
             self.value.show(str(value))
+
+    def save(self):
+        item = self.menu.iter.get()
+        key = self.menu.node["data"]
+        value, text = option_tuple(item)
+        self.result.enabled = True
+        if value != p.data[key]:
+            p.data[key] = value
+            p.data.save()
+            self.result.show("Saved")
+            p.mixer.play("service_save")
+        else:
+            self.result.show("No Change")
+            p.mixer.play("service_exit")
+        self.pop_menu()
+
+        self.cancel(self.result_timer)
+        self.result_timer = self.wait(1.0, self.clear_result)
+
+    def clear_result(self):
+        self.result.hide()
+
+    def animation_browser(self):
+        animations.handler.enable()
 
 
 mode = None
