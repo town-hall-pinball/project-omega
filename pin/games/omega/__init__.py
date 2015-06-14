@@ -56,6 +56,7 @@ def init():
         ("service_exit",        "sounds/service/exit.ogg"),
         ("service_save",        "sounds/service/save.ogg"),
         ("service_select",      "sounds/service/select.ogg"),
+        ("coin_drop",           "sounds/coinDrop.ogg")
     )
     resources.register_music(
         ("introduction", "music/Introduction.ogg", { "start_time": 0.50 }),
