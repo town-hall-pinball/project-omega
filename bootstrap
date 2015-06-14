@@ -25,15 +25,11 @@ set -x -e
 NAME="project-omega"
 
 apt-get update
-apt-get install -y curl git
+apt-get install -y curl git dos2unix
 
-cd /vagrant
-
-os/ext/download-dependencies
-os/ext/install-run-dependencies
-os/ext/install-build-dependencies
-
-pip install -r requirements.txt
+git clone https://github.com/town-hall-pinball/PinOS.git
+PinOS/ext/download-dependencies
+PinOS/ext/install-run-dependencies
 
 mkdir -p /vagrant/var
 
