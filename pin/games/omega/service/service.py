@@ -25,6 +25,31 @@ from pin import ui, util
 from pin.handler import Handler
 from . import menu
 
+def option_tuple(option):
+    if isinstance(option, list):
+        value = option[0]
+        text = option[1]
+    else:
+        value = option
+        text = option
+    return (value, text)
+
+
+def text_for_value(options, search):
+    for option in options:
+        value, text = option_tuple(option)
+        if search == value:
+            return text
+
+
+def index_for_value(options, search):
+    index = 0
+    for option in options:
+        value, text = option_tuple(option)
+        if search == value:
+            return index
+        index += 1
+
 class MenuNode(object):
 
     def __init__(self, key, node):
@@ -61,7 +86,7 @@ class Service(Handler):
 
         self.breadcrumbs = ui.Text(left=2, top=1, font="t5cd")
         self.name = ui.Text("Settings", top=1)
-        self.value = ui.Text(top=12, padding=[0, 5])
+        self.value = ui.Text(top=12, padding=[1, 5])
         self.icons = ui.Panel(top=5, fill=None)
         self.icons.add(ui.Image("service_settings"))
         self.default = ui.Text(bottom=2, right=2, font="t5cpb", fill=4)
@@ -149,6 +174,7 @@ class Service(Handler):
         menu = self.menu
         selected = menu.iter.get()
         self.default.hide()
+        self.value.hide()
         self.value.update(fill=None)
 
         if menu.type == "text":
@@ -173,7 +199,7 @@ class Service(Handler):
             value = selected[0]
             default_value = p.defaults[menu.node["data"]]
             self.value.show(selected[1])
-            self.value.update_style({"fill": 0x4})
+            self.value.update(fill=0x4)
             if value != None and value == default_value:
                 self.default.show("Default")
         elif menu.type == "value":

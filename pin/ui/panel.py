@@ -44,8 +44,9 @@ class Panel(Component):
     def draw(self):
         super(Panel, self).draw()
         for child in self.children:
-            self.frame.blit(child.frame,
-                    (child.x, child.y, child.width, child.height))
+            if child.enabled:
+                self.frame.blit(child.frame,
+                        (child.x, child.y, child.width, child.height))
 
     def __str__(self):
         name = self.style.get("name", None)

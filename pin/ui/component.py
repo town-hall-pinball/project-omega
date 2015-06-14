@@ -161,9 +161,9 @@ class Component(object):
                     self.has_alpha)
 
         fill = self.style.get("fill", None)
+
         self.frame.fill((0, 0, 0, 0), (0, 0, self.frame.get_width(),
                 self.frame.get_height()))
-
         if fill is not None:
             self.frame.fill((fill * 16, fill * 16, fill * 16, 0xff),
                     (0, 0, self.width, self.height))
