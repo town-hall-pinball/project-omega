@@ -126,7 +126,7 @@ def update(frame):
     for x in xrange(0, dmd.width):
         for y in xrange(0, dmd.height):
             if source[x, y] != previous[x, y]:
-                index = source[x, y] & 0xf
+                index = (source[x, y] >> 4) & 0xf
                 target.fill(palette[index], dots[x][y])
                 updates += [dots[x][y]]
     pygame.display.update(updates)

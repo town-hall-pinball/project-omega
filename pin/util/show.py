@@ -76,8 +76,10 @@ class Show(Handler):
             else:
                 self.stop()
                 return
-        self.action()
-        self.timer = self.wait(self.timings[self.index], self.next)
+        use_callback = self.timings[self.index] is None
+        self.action(use_callback)
+        if not use_callback:
+            self.timer = self.wait(self.timings[self.index], self.next)
         self.index += 1
 
 

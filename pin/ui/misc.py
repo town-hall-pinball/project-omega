@@ -21,7 +21,7 @@
 import math
 from pin import dmd
 
-__all__ = ["halign", "valign"]
+__all__ = ["debug_frame", "halign", "valign"]
 
 def valign(components, padding=4):
     height = 0
@@ -45,5 +45,17 @@ def halign(components, padding=4):
     for component in components:
         component.update(left=x)
         x += component.width + padding
+
+def debug_frame(frame):
+    dots = dmd.create_dots(frame)
+    width, height = frame.get_size()
+    lines = []
+    for y in xrange(height):
+        line = []
+        for x in xrange(width):
+            v = dots[x, y]
+            c = frame.unmap_rgb(v)
+            print c
+
 
 

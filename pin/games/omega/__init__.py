@@ -24,6 +24,29 @@ from .defaults import *
 from ... import resources
 
 def init():
+    resources.load_images(
+        ("thp_logo",                "images/thp_logo.dmd"),
+        ("service_animations",      "images/service/animations.dmd"),
+        ("service_audits",          "images/service/audits.dmd"),
+        ("service_clear",           "images/service/clear.dmd"),
+        ("service_coils",           "images/service/coils.dmd"),
+        ("service_debug",           "images/service/debug.dmd"),
+        ("service_flashers",        "images/service/flashers.dmd"),
+        ("service_font",            "images/service/font.dmd"),
+        ("service_game_settings",   "images/service/game_settings.dmd"),
+        ("service_lamps",           "images/service/lamps.dmd"),
+        ("service_money",           "images/service/money.dmd"),
+        ("service_music",           "images/service/music.dmd"),
+        ("service_server",          "images/service/server.dmd"),
+        ("service_settings",        "images/service/settings.dmd"),
+        ("service_sounds",          "images/service/sounds.dmd"),
+        ("service_switches",        "images/service/switches.dmd"),
+        ("service_tests",           "images/service/tests.dmd"),
+        ("service_utilities",       "images/service/utilities.dmd"),
+    )
+    resources.register_movies(
+        ("x2",                      "movies/X2_from_left_ship_from_right - 90-Android.mpg")
+    )
     resources.load_sounds(
         ("boot",                "sounds/boot.ogg"),
         ("settings_cleared",    "sounds/settings_cleared.ogg"),
@@ -54,26 +77,7 @@ def init():
     resources.alias_fonts(
         ("r7b",     "title")
     )
-    resources.load_images(
-        ("thp_logo",                "images/thp_logo.dmd"),
-        ("service_animations",      "images/service/animations.dmd"),
-        ("service_audits",          "images/service/audits.dmd"),
-        ("service_clear",           "images/service/clear.dmd"),
-        ("service_coils",           "images/service/coils.dmd"),
-        ("service_debug",           "images/service/debug.dmd"),
-        ("service_flashers",        "images/service/flashers.dmd"),
-        ("service_font",            "images/service/font.dmd"),
-        ("service_game_settings",   "images/service/game_settings.dmd"),
-        ("service_lamps",           "images/service/lamps.dmd"),
-        ("service_money",           "images/service/money.dmd"),
-        ("service_music",           "images/service/music.dmd"),
-        ("service_server",          "images/service/server.dmd"),
-        ("service_settings",        "images/service/settings.dmd"),
-        ("service_sounds",          "images/service/sounds.dmd"),
-        ("service_switches",        "images/service/switches.dmd"),
-        ("service_tests",           "images/service/tests.dmd"),
-        ("service_utilities",       "images/service/utilities.dmd"),
-    )
+
 
     attract.init()
     banner.init()

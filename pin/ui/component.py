@@ -33,6 +33,7 @@ class Component(object):
     parent = None
     children = None
     enabled = True
+    has_alpha = True
 
     def __init__(self, defaults=None, **style):
         self.style = {}
@@ -136,6 +137,10 @@ class Component(object):
         if self.dirty:
             self.revalidate()
         target.blit(self.frame, (self.x, self.y))
+        self.on_render()
+
+    def on_render(self):
+        pass
 
     def render_started(self):
         pass
@@ -152,14 +157,15 @@ class Component(object):
             return
         if ( not self.frame or self.width > self.frame.get_width() or
                 self.height > self.frame.get_height() ):
-            self.frame = pin.dmd.create_frame(self.width, self.height)
+            self.frame = pin.dmd.create_frame(self.width, self.height,
+                    self.has_alpha)
 
         fill = self.style.get("fill", None)
         self.frame.fill((0, 0, 0, 0), (0, 0, self.frame.get_width(),
                 self.frame.get_height()))
 
         if fill is not None:
-            self.frame.fill((fill, fill, fill, 0xff),
+            self.frame.fill((fill * 16, fill * 16, fill * 16, 0xff),
                     (0, 0, self.width, self.height))
 
     def expand4(self, key, value):

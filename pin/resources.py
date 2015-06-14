@@ -29,6 +29,7 @@ from pin import dmd, util
 fonts = {}
 images = {}
 sounds = {}
+movies = {}
 music = {}
 
 log = logging.getLogger("pin.resources")
@@ -73,6 +74,13 @@ def register_music(*args):
         log.debug("Registering music {}: {}".format(key, filename))
         add("music", music, key, Music(path, **options))
 
+def register_movies(*args):
+    for key, filename in args:
+        path = os.path.join(base_dir, filename)
+        log.debug("Registering movie {}: {}".format(key, filename))
+        add("movie", movies, key, pygame.movie.Movie(path))
+
+
 def load_dmd_animation(path):
     frames = []
     # Derived from
@@ -93,7 +101,7 @@ def load_dmd_animation(path):
             for x in xrange(width):
                 for y in xrange(height):
                     i = (y * width) + x
-                    v = ord(str_frame[i])
+                    v = ord(str_frame[i]) * 16
                     new_dots[x, y] = (v, v, v, 0xff)
             frames.append(new_frame)
     return frames

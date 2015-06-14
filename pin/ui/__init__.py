@@ -22,6 +22,7 @@ from .component import *
 from .image import *
 from .notice import *
 from .panel import *
+from .movie import *
 from .slides import *
 from .text import *
 from .misc import *

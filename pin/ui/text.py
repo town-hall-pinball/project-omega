@@ -77,7 +77,7 @@ class Text(Component):
         offset_y = self.style["padding_top"]
         if self.style["x_align"] == "center":
             x += round((self.width / 2.0) - (text_width / 2.0))
-        color = (0, 0, self.style["color"])
+        color = (0, 0, self.style["color"] * 16)
         text = font.render(self.style["text"], False, color)
         self.frame.blit(text, (offset_x, -offset_y), self.area)
 

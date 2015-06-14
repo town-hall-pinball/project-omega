@@ -39,9 +39,11 @@ class Slides(util.Show):
         self.on("switch_flipper_left", self.next)
         self.on("switch_flipper_right", self.next)
 
-    def action(self):
+    def action(self, use_callback=False):
         p.dmd.stack(self.name, self.slides[self.index],
                 self.transitions[self.index], delegate=self)
+        if use_callback:
+            self.slides[self.index].start(self.next)
 
     def render_stopped(self):
         self.disable()
