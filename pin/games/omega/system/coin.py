@@ -39,6 +39,7 @@ class Coin(Handler):
 
     def start_button(self):
         self.credits.enqueue()
+        p.mixer.play("coin_drop")
 
     def other(self):
         self.more.enqueue()
