@@ -93,7 +93,8 @@ def load_dmd_animation(path):
             for x in xrange(width):
                 for y in xrange(height):
                     i = (y * width) + x
-                    new_dots[x, y] = ord(str_frame[i])
+                    v = ord(str_frame[i])
+                    new_dots[x, y] = (v, v, v, 0xff)
             frames.append(new_frame)
     return frames
 

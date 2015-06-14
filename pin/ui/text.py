@@ -34,11 +34,19 @@ class Text(Component):
 
     def show(self, text):
         self.style["text"] = text if text is not None else ""
-        self.enable()
+        self.enabled = True
+        self.auto_size()
+        self.invalidate()
 
     def auto_size(self):
         font = p.fonts[self.style["font"]]
         metrics = font.metrics(self.style["text"])
+
+        if not metrics:
+            self.height = 1
+            self.width = 1
+            self.area = (0, 0, 0, 0)
+            return
 
         # Crop as tight as possible and only go below the baseline if
         # necessary
@@ -73,4 +81,6 @@ class Text(Component):
         text = font.render(self.style["text"], False, color)
         self.frame.blit(text, (offset_x, -offset_y), self.area)
 
+    def __str__(self):
+        return "text({})".format(self.style["text"])
 

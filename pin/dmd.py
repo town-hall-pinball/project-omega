@@ -168,7 +168,7 @@ enqueue = dmd.enqueue
 render = dmd.render
 
 def create_frame(width=width, height=height):
-    return pygame.Surface((width, height))
+    return pygame.Surface((width, height), pygame.locals.SRCALPHA)
 
 def create_dots(frame):
     return pygame.PixelArray(frame)

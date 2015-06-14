@@ -37,8 +37,17 @@ class Panel(Component):
             component.parent = self
             self.invalidate()
 
+    def clear(self):
+        self.children = []
+        self.invalidate()
+
     def draw(self):
         super(Panel, self).draw()
         for child in self.children:
             self.frame.blit(child.frame,
                     (child.x, child.y, child.width, child.height))
+
+    def __str__(self):
+        name = self.style.get("name", None)
+        return "panel({})".format(name) if name else "panel"
+

@@ -67,6 +67,10 @@ class Component(object):
             self.expand4("padding", util.to_list(style["padding"]))
         self.invalidate()
 
+    def hide(self):
+        self.enabled = False
+        self.invalidate()
+
     def invalidate(self):
         self.dirty = True
         if self.parent:
@@ -150,8 +154,13 @@ class Component(object):
                 self.height > self.frame.get_height() ):
             self.frame = pin.dmd.create_frame(self.width, self.height)
 
-        fill = self.style["fill"]
-        self.frame.fill(fill, (0, 0, self.width, self.height))
+        fill = self.style.get("fill", None)
+        self.frame.fill((0, 0, 0, 0), (0, 0, self.frame.get_width(),
+                self.frame.get_height()))
+
+        if fill is not None:
+            self.frame.fill((fill, fill, fill, 0xff),
+                    (0, 0, self.width, self.height))
 
     def expand4(self, key, value):
         if len(value) == 1:

@@ -29,12 +29,15 @@ class Image(Component):
         super(Image, self).__init__(defaults={
             "reverse": False
         }, **style)
+        self.reverse = None
 
     def auto_size(self):
         if self.style["image"] != None:
             image =  p.images[self.style["image"]]
-            width = image.get_width()
-            height = image.get_height()
+            width = (image.get_width() + self.style["padding_left"] +
+                    self.style["padding_right"])
+            height = (image.get_height() + self.style["padding_top"] +
+                    self.style["padding_bottom"])
         else:
             width = 0
             height = 0
@@ -48,4 +51,12 @@ class Image(Component):
         if self.width == 0 or self.height == 0:
             return
         image = p.images[self.style["image"]]
-        self.frame.blit(image, (0, 0))
+        if self.style["reverse"] and not self.reverse:
+            image = image.copy()
+            dots = p.dmd.create_dots(image)
+            for x in xrange(image.get_width()):
+                for y in xrange(image.get_height()):
+                    dots[x, y] = (dots[x, y]) ^ 0x00ffffff
+            del dots
+        self.frame.blit(image, (self.style["padding_left"],
+                self.style["padding_top"]))

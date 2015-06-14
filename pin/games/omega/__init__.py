@@ -30,8 +30,8 @@ def init():
         ("service_cancel",      "sounds/service/cancel.ogg"),
         ("service_enter",       "sounds/service/enter.ogg"),
         ("service_exit",        "sounds/service/exit.ogg"),
-        ("service_save",        "sounds/service.save.ogg"),
-        ("service_select",      "sounds/service.select.ogg"),
+        ("service_save",        "sounds/service/save.ogg"),
+        ("service_select",      "sounds/service/select.ogg"),
     )
     resources.register_music(
         ("introduction", "music/Introduction.ogg", { "start_time": 0.50 }),
@@ -55,7 +55,24 @@ def init():
         ("r7b",     "title")
     )
     resources.load_images(
-        ("thp_logo", "images/thp_logo.dmd"),
+        ("thp_logo",                "images/thp_logo.dmd"),
+        ("service_animations",      "images/service/animations.dmd"),
+        ("service_audits",          "images/service/audits.dmd"),
+        ("service_clear",           "images/service/clear.dmd"),
+        ("service_coils",           "images/service/coils.dmd"),
+        ("service_debug",           "images/service/debug.dmd"),
+        ("service_flashers",        "images/service/flashers.dmd"),
+        ("service_font",            "images/service/font.dmd"),
+        ("service_game_settings",   "images/service/game_settings.dmd"),
+        ("service_lamps",           "images/service/lamps.dmd"),
+        ("service_money",           "images/service/money.dmd"),
+        ("service_music",           "images/service/music.dmd"),
+        ("service_server",          "images/service/server.dmd"),
+        ("service_settings",        "images/service/settings.dmd"),
+        ("service_sounds",          "images/service/sounds.dmd"),
+        ("service_switches",        "images/service/switches.dmd"),
+        ("service_tests",           "images/service/tests.dmd"),
+        ("service_utilities",       "images/service/utilities.dmd"),
     )
 
     attract.init()

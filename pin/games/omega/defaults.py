@@ -19,5 +19,11 @@
 # DEALINGS IN THE SOFTWARE.
 
 defaults = {
-    "cleared": True
+    "cleared": True,
+    "free_play": False,
+    "pricing": 0.25,
+    "server_enabled": False,
+    "server_publish_events": False,
+    "server_remote_control": False,
+    "tilt_warnings": 2,
 }
