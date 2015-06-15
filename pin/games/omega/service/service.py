@@ -139,6 +139,7 @@ class Service(Handler):
 
     def enabled(self):
         self.push_menu(menu.main)
+        p.dmd.clear()
         p.dmd.stack("service", self.panel)
 
     def disabled(self):

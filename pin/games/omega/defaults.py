@@ -20,8 +20,10 @@
 
 defaults = {
     "cleared": True,
+    "credits": 0,
     "earnings": 0,
     "free_play": False,
+    "max_credits": 99,
     "paid_credits": 0,
     "pricing": 0.25,
     "server_enabled": False,

@@ -19,6 +19,8 @@
 # DEALINGS IN THE SOFTWARE.
 
 from copy import deepcopy
+import fractions
+
 
 def to_list(value):
     return value if isinstance(value, list) or isinstance(value, tuple) else [value]
@@ -52,4 +54,25 @@ def dict_merge(target, *args):
         else:
             target[k] = deepcopy(v)
     return target
+
+
+def fraction(value):
+    """
+    Converts the floating point `value` into a human-readable fraction.
+    Example::
+        >>> util.fraction(2)
+        "2"
+        >>> util.fraction(2.5)
+        "2 1/2"
+    """
+    fraction = fractions.Fraction(value).limit_denominator(4)
+    if fraction.numerator == 0:
+        return "0"
+    if fraction.numerator < fraction.denominator:
+        return str(fraction.numerator) + "/" + str(fraction.denominator)
+    whole = fraction.numerator / fraction.denominator
+    if fraction.denominator == 1:
+        return str(whole)
+    numerator = fraction.numerator - (whole * fraction.denominator)
+    return str(whole) + " " + str(numerator) + "/" + str(fraction.denominator)
 

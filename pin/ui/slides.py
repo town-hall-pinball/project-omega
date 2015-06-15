@@ -31,6 +31,7 @@ class Slides(util.Show):
         super(Slides, self).__init__(name, timings, **kwargs)
         self.slides = []
         self.transitions = []
+        self.previous = None
         for i, item in enumerate(slides):
             self.slides += [item[0]]
             self.transitions += [None if len(item) != 3 else item[2]]
@@ -40,8 +41,13 @@ class Slides(util.Show):
         self.on("switch_flipper_right", self.next)
 
     def action(self, use_callback=False):
-        p.dmd.stack(self.name, self.slides[self.index],
-                self.transitions[self.index], delegate=self)
+        if self.previous:
+            self.previous.render_stopped()
+        current = self.slides[self.index]
+        p.dmd.stack(self.name, current, self.transitions[self.index],
+                delegate=self)
+        current.render_started()
+        self.previous = current
         if use_callback:
             self.slides[self.index].start(self.next)
 

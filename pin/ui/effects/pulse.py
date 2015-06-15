@@ -20,42 +20,20 @@
 
 from pin import util
 
-class Blink(util.Show):
+class Pulse(util.Show):
 
-    def __init__(self, target, duration=0.5, repeat=False):
-        super(Blink, self).__init__("blink",
-                [duration, duration], repeat)
+    def __init__(self, target, duration=0.03):
+        durations = [duration] * 0x8
+        super(Pulse, self).__init__("pulse", durations, repeat=True)
         self.target = target
+        self.to_black = True
+        self.start()
 
     def action(self, *args, **kwargs):
-        if self.index % 2 == 0:
-            self.target.update(color=0xf)
-        else:
-            self.target.update(color=0x0)
-
-    def stopped(self):
-        self.target.update(color=0xf)
-
-
-def blink(target, duration=0.5, repeat=False):
-    return Blink(target, duration, repeat).start()
-
-
-class FillBlink(util.DMDShow):
-
-    def __init__(self, target, duration=0.5, repeat=False):
-        super(FillBlink, self).__init__("fill_blink",
-                [duration, duration], repeat)
-        self.target = target
-
-    def action(self, *args, **kwargs):
-        if self.index % 2 == 1:
-            self.target.update(color=0xf, fill=0x0)
-        else:
-            self.target.update(color=0x0, fill=0x0f)
-
-def fill_blink(target, duration=0.5, repeat=False):
-    return FillBlink(target, duration, repeat).start()
+        color = 0xf - (self.index * 2) if self.to_black else self.index
+        self.target.update(color=color)
+        if self.index == 0x07:
+            self.to_black = not self.to_black
 
 
 

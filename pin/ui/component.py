@@ -38,6 +38,7 @@ class Component(object):
     def __init__(self, defaults=None, **style):
         self.style = {}
         self.children = []
+        self.effect = None
         self.defaults = {
             "top": None,
             "right": None,
@@ -62,14 +63,26 @@ class Component(object):
         self.update(**self.defaults)
         self.update(**style)
 
+    def do(self, effect):
+        if self.effect:
+            self.effect.stop()
+        self.effect = effect
+        self.effect.start()
+
     def update(self, **style):
         self.style.update(style)
         if "padding" in style:
             self.expand4("padding", util.to_list(style["padding"]))
         self.invalidate()
 
+    def show(self):
+        self.enabled = True
+        self.render_started()
+        self.invalidate()
+
     def hide(self):
         self.enabled = False
+        self.render_stopped()
         self.invalidate()
 
     def invalidate(self):
@@ -143,13 +156,22 @@ class Component(object):
         pass
 
     def render_started(self):
-        pass
+        for child in self.children:
+            child.render_started()
+        if self.effect:
+            self.effect.start()
 
     def render_stopped(self):
-        pass
+        for child in self.children:
+            child.render_stopped()
+        if self.effect:
+            self.effect.stop()
 
     def render_restarted(self):
-        pass
+        for child in self.children:
+            child.render_restarted()
+        if self.effect:
+            self.effect.start()
 
     def draw(self):
         if self.width < 0 or self.height < 0:

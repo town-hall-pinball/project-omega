@@ -103,7 +103,7 @@ class DMD(object):
     def clear(self):
         for renderer in self.queued.values():
             renderer.stop()
-        self.queued[:] = []
+        self.queued.clear()
 
     def add(self, collection, renderer, transition=None):
         trans = "using {}".format(transition.name) if transition else ""

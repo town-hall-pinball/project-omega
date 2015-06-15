@@ -20,7 +20,6 @@
 
 import p
 from pin import brand, ui
-from . import system
 from pin.ui.transitions import SlideIn, SlideOut
 from pin.handler import Handler
 
@@ -33,16 +32,19 @@ class Attract(Handler):
     anim = ui.Movie("x2")
 
     def setup(self):
+        from .system import coin
         self.show = ui.Slides("attract.show", (
-            (self.anim,          None),
-            (self.thp,           3.0),
-            (self.presents,      3.0, SlideIn(direction="left")),
-            (self.title,         3.0),
-            (self.game_over,     6.0)),
+            (self.anim,             None),
+            (self.thp,              3.0),
+            (self.presents,         3.0, SlideIn(direction="left")),
+            (self.title,            3.0),
+            #(coin.handler.credits,  3.0),
+            (self.game_over,        6.0)),
             repeat=True)
         self.on("switch_service_enter", self.start_service_mode)
 
     def enabled(self):
+        from . import system
         system.mode.enable()
         self.show.start()
         p.mixer.play("introduction")

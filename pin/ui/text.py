@@ -34,7 +34,7 @@ class Text(Component):
 
     def show(self, text):
         self.style["text"] = text if text is not None else ""
-        self.enabled = True
+        super(Text, self).show()
         self.auto_size()
         self.invalidate()
 

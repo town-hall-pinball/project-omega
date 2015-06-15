@@ -19,3 +19,4 @@
 # DEALINGS IN THE SOFTWARE.
 
 from .blink import *
+from .pulse import *

@@ -28,6 +28,9 @@ class Mode(Handler):
     def setup(self):
         self.handlers += [coin.handler]
 
+    def enabled(self):
+        coin.handler.enable()
+
 mode = None
 
 def init():

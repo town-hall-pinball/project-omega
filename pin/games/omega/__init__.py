@@ -80,12 +80,11 @@ def init():
         ("r7b",     "title")
     )
 
-
+    system.init()
     attract.init()
     banner.init()
     post.init()
     service.init()
-    system.init()
 
     for gi in p.gi.values():
         gi.enable()
