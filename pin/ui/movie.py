@@ -24,7 +24,7 @@ from .component import Component
 
 class Movie(Component):
 
-    def __init__(self, movie="", **style):
+    def __init__(self, movie=None, **style):
         style["movie"] = movie
         super(Movie, self).__init__(defaults={}, **style)
         self.has_alpha = False
@@ -51,13 +51,21 @@ class Movie(Component):
         self.invalidate()
         self.callback = callback
 
-    def on_render(self):
-        movie = p.movies[self.style["movie"]]
-        if not movie.get_busy():
+    def stop(self):
+        if self.style["movie"]:
+            movie = p.movies[self.style["movie"]]
+            movie.stop()
             self.playing = False
-            if self.callback:
-                self.callback()
-                self.callback = None
+            self.invalidate()
+
+    def on_render(self):
+        if self.playing:
+            movie = p.movies[self.style["movie"]]
+            if not movie.get_busy():
+                self.playing = False
+                if self.callback:
+                    self.callback()
+                    self.callback = None
 
     def __str__(self):
         return "movie({})".format(self.style["movie"])

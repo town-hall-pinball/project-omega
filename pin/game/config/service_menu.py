@@ -151,9 +151,9 @@ utilities = {
         "name": "Browser",
         "icon": "service_browse",
         "menu": [{
-            "name": "Animations",
+            "name": "Movie Browser",
             "icon": "service_animations",
-            "action": "animation_browser"
+            "action": "movie_browser"
         }]
     }]
 }

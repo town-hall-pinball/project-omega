@@ -31,7 +31,7 @@ def init():
         "attract",
         "banner",
         "post",
-        "service.animation_browser",
+        "service.movie_browser",
         "service.service",
         "system.coin",
     ))

@@ -151,6 +151,8 @@ class Component(object):
             self.revalidate()
         target.blit(self.frame, (self.x, self.y))
         self.on_render()
+        for child in self.children:
+            child.on_render()
 
     def on_render(self):
         pass

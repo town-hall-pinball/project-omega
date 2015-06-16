@@ -20,20 +20,33 @@
 
 import p
 from pin.handler import Handler
-from pin import ui
+from pin import ui, util
 
 class Mode(Handler):
 
     def setup(self):
-        self.panel = ui.Text("Animations")
+        self.movies = util.Cycle(p.movies.items())
+        self.panel = ui.Panel()
+        self.player = ui.Movie()
+        self.label = ui.Text(top=0, right=0)
+        self.panel.add([self.player, self.label])
+
         self.on("switch_service_exit",  self.exit)
 
     def enabled(self):
-        p.dmd.stack("animation_browser", self.panel)
+        p.dmd.stack("movie_browser", self.panel)
+        self.update()
+
+    def update(self):
+        key, movie = self.movies.get()
+        self.player.stop()
+        self.player.update(movie=key)
+        self.player.start()
+        self.label.show(key)
 
     def disabled(self):
         p.mixer.play("service_exit")
-        p.dmd.remove("animation_browser")
+        p.dmd.remove("movie_browser")
         p.modes["service"].resume()
 
     def exit(self):

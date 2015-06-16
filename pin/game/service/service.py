@@ -239,8 +239,8 @@ class Mode(Handler):
     def clear_result(self):
         self.result.hide()
 
-    def animation_browser(self):
-        p.modes["animation_browser"].enable()
+    def movie_browser(self):
+        p.modes["movie_browser"].enable()
         self.suspend()
 
 
