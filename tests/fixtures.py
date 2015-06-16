@@ -43,6 +43,7 @@ def reset():
     p.images = pin.resources.images
     p.mixer = pin.mixer
     p.music = pin.resources.music
+    p.movies = pin.resources.movies
     p.now = 0
     p.proc = pin.proc
     p.proc.api = virtual_proc
