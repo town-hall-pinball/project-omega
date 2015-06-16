@@ -29,11 +29,12 @@ class Mode(Handler):
         self.on("switch_service_exit",  self.exit)
 
     def enabled(self):
-        print "stacking"
         p.dmd.stack("animation_browser", self.panel)
 
     def disabled(self):
+        p.mixer.play("service_exit")
         p.dmd.remove("animation_browser")
+        p.modes["service"].resume()
 
     def exit(self):
         self.disable()

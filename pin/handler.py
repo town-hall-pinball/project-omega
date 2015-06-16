@@ -32,6 +32,7 @@ class Handler(object):
         self.listeners = {}
         self.timers = set()
         self.active = False
+        self.suspended = False
         self.handlers = []
         self.renderer = None
         self.setup()
@@ -74,10 +75,7 @@ class Handler(object):
             return
         log.debug("{} enabled".format(self.name))
         self.active = True
-        #for handler in self.handlers:
-        #    handler.enable()
-        for event, listener in self.listeners.items():
-            p.events.on(event, listener)
+        self.register()
         self.enabled()
 
     def enabled(self):
@@ -88,12 +86,7 @@ class Handler(object):
             return
         log.debug("{} disabled".format(self.name))
         self.active = False
-        for handler in self.handlers:
-            self.disable()
-        for event, listener in self.listeners.items():
-            p.events.off(event, listener)
-        for ident in self.timers:
-            p.timers.clear(ident)
+        self.unregister()
         self.disabled()
 
     def disabled(self):
@@ -106,6 +99,30 @@ class Handler(object):
             handler.render(frame)
         if self.renderer:
             self.renderer.render(frame)
+
+    def suspend(self):
+        log.debug("{} suspended".format(self.name))
+        self.suspended = True
+        self.unregister()
+
+    def resume(self):
+        log.debug("{} resumed".format(self.name))
+        self.suspended = False
+        self.register()
+
+    def register(self):
+        #for handler in self.handlers:
+        #    handler.enable()
+        for event, listener in self.listeners.items():
+            p.events.on(event, listener)
+
+    def unregister(self):
+        for handler in self.handlers:
+            self.disable()
+        for event, listener in self.listeners.items():
+            p.events.off(event, listener)
+        for ident in self.timers:
+            p.timers.clear(ident)
 
     def render_started(self):
         pass

@@ -241,6 +241,8 @@ class Mode(Handler):
 
     def animation_browser(self):
         p.modes["animation_browser"].enable()
+        self.suspend()
+
 
 
 
