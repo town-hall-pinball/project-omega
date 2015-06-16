@@ -76,3 +76,5 @@ def fraction(value):
     numerator = fraction.numerator - (whole * fraction.denominator)
     return str(whole) + " " + str(numerator) + "/" + str(fraction.denominator)
 
+
+

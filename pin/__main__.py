@@ -119,7 +119,7 @@ def run():
     p.engine.processors += [pin.timers.service]
     p.engine.processors += [pin.events.dispatch]
 
-    p.game.init()
+    pin.game.init()
     p.engine.run()
 
 run()

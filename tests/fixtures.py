@@ -20,6 +20,7 @@
 
 import p
 import pin
+from pin.game.config.defaults import defaults
 from pin.virtual import proc as virtual_proc
 from mock import Mock
 import pygame
@@ -27,12 +28,10 @@ import pygame
 def reset():
     from pin.platforms import wpc as platform
     from pin.machines import no_fear as machine
-    from pin.games import omega as game
 
     p.platform = platform
     p.machine = machine
-    p.game = game
-    p.defaults = p.game.defaults
+    p.defaults = defaults
 
     pin.keyboard.reset()
     pin.events.reset()

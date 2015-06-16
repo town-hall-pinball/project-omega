@@ -21,9 +21,8 @@
 import p
 from pin import ui, util
 from pin.handler import Handler
-from .. import attract
 
-class Coin(Handler):
+class Mode(Handler):
 
     def setup(self):
         self.credits = ui.Notice("credit_display", duration=3)
@@ -37,7 +36,7 @@ class Coin(Handler):
 
     def start_button(self):
         self.update()
-        if attract.mode.active:
+        if p.modes["attract"].active:
             self.credits.enqueue()
 
     def coin_left(self):
@@ -56,7 +55,7 @@ class Coin(Handler):
         p.data["credits"] += add
         p.mixer.play("coin_drop")
         self.update()
-        if attract.mode.active and not p.data["free_play"]:
+        if p.modes["attract"].active and not p.data["free_play"]:
             self.credits.enqueue()
 
     def update(self):
@@ -76,10 +75,3 @@ class Coin(Handler):
             self.message.do(ui.effects.Blink(self.message, duration=0.2,
                     repeat=3))
 
-
-
-handler = None
-
-def init():
-    global handler
-    handler = Coin("system.coin.handler")

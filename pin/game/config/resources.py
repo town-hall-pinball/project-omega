@@ -18,12 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from . import attract, banner, post, service, system
-from .defaults import *
-from ... import resources
+from pin import resources
 
-def init():
+def load():
     resources.load_images(
         ("thp_logo",                "images/thp_logo.dmd"),
         ("service_animations",      "images/service/animations.dmd"),
@@ -79,17 +76,3 @@ def init():
     resources.alias_fonts(
         ("r7b",     "title")
     )
-
-    system.init()
-    attract.init()
-    banner.init()
-    post.init()
-    service.init()
-
-    for gi in p.gi.values():
-        gi.enable()
-
-    if p.options["fast"]:
-        attract.mode.enable()
-    else:
-        post.mode.enable()

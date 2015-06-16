@@ -18,47 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import importlib
-import logging
-import time
+import p
+from .config import defaults, resources
 
-coils = None
-data = None
-defaults = None
-dmd = None
-events = None
-fonts = None
-game = None
-gi = None
-images = None
-lamps = None
-machine = None
-modes = None
-movies = None
-mixer = None
-music = None
-now = time.time()
-options = {}
-proc = None
-platform = None
-namespace = None
-save = None
-switches = None
-sounds = None
-timers = None
+# Resources now in resources.py
 
-def load_modes(names):
-    global modes
-    if modes is None:
-        modes = {}
-    for name in names:
-        fullname = namespace + "." + name
-        basename = name.split(".")[-1]
-        try:
-            m = importlib.import_module(fullname)
-            modes[basename] = m.Mode(basename + ".mode")
-        except Exception as e:
-            logging.getLogger("pin").error("Unable to load {}".format(fullname))
-            raise
+def init():
+    p.namespace = "pin.game"
+    resources.load()
 
+    p.load_modes((
+        "attract",
+        "banner",
+        "post",
+        "service.animation_browser",
+        "service.service",
+        "system.coin",
+    ))
 
+    for gi in p.gi.values():
+        gi.enable()
+
+    if p.options["fast"]:
+        p.modes["attract"].enable()
+    else:
+        p.modes["post"].enable()

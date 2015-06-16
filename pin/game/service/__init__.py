@@ -17,16 +17,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
-
-from pin.games import omega
-
-import unittest
-from tests import fixtures
-
-class TestOmega(unittest.TestCase):
-
-    def setUp(self):
-        fixtures.reset()
-
-    def test_game(self):
-        omega.init()

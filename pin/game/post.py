@@ -18,12 +18,30 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from . import service, animations
+import p
+from pin import ui
+from pin.ui import effects
+from pin.handler import Handler
+from . import banner
 
-mode = None
+class Mode(Handler):
 
-def init():
-    global mode
-    animations.init()
-    service.init()
-    mode = service.mode
+    def setup(self):
+        self.panel = ui.Notice(duration=4.0, callback=self.done)
+        self.message = ui.Text("SETTINGS CLEARED", padding=2)
+        self.panel.add(self.message)
+
+    def enabled(self):
+        if p.data.get("cleared", False):
+            p.mixer.play("settings_cleared")
+            effects.fill_blink(self.message, duration=0.25, repeat=2)
+            self.panel.enqueue()
+        else:
+            self.disable()
+
+    def disabled(self):
+        p.modes["banner"].enable()
+
+    def done(self):
+        self.disable()
+

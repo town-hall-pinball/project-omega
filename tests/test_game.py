@@ -18,22 +18,16 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import ui
-from pin.handler import Handler
-from . import coin
+from pin import game
 
-class Mode(Handler):
+import unittest
+from tests import fixtures
 
-    def setup(self):
-        self.handlers += [coin.handler]
+class TestOmega(unittest.TestCase):
 
-    def enabled(self):
-        coin.handler.enable()
+    def setUp(self):
+        fixtures.reset()
 
-mode = None
+    def test_game(self):
+        game.init()
 
-def init():
-    global mode
-    coin.init()
-    mode = Mode("system.mode")

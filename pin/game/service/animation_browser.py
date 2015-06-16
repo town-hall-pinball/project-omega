@@ -19,34 +19,22 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import ui
-from pin.ui import effects
 from pin.handler import Handler
-from . import banner
+from pin import ui
 
 class Mode(Handler):
 
     def setup(self):
-        self.panel = ui.Notice(duration=4.0, callback=self.done)
-        self.message = ui.Text("SETTINGS CLEARED", padding=2)
-        self.panel.add(self.message)
+        self.panel = ui.Text("Animations")
+        self.on("switch_service_exit",  self.exit)
 
     def enabled(self):
-        if p.data.get("cleared", False):
-            p.mixer.play("settings_cleared")
-            effects.fill_blink(self.message, duration=0.25, repeat=2)
-            self.panel.enqueue()
-        else:
-            self.disable()
+        print "stacking"
+        p.dmd.stack("animation_browser", self.panel)
 
     def disabled(self):
-        banner.mode.enable()
+        p.dmd.remove("animation_browser")
 
-    def done(self):
+    def exit(self):
         self.disable()
 
-mode = None
-
-def init():
-    global mode
-    mode = Mode("post.mode")

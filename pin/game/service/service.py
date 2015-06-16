@@ -23,7 +23,7 @@ from collections import deque
 import p
 from pin import ui, util
 from pin.handler import Handler
-from . import menu, animations
+from ..config import service_menu as menu
 
 def option_tuple(option):
     if isinstance(option, list):
@@ -76,7 +76,7 @@ class MenuNode(object):
         self.iter = util.Cycle(self.items)
 
 
-class Service(Handler):
+class Mode(Handler):
 
     def setup(self):
         self.menus = {}
@@ -102,10 +102,6 @@ class Service(Handler):
         self.on("switch_service_up",    self.up)
         self.on("switch_service_down",  self.down)
         self.on("switch_service_exit",  self.exit)
-
-        self.handlers += [
-            animations.handler
-        ]
 
     def push_menu(self, node):
         self.depth += 1
@@ -166,8 +162,7 @@ class Service(Handler):
         self.key_stack.pop()
         self.menu_stack.pop()
         if self.depth == 0:
-            from .. import attract
-            attract.mode.enable()
+            p.modes["attract"].enable()
             self.disable()
         else:
             p.mixer.play("service_exit")
@@ -245,11 +240,7 @@ class Service(Handler):
         self.result.hide()
 
     def animation_browser(self):
-        animations.handler.enable()
+        p.modes["animation_browser"].enable()
 
 
-mode = None
 
-def init():
-    global mode
-    mode = Service("service.mode")

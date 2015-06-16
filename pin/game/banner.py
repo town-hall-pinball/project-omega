@@ -20,50 +20,47 @@
 
 import p
 from pin import brand, ui
-from pin.ui.transitions import SlideIn, SlideOut
 from pin.handler import Handler
+from . import attract
 
-class Attract(Handler):
+name = "banner"
 
-    thp = ui.Image("thp_logo")
-    presents = ui.Text("PRESENTS")
-    title = ui.Text(brand.name, font="t5exb")
-    game_over = ui.Text("Game Over")
-    anim = ui.Movie("x2")
+class Mode(Handler):
 
     def setup(self):
-        from .system import coin
-        self.show = ui.Slides("attract.show", (
-            (self.anim,             None),
-            (self.thp,              3.0),
-            (self.presents,         3.0, SlideIn(direction="left")),
-            (self.title,            3.0),
-            #(coin.handler.credits,  3.0),
-            (self.game_over,        6.0)),
-            repeat=True)
-        self.on("switch_service_enter", self.start_service_mode)
+        self.panel = ui.Notice(
+            "banner",
+            duration=8,
+            callback=self.done
+        )
+        self.title = ui.Text(
+            brand.name,
+            font="t5exb"
+        )
+        self.version = ui.Text(
+            "Version {}".format(brand.version),
+            font="t5cpb"
+        )
+        self.release = ui.Text(
+            brand.release,
+            font="t5cpb"
+        )
+        self.panel.add((self.title, self.version, self.release))
+
+        self.on("switch_flipper_left", self.bypass)
+        self.on("switch_flipper_right", self.bypass)
+        self.on("switch_start_button", self.bypass)
+        self.on("switch_service_enter", self.bypass)
+        self.on("switch_service_exit", self.bypass)
 
     def enabled(self):
-        from . import system
-        system.mode.enable()
-        self.show.start()
-        p.mixer.play("introduction")
+        self.panel.enqueue()
+        p.mixer.play("boot")
 
-    def disabled(self):
-        p.mixer.stop()
+    def bypass(self):
+        self.panel.done()
 
-    def start_service_mode(self):
-        from . import service
-        service.mode.enable()
+    def done(self):
         self.disable()
-        p.mixer.play("service_enter")
-
-mode = None
-
-def init():
-    global mode
-    mode = Attract("attract.mode")
-
-
-
-
+        p.mixer.stop()
+        p.modes["attract"].enable()
