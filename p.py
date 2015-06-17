@@ -26,6 +26,7 @@ coils = None
 data = None
 defaults = None
 dmd = None
+displays = {}
 events = None
 fonts = None
 game = None

@@ -22,15 +22,10 @@ import p
 import pin
 from pin.game.config.defaults import defaults
 from pin.virtual import proc as virtual_proc
-from mock import Mock
+from mock import Mock, patch
 import pygame
 
 def reset():
-    from pin.platforms import wpc as platform
-    from pin.machines import no_fear as machine
-
-    p.platform = platform
-    p.machine = machine
     p.defaults = defaults
 
     pin.keyboard.reset()
@@ -41,10 +36,12 @@ def reset():
     p.events = pin.events
     p.fonts = pin.resources.fonts
     p.images = pin.resources.images
+    p.machine = pin.machine
     p.mixer = pin.mixer
     p.music = pin.resources.music
     p.movies = pin.resources.movies
     p.now = 0
+    p.platform = pin.platform
     p.proc = pin.proc
     p.proc.api = virtual_proc
     p.sounds = pin.resources.sounds
@@ -59,16 +56,23 @@ def reset():
         "quiet": False,
     }
 
+    p.mixer.reset()
     pin.devices.reset()
-    machine.init()
+    pin.resources.reset()
+    p.proc.reset()
 
     pygame.mixer.Sound = Mock(pygame.mixer.Sound)
     pygame.mixer.Channel = Mock(pygame.mixer.Channel)
     pygame.font.Font = Mock(pygame.font.Font)
     pygame.movie.Movie = Mock(pygame.movie.Movie)
+    pygame.mixer.music = Mock(pygame.mixer.music)
 
     font = pygame.font.Font.return_value
     font.metrics.return_value = ((5, 5, 5, 5, 5),)
     font.get_ascent.return_value = 5
+
+    pin.machine.init()
+    with patch("pin.resources.load_dmd_animation") as load_patch:
+        pin.game.init()
 
 

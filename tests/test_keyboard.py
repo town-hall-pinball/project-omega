@@ -19,7 +19,8 @@
 # DEALINGS IN THE SOFTWARE.
 
 import pygame
-from pin import events, keyboard
+import p
+from pin import keyboard
 
 from mock import Mock, patch
 import unittest
@@ -42,11 +43,63 @@ class TestKeyboard(unittest.TestCase):
             "key": pygame.locals.K_a,
         })]
         listener = Mock()
-        events.on("a_event", listener)
+        p.events.on("a_event", listener)
         keyboard.register({"a": keyboard.event("a_event", foo=1)})
         keyboard.process()
-        events.dispatch()
+        p.events.dispatch()
         listener.assert_called_with(foo=1)
+
+    @patch("pygame.event.get")
+    @patch("pygame.key.name")
+    def test_switch_active(self, name, events):
+        name.return_value = "a"
+        events.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {
+            "key": pygame.locals.K_a,
+        })]
+        keyboard.register({"a": keyboard.switch("start_button")})
+        keyboard.process()
+        event = p.proc.artificial_events[0]
+        self.assertEquals(event["type"], p.proc.SWITCH_CLOSED)
+        self.assertTrue(event["value"], p.switches["start_button"].number)
+
+    @patch("pygame.event.get")
+    @patch("pygame.key.name")
+    def test_switch_inactive(self, name, events):
+        name.return_value = "a"
+        events.return_value = [pygame.event.Event(pygame.locals.KEYUP, {
+            "key": pygame.locals.K_a,
+        })]
+        keyboard.register({"a": keyboard.switch("start_button")})
+        keyboard.process()
+        event = p.proc.artificial_events[0]
+        self.assertEquals(event["type"], p.proc.SWITCH_OPENED)
+        self.assertTrue(event["value"], p.switches["start_button"].number)
+
+    @patch("pygame.event.get")
+    @patch("pygame.key.name")
+    def test_opto_active(self, name, events):
+        name.return_value = "a"
+        events.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {
+            "key": pygame.locals.K_a,
+        })]
+        keyboard.register({"a": keyboard.switch("trough")})
+        keyboard.process()
+        event = p.proc.artificial_events[0]
+        self.assertEquals(event["type"], p.proc.SWITCH_OPENED)
+        self.assertTrue(event["value"], p.switches["trough"].number)
+
+    @patch("pygame.event.get")
+    @patch("pygame.key.name")
+    def test_opto_inactive(self, name, events):
+        name.return_value = "a"
+        events.return_value = [pygame.event.Event(pygame.locals.KEYUP, {
+            "key": pygame.locals.K_a,
+        })]
+        keyboard.register({"a": keyboard.switch("trough")})
+        keyboard.process()
+        event = p.proc.artificial_events[0]
+        self.assertEquals(event["type"], p.proc.SWITCH_CLOSED)
+        self.assertTrue(event["value"], p.switches["trough"].number)
 
     @patch("pygame.event.get")
     @patch("pygame.key.name")
@@ -56,9 +109,11 @@ class TestKeyboard(unittest.TestCase):
             "key": pygame.locals.K_a,
         })]
         listener = Mock()
-        events.on("a_event", listener)
+        p.events.on("a_event", listener)
         keyboard.register({"a": keyboard.event("a_event")})
         keyboard.reset()
         keyboard.process()
-        events.dispatch()
+        p.events.dispatch()
         self.assertFalse(listener.called)
+
+

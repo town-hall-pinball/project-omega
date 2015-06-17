@@ -18,16 +18,16 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import game
-
+from pin import resources
 import unittest
-from tests import fixtures
+from mock import mock_open, patch
 
-class TestOmega(unittest.TestCase):
+class TestResources(unittest.TestCase):
 
-    def setUp(self):
-        fixtures.reset()
-
-    def test_game(self):
-        game.init()
-
+    @patch("__builtin__.open", mock_open(), create=True)
+    def test_duplicate(self):
+        with self.assertRaises(ValueError):
+            resources.load_fonts(
+                ("foo", "/tmp/foo", 8),
+                ("foo", "/tmp/foo", 8)
+            )

@@ -84,6 +84,7 @@ def init():
 
 def bind():
     p.data = pin.data
+    p.defaults = pin.game.config.defaults.defaults
     p.dmd = pin.dmd
     p.engine = pin.engine
     p.events = pin.events
@@ -108,8 +109,8 @@ def run():
         pass
 
     pygame.init()
-    pin.config.init()
-    p.machine.init()
+    p.platform = pin.platform
+    pin.machine.init()
     bind()
     init()
 
@@ -120,6 +121,7 @@ def run():
     p.engine.processors += [pin.events.dispatch]
 
     pin.game.init()
+    pin.game.start()
     p.engine.run()
 
 run()

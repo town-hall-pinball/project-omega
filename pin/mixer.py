@@ -51,6 +51,12 @@ def stop(channel=None):
         pygame.mixer.music.stop()
     elif channel in channels:
         channels[channel].stop()
+    elif channel == "music":
+        pygame.mixer.music.stop()
     else:
-        pygame.mixser.music.stop()
+        raise ValueError("Invalid channel: {}".format(channel))
+
+def reset():
+    channels.clear()
+
 

@@ -30,8 +30,12 @@ class Mode(Handler):
         self.message = ui.Text("FREE PLAY")
         self.credits.add((self.amount, self.message))
 
-        self.on("switch_start_button", self.start_button)
-        self.on("switch_coin_left", self.coin_left)
+        self.on("switch_start_button",  self.start_button)
+        self.on("switch_coin_left",     self.coin_left)
+        self.on("switch_coin_center",   self.coin_center)
+        self.on("switch_coin_right",    self.coin_right)
+        self.on("switch_coin_fourth",   self.coin_fourth)
+        self.on("switch_service_exit",  self.service_credit)
         self.update()
 
     def start_button(self):
@@ -40,7 +44,16 @@ class Mode(Handler):
             self.credits.enqueue()
 
     def coin_left(self):
-        self.paid_credit(0.25)
+        self.paid_credit(p.data["coin_left"])
+
+    def coin_center(self):
+        self.paid_credit(p.data["coin_center"])
+
+    def coin_right(self):
+        self.paid_credit(p.data["coin_right"])
+
+    def coin_fourth(self):
+        self.paid_credit(p.data["coin_fourth"])
 
     def paid_credit(self, value):
         pricing = p.data["pricing"]
@@ -48,6 +61,11 @@ class Mode(Handler):
         p.data["earnings"] += value
         p.data["paid_credits"] += add
         self.add_credit(add)
+
+    def service_credit(self):
+        if not p.modes["service"].active:
+            p.data["service_credits"] += 1
+            self.add_credit(1)
 
     def add_credit(self, add=1):
         if p.data["credits"] >= p.data["max_credits"]:

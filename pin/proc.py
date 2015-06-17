@@ -95,3 +95,7 @@ def process():
     api.flush()
     artificial_events[:] = []
 
+def reset():
+    artificial_events[:] = []
+
+

@@ -52,3 +52,26 @@ class TestDictMerge(unittest.TestCase):
         self.assertEquals(expected, util.dict_merge(a, b, c))
 
 
+class TestFraction(unittest.TestCase):
+
+    def test_fraction_0(self):
+        self.assertEquals("0", util.fraction(0))
+
+    def test_fraction_025(self):
+        self.assertEquals("1/4", util.fraction(0.25))
+
+    def test_fraction_1_3(self):
+        self.assertEquals("1/3", util.fraction(1.0/3.0))
+
+    def test_fraction_050(self):
+        self.assertEquals("1/2", util.fraction(0.5))
+
+    def test_fraction_075(self):
+        self.assertEquals("3/4", util.fraction(0.75))
+
+    def test_fraction_575(self):
+        self.assertEquals("5 3/4", util.fraction(5.75))
+
+    def test_fraction_200(self):
+        self.assertEquals("2", util.fraction(2.0))
+

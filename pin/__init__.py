@@ -20,13 +20,16 @@
 
 from . import (
     ui,
-    config,
     brand,
     engine,
     events,
+    game,
     keyboard,
+    machine,
     mixer,
+    platform,
     proc,
+    resources,
     timers
 )
 

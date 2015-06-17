@@ -111,3 +111,12 @@ def add(what, to, key, value):
         raise ValueError("Duplicate {}: {}".format(what, key))
     to[key] = value
 
+def reset():
+    fonts.clear()
+    images.clear()
+    sounds.clear()
+    movies.clear()
+    music.clear()
+
+
+

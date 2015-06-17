@@ -18,21 +18,39 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-# Coverage only
-
-from pin.machines import no_fear
-from pin import devices
+import p
 
 import unittest
 from tests import fixtures
 
-class TestNoFear(unittest.TestCase):
+class TestPROC(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
 
-    def test(self):
-        for switch in devices.switches.values():
-            switch.enable()
+    def test_reset(self):
+        p.proc.api.reset()
 
+    def test_get_events(self):
+        events = p.proc.api.get_events()
+        self.assertEquals(1, len(events))
+        self.assertEquals(p.proc.DMD_READY, events[0]["type"])
+
+    def test_switch_update_rule(self):
+        p.proc.api.switch_update_rule()
+
+    def test_flush(self):
+        p.proc.api.flush()
+
+    def test_watchdog_tickle(self):
+        p.proc.api.watchdog_tickle()
+
+    def test_dmd_draw(self):
+        p.proc.api.dmd_draw()
+
+    def test_driver_pulse(self):
+        p.proc.api.driver_pulse()
+
+    def test_driver_disable(self):
+        p.proc.api.driver_disable()
 

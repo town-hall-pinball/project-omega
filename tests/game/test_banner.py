@@ -18,28 +18,17 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from ... import devices
+import p
 
-def init():
-    devices.add_gi({
-        "gi01": {
-            "label": "Illumination, Playfield Top",
-            "device": "G01",
-        },
-        "gi02": {
-            "label": "Illumination, Playfield Right",
-            "device": "G02",
-        },
-        "gi03": {
-            "label": "Illumination, Playfield Left",
-            "device": "G03",
-        },
-        "gi04": {
-            "label": "Illumination, Insert Title",
-            "device": "G04",
-        },
-        "gi05": {
-            "label": "Illumination, Insert Background",
-            "device": "G05",
-        }
-    })
+import unittest
+from tests import fixtures
+
+class TestBanner(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.banner = p.modes["banner"]
+
+    def test_enable(self):
+        self.banner.enable()
+

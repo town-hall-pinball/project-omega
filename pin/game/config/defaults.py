@@ -20,6 +20,10 @@
 
 defaults = {
     "cleared": True,
+    "coin_left": 0.25,
+    "coin_center": 0.25,
+    "coin_right": 0.25,
+    "coin_fourth": 1.00,
     "credits": 0,
     "earnings": 0,
     "free_play": False,

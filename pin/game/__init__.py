@@ -23,9 +23,10 @@ from .config import defaults, resources
 
 # Resources now in resources.py
 
-def init():
+def init(load_resources=True):
     p.namespace = "pin.game"
-    resources.load()
+    if load_resources:
+        resources.load()
 
     p.load_modes((
         "attract",
@@ -36,6 +37,7 @@ def init():
         "system.coin",
     ))
 
+def start():
     for gi in p.gi.values():
         gi.enable()
 

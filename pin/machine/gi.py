@@ -18,13 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
+from .. import devices
 
 def init():
-    from .platforms import wpc as platform
-    from .machines import no_fear as machine
-    import game
-
-    p.platform = platform
-    p.machine = machine
-    p.defaults = game.defaults
+    devices.add_gi({
+        "gi01": {
+            "label": "Illumination, Playfield Top",
+            "device": "G01",
+        },
+        "gi02": {
+            "label": "Illumination, Playfield Right",
+            "device": "G02",
+        },
+        "gi03": {
+            "label": "Illumination, Playfield Left",
+            "device": "G03",
+        },
+        "gi04": {
+            "label": "Illumination, Insert Title",
+            "device": "G04",
+        },
+        "gi05": {
+            "label": "Illumination, Insert Background",
+            "device": "G05",
+        }
+    })

@@ -18,15 +18,18 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import config
+from pin import devices
 
 import unittest
 from tests import fixtures
 
-class TestConfig(unittest.TestCase):
+class TestNoFear(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
 
-    def test_coverage(self):
-        config.init()
+    def test(self):
+        for switch in devices.switches.values():
+            switch.enable()
+
+

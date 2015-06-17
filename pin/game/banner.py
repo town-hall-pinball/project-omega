@@ -23,8 +23,6 @@ from pin import brand, ui
 from pin.handler import Handler
 from . import attract
 
-name = "banner"
-
 class Mode(Handler):
 
     def setup(self):
