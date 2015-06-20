@@ -72,7 +72,8 @@ class Component(object):
         if self.effect:
             self.effect.stop()
         self.effect = effect
-        self.effect.start()
+        if self.rendering:
+            self.effect.start()
 
     def update(self, **style):
         self.style.update(style)
@@ -172,7 +173,7 @@ class Component(object):
         self.rendering = True
         self.invalidate()
         if self.effect:
-            self.effect.start()
+            self.effect.restart()
 
         if self.suspended:
             self.suspended = False

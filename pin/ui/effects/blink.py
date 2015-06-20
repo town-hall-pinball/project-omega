@@ -33,7 +33,7 @@ class Blink(util.Show):
         else:
             self.target.update(color=0x0)
 
-    def stopped(self):
+    def on_stop(self):
         self.target.update(color=0xf)
 
 

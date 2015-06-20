@@ -39,6 +39,7 @@ class Show(Handler):
             self.repeat = 0
         else:
             self.repeat = repeat
+        self.original_repeat = self.repeat
         self.timer = None
         self.fn_action = action
 
@@ -46,14 +47,15 @@ class Show(Handler):
         if not self.running:
             self.running = True
             log.debug("{} started".format(self.name))
-            self.started()
+            self.on_start()
             self.next()
 
-    def reset(self):
+    def restart(self):
         self.index = 0
+        self.repeat = self.original_repeat
         self.start()
 
-    def started(self):
+    def on_start(self):
         pass
 
     def stop(self):
@@ -62,9 +64,9 @@ class Show(Handler):
             log.debug("{} stopped".format(self.name))
             self.cancel(self.timer)
             self.timer = None
-            self.stopped()
+            self.on_stop()
 
-    def stopped(self):
+    def on_stop(self):
         pass
 
     def next(self):
