@@ -19,30 +19,48 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from .config import defaults, resources
+from pin.handler import Handler
+from pin import ui, util
 
-# Resources now in resources.py
+class Mode(Handler):
 
-def init(load_resources=True):
-    p.namespace = "pin.game"
-    if load_resources:
-        resources.load()
+    def setup(self):
+        self.music = util.Cycle(p.music.keys())
+        self.display = ui.Panel(name="music_player")
+        self.label = ui.Text()
+        self.display.add([self.label])
 
-    p.load_modes((
-        "system.coin",
-        "attract",
-        "banner",
-        "post",
-        "service.movie_browser",
-        "service.music_player",
-        "service.service",
-    ))
+        self.on("switch_service_enter", self.update)
+        self.on("switch_service_up", self.next)
+        self.on("switch_service_down", self.previous)
+        self.on("switch_service_exit",  self.exit)
 
-def start():
-    for gi in p.gi.values():
-        gi.enable()
+    def on_enable(self):
+        self.play()
 
-    if p.options["fast"]:
-        p.modes["attract"].enable()
-    else:
-        p.modes["post"].enable()
+    def play(self):
+        self.update()
+
+    def restart(self):
+        self.update()
+
+    def next(self):
+        self.music.next()
+        self.play()
+
+    def previous(self):
+        self.music.previous()
+        self.play()
+
+    def update(self):
+        key = self.music.get()
+        p.mixer.play(key)
+        self.label.show(key)
+
+    def on_disable(self):
+        p.mixer.stop()
+        p.mixer.play("service_exit")
+        p.modes["service"].resume()
+
+    def exit(self):
+        self.disable()
