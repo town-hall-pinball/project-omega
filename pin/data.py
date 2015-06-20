@@ -18,6 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import p
 import json
 import logging
 import os
@@ -51,6 +52,10 @@ class Data(dict):
         except Exception as ie:
             log.error("Unable to save data file: {}".format(ie))
             data["save_failure"] = True
+
+    def __setitem__(self, key, value):
+        super(Data, self).__setitem__(key, value)
+        p.events.post("data_{}".format(key))
 
     def reset(self, defaults):
         log.debug("Resetting data to defaults")

@@ -18,14 +18,25 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .effects import *
-from .transitions import *
+import p
+from pin import game
 
-from .component import *
-from .image import *
-from .notice import *
-from .panel import *
-from .movie import *
-from .slides import *
-from .text import *
-from .misc import *
+import unittest
+from tests import fixtures
+
+class TestGame(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+
+    def test_start_regular(self):
+        game.start()
+        self.assertTrue(p.modes["post"].enabled)
+        self.assertFalse(p.modes["attract"].enabled)
+
+    def test_start_fast(self):
+        p.options["fast"] = True
+        game.start()
+        self.assertFalse(p.modes["post"].enabled)
+        self.assertTrue(p.modes["attract"].enabled)
+

@@ -22,8 +22,9 @@ import p
 
 import unittest
 from tests import fixtures
+from mock import patch
 
-class TestCoinDrop(unittest.TestCase):
+class TestCoinChutes(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
@@ -58,7 +59,7 @@ class TestCoinDrop(unittest.TestCase):
         self.assertEquals(1.00, p.data["credits"])
 
 
-class TestCoin(unittest.TestCase):
+class TestCredits(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
@@ -88,6 +89,72 @@ class TestCoin(unittest.TestCase):
         self.assertEquals(0, p.data["earnings"])
 
 
+class TestDisplay(unittest.TestCase):
 
+    def setUp(self):
+        fixtures.reset()
+        self.coin = p.modes["coin"]
+        self.coin.enable()
+        p.data["coin_left"] = 0.25
+        p.data["pricing"] = 1.00
+        self.display = p.displays["credits"]
+
+    def get_text(self):
+        return (self.display.amount.style["text"],
+                self.display.message.style["text"])
+
+    def test_initial(self):
+        self.assertEquals(self.get_text(), ("CREDITS 0", "INSERT COINS"))
+
+    def test_free_play(self):
+        p.data["free_play"] = True
+        p.events.dispatch()
+        self.assertEquals(self.get_text(), ("FREE PLAY", "PRESS START"))
+
+    def test_not_full_credit(self):
+        p.events.post("switch_coin_left")
+        p.events.dispatch()
+        self.assertEquals(self.get_text(), ("CREDITS 1/4", "INSERT COINS"))
+
+    def test_full_credit(self):
+        p.events.post("switch_coin_left")
+        p.events.post("switch_coin_left")
+        p.events.post("switch_coin_left")
+        p.events.post("switch_coin_left")
+        p.events.dispatch()
+        self.assertEquals(self.get_text(), ("CREDITS 1", "PRESS START"))
+
+
+class TestAttract(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.attract = p.modes["attract"]
+        self.coin = p.modes["coin"]
+        self.coin.enable()
+
+    @patch("p.dmd.enqueue")
+    def test_not_attract_mode(self, enqueue):
+        p.events.post("switch_coin_left")
+        p.events.dispatch()
+        self.assertFalse(enqueue.called)
+
+    @patch("p.dmd.enqueue")
+    def test_attract_mode_banner(self, enqueue):
+        self.attract.enable()
+        p.events.post("switch_coin_left")
+        p.events.dispatch()
+        self.assertTrue(enqueue.called)
+        self.assertTrue(self.attract.suspended)
+
+    @patch("p.dmd.enqueue")
+    def test_attract_mode_banner_done(self, enqueue):
+        self.attract.enable()
+        p.events.post("switch_coin_left")
+        p.events.dispatch()
+        self.assertTrue(self.attract.suspended)
+        p.now = 10
+        p.timers.service()
+        self.assertFalse(self.attract.suspended)
 
 

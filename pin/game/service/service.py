@@ -298,7 +298,6 @@ class Mode(Handler):
     def clear_credits(self):
         p.data["credits"] = 0
         p.data.save()
-        p.events.post("credits")
 
     def movie_browser(self):
         p.modes["movie_browser"].enable()

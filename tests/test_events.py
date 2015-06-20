@@ -125,4 +125,7 @@ class TestSwitchEvents(unittest.TestCase):
         events.tick()
         self.assertFalse(listener.called)
 
+    def test_off_missing(self):
+        events.off_switch("start_button", None, None)
+
 

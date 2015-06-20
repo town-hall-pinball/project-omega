@@ -66,14 +66,18 @@ class DMD(object):
         for renderer in self.queue:
             renderer.on_render_stop()
         self.queue[:] = []
+        self.shift_renderer()
 
     def reset(self):
-        self.clear()
         if self.renderer:
             self.renderer.on_render_stop()
         if self.previous_renderer:
             self.previous_renderer.on_render_stop()
-        self.stack.clear()
+        self.renderer = None
+        self.previous_renderer = None
+        self.stack[:] = []
+        self.clear()
+        self.transition = None
 
     def add_renderer(self, collection, renderer, transition=None):
         trans = "using {}".format(renderer) if transition else ""
@@ -95,15 +99,19 @@ class DMD(object):
             renderer = self.stack[-1]
         else:
             renderer = None
-        if not renderer:
-            self.renderer = None
-            return
 
         if self.previous_renderer in self.stack:
             self.previous_renderer.render_suspend()
         elif self.previous_renderer:
             self.previous_renderer.render_stop()
         self.previous_renderer = None
+
+        if self.renderer:
+            self.renderer.render_stop()
+
+        if not renderer:
+            self.renderer = None
+            return
 
         if transition:
             self.previous_renderer = self.renderer
@@ -125,8 +133,8 @@ class DMD(object):
 
         if self.transition and self.transition.done:
             self.transition = None
-            if self.renderer.name != self.previous_renderer.name:
-                self.previous_renderer.stop_rendering()
+            if self.renderer != self.previous_renderer:
+                self.previous_renderer.render_stop()
             self.previous_renderer = None
 
         if self.transition:

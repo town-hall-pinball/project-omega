@@ -60,6 +60,7 @@ def reset():
     pin.devices.reset()
     pin.resources.reset()
     p.proc.reset()
+    p.dmd.reset()
 
     pygame.mixer.Sound = Mock(pygame.mixer.Sound)
     pygame.mixer.Channel = Mock(pygame.mixer.Channel)

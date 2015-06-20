@@ -31,4 +31,10 @@ class TestBanner(unittest.TestCase):
 
     def test_enable(self):
         self.banner.enable()
+        self.assertTrue(self.banner.enabled)
+
+    def test_bypass(self):
+        self.banner.enable()
+        self.banner.bypass()
+        self.assertFalse(self.banner.enabled)
 

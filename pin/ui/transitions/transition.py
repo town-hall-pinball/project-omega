@@ -22,6 +22,9 @@ import p
 
 class Transition(object):
 
+    name = None
+    done = False
+
     def __init__(self, name, duration=1.0):
         self.name = name
         self.duration = duration

@@ -18,14 +18,37 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .effects import *
-from .transitions import *
+import p
 
-from .component import *
-from .image import *
-from .notice import *
-from .panel import *
-from .movie import *
-from .slides import *
-from .text import *
-from .misc import *
+import unittest
+from tests import fixtures
+from mock import patch
+
+class TestAttract(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.attract = p.modes["attract"]
+        self.attract.enable()
+
+    @patch("p.mixer.stop")
+    def test_disable(self, mixer_stop):
+        self.attract.disable()
+        self.assertTrue(mixer_stop.called)
+
+    def test_suspend(self):
+        self.attract.suspend()
+        self.assertFalse(self.attract.show.running)
+
+    def test_resume(self):
+        self.attract.suspend()
+        self.attract.resume()
+        self.assertTrue(self.attract.show.running)
+
+    def test_start_service_mode(self):
+        p.events.post("switch_service_enter")
+        p.events.dispatch()
+        self.assertFalse(self.attract.enabled)
+        self.assertTrue(p.modes["service"].enabled)
+
+
