@@ -20,7 +20,7 @@
 
 import itertools
 import p
-from pin import util
+from pin import events, util
 
 __all__ = ["set", "tick", "clear", "service"]
 
@@ -77,4 +77,6 @@ def service():
                 timer["callback"](*args)
     for ticker in tickers.values():
         ticker()
+    events.tick()
+
 

@@ -25,19 +25,10 @@ from pin import ui, util
 from pin.handler import Handler
 from ..config import service_menu as menu
 
-def option_tuple(option):
-    if isinstance(option, list):
-        value = option[0]
-        text = option[1]
-    else:
-        value = option
-        text = option
-    return (value, text)
-
 
 def text_for_value(options, search):
     for option in options:
-        value, text = option_tuple(option)
+        value, text = option
         if search == value:
             return text
 
@@ -45,10 +36,11 @@ def text_for_value(options, search):
 def index_for_value(options, search):
     index = 0
     for option in options:
-        value, text = option_tuple(option)
+        value, text = option
         if search == value:
             return index
         index += 1
+
 
 class MenuNode(object):
 
@@ -92,9 +84,17 @@ class Mode(Handler):
         self.default = ui.Text(bottom=2, right=2, font="t5cd")
         self.result = ui.Text(bottom=2, fill=0x2, padding=[1, 3], font="t5cpb")
 
+        self.question = ui.Panel(fill=None, enabled=False)
+        self.confirm = ui.Text("Confirm?", bottom=2, padding=[1,4], font="t5cpb")
+        self.yes = ui.Text("YES", bottom=2, padding=[1,4], font="t5cpb")
+        self.no = ui.Text("NO", bottom=2, padding=[1,4], font="t5cpb")
+        self.question.add((self.confirm, self.yes, self.no))
+        ui.halign((self.confirm, self.yes, self.no))
+        self.confirmed = None
+
         self.panel = ui.Panel(name="root")
         self.panel.add([self.breadcrumbs, self.name, self.value, self.icons,
-                self.default, self.result])
+                self.default, self.result, self.question])
 
         self.result_timer = None
 
@@ -142,9 +142,12 @@ class Mode(Handler):
         p.dmd.remove("service")
 
     def enter(self):
+        if self.confirmed:
+            self.select_confirmed()
+            return
         item = self.menu.iter.get()
         if not isinstance(item, list) and item.get("confirm", False):
-            raise ValueError("a")
+            self.start_confirmed()
         elif self.menu.type == "edit":
             self.save()
         elif "menu" in item or "options" in item:
@@ -155,7 +158,10 @@ class Mode(Handler):
             getattr(self, item["action"])()
 
     def exit(self):
-        self.pop_menu()
+        if self.confirmed is None:
+            self.pop_menu()
+        else:
+            self.cancel_confirmed()
 
     def pop_menu(self):
         self.depth -= 1
@@ -171,13 +177,21 @@ class Mode(Handler):
 
     def up(self):
         p.mixer.play("service_select")
-        self.menu.iter.next()
-        self.update()
+        if self.confirmed is None:
+            self.menu.iter.next()
+            self.update()
+        else:
+            self.confirmed.next()
+            self.update_confirmed()
 
     def down(self):
         p.mixer.play("service_select")
-        self.menu.iter.previous()
-        self.update()
+        if self.confirmed is None:
+            self.menu.iter.previous()
+            self.update()
+        else:
+            self.confirmed.previous()
+            self.update_confirmed()
 
     def update(self):
         menu = self.menu
@@ -221,7 +235,7 @@ class Mode(Handler):
     def save(self):
         item = self.menu.iter.get()
         key = self.menu.node["data"]
-        value, text = option_tuple(item)
+        value, text = item
         self.result.enabled = True
         if value != p.data[key]:
             p.data[key] = value
@@ -238,6 +252,50 @@ class Mode(Handler):
 
     def clear_result(self):
         self.result.hide()
+
+    def start_confirmed(self):
+        self.confirmed = util.Cycle((False, True))
+        p.mixer.play("service_enter")
+        self.question.show()
+        self.update_confirmed()
+
+    def update_confirmed(self):
+        if self.confirmed.get():
+            self.yes.update(color=0x0, fill=0xf)
+            self.no.update(color=0xf, fill=0x0)
+        else:
+            self.yes.update(color=0xf, fill=0x0)
+            self.no.update(color=0x0, fill=0xf)
+
+    def cancel_confirmed(self):
+        self.confirmed = None
+        self.question.hide()
+        p.mixer.play("service_cancel")
+        self.result.show("Cancelled")
+        self.cancel(self.result_timer)
+        self.result_timer = self.wait(1.0, self.clear_result)
+
+    def select_confirmed(self):
+        if self.confirmed.get():
+            self.confirmed = None
+            self.question.hide()
+            p.mixer.play("service_save")
+            self.result.show("Confirmed")
+            self.cancel(self.result_timer)
+            self.result_timer = self.wait(1.0, self.clear_result)
+            item = self.menu.iter.get()
+            getattr(self, item["action"])()
+        else:
+            self.cancel_confirmed()
+
+
+# =============
+# Actions
+# =============
+
+    def clear_credits(self):
+        p.data["credits"] = 0
+        p.data.save()
 
     def movie_browser(self):
         p.modes["movie_browser"].enable()

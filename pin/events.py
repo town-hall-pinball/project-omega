@@ -18,11 +18,13 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import p
 import logging
 
 __all__ = ["on", "off", "post", "dispatch", "reset"]
 
 listeners = {}
+switch_timings = {}
 queue = []
 log = logging.getLogger("pin.event")
 
@@ -66,11 +68,63 @@ def dispatch():
                 item["args"], item["kwargs"]))
         for listener in listeners.get(item["event"], []):
             listener(*item["args"], **item["kwargs"])
+        if item["event"] == "switch":
+            handle_switch_event(*item["args"], **item["kwargs"])
 
 def reset():
     """
     Removes all registered listeners and clears the event queue.
     """
-    global listeners, queue
+    global listeners, queue, switch_timings
     listeners = {}
     queue = []
+    switch_timings = {}
+
+def on_switch(name, listener, duration=0, active=True):
+    info = switch_timings.get(name, {
+        "change_to": None,
+        "change_time": 0,
+        "last_notice": 0,
+        "listeners": []
+    })
+    info["listeners"] += [{
+        "callback": listener,
+        "duration": duration,
+        "active": active
+    }]
+    switch_timings[name] = info
+
+def off_switch(name, listener, duration=0, active=True):
+    if name not in switch_timings:
+        return
+    info = switch_timings[name]
+    info["listeners"] = [x for x in info["listeners"]
+            if x["callback"] != listener]
+    if len(info["listeners"]) == 0:
+        del switch_timings[name]
+
+def handle_switch_event(switch, active):
+    if switch.name not in switch_timings:
+        return
+    info = switch_timings[switch.name]
+    info["change_to"] = active
+    info["change_time"] = p.now
+    info["last_notice"] = p.now
+
+def tick():
+    for info in switch_timings.values():
+        for listener in info["listeners"]:
+            change_at = info["change_time"] + listener["duration"]
+            if (info["last_notice"] < change_at and
+                    p.now >= change_at and
+                    info["change_to"] == listener["active"]):
+                listener["callback"]()
+        info["last_notice"] = p.now
+
+
+
+
+
+
+
+

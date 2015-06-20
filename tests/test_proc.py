@@ -68,6 +68,7 @@ class TestPROC(unittest.TestCase):
         self.assertTrue(listener2.called)
         listener3.assert_called_with(switch)
         listener4.assert_called_with(switch, True)
+        self.assertTrue(switch.active)
 
     @patch("pygame.PixelArray")
     def test_inactive_switch_event(self, *args):
@@ -94,6 +95,7 @@ class TestPROC(unittest.TestCase):
         self.assertTrue(listener2.called)
         listener3.assert_called_with(switch)
         listener4.assert_called_with(switch, False)
+        self.assertFalse(switch.active)
 
     @patch("pygame.PixelArray")
     def test_active_opto_switch_event(self, *args):
@@ -111,7 +113,7 @@ class TestPROC(unittest.TestCase):
         pin.proc.process()
         p.events.dispatch()
         self.assertTrue(listener.called)
-
+        self.assertTrue(switch.active)
 
     @patch("pygame.PixelArray")
     def test_inactive_opto_switch_event(self, *args):
@@ -129,6 +131,7 @@ class TestPROC(unittest.TestCase):
         pin.proc.process()
         p.events.dispatch()
         self.assertTrue(listener.called)
+        self.assertFalse(switch.active)
 
     @patch("pygame.PixelArray")
     @patch("pin.proc.log")

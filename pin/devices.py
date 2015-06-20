@@ -99,6 +99,7 @@ class Switch(Device):
         self.type = "switch"
         self.debounce = self.number < 192
         self.opto = config.get("opto", False)
+        self.active = False
 
     def enable(self, enable=True):
         if self.debounce:

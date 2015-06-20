@@ -18,38 +18,43 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pin
-from pin import util
-from .component import Component
+import logging
 
-class Panel(Component):
+log = logging.getLogger("pin.capture")
 
-    def __init__(self, defaults=None, **style):
-        defaults = defaults or {}
-        defaults["width"] = defaults.get("width", pin.dmd.width)
-        defaults["height"] = defaults.get("height", pin.dmd.height)
-        super(Panel, self).__init__(defaults, **style)
+class BallCapture(object):
 
-    def add(self, components):
-        components = util.to_list(components)
-        for component in components:
-            self.children += [component]
-            component.parent = self
-            self.invalidate()
+    def __init__(self, name, switches, eject_coil):
+        self.name = name
+        self.switches = switches
+        self.eject_coil = eject_coil
 
-    def clear(self):
-        self.children = []
-        self.invalidate()
+    def capacity(self):
+        return len(self.switches)
 
-    def draw(self):
-        super(Panel, self).draw()
-        if self.enabled:
-            for child in self.children:
-                if child.enabled:
-                    self.frame.blit(child.frame,
-                            (child.x, child.y, child.width, child.height))
+    def balls(self):
+        balls = 0
+        for switch in self.switches:
+            if switch.active:
+                balls =+ 1
+        return balls
 
-    def __str__(self):
-        name = self.style.get("name", None)
-        return "panel({})".format(name) if name else "panel"
+    def eject(self):
+        if self.balls() > 0:
+            log.debug("Ejecting {}".format(name))
+            self.eject_coil.pulse()
+        else:
+            log.warn("No balls to eject in {}".format(self.name))
+
+
+class Trough(BallCapture):
+
+    def __init__(self, switches, jam_switch="trough_jam", eject_coil="trough",
+                shooter_lane="shooter_lane"):
+        super(Trough, self).__init__("trough", switches, jam_switch, eject_coil)
+        self.jam_switch = jam_switch
+        self.shooter_lane = shooter_lane
+
+
+
 

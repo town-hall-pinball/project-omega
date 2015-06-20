@@ -52,12 +52,14 @@ def switch_active(switch):
     p.events.post("switch_{}_active".format(switch.name))
     p.events.post("switch_active", switch)
     p.events.post("switch", switch, True)
+    switch.active = True
     switch_log.debug("+ {}".format(switch.name))
 
 def switch_inactive(switch):
     p.events.post("switch_{}_inactive".format(switch.name))
     p.events.post("switch_inactive", switch)
     p.events.post("switch", switch, False)
+    switch.active = False
     switch_log.debug("- {}".format(switch.name))
 
 def handle_switch(event):

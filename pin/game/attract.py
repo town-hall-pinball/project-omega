@@ -30,18 +30,18 @@ class Mode(Handler):
     thp = ui.Image("thp_logo")
     presents = ui.Text("PRESENTS")
     title = ui.Text(brand.name, font="t5exb")
-    game_over = ui.Text("Game Over")
+    game_over = ui.Text("GAME OVER")
     anim = ui.Movie("x2")
 
     def setup(self):
         from .system import coin
         self.show = ui.Slides("attract.show", (
-            (self.anim,             None),
             (self.thp,              3.0),
             (self.presents,         3.0, SlideIn(direction="left")),
             (self.title,            3.0),
             #(coin.handler.credits,  3.0),
-            (self.game_over,        6.0)),
+            (self.game_over,        6.0),
+            (self.anim,             None)),
             repeat=True)
         self.on("switch_service_enter", self.start_service_mode)
 

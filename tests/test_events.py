@@ -21,15 +21,17 @@
 from mock import Mock
 import unittest
 
+import p
 from pin import events
+from tests import fixtures
 
 class TestEvents(unittest.TestCase):
 
     def setUp(self):
-        events.reset()
+        fixtures.reset()
 
     def tearDown(self):
-        events.reset()
+        fixtures.reset()
 
     def test_on(self):
         listener = Mock()
@@ -64,3 +66,63 @@ class TestEvents(unittest.TestCase):
         events.post("foo", 1, bar=2)
         events.dispatch()
         listener.assert_called_with(1, bar=2)
+
+
+class TestSwitchEvents(unittest.TestCase):
+
+    def setUp(self):
+        events.reset()
+
+    def test_on_called(self):
+        listener = Mock()
+        p.now = 5.0
+        events.on_switch("start_button", listener, 1.0)
+        events.post("switch", p.switches["start_button"], True)
+        events.dispatch()
+        events.tick()
+        self.assertFalse(listener.called)
+        p.now = 6.0
+        events.tick()
+        self.assertTrue(listener.called)
+
+    def test_on_early(self):
+        listener = Mock()
+        p.now = 5.0
+        events.on_switch("start_button", listener, 1.0)
+        events.post("switch", p.switches["start_button"], True)
+        events.dispatch()
+        events.tick()
+        self.assertFalse(listener.called)
+        p.now = 5.5
+        events.tick()
+        self.assertFalse(listener.called)
+
+    def test_on_once(self):
+        listener = Mock()
+        p.now = 5.0
+        events.on_switch("start_button", listener, 1.0)
+        events.post("switch", p.switches["start_button"], True)
+        events.dispatch()
+        events.tick()
+        self.assertFalse(listener.called)
+        p.now = 6.0
+        events.tick()
+        self.assertEquals(1, listener.call_count)
+        p.now = 7.0
+        events.tick()
+        self.assertEquals(1, listener.call_count)
+
+    def test_off(self):
+        listener = Mock()
+        p.now = 5.0
+        events.on_switch("start_button", listener, 1.0)
+        events.post("switch", p.switches["start_button"], True)
+        events.dispatch()
+        events.tick()
+        self.assertFalse(listener.called)
+        p.now = 6.0
+        events.off_switch("start_button", listener, 1.0)
+        events.tick()
+        self.assertFalse(listener.called)
+
+

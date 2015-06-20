@@ -19,37 +19,14 @@
 # DEALINGS IN THE SOFTWARE.
 
 import pin
-from pin import util
-from .component import Component
 
-class Panel(Component):
+trough = None
 
-    def __init__(self, defaults=None, **style):
-        defaults = defaults or {}
-        defaults["width"] = defaults.get("width", pin.dmd.width)
-        defaults["height"] = defaults.get("height", pin.dmd.height)
-        super(Panel, self).__init__(defaults, **style)
-
-    def add(self, components):
-        components = util.to_list(components)
-        for component in components:
-            self.children += [component]
-            component.parent = self
-            self.invalidate()
-
-    def clear(self):
-        self.children = []
-        self.invalidate()
-
-    def draw(self):
-        super(Panel, self).draw()
-        if self.enabled:
-            for child in self.children:
-                if child.enabled:
-                    self.frame.blit(child.frame,
-                            (child.x, child.y, child.width, child.height))
-
-    def __str__(self):
-        name = self.style.get("name", None)
-        return "panel({})".format(name) if name else "panel"
-
+def init():
+    global trough
+    trough = pin.Trough([
+        "trough",
+        "trough_2",
+        "trough_3",
+        "trough_4"
+    ])

@@ -73,6 +73,8 @@ class Component(object):
         self.style.update(style)
         if "padding" in style:
             self.expand4("padding", util.to_list(style["padding"]))
+        if "enabled" in style:
+            self.enabled = style["enabled"]
         self.invalidate()
 
     def show(self):
