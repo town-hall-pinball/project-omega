@@ -60,3 +60,7 @@ class Image(Component):
             del dots
         self.frame.blit(image, (self.style["padding_left"],
                 self.style["padding_top"]))
+
+    def __str__(self):
+        name = self.style.get("image", None)
+        return "image({})".format(name) if name else "image"

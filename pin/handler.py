@@ -31,10 +31,11 @@ class Handler(object):
         self.name = name
         self.listeners = {}
         self.timers = set()
-        self.active = False
+        self.enabled = False
         self.suspended = False
         self.handlers = []
         self.renderer = None
+        self.display = None
         self.setup()
 
     def setup(self):
@@ -45,7 +46,7 @@ class Handler(object):
             raise ValueError("Listener already registered for {}"
                     .format(event))
         self.listeners[event] = listener
-        if self.active:
+        if self.enabled:
             p.events.on(event, listener)
 
     def off(self, event, listener):
@@ -71,44 +72,52 @@ class Handler(object):
         if not enabled:
             self.disable()
             return
-        if self.active:
+        if self.enabled:
             return
         log.debug("{} enabled".format(self.name))
-        self.active = True
+        self.enabled = True
+        if self.display:
+            p.dmd.add(self.display)
         self.register()
-        self.enabled()
+        self.on_enable()
 
-    def enabled(self):
+    def on_enable(self):
         pass
 
     def disable(self):
-        if not self.active:
+        if not self.enabled:
             return
         log.debug("{} disabled".format(self.name))
-        self.active = False
+        self.enabled = False
+        if self.display:
+            p.dmd.remove(self.display)
         self.unregister()
-        self.disabled()
+        self.on_disable()
 
-    def disabled(self):
+    def on_disable(self):
         pass
-
-    def render(self, frame):
-        if not self.active:
-            return
-        for handler in self.handlers:
-            handler.render(frame)
-        if self.renderer:
-            self.renderer.render(frame)
 
     def suspend(self):
         log.debug("{} suspended".format(self.name))
         self.suspended = True
         self.unregister()
+        if self.display:
+            self.display.render_suspend()
+        self.on_suspend()
+
+    def on_suspend(self):
+        pass
 
     def resume(self):
         log.debug("{} resumed".format(self.name))
         self.suspended = False
         self.register()
+        if self.display:
+            self.display.render_start()
+        self.on_resume()
+
+    def on_resume():
+        pass
 
     def register(self):
         #for handler in self.handlers:
@@ -124,14 +133,6 @@ class Handler(object):
         for ident in self.timers:
             p.timers.clear(ident)
 
-    def render_started(self):
-        pass
-
-    def render_stopped(self):
-        pass
-
-    def render_restarted(self):
-        pass
 
 
 

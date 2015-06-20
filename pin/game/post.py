@@ -27,19 +27,21 @@ from . import banner
 class Mode(Handler):
 
     def setup(self):
-        self.panel = ui.Notice(duration=4.0, callback=self.done)
+        self.timer = None
+        self.display = ui.Notice(name="post", enabled=False)
         self.message = ui.Text("SETTINGS CLEARED", padding=2)
-        self.panel.add(self.message)
+        self.display.add(self.message)
 
-    def enabled(self):
+    def on_enable(self):
         if p.data.get("cleared", False):
             p.mixer.play("settings_cleared")
+            self.display.update(enabled=True)
             effects.fill_blink(self.message, duration=0.25, repeat=2)
-            self.panel.enqueue()
+            self.wait(4.0, self.done)
         else:
             self.disable()
 
-    def disabled(self):
+    def on_disable(self):
         p.modes["banner"].enable()
 
     def done(self):

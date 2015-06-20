@@ -44,7 +44,7 @@ class TestService(unittest.TestCase):
     def test_menu_exit(self):
         p.events.post("switch_service_exit")
         p.events.dispatch()
-        self.assertFalse(self.service.active)
+        self.assertFalse(self.service.enabled)
 
     def test_menu_down(self):
         p.events.post("switch_service_enter")

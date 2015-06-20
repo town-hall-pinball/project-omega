@@ -26,9 +26,8 @@ from . import attract
 class Mode(Handler):
 
     def setup(self):
-        self.panel = ui.Notice(
-            "banner",
-            duration=8,
+        self.display = ui.Notice(
+            name="banner",
             callback=self.done
         )
         self.title = ui.Text(
@@ -43,7 +42,7 @@ class Mode(Handler):
             brand.release,
             font="t5cpb"
         )
-        self.panel.add((self.title, self.version, self.release))
+        self.display.add((self.title, self.version, self.release))
 
         self.on("switch_flipper_left", self.bypass)
         self.on("switch_flipper_right", self.bypass)
@@ -51,12 +50,12 @@ class Mode(Handler):
         self.on("switch_service_enter", self.bypass)
         self.on("switch_service_exit", self.bypass)
 
-    def enabled(self):
-        self.panel.enqueue()
+    def on_enable(self):
         p.mixer.play("boot")
+        self.wait(8, self.done)
 
     def bypass(self):
-        self.panel.done()
+        self.done()
 
     def done(self):
         self.disable()

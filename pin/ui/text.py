@@ -32,9 +32,9 @@ class Text(Component):
         }, **style)
         self.area = None
 
-    def show(self, text):
+    def show(self, text, duration=None):
         self.style["text"] = text if text is not None else ""
-        super(Text, self).show()
+        super(Text, self).show(duration)
         self.auto_size()
         self.invalidate()
 

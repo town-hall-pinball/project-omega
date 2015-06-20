@@ -46,6 +46,7 @@ class Panel(Component):
         if self.enabled:
             for child in self.children:
                 if child.enabled:
+                    child.draw()
                     self.frame.blit(child.frame,
                             (child.x, child.y, child.width, child.height))
 

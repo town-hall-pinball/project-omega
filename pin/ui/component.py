@@ -19,26 +19,31 @@
 # DEALINGS IN THE SOFTWARE.
 
 import math
+
+import p
 import pin
 from pin import util
 
 class Component(object):
 
-    frame = None
-    dirty = False
-    width = None
-    height = None
-    x = None
-    y = None
-    parent = None
-    children = None
-    enabled = True
-    has_alpha = True
-
     def __init__(self, defaults=None, **style):
+        self.frame = None
+        self.dirty = False
+        self.width = None
+        self.height = None
+        self.x = None
+        self.y = None
+        self.parent = None
+        self.children = None
+        self.enabled = True
+        self.rendering = False
+        self.suspended = False
+        self.has_alpha = True
         self.style = {}
         self.children = []
         self.effect = None
+        self.name = None
+        self.show_timer = None
         self.defaults = {
             "top": None,
             "right": None,
@@ -75,17 +80,21 @@ class Component(object):
             self.expand4("padding", util.to_list(style["padding"]))
         if "enabled" in style:
             self.enabled = style["enabled"]
+        if "name" in style:
+            self.name = style["name"]
         self.invalidate()
 
-    def show(self):
+    def show(self, duration=None):
         self.enabled = True
-        self.render_started()
         self.invalidate()
+        if duration:
+            p.timers.clear(self.show_timer)
+            self.show_timer = p.timers.set(duration, self.hide)
 
     def hide(self):
         self.enabled = False
-        self.render_stopped()
         self.invalidate()
+        p.timers.clear(self.show_timer)
 
     def invalidate(self):
         self.dirty = True
@@ -159,23 +168,47 @@ class Component(object):
     def on_render(self):
         pass
 
-    def render_started(self):
-        for child in self.children:
-            child.render_started()
+    def render_start(self):
+        self.rendering = True
+        self.invalidate()
         if self.effect:
             self.effect.start()
 
-    def render_stopped(self):
+        if self.suspended:
+            self.suspended = False
+            self.on_render_resume()
+        else:
+            self.on_render_start()
+
         for child in self.children:
-            child.render_stopped()
+            child.render_start()
+
+    def on_render_start(self):
+        pass
+
+    def render_stop(self):
+        self.rendering = False
+        self.suspended = False
         if self.effect:
             self.effect.stop()
-
-    def render_restarted(self):
         for child in self.children:
-            child.render_restarted()
+            child.render_stop()
+
+    def on_render_stop(self):
+        pass
+
+    def render_suspend(self):
+        self.suspended = True
         if self.effect:
-            self.effect.start()
+            self.effect.stop()
+        for child in self.children:
+            child.render_suspend()
+
+    def on_render_suspend(self):
+        pass
+
+    def on_render_resume(self):
+        pass
 
     def draw(self):
         if self.width < 0 or self.height < 0:

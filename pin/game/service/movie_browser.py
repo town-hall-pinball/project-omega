@@ -26,25 +26,42 @@ class Mode(Handler):
 
     def setup(self):
         self.movies = util.Cycle(p.movies.items())
-        self.panel = ui.Panel()
+        self.display = ui.Panel(name="movie_browser")
         self.player = ui.Movie()
-        self.label = ui.Text(top=0, right=0)
-        self.panel.add([self.player, self.label])
+        self.label = ui.Text(top=0, font="r7")
+        self.display.add([self.player, self.label])
 
+        self.on("switch_service_enter", self.update)
+        self.on("switch_service_up", self.next)
+        self.on("switch_service_down", self.previous)
         self.on("switch_service_exit",  self.exit)
 
-    def enabled(self):
-        p.dmd.stack("movie_browser", self.panel)
-        self.update()
+    def on_enable(self):
+        self.play()
 
-    def update(self):
+    def play(self):
+        self.update(show_label=True)
+
+    def restart(self):
+        self.update(show_label=False)
+
+    def next(self):
+        self.movies.next()
+        self.play()
+
+    def previous(self):
+        self.movies.previous()
+        self.play()
+
+    def update(self, show_label=False):
         key, movie = self.movies.get()
         self.player.stop()
         self.player.update(movie=key)
         self.player.start()
-        self.label.show(key)
+        if show_label:
+            self.label.show(key, duration=1)
 
-    def disabled(self):
+    def on_disable(self):
         p.mixer.play("service_exit")
         p.dmd.remove("movie_browser")
         p.modes["service"].resume()

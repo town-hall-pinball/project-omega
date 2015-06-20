@@ -45,7 +45,8 @@ def off(event, listener):
     this method does nothing.
     """
     if event in listeners:
-        listeners[event].remove(listener)
+        if listener in listeners[event]:
+            listeners[event].remove(listener)
 
 def post(event, *args, **kwargs):
     """

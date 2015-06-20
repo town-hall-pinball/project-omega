@@ -18,7 +18,6 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from collections import OrderedDict
 import itertools
 import logging
 import pygame
@@ -27,53 +26,6 @@ width = 128
 height = 32
 
 log = logging.getLogger("pin.dmd")
-
-class Renderer(object):
-
-    def __init__(self, renderer, name, delegate=None):
-        self.renderer = renderer
-        self.name = name
-        self.delegate = delegate
-
-    def __call__(self, frame):
-        self.renderer.render(frame)
-
-    def start(self):
-        if self.delegate:
-            self.delegate.render_started()
-        else:
-            self.renderer.render_started()
-
-    def restart(self):
-        if self.delegate:
-            self.delegate.render_restarted()
-        else:
-            self.renderer.render_restarted()
-
-    def stop(self):
-        if self.delegate:
-            self.delegate.render_stopped()
-        else:
-            self.renderer.render_stopped()
-
-
-class NullRenderer(Renderer):
-
-    def __init__(self):
-        super(NullRenderer, self).__init__(None, "null")
-
-    def __call__(self, frame):
-        pass
-
-    def start(self):
-        pass
-
-    def restart(self):
-        pass
-
-    def stop(self):
-        pass
-
 
 class DMD(object):
 
@@ -88,93 +40,111 @@ class DMD(object):
         self.frame_to = pygame.Surface((width, height))
 
         self.transition = None
-        self.stacked = OrderedDict()
-        self.queued = OrderedDict()
+        self.stack = []
+        self.queue = []
 
-        null = NullRenderer()
-        self.stacked[null.name] = null
+    def add(self, renderer, transition=None):
+        if renderer in self.stack:
+            return
+        self.add_renderer(self.stack, renderer, transition)
 
-    def stack(self, name, renderer, transition=None, delegate=None):
-        self.add(self.stacked, Renderer(renderer, name, delegate), transition)
+    def enqueue(self, renderer, transition=None):
+        if renderer in self.queue:
+            return
+        self.add_renderer(self.queue, renderer, transition)
 
-    def enqueue(self, name, renderer, transition=None, delegate=None):
-        self.add(self.queued, Renderer(renderer, name, delegate), transition)
+    def replace(self, previous, current, transition=None):
+        trans = "using {}".format(transition) if transition else ""
+        log.debug("{} replaces {} {}".format(current, previous, trans))
+        if previous in self.stack:
+            self.stack[self.stack.index(previous)] = current
+        if previous in self.queue:
+            self.queue[self.queue.index(previous)] = current
+        self.shift_renderer(transition)
 
     def clear(self):
-        for renderer in self.queued.values():
-            renderer.stop()
-        self.queued.clear()
+        for renderer in self.queue:
+            renderer.on_render_stop()
+        self.queue[:] = []
 
     def reset(self):
         self.clear()
-        self.renderer.stop()
+        if self.renderer:
+            self.renderer.on_render_stop()
         if self.previous_renderer:
-            self.previous_renderer.stop()
-        self.stacked.clear()
+            self.previous_renderer.on_render_stop()
+        self.stack.clear()
 
-    def add(self, collection, renderer, transition=None):
-        trans = "using {}".format(transition.name) if transition else ""
-        replaced = renderer.name in collection
-        action = "replaced" if replaced else "added"
-        log.debug("{} {} {}".format(renderer.name, action, trans))
-        collection[renderer.name] = renderer
+    def add_renderer(self, collection, renderer, transition=None):
+        trans = "using {}".format(renderer) if transition else ""
+        log.debug("{} added {}".format(renderer, trans))
+        collection += [renderer]
         self.shift_renderer(transition)
-        if replaced:
-            renderer.restart()
 
-    def remove(self, name):
-        if name in self.stacked:
-            self.stacked.pop(name)
-        if name in self.queued:
-            self.queued.pop(name)
+    def remove(self, renderer):
+        if renderer in self.stack:
+            self.stack.remove(renderer)
+        if renderer in self.queue:
+            self.queue.remove(renderer)
         self.shift_renderer()
 
     def shift_renderer(self, transition=None):
-        if len(self.queued) > 0:
-            renderer = self.queued.values()[0]
+        if len(self.queue) > 0:
+            renderer = self.queue[0]
+        elif len(self.stack) > 0:
+            renderer = self.stack[-1]
         else:
-            renderer = self.stacked.values()[-1]
-        notify = not(self.renderer and self.renderer.name == renderer.name)
-        if self.previous_renderer:
-            if notify:
-                self.previous_renderer.stop()
-            self.previous_renderer = None
+            renderer = None
+        if not renderer:
+            self.renderer = None
+            return
+
+        if self.previous_renderer in self.stack:
+            self.previous_renderer.render_suspend()
+        elif self.previous_renderer:
+            self.previous_renderer.render_stop()
+        self.previous_renderer = None
+
         if transition:
             self.previous_renderer = self.renderer
             transition.reset()
+        elif self.renderer in self.stack:
+            self.renderer.render_suspend()
         elif self.renderer:
-            if notify:
-                self.renderer.stop()
+            self.renderer.render_stop()
         self.renderer = renderer
         self.transition = transition
-        if notify:
-            self.renderer.start()
+        self.renderer.render_start()
 
     def render(self):
         self.frame, self.previous_frame = self.previous_frame, self.frame
         self.frame.fill(0)
 
+        if not self.renderer:
+            return self.frame
+
         if self.transition and self.transition.done:
             self.transition = None
             if self.renderer.name != self.previous_renderer.name:
-                self.previous_renderer.stop()
+                self.previous_renderer.stop_rendering()
             self.previous_renderer = None
 
         if self.transition:
             self.frame_from.fill(0)
             self.frame_to.fill(0)
-            self.renderer(self.frame_to)
-            self.previous_renderer(self.frame_from)
+            self.renderer.render(self.frame_to)
+            self.previous_renderer.render(self.frame_from)
             self.transition.render(self.frame, self.frame_from, self.frame_to)
         else:
-            self.renderer(self.frame)
+            self.renderer.render(self.frame)
 
         return self.frame
 
 
 dmd = DMD()
 
-stack = dmd.stack
+add = dmd.add
+replace = dmd.replace
 remove = dmd.remove
 enqueue = dmd.enqueue
 clear = dmd.clear

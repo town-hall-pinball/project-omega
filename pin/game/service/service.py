@@ -92,8 +92,8 @@ class Mode(Handler):
         ui.halign((self.confirm, self.yes, self.no))
         self.confirmed = None
 
-        self.panel = ui.Panel(name="root")
-        self.panel.add([self.breadcrumbs, self.name, self.value, self.icons,
+        self.display = ui.Panel(name="service")
+        self.display.add([self.breadcrumbs, self.name, self.value, self.icons,
                 self.default, self.result, self.question])
 
         self.result_timer = None
@@ -133,13 +133,10 @@ class Mode(Handler):
             self.menu.iter.index = index_for_value(options, p.data[key])
         self.update()
 
-    def enabled(self):
+    def on_enable(self):
+        p.modes["attract"].suspend()
         self.push_menu(menu.main)
         p.dmd.clear()
-        p.dmd.stack("service", self.panel)
-
-    def disabled(self):
-        p.dmd.remove("service")
 
     def enter(self):
         if self.confirmed:

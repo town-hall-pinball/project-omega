@@ -58,8 +58,14 @@ class Movie(Component):
             self.playing = False
             self.invalidate()
 
+    def draw(self):
+        if self.frame:
+            return self.frame
+        return super(Movie, self).draw()
+
     def on_render(self):
         if self.playing:
+            self.invalidate()
             movie = p.movies[self.style["movie"]]
             if not movie.get_busy():
                 self.playing = False

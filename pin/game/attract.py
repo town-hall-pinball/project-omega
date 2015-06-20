@@ -34,8 +34,7 @@ class Mode(Handler):
     anim = ui.Movie("x2")
 
     def setup(self):
-        from .system import coin
-        self.show = ui.Slides("attract.show", (
+        self.show = ui.Slides("attract.show", self, (
             (self.thp,              3.0),
             (self.presents,         3.0, SlideIn(direction="left")),
             (self.title,            3.0),
@@ -44,15 +43,22 @@ class Mode(Handler):
             (self.anim,             None)),
             repeat=True)
         self.on("switch_service_enter", self.start_service_mode)
+        self.on("switch_flipper_left", self.show.next)
+        self.on("switch_flipper_right", self.show.next)
 
-    def enabled(self):
+    def on_enable(self):
         p.modes["coin"].enable()
-
         self.show.start()
         p.mixer.play("introduction")
 
-    def disabled(self):
+    def on_disable(self):
         p.mixer.stop()
+
+    def on_suspend(self):
+        self.show.stop()
+
+    def on_resume(self):
+        self.show.start()
 
     def start_service_mode(self):
         p.modes["service"].enable()

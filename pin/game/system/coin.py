@@ -25,7 +25,8 @@ from pin.handler import Handler
 class Mode(Handler):
 
     def setup(self):
-        self.credits = ui.Notice("credit_display", duration=3)
+        self.timer = None
+        self.credits = ui.Notice("credit_display")
         self.amount = ui.Text("CREDITS 0")
         self.message = ui.Text("FREE PLAY")
         self.credits.add((self.amount, self.message))
@@ -40,8 +41,19 @@ class Mode(Handler):
 
     def start_button(self):
         self.update()
-        if p.modes["attract"].active:
-            self.credits.enqueue()
+        if p.modes["attract"].enabled:
+            self.show_credits()
+
+    def show_credits(self):
+        p.modes["attract"].suspend()
+        p.dmd.enqueue(self.credits)
+        self.cancel(self.timer)
+        self.timer = self.wait(3.0, self.done)
+
+    def done(self):
+        p.dmd.remove(self.credits)
+        p.modes["attract"].resume()
+        self.cancel(self.timer)
 
     def coin_left(self):
         self.paid_credit(p.data["coin_left"])
@@ -63,7 +75,7 @@ class Mode(Handler):
         self.add_credit(add)
 
     def service_credit(self):
-        if not p.modes["service"].active:
+        if not p.modes["service"].enabled:
             p.data["service_credits"] += 1
             self.add_credit(1)
 
@@ -73,8 +85,8 @@ class Mode(Handler):
         p.data["credits"] += add
         p.mixer.play("coin_drop")
         self.update()
-        if p.modes["attract"].active and not p.data["free_play"]:
-            self.credits.enqueue()
+        if p.modes["attract"].enabled and not p.data["free_play"]:
+            self.show_credits()
 
     def update(self):
         free_play = p.data["free_play"]
