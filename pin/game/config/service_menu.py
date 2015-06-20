@@ -157,6 +157,10 @@ utilities = {
             "icon": "service_music",
             "action": "music_player",
         },{
+            "name": "Sound Player",
+            "icon": "service_sounds",
+            "action": "sound_player"
+        },{
             "name": "Movie Browser",
             "icon": "service_animations",
             "action": "movie_browser"

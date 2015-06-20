@@ -308,7 +308,9 @@ class Mode(Handler):
         p.modes["music_player"].enable()
         self.suspend()
 
-
+    def sound_player(self):
+        p.modes["sound_player"].enable()
+        self.suspend()
 
 
 
