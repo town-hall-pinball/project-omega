@@ -34,12 +34,13 @@ class Mode(Handler):
     anim = ui.Movie("x2")
 
     def setup(self):
+        credits = p.displays["credits"].display
         self.show = ui.Slides("attract.show", self, (
             (self.thp,              3.0),
             (self.presents,         3.0, SlideIn(direction="left")),
             (self.title,            3.0),
-            #(coin.handler.credits,  3.0),
             (self.game_over,        6.0),
+            (credits,               3.0),
             (self.anim,             None)),
             repeat=True)
         self.on("switch_service_enter", self.start_service_mode)
@@ -61,6 +62,7 @@ class Mode(Handler):
         self.show.start()
 
     def start_service_mode(self):
+        print "SERVICE REQUEST"
         p.modes["service"].enable()
         self.disable()
         p.mixer.play("service_enter")

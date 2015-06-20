@@ -57,6 +57,8 @@ def load_modes(names):
         basename = name.split(".")[-1]
         try:
             m = importlib.import_module(fullname)
+            if hasattr(m, "init"):
+                m.init()
             modes[basename] = m.Mode(basename + ".mode")
         except Exception as e:
             logging.getLogger("pin").error("Unable to load {}".format(fullname))

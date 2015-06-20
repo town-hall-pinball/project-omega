@@ -100,7 +100,7 @@ class Handler(object):
     def suspend(self):
         log.debug("{} suspended".format(self.name))
         self.suspended = True
-        self.unregister()
+        #self.unregister()
         if self.display:
             self.display.render_suspend()
         self.on_suspend()
@@ -111,7 +111,7 @@ class Handler(object):
     def resume(self):
         log.debug("{} resumed".format(self.name))
         self.suspended = False
-        self.register()
+        #self.register()
         if self.display:
             self.display.render_start()
         self.on_resume()

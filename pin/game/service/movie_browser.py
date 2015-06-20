@@ -28,7 +28,7 @@ class Mode(Handler):
         self.movies = util.Cycle(p.movies.items())
         self.display = ui.Panel(name="movie_browser")
         self.player = ui.Movie()
-        self.label = ui.Text(top=0, font="r7", padding=[1, 1])
+        self.label = ui.Text(top=0, right=0, font="r7", padding=[1, 1])
         self.display.add([self.player, self.label])
 
         self.on("switch_service_enter", self.update)

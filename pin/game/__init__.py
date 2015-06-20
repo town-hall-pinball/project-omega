@@ -29,12 +29,12 @@ def init(load_resources=True):
         resources.load()
 
     p.load_modes((
+        "system.coin",
         "attract",
         "banner",
         "post",
         "service.movie_browser",
         "service.service",
-        "system.coin",
     ))
 
 def start():

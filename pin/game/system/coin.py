@@ -22,14 +22,39 @@ import p
 from pin import ui, util
 from pin.handler import Handler
 
+class CreditsDisplay(object):
+
+    def __init__(self):
+        self.display = ui.Notice("credit_display")
+        self.amount = ui.Text("CREDITS 0")
+        self.message = ui.Text("FREE PLAY")
+        self.display.add((self.amount, self.message))
+        p.displays["credits"] = self
+        p.events.on("credits", self.update)
+        self.update()
+
+    def update(self):
+        free_play = p.data["free_play"]
+        credits = p.data["credits"]
+
+        if free_play:
+            self.amount.show("FREE PLAY")
+        else:
+            self.amount.show("CREDITS {}".format(util.fraction(credits)))
+
+        if free_play or credits >= 1:
+            self.message.show("PRESS START")
+            self.message.do(ui.effects.Pulse(self.message))
+        else:
+            self.message.show("INSERT COINS")
+            self.message.do(ui.effects.Blink(self.message, duration=0.2,
+                    repeat=3))
+
 class Mode(Handler):
 
     def setup(self):
         self.timer = None
-        self.credits = ui.Notice("credit_display")
-        self.amount = ui.Text("CREDITS 0")
-        self.message = ui.Text("FREE PLAY")
-        self.credits.add((self.amount, self.message))
+        self.credits = p.displays["credits"]
 
         self.on("switch_start_button",  self.start_button)
         self.on("switch_coin_left",     self.coin_left)
@@ -37,21 +62,19 @@ class Mode(Handler):
         self.on("switch_coin_right",    self.coin_right)
         self.on("switch_coin_fourth",   self.coin_fourth)
         self.on("switch_service_exit",  self.service_credit)
-        self.update()
 
     def start_button(self):
-        self.update()
         if p.modes["attract"].enabled:
             self.show_credits()
 
     def show_credits(self):
         p.modes["attract"].suspend()
-        p.dmd.enqueue(self.credits)
+        p.dmd.enqueue(self.credits.display)
         self.cancel(self.timer)
         self.timer = self.wait(3.0, self.done)
 
     def done(self):
-        p.dmd.remove(self.credits)
+        p.dmd.remove(self.credits.display)
         p.modes["attract"].resume()
         self.cancel(self.timer)
 
@@ -84,24 +107,11 @@ class Mode(Handler):
             return
         p.data["credits"] += add
         p.mixer.play("coin_drop")
-        self.update()
         if p.modes["attract"].enabled and not p.data["free_play"]:
             self.show_credits()
+        p.data.save()
+        p.events.post("credits")
 
-    def update(self):
-        free_play = p.data["free_play"]
-        credits = p.data["credits"]
 
-        if free_play:
-            self.amount.show("FREE PLAY")
-        else:
-            self.amount.show("CREDITS {}".format(util.fraction(credits)))
-
-        if free_play or credits >= 1:
-            self.message.show("PRESS START")
-            self.message.do(ui.effects.Pulse(self.message))
-        else:
-            self.message.show("INSERT COINS")
-            self.message.do(ui.effects.Blink(self.message, duration=0.2,
-                    repeat=3))
-
+def init():
+    p.displays["credits"] = CreditsDisplay()
