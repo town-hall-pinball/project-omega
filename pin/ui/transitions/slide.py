@@ -72,6 +72,9 @@ class SlideIn(Slide):
         self.frame.blit(self.before, (0, 0))
         self.frame.blit(self.after, (x, y))
 
+    def __str__(self):
+        return "slide_in"
+
 
 class SlideOut(Slide):
 
@@ -94,4 +97,7 @@ class SlideOut(Slide):
         x, y = self.calc()
         self.frame.blit(self.after, (0, 0))
         self.frame.blit(self.before, (x, y))
+
+    def __str__(self):
+        return "slide_out"
 

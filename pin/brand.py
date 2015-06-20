@@ -33,7 +33,7 @@ version = "0.1.0"
 Version string.
 """
 
-release = "June 16, 2015"
+release = "June 19, 2015"
 """
 Release string.
 """
