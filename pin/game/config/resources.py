@@ -43,7 +43,8 @@ def load():
         ("service_utilities",       "images/service/utilities.dmd"),
     )
     resources.register_movies(
-        ("x2",                      "movies/X2_from_left_ship_from_right - 90-Android.mpg")
+        ("x2",                      "movies/X2_from_left_ship_from_right - 90-Android.mpg"),
+        ("tina_test",               "movies/tinatest.dmd")
     )
     resources.load_sounds(
         ("boot",                "sounds/boot.ogg"),

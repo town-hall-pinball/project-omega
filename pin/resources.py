@@ -24,6 +24,7 @@ import logging
 import pygame
 import struct
 
+import p
 from pin import dmd, util
 
 fonts = {}
@@ -40,6 +41,45 @@ class Music(object):
     def __init__(self, path, start_time=0):
         self.path = path
         self.start_time = start_time
+
+
+class Movie(object):
+
+    def __init__(self, path):
+        self.current = 0
+        self.playing = False
+        self.timer = None
+        self.display = None
+        self.frames = load_dmd_animation(path)
+
+    def play(self):
+        self.playing = True
+        self.current = 0
+        self.timer = p.timers.tick(self.render)
+
+    def stop(self):
+        self.playing = False
+        p.timers.clear(self.timer)
+
+    def rewind(self):
+        self.current = 0
+
+    def set_display(self, display):
+        self.display = display
+
+    def render(self):
+        if not self.display:
+            return
+        self.display.blit(self.frames[self.current], (0, 0))
+        self.current += 1
+        if self.current >= len(self.frames):
+            self.stop()
+
+    def get_busy(self):
+        return self.playing
+
+    def get_size(self):
+        return (p.dmd.width, p.dmd.height)
 
 
 def load_fonts(*args):
@@ -78,7 +118,10 @@ def register_movies(*args):
     for key, filename in args:
         path = os.path.join(base_dir, filename)
         log.debug("Registering movie {}: {}".format(key, filename))
-        add("movie", movies, key, pygame.movie.Movie(path))
+        if filename.endswith(".dmd"):
+            add("movie", movies, key, Movie(path))
+        else:
+            add("movie", movies, key, pygame.movie.Movie(path))
 
 
 def load_dmd_animation(path):

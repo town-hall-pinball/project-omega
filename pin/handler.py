@@ -116,7 +116,7 @@ class Handler(object):
             self.display.render_start()
         self.on_resume()
 
-    def on_resume():
+    def on_resume(self):
         pass
 
     def register(self):
