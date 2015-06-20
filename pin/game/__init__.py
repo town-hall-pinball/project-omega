@@ -33,9 +33,10 @@ def init(load_resources=True):
         "attract",
         "banner",
         "post",
+        "service.font_browser",
         "service.movie_browser",
-        "service.music_player",
-        "service.sound_player",
+        "service.music_browser",
+        "service.sound_browser",
         "service.service",
     ))
 

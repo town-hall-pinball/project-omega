@@ -304,13 +304,18 @@ class Mode(Handler):
         p.modes["movie_browser"].enable()
         self.suspend()
 
-    def music_player(self):
-        p.modes["music_player"].enable()
+    def music_browser(self):
+        p.modes["music_browser"].enable()
         self.suspend()
 
-    def sound_player(self):
-        p.modes["sound_player"].enable()
+    def sound_browser(self):
+        p.modes["sound_browser"].enable()
         self.suspend()
+
+    def font_browser(self):
+        p.modes["font_browser"].enable()
+        self.suspend()
+
 
 
 

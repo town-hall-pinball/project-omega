@@ -30,7 +30,7 @@ class Show(Handler):
     running = False
     index = 0
 
-    def __init__(self, name, timings, repeat=False):
+    def __init__(self, name, timings, repeat=False, action=None):
         super(Show, self).__init__(name)
         self.timings = timings
         if repeat == True:
@@ -40,6 +40,7 @@ class Show(Handler):
         else:
             self.repeat = repeat
         self.timer = None
+        self.fn_action = action
 
     def start(self):
         if not self.running:
@@ -78,8 +79,12 @@ class Show(Handler):
             else:
                 self.stop()
                 return
-        use_callback = self.timings[self.index] is None
-        self.action(use_callback)
+        use_callback = False
+        if self.fn_action:
+            self.fn_action()
+        else:
+            use_callback = self.timings[self.index] is None
+            self.action(use_callback)
         if not use_callback:
             self.timer = self.wait(self.timings[self.index], self.next)
         self.index += 1

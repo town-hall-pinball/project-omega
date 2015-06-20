@@ -150,18 +150,22 @@ utilities = {
             "confirm": True
         }]
     },{
-        "name": "Browser",
+        "name": "Browsers",
         "icon": "service_browse",
         "menu": [{
-            "name": "Music Player",
+            "name": "Music",
             "icon": "service_music",
-            "action": "music_player",
+            "action": "music_browser",
         },{
-            "name": "Sound Player",
+            "name": "Sounds",
             "icon": "service_sounds",
-            "action": "sound_player"
+            "action": "sound_browser"
         },{
-            "name": "Movie Browser",
+            "name": "Fonts",
+            "icon": "service_font",
+            "action": "font_browser",
+        },{
+            "name": "Movies",
             "icon": "service_animations",
             "action": "movie_browser"
         }]

@@ -62,7 +62,6 @@ class Mode(Handler):
         self.show.start()
 
     def start_service_mode(self):
-        print "SERVICE REQUEST"
         p.modes["service"].enable()
         self.disable()
         p.mixer.play("service_enter")
