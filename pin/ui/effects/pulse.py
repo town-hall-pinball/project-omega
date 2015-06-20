@@ -27,7 +27,6 @@ class Pulse(util.Show):
         super(Pulse, self).__init__("pulse", durations, repeat=True)
         self.target = target
         self.to_black = True
-        self.start()
 
     def action(self, *args, **kwargs):
         color = 0xf - (self.index * 2) if self.to_black else self.index

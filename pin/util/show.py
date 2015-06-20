@@ -45,15 +45,19 @@ class Show(Handler):
 
     def start(self):
         if not self.running:
-            self.running = True
             log.debug("{} started".format(self.name))
-            self.on_start()
-            self.next()
+            self._start()
+
+    def _start(self):
+        self.running = True
+        self.on_start()
+        self.next()
 
     def restart(self):
         self.index = 0
         self.repeat = self.original_repeat
-        self.start()
+        log.debug("{} restarted".format(self.name))
+        self._start()
 
     def on_start(self):
         pass

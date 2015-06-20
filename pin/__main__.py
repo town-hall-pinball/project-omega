@@ -18,13 +18,12 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import logging
-
-
 import argparse
 import logging
 import logging.handlers
 import os
+import time
+
 import pygame
 import p
 import pin
@@ -120,6 +119,7 @@ def run():
     p.engine.processors += [pin.timers.service]
     p.engine.processors += [pin.events.dispatch]
 
+    p.now = time.time()
     pin.game.init()
     pin.game.start()
     p.engine.run()

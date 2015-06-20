@@ -18,11 +18,15 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
+
 import p
 from pin import ui
 from pin.ui import effects
 from pin.handler import Handler
 from . import banner
+
+log = logging.getLogger("pin")
 
 class Mode(Handler):
 
@@ -37,7 +41,7 @@ class Mode(Handler):
             p.mixer.play("settings_cleared")
             self.display.update(enabled=True)
             effects.fill_blink(self.message, duration=0.25, repeat=2)
-            self.wait(4.0, self.done)
+            self.wait(5.0, self.done)
         else:
             self.disable()
 
