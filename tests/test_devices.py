@@ -58,3 +58,22 @@ class TestDevices(unittest.TestCase):
         self.assertEquals("switch:foo also maps to switch:start_button",
                 str(cm.exception))
 
+    def test_duplicate_name(self):
+        devices.reset()
+        devices.add_switches({
+            "foo": {
+                "label": "Foo Button",
+                "device": "S13"
+            }
+        })
+        with self.assertRaises(ValueError) as cm:
+            devices.add_switches({
+                "foo": {
+                    "label": "Foo Button",
+                    "device": "S14"
+                }
+            })
+
+
+
+

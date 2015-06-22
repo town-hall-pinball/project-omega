@@ -105,8 +105,9 @@ class Switch(Device):
         if self.debounce:
             events = ["closed_debounced", "open_debounced"]
         else:
-            raise ValueError("Non-debounced switch")
-            events = ["closed_nondebounced", "open_nondebounced"]
+            # Don't worry about this now
+            raise ValueError("Non-debounced switch") # pragma: no cover
+            #events = ["closed_nondebounced", "open_nondebounced"]
 
         for event in events:
             p.proc.api.switch_update_rule(self.number, event, {

@@ -47,7 +47,8 @@ def test():
     nose.run(argv=["",
         "-w", "tests",
         "--with-coverage",
-        "--cover-package=pin"
+        "--cover-package=pin",
+        "--cover-erase",
     ])
 
 
