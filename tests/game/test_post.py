@@ -19,45 +19,24 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin.handler import Handler
-from pin import ui, util
 
-class Mode(Handler):
+import unittest
+from tests import fixtures
 
-    def setup(self):
-        self.sounds = util.Cycle(p.sounds.keys())
-        self.display = ui.Panel(name="sound_player")
-        self.label = ui.Text()
-        self.display.add([self.label])
+class TestPOST(unittest.TestCase):
 
-        self.on("switch_service_enter", self.update)
-        self.on("switch_service_up", self.next)
-        self.on("switch_service_down", self.previous)
-        self.on("switch_service_exit",  self.exit)
+    def setUp(self):
+        fixtures.reset()
+        self.post = p.modes["post"]
 
-    def on_enable(self):
-        self.play()
+    def test_settings_cleared(self):
+        p.data["cleared"] = True
+        self.post.enable()
+        self.assertEquals("SETTINGS CLEARED", self.post.message.style["text"])
+        p.now = 10
+        p.timers.service()
 
-    def play(self):
-        self.update()
-
-    def next(self):
-        self.sounds.next()
-        self.play()
-
-    def previous(self):
-        self.sounds.previous()
-        self.play()
-
-    def update(self):
-        key = self.sounds.get()
-        p.mixer.play(key)
-        self.label.show(key)
-
-    def on_disable(self):
-        p.mixer.stop()
-        p.mixer.play("service_exit")
-        p.modes["service"].resume()
-
-    def exit(self):
-        self.disable()
+    def test_normal(self):
+        p.data["cleared"] = False
+        self.post.enable()
+        self.assertEquals("NORMAL", self.post.message.style["text"])

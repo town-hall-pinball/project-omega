@@ -79,4 +79,7 @@ def service():
         ticker()
     events.tick()
 
+def reset():
+    active.clear()
+    tickers.clear()
 

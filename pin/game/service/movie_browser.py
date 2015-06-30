@@ -42,9 +42,6 @@ class Mode(Handler):
     def play(self):
         self.update(show_label=True)
 
-    def restart(self):
-        self.update(show_label=False)
-
     def next(self):
         self.movies.next()
         self.play()

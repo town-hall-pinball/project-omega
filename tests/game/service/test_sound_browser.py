@@ -18,46 +18,39 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+from mock import Mock, patch
+import unittest
+
 import p
-from pin.handler import Handler
-from pin import ui, util
+from pin import resources
+from tests import fixtures
 
-class Mode(Handler):
+class TestSoundBrowser(unittest.TestCase):
 
-    def setup(self):
-        self.sounds = util.Cycle(p.sounds.keys())
-        self.display = ui.Panel(name="sound_player")
-        self.label = ui.Text()
-        self.display.add([self.label])
+    def setUp(self):
+        fixtures.reset()
+        self.browser = p.modes["sound_browser"]
+        self.browser.enable()
 
-        self.on("switch_service_enter", self.update)
-        self.on("switch_service_up", self.next)
-        self.on("switch_service_down", self.previous)
-        self.on("switch_service_exit",  self.exit)
+    def test_next(self):
+        previous = self.browser.label.style["text"]
+        p.events.post("switch_service_up")
+        p.events.dispatch()
+        self.assertNotEquals(previous, self.browser.label.style["text"])
 
-    def on_enable(self):
-        self.play()
+    def test_previous(self):
+        previous = self.browser.label.style["text"]
+        p.events.post("switch_service_down")
+        p.events.dispatch()
+        self.assertNotEquals(previous, self.browser.label.style["text"])
 
-    def play(self):
-        self.update()
+    @patch("p.mixer.play")
+    def test_restart(self, mock_play):
+        p.events.post("switch_service_enter")
+        p.events.dispatch()
+        self.assertEquals(1, mock_play.call_count)
 
-    def next(self):
-        self.sounds.next()
-        self.play()
-
-    def previous(self):
-        self.sounds.previous()
-        self.play()
-
-    def update(self):
-        key = self.sounds.get()
-        p.mixer.play(key)
-        self.label.show(key)
-
-    def on_disable(self):
-        p.mixer.stop()
-        p.mixer.play("service_exit")
-        p.modes["service"].resume()
-
-    def exit(self):
-        self.disable()
+    def test_exit(self):
+        p.events.post("switch_service_exit")
+        p.events.dispatch()
+        self.assertFalse(self.browser.enabled)

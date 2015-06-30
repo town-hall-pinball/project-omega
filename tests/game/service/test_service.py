@@ -51,6 +51,15 @@ class TestService(unittest.TestCase):
         p.events.dispatch()
         self.assertEquals("Pricing", self.service.name.style["text"])
 
+    def test_menu_cache(self):
+        p.events.post("switch_service_up")      # Go to Tests
+        p.events.post("switch_service_enter")   # Enter Tests
+        p.events.post("switch_service_up")      # Go to Coils
+        p.events.post("switch_service_exit")    # Back to main
+        p.events.post("switch_service_enter")   # Enter Tests
+        p.events.dispatch()
+        self.assertEquals("Coils", self.service.name.style["text"])
+
     def test_option_select(self):
         p.events.post("switch_service_enter")
         p.events.post("switch_service_enter")
@@ -84,6 +93,15 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_enter") # Enter Audtis
         p.events.dispatch()
         self.assertEquals("1.23", self.service.value.style["text"])
+
+    def test_action(self):
+        p.events.post("switch_service_down")    # To Utilities
+        p.events.post("switch_service_enter")   # Enter Utilities
+        p.events.post("switch_service_down")    # To Browsers
+        p.events.post("switch_service_enter")   # Enter Browsers
+        p.events.post("switch_service_enter")   # Select Music Browser
+        p.events.dispatch()
+        self.assertTrue(p.modes["music_browser"].enabled)
 
     def test_confirm_action(self):
         p.data["credits"] = 10
@@ -120,6 +138,17 @@ class TestService(unittest.TestCase):
         p.events.dispatch()
         self.assertEquals(10, p.data["credits"])
 
+    def test_cancel_exit(self):
+        p.data["credits"] = 10
+        p.events.post("switch_service_down") # Utilities
+        p.events.post("switch_service_enter") # Enter Utilities
+        p.events.post("switch_service_up") # Clear
+        p.events.post("switch_service_enter") # Enter Clear
+        p.events.post("switch_service_enter") # Clear Credits
+        p.events.post("switch_service_exit") # Exit out
+        p.events.dispatch()
+        self.assertEquals(10, p.data["credits"])
+
     def test_save(self):
         p.data["free_play"] = False
         p.events.post("switch_service_enter") # Enter Settings
@@ -129,8 +158,10 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_enter") # Save
         p.events.dispatch()
         self.assertTrue(p.data["free_play"])
+        p.now = 5                             # Remove confirmation message
+        p.timers.service()
 
-    def test_no_chace(self):
+    def test_no_change(self):
         p.data["free_play"] = False
         p.events.post("switch_service_enter") # Enter Settings
         p.events.post("switch_service_enter") # Enter Pricing
@@ -138,3 +169,33 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_enter") # No Change
         p.events.dispatch()
         self.assertFalse(p.data["free_play"])
+
+
+class TestServiceActions(unittest.TestCase):
+
+    def setUp(self):
+        self.service = p.modes["service"]
+        self.service.enable()
+
+    def test_clear_credits(self):
+        p.data["credits"] = 5
+        self.service.clear_credits()
+        self.assertEquals(0, p.data["credits"])
+
+    def test_movie_browser(self):
+        self.service.movie_browser()
+        self.assertTrue(p.modes["movie_browser"].enabled)
+
+    def test_music_browser(self):
+        self.service.music_browser()
+        self.assertTrue(p.modes["music_browser"].enabled)
+
+    def test_sound_browser(self):
+        self.service.sound_browser()
+        self.assertTrue(p.modes["sound_browser"].enabled)
+
+    def test_font_browser(self):
+        self.service.font_browser()
+        self.assertTrue(p.modes["font_browser"].enabled)
+
+

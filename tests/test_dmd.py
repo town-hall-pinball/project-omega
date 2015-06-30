@@ -18,6 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import pygame
+
 from pin import devices
 
 import p
@@ -32,6 +34,7 @@ class TestDMD(unittest.TestCase):
         fixtures.reset()
         self.r1 = Mock(ui.Panel)
         self.r2 = Mock(ui.Panel)
+        self.r3 = Mock(ui.Panel)
         self.trans = Mock(ui.transition.Transition)
         self.trans.done = False
 
@@ -53,8 +56,20 @@ class TestDMD(unittest.TestCase):
         self.assertEquals(0, self.r1.render.call_count)
         self.assertEquals(1, self.r2.render.call_count)
 
-    def test_replace(self):
+    def test_enqueue_once(self):
+        dmd.enqueue(self.r1)
+        dmd.enqueue(self.r1)
+        self.assertEquals(1, len(dmd.dmd.queue))
+
+    def test_replace_stack(self):
         dmd.add(self.r1)
+        dmd.replace(self.r1, self.r2)
+        dmd.render()
+        self.assertEquals(0, self.r1.render.call_count)
+        self.assertEquals(1, self.r2.render.call_count)
+
+    def test_replace_queue(self):
+        dmd.enqueue(self.r1)
         dmd.replace(self.r1, self.r2)
         dmd.render()
         self.assertEquals(0, self.r1.render.call_count)
@@ -110,11 +125,46 @@ class TestDMD(unittest.TestCase):
         dmd.render()
         self.assertEquals(1, self.r1.render_suspend.call_count)
 
+    def test_render_suspend_with_transition(self):
+        dmd.add(self.r1, self.trans)
+        dmd.add(self.r2, self.trans)
+        dmd.enqueue(self.r3)
+        dmd.render()
+        self.assertEquals(1, self.r2.render_suspend.call_count)
+
+    def test_render_stop_with_transition(self):
+        dmd.add(self.r1)
+        dmd.add(self.r2, self.trans)
+        dmd.remove(self.r1)
+        dmd.render()
+        self.assertTrue(self.r1.render_stop.call_count > 0)
+
     def test_render_resume(self):
         dmd.add(self.r1)
         dmd.enqueue(self.r2)
         dmd.remove(self.r2)
         dmd.render()
         self.assertEquals(2, self.r1.render_start.call_count)
+
+    def test_transition_done(self):
+        dmd.add(self.r1)
+        dmd.add(self.r2, self.trans)
+        self.trans.done = True
+        dmd.render()
+        self.assertTrue(self.r1.render_stop.call_count > 0)
+
+    @patch("pygame.Surface")
+    def test_create_frame(self, mock_surface):
+        dmd.create_frame(10, 20, has_alpha=False)
+        mock_surface.assert_called_with((10, 20))
+
+    @patch("pygame.Surface")
+    def test_create_frame_alpha(self, mock_surface):
+        dmd.create_frame(10, 20)
+        mock_surface.assert_called_with((10, 20), pygame.locals.SRCALPHA)
+
+    @patch("pygame.PixelArray")
+    def test_create_dots(self, mock_pixel_array):
+        dmd.create_dots(None)
 
 

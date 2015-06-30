@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import devices
+from pin import devices, platform
 
 import p
 import unittest
@@ -29,6 +29,10 @@ class TestDevices(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
+        platform.devices["SXX"] = 32
+
+    def tearDown(self):
+        del platform.devices["SXX"]
 
     def test_to_string(self):
         self.assertEquals("switch:start_button",
@@ -56,6 +60,17 @@ class TestDevices(unittest.TestCase):
                 }
             })
         self.assertEquals("switch:foo also maps to switch:start_button",
+                str(cm.exception))
+
+    def test_duplicate_device(self):
+        with self.assertRaises(ValueError) as cm:
+            devices.add_switches({
+                "foo": {
+                    "label": "Foo Button",
+                    "device": "SXX"
+                }
+            })
+        self.assertEquals("Duplicate address number 32 for switch:foo and switch:ball_launch_button",
                 str(cm.exception))
 
     def test_duplicate_name(self):

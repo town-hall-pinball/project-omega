@@ -41,9 +41,6 @@ class Mode(Handler):
     def play(self):
         self.update()
 
-    def restart(self):
-        self.update()
-
     def next(self):
         self.music.next()
         self.play()

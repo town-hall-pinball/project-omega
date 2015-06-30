@@ -33,12 +33,13 @@ class Mode(Handler):
     def setup(self):
         self.timer = None
         self.display = ui.Notice(name="post", enabled=False)
-        self.message = ui.Text("SETTINGS CLEARED", padding=2)
+        self.message = ui.Text("NORMAL", padding=2)
         self.display.add(self.message)
 
     def on_enable(self):
         if p.data.get("cleared", False):
             p.mixer.play("settings_cleared")
+            self.message.show("SETTINGS CLEARED")
             self.display.update(enabled=True)
             effects.fill_blink(self.message, duration=0.25, repeat=2)
             self.wait(5.0, self.done)

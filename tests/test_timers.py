@@ -29,6 +29,7 @@ class TestTimers(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
+        timers.reset()
 
     def test_set_called(self):
         callback = Mock()

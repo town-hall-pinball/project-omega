@@ -40,9 +40,10 @@ class Text(Component):
 
     def auto_size(self):
         font = p.fonts[self.style["font"]]
-        metrics = font.metrics(self.style["text"])
+        width_metrics = font.metrics(self.style["text"])
+        height_metrics = font.metrics("g")
 
-        if not metrics:
+        if not width_metrics:
             self.height = 1
             self.width = 1
             self.area = (0, 0, 0, 0)
@@ -50,13 +51,14 @@ class Text(Component):
 
         # Crop as tight as possible and only go below the baseline if
         # necessary
-        text_height = max([x[3] - x[2] for x in metrics])
-        descent = min(x[2] for x in metrics) * -1
-        text_height += descent
+        text_height = max([x[3] - x[2] for x in height_metrics])
+        self.descent = min(x[2] for x in height_metrics) * - 1
+        text_height += self.descent
 
         # Remove the advance on the last character
-        text_width = sum([x[4] for x in metrics])
-        text_width -= metrics[-1][4] - metrics[-1][1] - metrics[-1][0]
+        text_width = sum([x[4] for x in width_metrics])
+        text_width -= (width_metrics[-1][4] - width_metrics[-1][1] -
+                width_metrics[-1][0])
 
         if self.width == None:
             self.width = (text_width + self.style["padding_left"] +
@@ -65,8 +67,8 @@ class Text(Component):
             self.height = (text_height + self.style["padding_top"] +
                     self.style["padding_bottom"])
 
-        self.area = (0, font.get_ascent() - self.height + descent, self.width,
-                self.height)
+        self.area = (0, font.get_ascent() - self.height + self.descent,
+                self.width, self.height)
 
     def draw(self):
         super(Text, self).draw()

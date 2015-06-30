@@ -42,7 +42,6 @@ class Mode(Handler):
         self.on("switch_flipper_left_inactive", self.flipper_up)
         self.on("switch_flipper_right_inactive", self.flipper_up)
 
-
         self.timer = None
         self.scroll_left = util.Show("scroll_left", [0.05],
                 repeat=True, action=self.text_left)
@@ -53,9 +52,6 @@ class Mode(Handler):
         self.start()
 
     def start(self):
-        self.update()
-
-    def restart(self):
         self.update()
 
     def next(self):

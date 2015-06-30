@@ -22,7 +22,7 @@ import p
 import pin
 from pin.game.config.defaults import defaults
 from pin.virtual import proc as virtual_proc
-from mock import Mock, patch
+from mock import MagicMock as Mock, patch
 import pygame
 
 def reset():
@@ -30,6 +30,7 @@ def reset():
 
     pin.keyboard.reset()
     pin.events.reset()
+    pin.timers.reset()
 
     p.dmd = pin.dmd
     p.data = pin.data
@@ -65,8 +66,18 @@ def reset():
     pygame.mixer.Sound = Mock(pygame.mixer.Sound)
     pygame.mixer.Channel = Mock(pygame.mixer.Channel)
     pygame.font.Font = Mock(pygame.font.Font)
-    pygame.movie.Movie = Mock(pygame.movie.Movie)
     pygame.mixer.music = Mock(pygame.mixer.music)
+
+    movie = Mock(spec=[
+        "get_size",
+        "play",
+        "rewind",
+        "set_display",
+        "stop",
+    ])
+    pygame.movie.Movie = Mock()
+    pygame.movie.Movie.return_value = movie
+    movie.get_size.return_value = (128, 32)
 
     font = pygame.font.Font.return_value
     font.metrics.return_value = ((5, 5, 5, 5, 5),)
