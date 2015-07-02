@@ -22,6 +22,12 @@ from .component import Component
 
 class Text(Component):
 
+    font_case = {
+        "upper": "G",
+        "number": ",",
+        "full": "g",
+    }
+
     def __init__(self, text="", **style):
         style["text"] = text
         super(Text, self).__init__(defaults={
@@ -29,6 +35,7 @@ class Text(Component):
             "reverse": False,
             "color": 0xf,
             "x_align": "left",
+            "case": "upper"
         }, **style)
         self.area = None
 
@@ -41,7 +48,7 @@ class Text(Component):
     def auto_size(self):
         font = p.fonts[self.style["font"]]
         width_metrics = font.metrics(self.style["text"])
-        height_metrics = font.metrics("g")
+        height_metrics = font.metrics(self.font_case[self.style["case"]])
 
         if not width_metrics:
             self.height = 1
