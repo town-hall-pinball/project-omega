@@ -19,6 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
+from pin import util
 from .misc import valign
 from .panel import Panel
 from .text import Text
@@ -36,6 +37,8 @@ class Notice(Panel):
         self.callback = callback
 
     def add(self, components):
+        for component in util.to_list(components):
+            component.update(case="title")
         super(Notice, self).add(components)
         valign(self.children)
 

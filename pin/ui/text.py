@@ -23,9 +23,9 @@ from .component import Component
 class Text(Component):
 
     font_case = {
-        "upper": "G",
+        "title": "G",
         "number": ",",
-        "full": "g",
+        "full": "g,",
     }
 
     def __init__(self, text="", **style):
@@ -35,7 +35,7 @@ class Text(Component):
             "reverse": False,
             "color": 0xf,
             "x_align": "left",
-            "case": "upper"
+            "case": "full"
         }, **style)
         self.area = None
 

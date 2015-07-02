@@ -23,8 +23,6 @@ from pin import brand, ui
 from pin.ui.transitions import SlideIn, SlideOut
 from pin.handler import Handler
 
-name = "attract"
-
 class Mode(Handler):
 
     thp = ui.Image("thp_logo")
@@ -35,7 +33,10 @@ class Mode(Handler):
 
     def setup(self):
         credits = p.displays["credits"].display
+        score = p.displays["main_score"].display
+
         self.show = ui.Slides("attract.show", self, (
+            #(score,                 3.0),
             (self.thp,              3.0),
             (self.presents,         3.0, SlideIn(direction="left")),
             (self.title,            3.0),

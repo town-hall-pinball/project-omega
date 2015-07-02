@@ -19,33 +19,32 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from .config import defaults, resources
+from pin import ui
+from pin.handler import Handler
 
-# Resources now in resources.py
+font = "t5cp"
 
-def init(load_resources=True):
-    p.namespace = "pin.game"
-    if load_resources:
-        resources.load()
+class ScoreDisplay(object):
 
-    p.load_modes((
-        "main.score",
-        "system.coin",
-        "attract",
-        "banner",
-        "post",
-        "service.font_browser",
-        "service.movie_browser",
-        "service.music_browser",
-        "service.sound_browser",
-        "service.service",
-    ))
+    def __init__(self):
+        self.display = ui.Panel()
+        self.p = [
+            ui.Text("123,456,123", font=font, left=0),
+            ui.Text("123,456,123", font=font, left=0),
+            ui.Text("123,456,123", font=font, left=0),
+            ui.Text("123,456,123", font=font, left=0),
+        ]
+        ui.valign(self.p, padding=1)
+        self.display.add(self.p)
 
-def start():
-    for gi in p.gi.values():
-        gi.enable()
+class Mode(Handler):
 
-    if p.options["fast"]:
-        p.modes["attract"].enable()
-    else:
-        p.modes["post"].enable()
+    def setup(self):
+        pass
+
+
+def init():
+    p.displays["main_score"] = ScoreDisplay()
+
+
+
