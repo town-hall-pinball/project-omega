@@ -29,7 +29,6 @@ class CreditsDisplay(object):
         self.amount = ui.Text("CREDITS 0")
         self.message = ui.Text("FREE PLAY")
         self.display.add((self.amount, self.message))
-        p.displays["credits"] = self
         self.update()
 
         p.events.on("data_free_play", self.update)
