@@ -18,7 +18,34 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .cycle import *
-from .magic import *
-from .misc import *
-from .show import *
+import logging
+from pin.handler import Handler
+
+log = logging.getLogger("pin.magic")
+
+class MagicSequence(Handler):
+
+    def __init__(self, name, switches, callback):
+        self.switches = switches
+        self.callback = callback
+        self.index = 0
+        super(MagicSequence, self).__init__(name)
+
+    def setup(self):
+        self.on("switch", self.check)
+
+    def check(self, switch, active):
+        if not active:
+            return
+        if switch.name != self.switches[self.index]:
+            if self.index != 0:
+                log.debug("rejected")
+            self.index = 0
+            return
+        log.debug("accepted")
+        self.index += 1
+        if self.index == len(self.switches):
+            log.debug("triggered")
+            self.callback()
+            self.index = 0
+

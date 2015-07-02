@@ -92,6 +92,8 @@ class Handler(object):
         if self.display:
             p.dmd.remove(self.display)
         self.unregister()
+        for handler in self.handlers:
+            handler.disable()
         self.on_disable()
 
     def on_disable(self):

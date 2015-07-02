@@ -19,9 +19,18 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import brand, ui
+from pin import brand, ui, util
 from pin.ui.transitions import SlideIn, SlideOut
 from pin.handler import Handler
+
+mm3_sequence = [
+    "flipper_left",
+    "flipper_left",
+    "flipper_left",
+    "flipper_right",
+    "flipper_right",
+    "flipper_right",
+]
 
 class Mode(Handler):
 
@@ -48,10 +57,15 @@ class Mode(Handler):
         self.on("switch_flipper_left", self.show.next)
         self.on("switch_flipper_right", self.show.next)
 
+        self.mm3 = util.MagicSequence("mm3.watcher", mm3_sequence,
+                self.start_mm3)
+        self.handlers += [self.mm3]
+
     def on_enable(self):
         p.modes["coin"].enable()
         self.show.start()
         p.mixer.play("introduction")
+        self.mm3.enable()
 
     def on_disable(self):
         p.mixer.stop()
@@ -66,6 +80,9 @@ class Mode(Handler):
         p.modes["service"].enable()
         self.disable()
         p.mixer.play("service_enter")
+
+    def start_mm3(self):
+        pass
 
 
 

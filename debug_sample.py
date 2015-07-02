@@ -30,6 +30,7 @@ def init():
         #"pin.event",
         #"pin.keyboard",
         #"pin.handler",
+        #"pin.magic",
         #"pin.mixer",
         #"pin.resources",
         #"pin.shows",
