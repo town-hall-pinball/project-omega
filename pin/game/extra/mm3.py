@@ -26,15 +26,66 @@ from pin.handler import Handler
 
 available = os.path.exists(os.path.join(resources.base_dir, "extra", "mm3"))
 
-class Mode(Handler):
+bosses = [
+    ( "mm3_spark_man",  "Spark Man" ),
+    ( "mm3_snake_man",  "Snake Man" ),
+    ( "mm3_needle_man", "Needle Man" ),
+    ( "mm3_hard_man",   "Hard Man" ),
+    ( "mm3_top_man",    "Top Man" ),
+    ( "mm3_gemini_man", "Gemini Man" ),
+    ( "mm3_magnet_man", "Magnet Man" ),
+    ( "mm3_shadow_man", "Shadow Man" )
+]
+
+class StageSelectDisplay(Handler):
 
     def setup(self):
         self.display = ui.Panel(name="mm3_stage_select")
-        self.text = ui.Text("MM3")
-        self.display.add(self.text)
+        self.selected = util.Cycle(bosses)
+        self.boss = ui.Image(left=0)
+
+        self.instructions = ui.Text("Flippers to Select", font="r7",
+                padding_left=32, fill=None)
+        self.push_start = ui.Text("PUSH START", padding_left=32, fill=None)
+
+        ui.valign((self.instructions, self.push_start))
+        self.display.add((self.boss, self.instructions, self.push_start))
+        self.push_start.do(ui.effects.Pulse(self.push_start))
+        self.update()
+
+        self.on("switch_flipper_left", self.previous)
+        self.on("switch_flipper_right", self.next)
+
+    def previous(self):
+        self.selected.previous()
+        self.update()
+        p.mixer.play("mm3_select")
+
+    def next(self):
+        self.selected.next()
+        self.update()
+        p.mixer.play("mm3_select")
+
+    def update(self):
+        self.boss.update(image=self.selected.get()[0])
+
+
+class Mode(Handler):
+
+    def setup(self):
+        self.select = StageSelectDisplay("mm3_stage_select")
+        self.handlers = [ self.select ]
 
     def on_enable(self):
-        p.dmd.add(self.display)
+        self.display = self.select.display
+        p.dmd.add(self.display, ui.transitions.Tear())
+        p.mixer.play("mm3_stage_select")
+        self.select.enable()
+        self.wait(30, self.cancel)
+
+    def cancel(self):
+        self.disable()
+        p.modes["attract"].enable()
 
 
 def init():

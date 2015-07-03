@@ -104,17 +104,16 @@ class DMD(object):
             self.previous_renderer.render_suspend()
         elif self.previous_renderer:
             self.previous_renderer.render_stop()
-        self.previous_renderer = None
 
         if self.renderer:
             self.renderer.render_stop()
+            self.previous_renderer = self.renderer
 
         if not renderer:
             self.renderer = None
             return
 
         if transition:
-            self.previous_renderer = self.renderer
             transition.reset()
         elif self.renderer in self.stack:
             self.renderer.render_suspend()

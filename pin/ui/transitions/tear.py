@@ -18,6 +18,29 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .transition import *
-from .slide import *
-from .tear import *
+import pygame
+
+import p
+from . import Transition
+
+__all__ = ["Tear"]
+
+class Tear(Transition):
+
+    def __init__(self, duration=1.0):
+        super(Tear, self).__init__("tear", duration)
+
+    def draw(self):
+        mid = p.dmd.height / 2
+        distance = p.dmd.width * self.progress
+        self.frame.blit(self.after, (p.dmd.width - distance, 0),
+                area=(0, 0, p.dmd.width, mid))
+        self.frame.blit(self.after, (-p.dmd.width + distance, mid),
+                area=(0, mid, p.dmd.width, mid))
+        self.frame.blit(self.before, (0 - distance, 0),
+                area=(0, 0, p.dmd.width, mid))
+        self.frame.blit(self.before, (0 + distance, mid),
+                area=(0, mid, p.dmd.width, mid))
+
+    def __str__(self):
+        return "tear"

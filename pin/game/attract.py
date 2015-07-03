@@ -71,6 +71,7 @@ class Mode(Handler):
 
     def on_disable(self):
         p.mixer.stop()
+        self.show.stop()
 
     def on_suspend(self):
         self.show.stop()
@@ -84,7 +85,9 @@ class Mode(Handler):
         p.mixer.play("service_enter")
 
     def start_mm3(self):
-        pass
+        self.disable()
+        p.modes["mm3"].enable()
+
 
 
 
