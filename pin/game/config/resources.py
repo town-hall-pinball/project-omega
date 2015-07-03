@@ -22,7 +22,7 @@ from pin import resources
 
 def load():
     resources.load_images(
-        ("thp_logo",                "images/thp_logo.dmd"),
+        ("p-roc",                   "images/p-roc.dmd"),
         ("service_animations",      "images/service/animations.dmd"),
         ("service_audits",          "images/service/audits.dmd"),
         ("service_browse",          "images/service/browse.dmd"),
@@ -42,6 +42,7 @@ def load():
         ("service_switches",        "images/service/switches.dmd"),
         ("service_tests",           "images/service/tests.dmd"),
         ("service_utilities",       "images/service/utilities.dmd"),
+        ("thp_logo",                "images/thp_logo.dmd"),
     )
     resources.register_movies(
         ("x2",                      "movies/X2_from_left_ship_from_right - 90-Android.mpg"),

@@ -39,6 +39,7 @@ class Mode(Handler):
     title = ui.Text(brand.name, font="t5exb")
     game_over = ui.Text("GAME OVER")
     anim = ui.Movie("x2")
+    proc = ui.Image("p-roc")
 
     def setup(self):
         credits = p.displays["credits"].display
@@ -51,7 +52,8 @@ class Mode(Handler):
             (self.title,            3.0),
             (self.game_over,        6.0),
             (credits,               3.0),
-            (self.anim,             None)),
+            (self.anim,             None),
+            (self.proc,             3.0)),
             repeat=True)
         self.on("switch_service_enter", self.start_service_mode)
         self.on("switch_flipper_left", self.show.next)
