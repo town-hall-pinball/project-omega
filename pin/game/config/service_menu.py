@@ -165,6 +165,10 @@ utilities = {
             "icon": "service_font",
             "action": "font_browser",
         },{
+            "name": "Images",
+            "icon": "service_image",
+            "action": "image_browser"
+        },{
             "name": "Movies",
             "icon": "service_animations",
             "action": "movie_browser"

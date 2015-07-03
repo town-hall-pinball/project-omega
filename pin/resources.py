@@ -97,7 +97,10 @@ def load_images(*args):
     for key, filename in args:
         path = os.path.join(base_dir, filename)
         log.debug("Loading image {}: {}".format(key, filename))
-        add("image", images, key, load_dmd_animation(path)[0])
+        if filename.endswith(".dmd"):
+            add("image", images, key, load_dmd_animation(path)[0])
+        else:
+            add("image", images, key, load_image(path))
 
 def load_sounds(*args):
     for key, filename in args:
@@ -148,6 +151,17 @@ def load_dmd_animation(path):
                     new_dots[x, y] = (v, v, v, 0xff)
             frames.append(new_frame)
     return frames
+
+def load_image(path):
+    image = pygame.image.load(path)
+    dots = dmd.create_dots(image)
+    for x in xrange(image.get_width()):
+        for y in xrange(image.get_height()):
+            v = dots[x, y]
+            nv = (v & 0xff000000) >> 24
+            dots[x, y] = (nv, nv, nv, 0xff)
+    return image
+
 
 def add(what, to, key, value):
     if key in to:

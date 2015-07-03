@@ -38,6 +38,7 @@ def init(load_resources=True):
         "banner",
         "post",
         "service.font_browser",
+        "service.image_browser",
         "service.movie_browser",
         "service.music_browser",
         "service.sound_browser",

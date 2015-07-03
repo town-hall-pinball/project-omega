@@ -32,6 +32,7 @@ def load():
         ("service_flashers",        "images/service/flashers.dmd"),
         ("service_font",            "images/service/font.dmd"),
         ("service_game_settings",   "images/service/game_settings.dmd"),
+        ("service_image",           "images/service/image.png"),
         ("service_lamps",           "images/service/lamps.dmd"),
         ("service_money",           "images/service/money.dmd"),
         ("service_music",           "images/service/music.dmd"),

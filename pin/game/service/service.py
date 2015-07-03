@@ -315,6 +315,11 @@ class Mode(Handler):
         p.modes["font_browser"].enable()
         self.suspend()
 
+    def image_browser(self):
+        p.modes["image_browser"].enable()
+        self.suspend()
+
+
 
 
 
