@@ -30,6 +30,7 @@ mm3_sequence = [
     "flipper_right",
     "flipper_right",
     "flipper_right",
+    "ball_launch_button"
 ]
 
 class Mode(Handler):

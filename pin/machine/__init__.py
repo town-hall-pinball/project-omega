@@ -20,7 +20,7 @@
 
 import p
 from pin import devices
-from . import coils, flashers, gi, lamps, keyboard, switches
+from . import coils, flashers, gi, lamps, switches
 
 def init():
     coils.init()
@@ -37,5 +37,3 @@ def init():
 
     switches.init()
     p.switches = devices.switches
-
-    keyboard.init()

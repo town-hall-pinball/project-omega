@@ -20,7 +20,7 @@
 
 import p
 
-from .config import defaults, resources
+from .config import defaults, keyboard, resources
 from . import extra
 
 # Resources now in resources.py
@@ -45,6 +45,7 @@ def init(load_resources=True):
         "service.service",
     ))
     extra.init()
+    keyboard.init()
 
 def start():
     for gi in p.gi.values():
