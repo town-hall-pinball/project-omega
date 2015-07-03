@@ -48,7 +48,8 @@ class Panel(Component):
                 if child.enabled:
                     child.draw()
                     self.frame.blit(child.frame,
-                            (child.x, child.y, child.width, child.height))
+                            (child.x, child.y, child.width, child.height),
+                            special_flags=child.style["composite"])
 
     def __str__(self):
         name = self.style.get("name", None)

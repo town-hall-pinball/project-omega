@@ -70,22 +70,85 @@ class StageSelectDisplay(Handler):
         self.boss.update(image=self.selected.get()[0])
 
 
+class GameStartDisplay(Handler):
+
+    def setup(self):
+        self.selected = None
+        self.display = ui.Panel(name="mm3_game_start")
+        self.background = ui.Image("mm3_background")
+        self.text_container = ui.Panel(
+            left=0,
+            height=14,
+            fill=None,
+        )
+        self.image = ui.Image(
+            left=10,
+            padding=[0, 2],
+            fill=0
+        )
+        self.name = ui.Text(
+            fill=None,
+            padding_left=10 + 38,
+            padding_bottom=1,
+            case="title"
+        )
+        self.display.add((
+            self.background,
+            self.text_container,
+            self.image,
+            self.name
+        ))
+
+    def on_enable(self):
+        self.wait(1.75, self.tear_end)
+        self.image.update(image=self.selected[0], enabled=True)
+
+    def tear_end(self):
+        self.wait(1.50, self.blend_out)
+        self.wait(3.25, self.show_name)
+
+    def blend_out(self):
+        self.text_container.do(ui.effects.BlendOut(self.text_container))
+
+    def show_name(self):
+        name = self.selected[1]
+        self.name.do(ui.effects.Typewriter(self.name, name))
+
+
 class Mode(Handler):
 
     def setup(self):
-        self.select = StageSelectDisplay("mm3_stage_select")
-        self.handlers = [ self.select ]
+        self.stage_select = StageSelectDisplay("mm3_stage_select")
+        self.game_start = GameStartDisplay("mm3_game_start")
+
+        self.handlers = [ self.stage_select, self.game_start ]
+        self.on("switch_start_button", self.select)
+        self.timer = None
 
     def on_enable(self):
-        self.display = self.select.display
-        p.dmd.add(self.display, ui.transitions.Tear())
+        p.dmd.clear()
         p.mixer.play("mm3_stage_select")
-        self.select.enable()
-        self.wait(30, self.cancel)
+        self.stage_select.enable(transition=ui.transitions.Tear())
+        self.timer = self.wait(30, self.timeout)
 
-    def cancel(self):
+    def select(self):
+        if self.game_start.enabled:
+            return
+        self.stage_select.disable()
+        self.game_start.selected = self.stage_select.selected.get()
+        self.game_start.enable(transition=ui.transitions.Tear())
+        p.mixer.play("mm3_game_start")
+        self.cancel(self.timer)
+        self.wait(8.0, self.finish)
+
+    def timeout(self):
         self.disable()
         p.modes["attract"].enable()
+
+    def finish(self):
+        self.disable()
+        p.modes["attract"].enable()
+        p.mixer.play(self.stage_select.selected.get()[0])
 
 
 def init():

@@ -19,6 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import math
+import pygame.locals
 from pin import dmd
 
 __all__ = ["debug_frame", "halign", "valign"]

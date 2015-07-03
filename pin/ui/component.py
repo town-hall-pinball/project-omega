@@ -58,6 +58,7 @@ class Component(object):
             "padding_left": 0,
             "x_align": "center",
             "y_align": "center",
+            "composite": 0,
         }
         if defaults:
             self.defaults.update(defaults)
@@ -80,7 +81,10 @@ class Component(object):
         if "padding" in style:
             self.expand4("padding", util.to_list(style["padding"]))
         if "enabled" in style:
-            self.enabled = style["enabled"]
+            if style["enabled"]:
+                self.show()
+            else:
+                self.hide()
         if "name" in style:
             self.name = style["name"]
         self.invalidate()
@@ -161,7 +165,8 @@ class Component(object):
             return
         if self.dirty:
             self.revalidate()
-        target.blit(self.frame, (self.x, self.y))
+        target.blit(self.frame, (self.x, self.y),
+                special_flags=self.style["composite"])
         self.on_render()
         for child in self.children:
             child.on_render()
@@ -219,7 +224,6 @@ class Component(object):
                 self.height > self.frame.get_height() ):
             self.frame = pin.dmd.create_frame(self.width, self.height,
                     self.has_alpha)
-
         fill = self.style.get("fill", None)
 
         self.frame.fill((0, 0, 0, 0), (0, 0, self.frame.get_width(),

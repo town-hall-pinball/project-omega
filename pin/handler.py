@@ -68,7 +68,7 @@ class Handler(object):
             p.timers.clear(ident)
 
 
-    def enable(self, enabled=True):
+    def enable(self, enabled=True, transition=None):
         if not enabled:
             self.disable()
             return
@@ -77,7 +77,7 @@ class Handler(object):
         log.debug("{} enabled".format(self.name))
         self.enabled = True
         if self.display:
-            p.dmd.add(self.display)
+            p.dmd.add(self.display, transition)
         self.register()
         self.on_enable()
 
@@ -111,8 +111,10 @@ class Handler(object):
         pass
 
     def resume(self):
-        log.debug("{} resumed".format(self.name))
         self.suspended = False
+        if not self.enabled:
+            return
+        log.debug("{} resumed".format(self.name))
         #self.register()
         if self.display:
             self.display.render_start()

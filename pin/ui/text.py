@@ -51,8 +51,8 @@ class Text(Component):
         height_metrics = font.metrics(self.font_case[self.style["case"]])
 
         if not width_metrics:
-            self.height = 1
-            self.width = 1
+            self.height = 0
+            self.width = 0
             self.area = (0, 0, 0, 0)
             return
 

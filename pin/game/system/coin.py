@@ -25,7 +25,7 @@ from pin.handler import Handler
 class CreditsDisplay(object):
 
     def __init__(self):
-        self.display = ui.Notice("credit_display")
+        self.display = ui.Notice(name="credits")
         self.amount = ui.Text("CREDITS 0")
         self.message = ui.Text("FREE PLAY")
         self.display.add((self.amount, self.message))

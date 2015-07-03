@@ -18,7 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .blend import *
-from .blink import *
-from .pulse import *
-from .typewriter import *
+import pygame.locals
+from pin import util
+
+class Typewriter(util.Show):
+
+    def __init__(self, target, text, duration=0.1, repeat=False):
+        self.text = text.upper()
+        super(Typewriter, self).__init__("typewriter",
+                [duration] * len(self.text), repeat)
+        self.target = target
+
+    def action(self, *args, **kwargs):
+        self.target.update(text=self.text[:self.index])
+
+    def on_stop(self):
+        self.target.update(text=self.text)

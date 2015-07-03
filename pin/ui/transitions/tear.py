@@ -27,7 +27,7 @@ __all__ = ["Tear"]
 
 class Tear(Transition):
 
-    def __init__(self, duration=1.0):
+    def __init__(self, duration=0.75):
         super(Tear, self).__init__("tear", duration)
 
     def draw(self):

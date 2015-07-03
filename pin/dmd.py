@@ -80,7 +80,7 @@ class DMD(object):
         self.transition = None
 
     def add_renderer(self, collection, renderer, transition=None):
-        trans = "using {}".format(renderer) if transition else ""
+        trans = "using {}".format(transition) if transition else ""
         log.debug("{} added {}".format(renderer, trans))
         collection += [renderer]
         self.shift_renderer(transition)

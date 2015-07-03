@@ -18,7 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .blend import *
-from .blink import *
-from .pulse import *
-from .typewriter import *
+import pygame.locals
+from pin import util
+
+class BlendOut(util.Show):
+
+    def __init__(self, target, duration=0.1, repeat=False):
+        super(BlendOut, self).__init__("blend_out",
+                [duration] * 16, repeat)
+        self.target = target
+        self.target.update(composite=pygame.locals.BLEND_SUB)
+
+    def action(self, *args, **kwargs):
+        self.target.update(fill=self.index)
+
+    def on_stop(self):
+        self.target.update(composite=0, fill=0)

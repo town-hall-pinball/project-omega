@@ -26,13 +26,12 @@ from .text import Text
 
 class Notice(Panel):
 
-    def __init__(self, name="notice", duration=2.0, callback=None,
+    def __init__(self, duration=2.0, callback=None,
             defaults=None, **style):
         defaults = defaults or {}
         style["duration"] = duration
         style["padding"] = style.get("padding", 2)
         super(Notice, self).__init__(defaults, **style)
-        self.name = name
         self.timer = None
         self.callback = callback
 
