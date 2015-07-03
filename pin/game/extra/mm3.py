@@ -103,6 +103,10 @@ class GameStartDisplay(Handler):
         self.wait(1.75, self.tear_end)
         self.image.update(image=self.selected[0], enabled=True)
 
+    def on_disable(self):
+        self.text_container.update(fill=None)
+        self.name.update(text="")
+
     def tear_end(self):
         self.wait(1.50, self.blend_out)
         self.wait(3.25, self.show_name)
