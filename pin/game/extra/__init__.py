@@ -18,52 +18,13 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import importlib
-import logging
-import time
+import p
+from . import mm3
 
-coils = None
-data = None
-defaults = None
-dmd = None
-displays = {}
-events = None
-fonts = None
-game = None
-gi = None
-images = None
-lamps = None
-machine = None
-modes = None
-movies = None
-mixer = None
-music = None
-now = time.time()
-options = {}
-proc = None
-platform = None
-namespace = None
-save = None
-switches = None
-sounds = None
-timers = None
+def init():
+    p.load_modes((
+        "extra.mm3",
+    ))
 
-def load_modes(names):
-    global modes
-    if modes is None:
-        modes = {}
-    for name in names:
-        fullname = namespace + "." + name
-        basename = name.split(".")[-1]
-        try:
-            m = importlib.import_module(fullname)
-            create_mode = True
-            if hasattr(m, "init"):
-                create_mode = m.init() != False
-            if create_mode:
-                modes[basename] = m.Mode(basename + ".mode")
-        except Exception as e:
-            logging.getLogger("pin").error("Unable to load {}".format(fullname))
-            raise
-
-
+def load():
+    mm3.load()

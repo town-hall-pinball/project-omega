@@ -19,7 +19,9 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
+
 from .config import defaults, resources
+from . import extra
 
 # Resources now in resources.py
 
@@ -27,6 +29,7 @@ def init(load_resources=True):
     p.namespace = "pin.game"
     if load_resources:
         resources.load()
+        extra.load()
 
     p.load_modes((
         "main.score",
@@ -40,6 +43,7 @@ def init(load_resources=True):
         "service.sound_browser",
         "service.service",
     ))
+    extra.init()
 
 def start():
     for gi in p.gi.values():

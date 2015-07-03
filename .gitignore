@@ -3,8 +3,9 @@
 build
 var
 *.pyc
-*.pyp
+*.pyo
 os/ext/dist
 *.nosync
 .DS_Store
 debug.py
+resources/extra/*
