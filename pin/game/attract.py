@@ -86,8 +86,9 @@ class Mode(Handler):
         p.mixer.play("service_enter")
 
     def start_mm3(self):
-        self.disable()
-        p.modes["mm3"].enable()
+        if "mm3" in p.modes:
+            self.disable()
+            p.modes["mm3"].enable()
 
 
 
