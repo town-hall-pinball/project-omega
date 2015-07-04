@@ -21,7 +21,15 @@ User Guide
 ----------
 
 * :doc:`Getting Started <user/getting_started>`
+* :doc:`Take a Tour <user/tour>`
 * :doc:`Keyboard Bindings <user/keyboard>`
+
+Developer's Guide
+-----------------
+
+* :doc:`Logging <developer/logging>`
+* :doc:`Documentation and Testing <developer/paver>`
+* :doc:`Adding Resources (Music, Sounds, Images, etc) <developer/resources>`
 
 API Reference
 -------------
