@@ -50,7 +50,7 @@ class StageSelectDisplay(Handler):
 
         ui.valign((self.instructions, self.push_start))
         self.display.add((self.boss, self.instructions, self.push_start))
-        self.push_start.do(ui.effects.Pulse(self.push_start))
+        self.push_start.effect("pulse")
         self.update()
 
         self.on("switch_flipper_left", self.previous)
@@ -112,11 +112,11 @@ class GameStartDisplay(Handler):
         self.wait(3.25, self.show_name)
 
     def blend_out(self):
-        self.text_container.do(ui.effects.BlendOut(self.text_container))
+        self.text_container.effect("blend_out", once=True)
 
     def show_name(self):
         name = self.selected[1]
-        self.name.do(ui.effects.Typewriter(self.name, name))
+        self.name.effect("typewriter", text=name)
 
 
 class Mode(Handler):

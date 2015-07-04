@@ -18,13 +18,15 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import p
 from pin import util
+from .effect import Effect
 
-class Blink(util.Show):
+class Blink(Effect):
 
-    def __init__(self, target, duration=0.5, repeat=False):
-        super(Blink, self).__init__("blink",
-                [duration, duration], repeat)
+    def __init__(self, target, duration=0.5, repeat=False, once=False):
+        super(Blink, self).__init__("blink", target,
+                [duration, duration], repeat, once)
         self.target = target
 
     def action(self, *args, **kwargs):
@@ -33,19 +35,17 @@ class Blink(util.Show):
         else:
             self.target.update(color=0x0)
 
-    def on_stop(self):
+    def on_finish(self):
         self.target.update(color=0xf)
 
-
-def blink(target, duration=0.5, repeat=False):
-    return Blink(target, duration, repeat).start()
+p.effects["blink"] = Blink
 
 
-class FillBlink(util.DMDShow):
+class FillBlink(Effect):
 
-    def __init__(self, target, duration=0.5, repeat=False):
-        super(FillBlink, self).__init__("fill_blink",
-                [duration, duration], repeat)
+    def __init__(self, target, duration=0.5, repeat=False, once=False):
+        super(FillBlink, self).__init__("fill_blink", target,
+                [duration, duration], repeat, once)
         self.target = target
 
     def action(self, *args, **kwargs):
@@ -54,8 +54,7 @@ class FillBlink(util.DMDShow):
         else:
             self.target.update(color=0x0, fill=0x0f)
 
-def fill_blink(target, duration=0.5, repeat=False):
-    return FillBlink(target, duration, repeat).start()
+p.effects["fill_blink"] = FillBlink
 
 
 

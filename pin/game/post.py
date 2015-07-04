@@ -41,7 +41,7 @@ class Mode(Handler):
             p.mixer.play("settings_cleared")
             self.message.show("SETTINGS CLEARED")
             self.display.update(enabled=True)
-            effects.fill_blink(self.message, duration=0.25, repeat=2)
+            self.message.effect("fill_blink", duration=0.25, repeat=2)
             self.wait(5.0, self.done)
         else:
             self.disable()

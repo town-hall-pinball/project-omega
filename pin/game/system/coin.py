@@ -45,11 +45,10 @@ class CreditsDisplay(object):
 
         if free_play or credits >= 1:
             self.message.show("PRESS START")
-            self.message.do(ui.effects.Pulse(self.message))
+            self.message.effect("pulse")
         else:
             self.message.show("INSERT COINS")
-            self.message.do(ui.effects.Blink(self.message, duration=0.2,
-                    repeat=3))
+            self.message.effect("blink", duration=0.2, repeat=3)
 
 class Mode(Handler):
 

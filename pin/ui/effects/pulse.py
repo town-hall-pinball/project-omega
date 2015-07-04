@@ -18,13 +18,16 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import p
 from pin import util
+from .effect import Effect
 
-class Pulse(util.Show):
+class Pulse(Effect):
 
     def __init__(self, target, duration=0.03):
         durations = [duration] * 0x8
-        super(Pulse, self).__init__("pulse", durations, repeat=True)
+        super(Pulse, self).__init__("pulse", target, durations, repeat=True,
+                once=False)
         self.target = target
         self.to_black = True
 
@@ -33,6 +36,8 @@ class Pulse(util.Show):
         self.target.update(color=color)
         if self.index == 0x07:
             self.to_black = not self.to_black
+
+p.effects["pulse"] = Pulse
 
 
 

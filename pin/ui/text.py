@@ -79,6 +79,8 @@ class Text(Component):
 
     def draw(self):
         super(Text, self).draw()
+        if not self.style["text"]:
+            return
         font = p.fonts[self.style["font"]]
         x = self.x
         y = self.y

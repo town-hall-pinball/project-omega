@@ -41,7 +41,7 @@ class Component(object):
         self.has_alpha = True
         self.style = {}
         self.children = []
-        self.effect = None
+        self.active_effect = None
         self.name = None
         self.show_timer = None
         self.defaults = {
@@ -69,12 +69,12 @@ class Component(object):
         self.update(**self.defaults)
         self.update(**style)
 
-    def do(self, effect):
-        if self.effect:
-            self.effect.stop()
-        self.effect = effect
+    def effect(self, name, **kwargs):
+        if self.active_effect:
+            self.active_effect.stop()
+        self.active_effect = p.effects[name](self, **kwargs)
         if self.rendering:
-            self.effect.start()
+            self.active_effect.start()
 
     def update(self, **style):
         self.style.update(style)
@@ -177,8 +177,8 @@ class Component(object):
     def render_start(self):
         self.rendering = True
         self.invalidate()
-        if self.effect:
-            self.effect.restart()
+        if self.active_effect:
+            self.active_effect.restart()
 
         if self.suspended:
             self.suspended = False
@@ -195,8 +195,8 @@ class Component(object):
     def render_stop(self):
         self.rendering = False
         self.suspended = False
-        if self.effect:
-            self.effect.stop()
+        if self.active_effect:
+            self.active_effect.stop()
         for child in self.children:
             child.render_stop()
 
@@ -205,8 +205,8 @@ class Component(object):
 
     def render_suspend(self):
         self.suspended = True
-        if self.effect:
-            self.effect.stop()
+        if self.active_effect:
+            self.active_effect.stop()
         for child in self.children:
             child.render_suspend()
 

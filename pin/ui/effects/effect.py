@@ -18,23 +18,22 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pygame.locals
 import p
 from pin import util
-from .effect import Effect
 
-class Typewriter(Effect):
+class Effect(util.Show):
 
-    def __init__(self, target, text, duration=0.1):
-        self.text = text.upper()
-        super(Typewriter, self).__init__("typewriter", target,
-                [duration] * len(self.text), repeat=False, once=True)
+    def __init__(self, name, target, timings, repeat=False, once=False):
+        super(Effect, self).__init__(name, timings, repeat)
         self.target = target
+        self.once = once
 
-    def action(self, *args, **kwargs):
-        self.target.update(text=self.text[:self.index])
+    def on_stop(self):
+        if self.once:
+            self.target.active_effect = None
+        self.on_finish()
 
     def on_finish(self):
-        self.target.update(text=self.text)
+        pass
 
-p.effects["typewriter"] = Typewriter
+

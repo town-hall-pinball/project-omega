@@ -27,6 +27,7 @@ data = None
 defaults = None
 dmd = None
 displays = {}
+effects = {}
 events = None
 fonts = None
 game = None

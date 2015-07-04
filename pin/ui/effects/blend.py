@@ -18,19 +18,23 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import p
 import pygame.locals
 from pin import util
 
-class BlendOut(util.Show):
+from .effect import Effect
 
-    def __init__(self, target, duration=0.1, repeat=False):
-        super(BlendOut, self).__init__("blend_out",
-                [duration] * 16, repeat)
-        self.target = target
+class BlendOut(Effect):
+
+    def __init__(self, target, duration=0.1, repeat=False, once=False):
+        super(BlendOut, self).__init__("blend_out", target,
+                [duration] * 16, repeat, once)
         self.target.update(composite=pygame.locals.BLEND_SUB)
 
     def action(self, *args, **kwargs):
         self.target.update(fill=self.index)
 
-    def on_stop(self):
+    def on_finish(self):
         self.target.update(composite=0, fill=0)
+
+p.effects["blend_out"] = BlendOut

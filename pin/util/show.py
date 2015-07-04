@@ -28,10 +28,9 @@ log = logging.getLogger("pin.shows")
 class Show(Handler):
 
     running = False
-    finished = False
     index = 0
 
-    def __init__(self, name, timings, repeat=False, action=None):
+    def __init__(self, name, timings, repeat=False, action=None, callback=None):
         super(Show, self).__init__(name)
         self.timings = timings
         if repeat == True:
@@ -43,6 +42,7 @@ class Show(Handler):
         self.original_repeat = self.repeat
         self.timer = None
         self.fn_action = action
+        self.fn_finished = callback
 
     def start(self):
         if not self.running:
@@ -55,11 +55,10 @@ class Show(Handler):
         self.next()
 
     def restart(self):
-        if not self.finished:
-            self.index = 0
-            self.repeat = self.original_repeat
-            log.debug("{} restarted".format(self.name))
-            self._start()
+        self.index = 0
+        self.repeat = self.original_repeat
+        log.debug("{} restarted".format(self.name))
+        self._start()
 
     def on_start(self):
         pass
@@ -86,7 +85,8 @@ class Show(Handler):
                     self.repeat -= 1
             else:
                 self.stop()
-                self.finished = True
+                if self.fn_finished:
+                    self.fn_finished()
                 return
         use_callback = False
         if self.fn_action:
