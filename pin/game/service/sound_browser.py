@@ -25,9 +25,9 @@ from pin import ui, util
 class Mode(Handler):
 
     def setup(self):
-        self.sounds = util.Cycle(p.sounds.keys())
+        self.sounds = util.Cycle(sorted(p.sounds.keys()))
         self.display = ui.Panel(name="sound_player")
-        self.label = ui.Text()
+        self.label = ui.Text(case="full")
         self.display.add([self.label])
 
         self.on("switch_service_enter", self.update)

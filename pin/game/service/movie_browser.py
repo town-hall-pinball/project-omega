@@ -25,7 +25,7 @@ from pin import ui, util
 class Mode(Handler):
 
     def setup(self):
-        self.movies = util.Cycle(p.movies.items())
+        self.movies = util.Cycle(sorted(p.movies.keys()))
         self.display = ui.Panel(name="movie_browser")
         self.player = ui.Movie()
         self.label = ui.Text(top=0, right=0, font="r7", padding=[1, 1])
@@ -51,7 +51,7 @@ class Mode(Handler):
         self.play()
 
     def update(self, show_label=False):
-        key, movie = self.movies.get()
+        key = self.movies.get()
         self.player.stop()
         self.player.update(movie=key)
         self.player.start()

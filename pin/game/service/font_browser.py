@@ -27,7 +27,7 @@ class Mode(Handler):
 
     def setup(self):
         self.sample = ".,1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        self.fonts = util.Cycle(p.fonts.keys())
+        self.fonts = util.Cycle(sorted(p.fonts.keys()))
         self.display = ui.Panel(name="font_viewer")
         self.label = ui.Text(top=0, right=0, font="r7", padding=[1, 1])
         self.text = ui.Text(self.sample)
