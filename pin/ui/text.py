@@ -26,6 +26,7 @@ class Text(Component):
         "title": "G",
         "number": ",",
         "full": "g,",
+        "auto": None
     }
 
     def __init__(self, text="", **style):
@@ -35,7 +36,7 @@ class Text(Component):
             "reverse": False,
             "color": 0xf,
             "x_align": "left",
-            "case": "full"
+            "case": "auto",
         }, **style)
         self.area = None
 
@@ -48,7 +49,10 @@ class Text(Component):
     def auto_size(self):
         font = p.fonts[self.style["font"]]
         width_metrics = font.metrics(self.style["text"])
-        height_metrics = font.metrics(self.font_case[self.style["case"]])
+        height_text = self.font_case[self.style["case"]]
+        if not height_text:
+            height_text = self.style["text"]
+        height_metrics = font.metrics(height_text)
 
         if not width_metrics:
             self.height = 0

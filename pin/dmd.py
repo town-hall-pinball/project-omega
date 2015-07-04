@@ -128,7 +128,7 @@ class DMD(object):
         self.frame.fill(0)
 
         if not self.renderer:
-            log.warn("No renderer")
+            raise ValueError("No Renderer")
             return self.frame
 
         if self.transition and self.transition.done:
