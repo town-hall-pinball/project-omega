@@ -289,7 +289,7 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 from mock import MagicMock
-MOCK_MODULES = ['pygame']
+MOCK_MODULES = ['pygame.locals', 'pygame']
 sys.modules.update((mod_name, MagicMock()) for mod_name in MOCK_MODULES)
 
 
