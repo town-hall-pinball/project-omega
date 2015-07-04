@@ -17,31 +17,10 @@ Since the name of the game has not yet been decided, this repository will be cal
 
 Feel free to clone the repository and see development in action. This code can be run without an actual pinball machine. Anything and everything can be broken at anytime.
 
-User Guide
-----------
-
-* :doc:`Getting Started <user/getting_started>`
-* :doc:`Take a Tour <user/tour>`
-* :doc:`Keyboard Bindings <user/keyboard>`
-
-Developer's Guide
------------------
-
-* :doc:`Logging <developer/logging>`
-* :doc:`Documentation and Testing <developer/paver>`
-* :doc:`Adding Resources (Music, Sounds, Images, etc) <developer/resources>`
-
-API Reference
--------------
-
-Note: This is not up-to-date at the moment.
-
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
-   api/pin/engine
-   api/pin/events
-   api/pin/timers
-   api/pin/virtual/dmd
+   user/index
+   developer/index
+   api/index
+
