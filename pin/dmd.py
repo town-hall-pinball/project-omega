@@ -132,7 +132,6 @@ class DMD(object):
 
         if not self.renderer:
             raise ValueError("No Renderer")
-            return self.frame
 
         if self.transition and self.transition.done:
             self.transition = None
