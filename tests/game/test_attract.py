@@ -26,7 +26,9 @@ from mock import patch
 
 class TestAttract(unittest.TestCase):
 
-    def setUp(self):
+    @patch("pin.resources.available")
+    def setUp(self, mock_available):
+        mock_available.return_code = True
         fixtures.reset()
         self.attract = p.modes["attract"]
         self.attract.enable()
@@ -50,5 +52,17 @@ class TestAttract(unittest.TestCase):
         p.events.dispatch()
         self.assertFalse(self.attract.enabled)
         self.assertTrue(p.modes["service"].enabled)
+
+    def test_mm3_select(self):
+        p.events.post("switch", p.switches["flipper_left"], True)
+        p.events.post("switch", p.switches["flipper_left"], True)
+        p.events.post("switch", p.switches["flipper_left"], True)
+        p.events.post("switch", p.switches["flipper_right"], True)
+        p.events.post("switch", p.switches["flipper_right"], True)
+        p.events.post("switch", p.switches["flipper_right"], True)
+        p.events.post("switch", p.switches["ball_launch_button"], True)
+        p.events.dispatch()
+        self.assertTrue(p.modes["mm3"].enabled)
+
 
 

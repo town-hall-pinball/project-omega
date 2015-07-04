@@ -177,5 +177,8 @@ def reset():
     movies.clear()
     music.clear()
 
+def available(path):
+    path = os.path.join(base_dir, path)
+    return os.path.exists(path)
 
 

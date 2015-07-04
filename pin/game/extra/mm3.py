@@ -24,7 +24,7 @@ import p
 from pin import resources, ui, util
 from pin.handler import Handler
 
-available = os.path.exists(os.path.join(resources.base_dir, "extra", "mm3"))
+available = False
 
 bosses = [
     ( "mm3_spark_man",  "Spark Man" ),
@@ -156,12 +156,13 @@ class Mode(Handler):
 
 
 def init():
-    if not available:
+    if not resources.available("extra/mm3"):
         return False
 
+
 def load():
-    if not available:
-        return False
+    if not resources.available("extra/mm3"):
+        return
 
     resources.load_images(
         ("mm3_background",      "extra/mm3/images/background.dmd"),
