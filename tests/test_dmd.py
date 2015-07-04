@@ -96,9 +96,10 @@ class TestDMD(unittest.TestCase):
         dmd.add(self.r1)
         dmd.enqueue(self.r2)
         dmd.reset()
-        dmd.render()
-        self.assertEquals(0, self.r1.render.call_count)
-        self.assertEquals(0, self.r2.render.call_count)
+        with self.assertRaises(ValueError):
+            dmd.render()
+        #self.assertEquals(0, self.r1.render.call_count)
+        #self.assertEquals(0, self.r2.render.call_count)
 
     def test_transition(self):
         dmd.add(self.r1)
