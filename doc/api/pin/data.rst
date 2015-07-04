@@ -19,19 +19,9 @@
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THE SOFTWARE.
 
-API Reference
-=============
+==========================================
+:mod:`pin.data` --- Persistant Information
+==========================================
 
-.. toctree::
-   :maxdepth: 2
-
-   p
-   pin/brand
-   pin/data
-   pin/devices
-   pin/engine
-   pin/events
-   pin/machine/index
-   pin/timers
-   pin/virtual/dmd
-
+.. automodule:: pin.data
+   :members:

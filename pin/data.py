@@ -24,15 +24,27 @@ import logging
 import os
 from . import util
 
-__all__ = ["data"]
+__all__ = ["data", "Data"]
 
 log = logging.getLogger("pin.data")
 path = os.path.abspath(os.path.join(os.path.dirname(__file__),
         "..", "var", "data.json"))
 
 class Data(dict):
+    """
+    A dictionary with methods to load and save the state to ``var/data.json``.
+    Load and save activities are logged to `pin.data`
+    """
 
     def load(self, defaults):
+        """
+        Loads the dictonary with values stored in ``var/data.json``. Values
+        from `defaults` dictonary are loaded first and are overriden by any
+        values found in the saved file.
+
+        If the persistant file cannot be loaded, the dictonary contains
+        a `cleared` key with the value of `True`.
+        """
         log.debug("Loading data from {}".format(path))
         util.dict_merge(self, defaults)
         try:
@@ -44,6 +56,11 @@ class Data(dict):
             log.error("Unable to load data file: {}".format(ie))
 
     def save(self):
+        """
+        Saves the dictionary to ``var/data.json``. If the persistant file
+        cannot be saved, the dictonary contains a `save_failure` key with
+        the value of `True`.
+        """
         log.debug("Saving data to {}".format(path))
         try:
             with open(path, "w") as fp:
@@ -58,6 +75,10 @@ class Data(dict):
         p.events.post("data_{}".format(key))
 
     def reset(self, defaults):
+        """
+        Clears the dictonary and sets it to all values found in `defaults`
+        dictionary.
+        """
         log.debug("Resetting data to defaults")
         self.clear()
         util.dict_merge(self, defaults)

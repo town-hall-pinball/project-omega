@@ -61,6 +61,9 @@ class Driver(Device):
 
 
 class Coil(Driver):
+    """
+    Driver for a coil/solenoid.
+    """
 
     def __init__(self, name, **config):
         super(Coil, self).__init__(name, **config)

@@ -21,6 +21,29 @@
 from .. import devices
 
 def init():
+    """
+    Configures coils for the machine. In the form of::
+
+       devices.add_coils({
+            "auto_plunger": {
+                "label": "Auto Plunger",
+                "device": "C02"
+            },
+            "drop_target_down": {
+                "label": "Drop Target, Down",
+                "device": "C08"
+            }
+        })
+
+    Each coil should be keyed by an identifier (e.g., `auto_plunger`) and
+    contain the following:
+
+    - `label`: Descriptive, user-friendly, but not overly verbose description
+      of this coil.
+    - `device`: A three character code starting with "C" and the number of
+      the coil as specified in the owner's manual for the machine.
+    """
+
     devices.add_coils({
         "auto_plunger": {
             "label": "Auto Plunger",

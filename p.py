@@ -23,7 +23,21 @@ import logging
 import time
 
 coils = None
+"""
+Something :py:class:`pin.devices.Coil`
+"""
+
 data = None
+"""
+A :py:class:`pin.data <pin.data.Data>` object that contains all persistant
+information tracked by the pinball machine.
+
+Example to clear the current credit count::
+
+    p.data["credits"] = 0
+    p.data.save()
+"""
+
 defaults = None
 dmd = None
 displays = {}
