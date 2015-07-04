@@ -37,11 +37,14 @@ log =  logging.getLogger("pin.proc")
 switch_log = logging.getLogger("pin.switch")
 
 def init():
-    global dmd_buffer
+    global dmd_buffer, artificial_events
     api.reset(1)
     for switch in p.switches.values():
         switch.enable()
     dmd_buffer = create_buffer()
+    # DMD needs to be "primed" with a frame before it starts sending
+    # ready events
+    artificial_events += [{ "type": DMD_READY }]
 
 def create_buffer():
     import pinproc
