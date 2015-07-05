@@ -72,6 +72,16 @@ class Root(object):
         }
 
 
+class Handler(WebSocket):
+
+    def received_message(self, m):
+        if not p.data["server_remote_control"]:
+            return
+        message = json.loads(str(m))
+        command = message["command"]
+        print "command", str(message)
+
+
 class WebServer(Thread):
 
     def __init__(self):
@@ -102,6 +112,10 @@ class WebServer(Thread):
                 "tools.staticdir.on": True,
                 "tools.staticdir.dir": "console"
             },
+            "/ws": {
+                "tools.websocket.on": True,
+                "tools.websocket.handler_cls": Handler
+            }
         })
         plugin.unsubscribe()
         log.info("stopped")

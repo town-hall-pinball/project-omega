@@ -322,8 +322,8 @@ $(function() {
 
     var onDisconnect = function() {
         $("#connection").removeClass("on");
-        _.each(config.devices, function(device) {
-            disable(device.id);
+        _.each(state.devices, function(device) {
+            disable(device.device);
         });
         $("#modes table").empty();
         logNotice({
@@ -486,8 +486,8 @@ $(function() {
     };
 
     var on = function(id) {
-        device = config.devices[id];
-        if ( device.id === "flippers" ) {
+        device = state.devices[id];
+        if ( device.type === "flippers" ) {
             $("#flippers-enable").removeClass("off").addClass("on");
             return;
         }
@@ -501,8 +501,8 @@ $(function() {
     };
 
     var off = function(id) {
-        device = config.devices[id];
-        if ( device.id === "flippers" ) {
+        device = state.devices[id];
+        if ( device.type === "flippers" ) {
             $("#flippers-enable").removeClass("on").addClass("off");
             return;
         }
