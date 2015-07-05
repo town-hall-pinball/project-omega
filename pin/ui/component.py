@@ -94,7 +94,7 @@ class Component(object):
         self.invalidate()
         if duration:
             p.timers.clear(self.show_timer)
-            self.show_timer = p.timers.set(duration, self.hide)
+            self.show_timer = p.timers.wait(duration, self.hide)
 
     def hide(self):
         self.enabled = False

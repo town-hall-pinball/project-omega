@@ -28,7 +28,7 @@ counter = itertools.count()
 active = {}
 tickers = {}
 
-def set(duration, callback, with_ident=False):
+def wait(duration, callback, with_ident=False):
     """
     Register `callback` to be invoked one time after `duration` seconds
     have elapsed. Returns an identifier that can be used to cancel this

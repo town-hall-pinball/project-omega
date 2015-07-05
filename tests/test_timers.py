@@ -31,23 +31,23 @@ class TestTimers(unittest.TestCase):
         fixtures.reset()
         timers.reset()
 
-    def test_set_called(self):
+    def test_wait_called(self):
         callback = Mock()
-        timers.set(1.0, callback)
+        timers.wait(1.0, callback)
         p.now = 2.0
         timers.service()
         self.assertTrue(callback.called)
 
-    def test_set_not_called(self):
+    def test_wait_not_called(self):
         callback = Mock()
-        timers.set(1.0, callback)
+        timers.wait(1.0, callback)
         p.now = 0.5
         timers.service()
         self.assertFalse(callback.called)
 
-    def test_set_not_called_twice(self):
+    def test_wait_not_called_twice(self):
         callback = Mock()
-        timers.set(1.0, callback)
+        timers.wait(1.0, callback)
         p.now = 2.0
         timers.service()
         self.assertEquals(1, callback.call_count)
@@ -57,7 +57,7 @@ class TestTimers(unittest.TestCase):
 
     def test_clear(self):
         callback = Mock()
-        ident1 = timers.set(1.0, callback)
+        ident1 = timers.wait(1.0, callback)
         ident2 = timers.tick(callback)
         timers.clear(ident1)
         timers.clear(ident2)

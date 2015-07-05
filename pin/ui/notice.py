@@ -46,7 +46,7 @@ class Notice(Panel):
 
     def render_started(self):
         super(Notice, self).render_started()
-        self.timer = p.timers.set(self.style["duration"], self.done)
+        self.timer = p.timers.wait(self.style["duration"], self.done)
 
     def render_stopped(self):
         super(Notice, self).render_stopped()
@@ -55,7 +55,7 @@ class Notice(Panel):
     def render_restarted(self):
         super(Notice, self).render_restarted()
         p.timers.clear(self.timer)
-        self.timer = p.timers.set(self.style["duration"], self.done)
+        self.timer = p.timers.wait(self.style["duration"], self.done)
 
     def done(self):
         p.timers.clear(self.timer)

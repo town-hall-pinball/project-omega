@@ -57,7 +57,7 @@ class Handler(object):
         def expire(expired):
             self.timers.remove(expired)
             callback()
-        ident = p.timers.set(duration, expire, with_ident=True)
+        ident = p.timers.wait(duration, expire, with_ident=True)
         self.timers.add(ident)
         return ident
 
