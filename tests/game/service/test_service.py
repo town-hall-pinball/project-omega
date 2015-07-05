@@ -66,7 +66,7 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_up")
         p.events.post("switch_service_enter")
         p.events.dispatch()
-        self.assertEquals("1 for 0.25", self.service.value.style["text"])
+        self.assertEquals("1 for 0.50", self.service.value.style["text"])
 
     def test_option_select_next(self):
         p.events.post("switch_service_enter")
@@ -75,7 +75,7 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_enter")
         p.events.post("switch_service_up")
         p.events.dispatch()
-        self.assertEquals("1 for 0.50", self.service.value.style["text"])
+        self.assertEquals("1 for 0.75", self.service.value.style["text"])
 
     def test_option_select_previous(self):
         p.events.post("switch_service_enter")
@@ -84,7 +84,7 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_enter")
         p.events.post("switch_service_down")
         p.events.dispatch()
-        self.assertEquals("1 for 1.00", self.service.value.style["text"])
+        self.assertEquals("1 for 0.25", self.service.value.style["text"])
 
     def test_data_display(self):
         p.data["earnings"] = 1.23
