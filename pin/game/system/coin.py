@@ -26,7 +26,7 @@ class CreditsDisplay(object):
 
     def __init__(self):
         self.display = ui.Notice(name="credits")
-        self.amount = ui.Text("CREDITS 0")
+        self.amount = ui.Text("CREDITS 0.00")
         self.message = ui.Text("FREE PLAY")
         self.display.add((self.amount, self.message))
         self.update()
@@ -41,7 +41,7 @@ class CreditsDisplay(object):
         if free_play:
             self.amount.show("FREE PLAY")
         else:
-            self.amount.show("CREDITS {}".format(util.fraction(credits)))
+            self.amount.show("CREDITS {:0.2f}".format(credits))
 
         if free_play or credits >= 1:
             self.message.show("PRESS START")

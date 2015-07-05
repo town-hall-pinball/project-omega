@@ -104,7 +104,7 @@ class TestDisplay(unittest.TestCase):
                 self.display.message.style["text"])
 
     def test_initial(self):
-        self.assertEquals(self.get_text(), ("CREDITS 0", "INSERT COINS"))
+        self.assertEquals(self.get_text(), ("CREDITS 0.00", "INSERT COINS"))
 
     def test_free_play(self):
         p.data["free_play"] = True
@@ -114,7 +114,7 @@ class TestDisplay(unittest.TestCase):
     def test_not_full_credit(self):
         p.events.post("switch_coin_left")
         p.events.dispatch()
-        self.assertEquals(self.get_text(), ("CREDITS 1/4", "INSERT COINS"))
+        self.assertEquals(self.get_text(), ("CREDITS 0.25", "INSERT COINS"))
 
     def test_full_credit(self):
         p.events.post("switch_coin_left")
@@ -122,7 +122,7 @@ class TestDisplay(unittest.TestCase):
         p.events.post("switch_coin_left")
         p.events.post("switch_coin_left")
         p.events.dispatch()
-        self.assertEquals(self.get_text(), ("CREDITS 1", "PRESS START"))
+        self.assertEquals(self.get_text(), ("CREDITS 1.00", "PRESS START"))
 
 
 class TestAttract(unittest.TestCase):
