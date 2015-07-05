@@ -68,6 +68,8 @@ class Device(object):
     Descriptive type of the device, such as "switch" or "coil"
     """
 
+    state = { "schedule": "disable" }
+
     def __init__(self, name, **config):
         self.name = name
         self.label = config.get("label", name)

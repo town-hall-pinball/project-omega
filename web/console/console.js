@@ -62,6 +62,7 @@ $(function() {
         lampMatrix();
         coilFlasherMatrix();
         deviceList();
+
         /*
         keyboardReference();
         */
@@ -92,6 +93,10 @@ $(function() {
 
         requestAnimationFrame(tick);
         ready = true;
+
+        _.each(state.devices, function(device) {
+            updateDevice(device);
+        });
 
         p.ws.events
             .on("connect", onConnect)
@@ -381,16 +386,16 @@ $(function() {
     };
 
     var updateDevice = function(device) {
-        if ( !device || !config.devices[device.id] ) {
+        if ( !device || !state.devices[device.device] ) {
             return;
         }
-        var $element = $("#" + device.id);
+        var $element = $("#" + device.device);
         if ( device.active === true || device.schedule === "enable" ) {
-            enable(device.id);
+            enable(device.device);
         } else if ( device.active === false || device.schedule === "disable" ) {
-            disable(device.id);
+            disable(device.device);
         } else {
-            animations[device.id] = device;
+            animations[device.device] = device;
         }
     };
 
@@ -439,10 +444,10 @@ $(function() {
 
     var logDevice = function(device) {
         var style = "enable";
-        if ( device.schedule === "disable" ) {
+        if ( device.state.schedule === "disable" ) {
             style = "disable";
         }
-        log(device.hardware, style, device.label);
+        log(device.type, style, device.label);
     };
 
     var logNotice = function(entry) {

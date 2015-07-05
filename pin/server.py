@@ -79,7 +79,6 @@ class Handler(WebSocket):
             return
         message = json.loads(str(m))
         command = message["command"]
-        print "command", str(message)
 
 
 class WebServer(Thread):
@@ -93,12 +92,20 @@ class WebServer(Thread):
             "engine.autoreload.on": False
         })
 
+    def dispatch_device(self, item, *args, **kwargs):
+        if not p.data["server_publish_events"]:
+            return
+        payload = item.__dict__
+        payload["message"] = item.type
+        cherrypy.engine.publish("websocket-broadcast", json.dumps(payload))
 
     def run(self):
         log.info("starting on port {}".format(port))
         plugin = WebSocketPlugin(cherrypy.engine)
         plugin.subscribe()
         cherrypy.tools.websocket = WebSocketTool()
+
+        p.events.on("switch", self.dispatch_device)
 
         cherrypy.quickstart(Root(), "/", config={
             "/": {
