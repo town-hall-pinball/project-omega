@@ -132,8 +132,8 @@ def shutdown(exit_code):
     try:
         server.stop()
     except Exception as e:
-        logging.getLogger("pin").exception("Error during shutdown")
-    logging.getLogger("pin").info("Exited with return code: {}"
+        logging.getLogger("pin").exception("error during shutdown")
+    logging.getLogger("pin").info("exited with return code {}"
             .format(exit_code))
     os._exit(exit_code)
 
@@ -141,9 +141,9 @@ exit_code = 0
 try:
     run()
 except KeyboardInterrupt as ki:
-    logging.getLogger("pin").info("Exiting on console interrupt")
+    logging.getLogger("pin").info("exiting on console interrupt")
 except Exception as e:
-    logging.getLogger("pin").exception("Exiting on unexpected error")
+    logging.getLogger("pin").exception("exiting on unexpected error")
     exit_code = 1
 finally:
     shutdown(exit_code)

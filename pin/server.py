@@ -41,13 +41,34 @@ class Root(object):
         # you can access the class instance through
         handler = cherrypy.request.ws_handler
 
-    @cherrypy.expose
-    @cherrypy.tools.json_out()
-    def branding(self):
+    def get_branding(self):
         return {
             "name": brand.name,
             "version": brand.version,
             "release": brand.release
+        }
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def branding(self):
+        return self.get_branding()
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def status(self):
+        devices = {}
+        def add_devices(ds):
+            for d in ds.values():
+                devices[d.device] = d.__dict__
+        add_devices(p.coils)
+        add_devices(p.flashers)
+        add_devices(p.gi)
+        add_devices(p.lamps)
+        add_devices(p.switches)
+
+        return {
+            "branding": self.get_branding(),
+            "devices": devices
         }
 
 
@@ -76,7 +97,11 @@ class WebServer(Thread):
                         os.path.dirname(__file__), "..", "web")),
                 "tools.staticdir.index": "index.html",
                 "tools.staticdir.dir": ""
-            }
+            },
+            "/console": {
+                "tools.staticdir.on": True,
+                "tools.staticdir.dir": "console"
+            },
         })
         plugin.unsubscribe()
         log.info("stopped")
@@ -89,7 +114,6 @@ def update():
         stop()
 
 def start():
-    print json.dumps(p.switches["start_button"].__dict__)
     global server
     if not server:
         server = WebServer()

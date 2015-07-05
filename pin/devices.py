@@ -22,6 +22,14 @@ import logging
 
 import p
 
+log = {
+    "coil": logging.getLogger("pin.coil"),
+    "flasher": logging.getLogger("pin.flasher"),
+    "gi": logging.getLogger("pin.gi"),
+    "lamp": logging.getLogger("pin.lamp"),
+    "switch": logging.getLogger("pin.switch")
+}
+
 devices = {}
 switch_numbers = {}
 flashers = {}
@@ -85,14 +93,14 @@ class Driver(Device):
         """
         if not enabled:
             self.disable()
-        self.log.debug("+ {}".format(self.name))
+        log[self.type].debug("+ {}".format(self.name))
         p.proc.api.driver_pulse(self.number, 0)
 
     def disable(self):
         """
         Disables this device.
         """
-        self.log.debug("- {}".format(self.name))
+        log[self.type].debug("- {}".format(self.name))
         p.proc.api.driver_disable(self.number)
 
 
@@ -107,7 +115,6 @@ class Coil(Driver):
     def __init__(self, name, **config):
         super(Coil, self).__init__(name, **config)
         self.type = "coil"
-        self.log = logging.getLogger("pin.coil")
 
 
 class GI(Driver):
@@ -115,7 +122,6 @@ class GI(Driver):
     def __init__(self, name, **config):
         super(GI, self).__init__(name, **config)
         self.type = "gi"
-        self.log = logging.getLogger("pin.gi")
 
 
 class Flasher(Driver):
@@ -123,7 +129,6 @@ class Flasher(Driver):
     def __init__(self, name, **config):
         super(Flasher, self).__init__(name, **config)
         self.type = "flasher"
-        self.log = logging.getLogger("pin.flasher")
 
 
 class Lamp(Driver):
@@ -131,7 +136,6 @@ class Lamp(Driver):
     def __init__(self, name, **config):
         super(Lamp, self).__init__(name, **config)
         self.type = "lamp"
-        self.log = logging.getLogger("pin.lamp")
 
 
 class Switch(Device):

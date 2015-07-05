@@ -50,7 +50,7 @@ p.ws = p.ws || (function() {
 
     var heartbeat = function() {
         if ( !ws ) {
-            ws = new WebSocket('ws://localhost:9000/ws');
+            ws = new WebSocket('ws://localhost:9999/ws');
             ws.onopen = onopen;
             ws.onerror = onerror;
             ws.onmessage = onmessage;

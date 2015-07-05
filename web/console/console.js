@@ -38,7 +38,7 @@ $(function() {
         "simulate": "fa-play"
     }
 
-    var config;
+    var status;
     var ready = false;
     var holdStart;
     var id = 0;
@@ -49,66 +49,22 @@ $(function() {
     var modes = [];
 
     var load = function() {
-        $.getJSON("/config", init);
+        $.getJSON("/status", init);
     };
 
     var init = function(data) {
-        config = data;
-        p.config = config;
-        config.devices = {};
-        config.keys = {};
-        $("#title").html(config["game.name"]);
-        _.each(["PRSwitches", "PRLamps", "PRCoils"], function(type) {
-            _.each(config[type], function(device, name) {
-                if ( device.category === "unused" || device.id[0] === "F" ) {
-                    return;
-                }
-                device.name = name;
-                if ( config.devices[device.id] ) {
-                    logError("Duplicate device " + device.id + " for " +
-                        config.devices[device.id].label + " and " +
-                        device.label);
-                }
-                config.devices[device.id] = device;
-                if ( type == "PRSwitches" ) {
-                    device.hardware = "switch";
-                    device.indicator = "switch";
-                    if ( device.type === "NC" ) {
-                        device.opto = true;
-                    }
-                } else if ( type == "PRLamps" ) {
-                    device.hardware = "lamp";
-                    device.indicator = "light";
-                } else if ( type == "PRCoils" ) {
-                    if ( device.tags && _.contains(device.tags, "flasher") ) {
-                        device.hardware = "flasher";
-                        device.indicator = "light";
-                    } else {
-                        device.hardware = "coil";
-                        device.indicator = "coil";
-                    }
-                }
-                if ( device.keyboard ) {
-                    var char = device.keyboard.toUpperCase();
-                    if ( config.keys[char] ) {
-                        logError("Duplicate keymap " + char + " for " +
-                            config.keys[char].label + " and " + device.label);
-                    }
-                    config.keys[char] = device;
-                }
-            });
-        });
-        config.devices.flippers = {
-            "hardware": "flippers",
-            "id": "flippers",
-            "label": "Enable Flippers"
-        }
+        state = data;
+        p.state = state;
+        console.log("Received state", state);
+        $("#title").html(state.branding.name);
+
         switchMatrix();
         lampMatrix();
         coilFlasherMatrix();
         deviceList();
+        /*
         keyboardReference();
-
+        */
         $("#search input").keyup(filter);
         $("#device-filter input").change(filter);
         $("input [data-action='filter']").change(filter);
@@ -134,13 +90,8 @@ $(function() {
         $(document).keydown(keydown);
         $(document).keyup(keyup);
 
-        console.log("config", config);
         requestAnimationFrame(tick);
         ready = true;
-
-        if ( config.simulator ) {
-            p.sim.start();
-        }
 
         p.ws.events
             .on("connect", onConnect)
@@ -150,8 +101,9 @@ $(function() {
     };
 
     var deviceList = function() {
-        var sorted = _.sortBy(config.devices, "label");
+        var sorted = _.sortBy(state.devices, "label");
         _.each(sorted, function(device) {
+            /*
             if ( device.category === "unused" ) {
                 return;
             }
@@ -163,8 +115,9 @@ $(function() {
             if ( device.hardware === "flippers" ) {
                 return;
             }
+            */
             var $device = $("<li></li>")
-                .attr("data-device", device.id)
+                .attr("data-device", device.device)
                 .attr("data-name", device.name);
             var $favorite = $("<i></i>")
                 .addClass("favorite")
@@ -175,9 +128,9 @@ $(function() {
                 .addClass("hardware")
                 .addClass("fa")
                 .addClass("fa-fw")
-                .addClass(famap[device.hardware]);
+                .addClass(famap[device.type]);
             var $label = $("<span></span>")
-                .attr("data-hardware", device.hardware)
+                .attr("data-hardware", device.type)
                 .html(device.label);
             $device.append($favorite);
             $device.append($icon);
@@ -300,14 +253,15 @@ $(function() {
 
     var cell = function($row, id, type) {
         type = type || "normal";
-        var device = config.devices[id];
+        var device = state.devices[id];
         var $cell = $("<td></td>").addClass(type);
         var $indicator = $("<div></div>");
         if ( device && device.category !== "unused" ) {
+            console.log(device.label);
             $cell.attr("title", device.label)
                 .attr("data-toggle", "tooltip");
-            $indicator.addClass(device.indicator)
-                .attr("id", device.id)
+            $indicator.addClass(device.type)
+                .attr("id", device.device)
                 .attr("data-name", device.name)
                 .addClass("off");
             device.$indicator = $indicator;

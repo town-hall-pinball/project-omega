@@ -171,19 +171,25 @@ html, body {
     background-color: #444;
 }
 
-.light {
+.lamp,
+.flasher,
+.gi {
     width: 10px;
     height: 10px;
     margin: 4px;
     border-radius: 5px;
 }
 
-.light.off {
+.lamp.off,
+.flasher.off,
+.gi.off {
     border: 1px solid #888;
     background-color: #000;
 }
 
-.light.on {
+.lamp.on,
+.flasher.on,
+.gi.off {
     border: 1px solid #888;
     background-color: #fff;
 }
