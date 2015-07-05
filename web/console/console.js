@@ -257,7 +257,6 @@ $(function() {
         var $cell = $("<td></td>").addClass(type);
         var $indicator = $("<div></div>");
         if ( device && device.category !== "unused" ) {
-            console.log(device.label);
             $cell.attr("title", device.label)
                 .attr("data-toggle", "tooltip");
             $indicator.addClass(device.type)
@@ -283,9 +282,9 @@ $(function() {
         }
         var regexp = new RegExp(text, "i");
         $("#device-list li").each(function() {
-            var device = config.devices[$(this).attr("data-device")]
+            var device = state.devices[$(this).attr("data-device")]
             var content = device.label + " " + device.search;
-            var show = hardware[device.hardware] && regexp.test(content);
+            var show = hardware[device.type] && regexp.test(content);
             if ( hardware.favorites && !$(this).hasClass("selected") ) {
                 show = false;
             }
