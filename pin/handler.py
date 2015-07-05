@@ -100,6 +100,8 @@ class Handler(object):
         pass
 
     def suspend(self):
+        if self.suspended:
+            return
         log.debug("{} suspended".format(self.name))
         self.suspended = True
         #self.unregister()
@@ -111,6 +113,8 @@ class Handler(object):
         pass
 
     def resume(self):
+        if not self.suspended:
+            return
         self.suspended = False
         if not self.enabled:
             return
