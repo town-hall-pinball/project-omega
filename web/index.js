@@ -23,11 +23,11 @@
 $(function() {
 
     var load = function() {
-        $.getJSON("/config", init);
+        $.getJSON("/branding", init);
     };
 
     var init = function(config) {
-        $("#title").html(config["game.name"]);
+        $("#title").html(config.name);
     };
 
     load();

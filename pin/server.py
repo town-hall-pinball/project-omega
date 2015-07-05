@@ -28,6 +28,7 @@ from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
 
 import p
+from pin import brand
 
 log = logging.getLogger("pin.server")
 server = None
@@ -39,6 +40,15 @@ class Root(object):
     def ws(self):
         # you can access the class instance through
         handler = cherrypy.request.ws_handler
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def branding(self):
+        return {
+            "name": brand.name,
+            "version": brand.version,
+            "release": brand.release
+        }
 
 
 class WebServer(Thread):
@@ -79,6 +89,7 @@ def update():
         stop()
 
 def start():
+    print json.dumps(p.switches["start_button"].__dict__)
     global server
     if not server:
         server = WebServer()
