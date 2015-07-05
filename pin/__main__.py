@@ -27,6 +27,7 @@ import time
 import pygame
 import p
 import pin
+from pin import server
 from pin.game import extra
 from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
 
@@ -124,6 +125,26 @@ def run():
     pin.game.init()
     extra.init()
     pin.game.start()
+    server.update()
     p.engine.run()
 
-run()
+def shutdown(exit_code):
+    try:
+        server.stop()
+    except Exception as e:
+        logging.getLogger("pin").exception("Error during shutdown")
+    logging.getLogger("pin").info("Exited with return code: {}"
+            .format(exit_code))
+    os._exit(exit_code)
+
+exit_code = 0
+try:
+    run()
+except KeyboardInterrupt as ki:
+    logging.getLogger("pin").info("Exiting on console interrupt")
+except Exception as e:
+    logging.getLogger("pin").exception("Exiting on unexpected error")
+    exit_code = 1
+finally:
+    shutdown(exit_code)
+

@@ -20,6 +20,7 @@ pin.magic      Shows if switch events are accepted, rejected, or trigger by
                a given magic sequence
 pin.mixer      Music and sounds being played
 pin.resources  Loading of resource assets
+pin.server     Lifecylce events for the web server
 pin.shows      Lifecycle of scripted events to be shown to the user
 pin.switch     Physical switches
 ============== ================================================================

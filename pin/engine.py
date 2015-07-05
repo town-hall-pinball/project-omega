@@ -91,7 +91,7 @@ def run():
         while not exit:
             frame()
     except KeyboardInterrupt as ki:
-        pass
+        raise
     finally:
         metrics = p.options.get("metrics", False)
         if metrics and loops > 0:
