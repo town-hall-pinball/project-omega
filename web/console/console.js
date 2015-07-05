@@ -148,9 +148,9 @@ $(function() {
         });
 
         $("#device-list li").mousedown(function() {
-            listCommand(config.devices[$(this).attr("data-device")], "down");
+            listCommand(state.devices[$(this).attr("data-device")], "down");
         }).mouseup(function() {
-            listCommand(config.devices[$(this).attr("data-device")], "up");
+            listCommand(state.devices[$(this).attr("data-device")], "up");
         });
     };
 
