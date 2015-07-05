@@ -78,7 +78,7 @@ music = None
 
 now = time.time()
 """
-The time at the start of the execution loop. Use this instead of `
+The time at the start of the execution loop. Use this instead of
 ``time.time()`` for getting a consistant time value throughout the execution
 loop.
 """
