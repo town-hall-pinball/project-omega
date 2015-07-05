@@ -59,8 +59,9 @@ def load():
         ("coin_drop",           "sounds/coinDrop.ogg")
     )
     resources.register_music(
-        ("introduction", "music/Introduction.ogg", { "start_time": 0.50 }),
-        ("credits",      "music/Credits.ogg",      { "start_time": 2.25 })
+        ("credits",         "music/Credits.ogg",       { "start_time": 2.25 }),
+        ("introduction",    "music/Introduction.ogg",  { "start_time": 0.50 }),
+        ("pinball_wizard",  "music/pinball_wizard.ogg",{ "start_time": 1.00 }),
     )
     resources.load_fonts(
         ("t5exb",   "fonts/pf_tempesta_five_extended_bold.ttf", 8),
