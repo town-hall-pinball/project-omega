@@ -19,20 +19,9 @@
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THE SOFTWARE.
 
-API Reference
-=============
+=============================================================
+:mod:`pin.game.config.defaults` --- Persistant State Defaults
+=============================================================
 
-.. toctree::
-   :maxdepth: 2
-
-   p
-   pin/brand
-   pin/data
-   pin/devices
-   pin/engine
-   pin/events
-   pin/game/index
-   pin/machine/index
-   pin/timers
-   pin/virtual/dmd
-
+.. automodule:: pin.game.config.defaults
+   :members:

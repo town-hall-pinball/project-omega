@@ -31,8 +31,34 @@ switches = {}
 coils = {}
 
 class Device(object):
+    """
+    A device in the pinball machine such as a switch, coil, lamp, etc.
+    """
+
+    name = None
+    """
+    Name of the device used as an identifier (e.g., `auto_plunger`)
+    """
+
+    label = None
+    """
+    Descriptive name of the device (e.g., `Auto Plunger`)
+    """
+
+    device = None
+    """
+    The string representation of this device by lookup in the owner's manual.
+    """
+
+    number = None
+    """
+    Address number of the device used by the P-ROC
+    """
 
     type = "unknown"
+    """
+    Descriptive type of the device, such as "switch" or "coil"
+    """
 
     def __init__(self, name, **config):
         self.name = name
@@ -45,24 +71,37 @@ class Device(object):
 
 
 class Driver(Device):
+    """
+    A :py:class:`Device` in the pinball machine that can be driven by software.
+    """
 
     def __init__(self, name, **config):
         super(Driver, self).__init__(name, **config)
 
     def enable(self, enabled=True):
+        """
+        Enables this device for an indefinate amount of time. Can be
+        disabled by specifying `False` for `enabled`
+        """
         if not enabled:
             self.disable()
         self.log.debug("+ {}".format(self.name))
         p.proc.api.driver_pulse(self.number, 0)
 
     def disable(self):
+        """
+        Disables this device.
+        """
         self.log.debug("- {}".format(self.name))
         p.proc.api.driver_disable(self.number)
 
 
 class Coil(Driver):
     """
-    Driver for a coil/solenoid.
+    :py:class:`Driver` for a coil/solenoid. Each coil is normally configured
+    in :py:mod:`pin.machine.coils`
+
+    State changes are logged to `pin.coil`
     """
 
     def __init__(self, name, **config):

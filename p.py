@@ -24,7 +24,13 @@ import time
 
 coils = None
 """
-Something :py:class:`pin.devices.Coil`
+Dictionary of :py:class:`pin.devices.Coil` objects keyed by identifier.
+
+Example to fire the auto plunger coil::
+
+    p.coils["auto_plunger"].pulse()
+
+Coils are configured at :py:mod:`pin.machine.coils`
 """
 
 data = None
@@ -39,10 +45,26 @@ Example to clear the current credit count::
 """
 
 defaults = None
+"""
+Dictonary of defaults to be used if the persistant state in ``var/data.json``
+is not available. Configured in :py:mod:`pin.game.config.defaults`
+"""
+
 dmd = None
 displays = {}
 effects = {}
+
 events = None
+"""
+:py:mod:`The global event queue <pin.events>`
+
+Example to register a function, `foo`, to be called when the left flipper
+button is pressed::
+
+    p.events.on("switch_left_flipper", foo)
+
+"""
+
 fonts = None
 game = None
 gi = None
@@ -53,15 +75,41 @@ modes = None
 movies = None
 mixer = None
 music = None
+
 now = time.time()
+"""
+The time at the start of the execution loop. Use this instead of `
+`time.time()`` for getting a consistant time value throughout the execution
+loop.
+"""
+
 options = {}
+"""
+A dictionary of options passed on the command line.
+
+Example to see if the ``-q`` or ``--quiet`` option was passed in::
+
+    if p.options["quiet"]:
+        print "quiet"
+"""
+
 proc = None
 platform = None
 namespace = None
 save = None
 switches = None
 sounds = None
+
 timers = None
+"""
+:py:mod:`The global timer manager <pin.timers>`
+
+Example to register a function, `foo`, to be called after two seconds have
+elapsed::
+
+    p.timers.wait(2.0, foo)
+
+"""
 
 def load_modes(names):
     global modes

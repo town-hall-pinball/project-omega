@@ -36,3 +36,8 @@ defaults = {
     "service_credits": 0,
     "tilt_warnings": 2,
 }
+"""
+Dictonary of defaults to be used if the persistant state in ``var/data.json``
+is not available
+"""
+

@@ -19,20 +19,12 @@
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THE SOFTWARE.
 
-API Reference
-=============
+=======================================
+:mod:`pin.game` --- Game Implementation
+=======================================
 
 .. toctree::
    :maxdepth: 2
 
-   p
-   pin/brand
-   pin/data
-   pin/devices
-   pin/engine
-   pin/events
-   pin/game/index
-   pin/machine/index
-   pin/timers
-   pin/virtual/dmd
+   config/index
 
