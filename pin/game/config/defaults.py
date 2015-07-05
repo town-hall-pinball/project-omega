@@ -29,7 +29,7 @@ defaults = {
     "free_play": False,
     "max_credits": 99,
     "paid_credits": 0,
-    "pricing": 0.25,
+    "pricing": 0.50,
     "server_enabled": False,
     "server_publish_events": False,
     "server_remote_control": False,
