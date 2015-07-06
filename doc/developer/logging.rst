@@ -8,9 +8,9 @@ the loggers to see the following information:
 ============== ================================================================
 Logger         Description
 ============== ================================================================
+pin.command    Command received from a web client
 pin.data       Loading and saving of persistant state
 pin.dmd        Dot-matrix stack, queue, and overlay handling
-pin.dmd_shift  Current and previous renderer tracking for transitions
 pin.event      Global event queue
 pin.gi         General illumination lights
 pin.keyboard   Key down and up events

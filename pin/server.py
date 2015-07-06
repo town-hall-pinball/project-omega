@@ -31,6 +31,7 @@ import p
 from pin import brand
 
 log = logging.getLogger("pin.server")
+log_command = logging.getLogger("pin.command")
 server = None
 port = 9999
 
@@ -38,7 +39,6 @@ class Root(object):
 
     @cherrypy.expose
     def ws(self):
-        # you can access the class instance through
         handler = cherrypy.request.ws_handler
 
     def get_branding(self):
@@ -79,6 +79,18 @@ class Handler(WebSocket):
             return
         message = json.loads(str(m))
         command = message["command"]
+        log_command.debug(command)
+        if command == "switch":
+            self.toggle_switch(message)
+
+    def toggle_switch(self, message):
+        switch = p.switches[message["name"]]
+        change_to = not switch.active
+        if change_to:
+            event = p.proc.SWITCH_OPENED if switch.opto else p.proc.SWITCH_CLOSED
+        else:
+            event = p.proc.SWITCH_CLOSED if switch.opto else p.proc.SWITCH_OPENED
+        p.proc.artificial_events += [{"type": event, "value": switch.number}]
 
 
 class WebServer(Thread):

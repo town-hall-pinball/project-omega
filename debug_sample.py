@@ -25,6 +25,7 @@ def init():
         #"pin.gi",
         #"pin.switch",
 
+        #"pin.command",
         #"pin.data",
         #"pin.dmd",
         #"pin.dmd_shift",

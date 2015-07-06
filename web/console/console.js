@@ -188,30 +188,32 @@ $(function() {
     };
 
     var deviceCommand = function(device, mouse) {
-        if ( device.hardware === "switch" ) {
+        if ( device.type === "switch" ) {
             p.ws.send({
                 command: "switch",
                 action: "toggle",
-                id: device.id
+                name: device.name
             });
-        } else if ( device.hardware === "lamp" ) {
+        } else if ( device.type === "lamp" ) {
             p.ws.send({
                 command: "lamp",
                 action: "toggle",
-                id: device.id
+                name: device.name
             });
-        } else if ( device.hardware === "coil" && mouse === "up" ) {
+        } else if ( device.type === "coil" && mouse === "up" ) {
             p.ws.send({
                 command: "coil",
                 action: "pulse",
-                id: device.id
+                name: device.name
             });
-        } else if ( device.hardware === "flasher" && mouse === "up")  {
+        } else if ( device.type === "flasher" && mouse === "up")  {
             p.ws.send({
                 command: "flasher",
                 action: "pulse",
-                id: device.id
+                name: device.name
             });
+        } else {
+            console.log("Unknown device command", device);
         }
     };
 
