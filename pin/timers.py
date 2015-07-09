@@ -69,7 +69,7 @@ def service():
     """
     if len(active) > 0:
         for ident, timer in active.items():
-            if p.now > timer["end"] and ident in active:
+            if p.now >= timer["end"] and ident in active:
                 del active[ident]
                 args = []
                 if timer["with_ident"]:

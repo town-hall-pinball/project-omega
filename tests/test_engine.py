@@ -23,6 +23,8 @@ from pin import engine
 
 import unittest
 from mock import Mock, patch
+from tests import fixtures
+
 
 def exit():
     engine.exit = True
@@ -30,6 +32,7 @@ def exit():
 class TestEngine(unittest.TestCase):
 
     def setUp(self):
+        fixtures.reset()
         engine.reset()
 
     def tearDown(self):
@@ -46,7 +49,10 @@ class TestEngine(unittest.TestCase):
         interrupt = Mock(side_effect=KeyboardInterrupt)
         p2 = Mock()
         engine.processors = [p1, interrupt, p2]
-        engine.run()
+        try:
+            engine.run()
+        except KeyboardInterrupt as ki:
+            pass
         self.assertTrue(p1.called)
         self.assertFalse(p2.called)
 
@@ -54,7 +60,10 @@ class TestEngine(unittest.TestCase):
         p.options["metrics"] = True
         p1 = Mock(side_effect=[1, 2, KeyboardInterrupt])
         engine.processors = [p1]
-        engine.run()
+        try:
+            engine.run()
+        except KeyboardInterrupt as ki:
+            pass
         self.assertTrue(engine.loops > 0)
         self.assertTrue(engine.run_time > 0)
 
@@ -62,7 +71,10 @@ class TestEngine(unittest.TestCase):
         p.options["metrics"] = False
         p1 = Mock(side_effect=[1, 2, KeyboardInterrupt])
         engine.processors = [p1]
-        engine.run()
+        try:
+            engine.run()
+        except KeyboardInterrupt as ki:
+            pass
         self.assertTrue(engine.loops == 0)
         self.assertTrue(engine.run_time == 0)
 

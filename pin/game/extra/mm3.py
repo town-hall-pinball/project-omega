@@ -112,9 +112,11 @@ class GameStartDisplay(Handler):
         self.wait(3.25, self.show_name)
 
     def blend_out(self):
+        print "********* blend_out"
         self.text_container.effect("blend_out", once=True)
 
     def show_name(self):
+        print "********* show name"
         name = self.selected[1]
         self.name.effect("typewriter", text=name)
 
@@ -136,8 +138,7 @@ class Mode(Handler):
         self.timer = self.wait(30, self.timeout)
 
     def select(self):
-        if self.game_start.enabled:
-            return
+        self.off("switch_start_button", self.select)
         self.stage_select.disable()
         self.game_start.selected = self.stage_select.selected.get()
         self.game_start.enable(transition=ui.transitions.Tear())
@@ -162,7 +163,7 @@ def init():
 
 def load():
     if not resources.available("extra/mm3"):
-        return
+        return False
 
     resources.load_images(
         ("mm3_background",      "extra/mm3/images/background.dmd"),

@@ -50,7 +50,7 @@ class Handler(object):
             p.events.on(event, listener)
 
     def off(self, event, listener):
-        self.listeners.remove(event)
+        del self.listeners[event]
         p.events.off(event, listener)
 
     def wait(self, duration, callback):
