@@ -5,7 +5,7 @@ before_install:
     - sudo apt-get update
     - sudo apt-get install -y python-pygame
 install: "pip install -r requirements.txt"
-script: "nosetests -w tests --with-coverage --cover-package=pin"
+script: "nosetests -w tests --with-coverage --cover-package=pin --cover-erase"
 sudo: required
 virtualenv:
     system_site_packages: true
