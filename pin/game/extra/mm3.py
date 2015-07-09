@@ -112,11 +112,9 @@ class GameStartDisplay(Handler):
         self.wait(3.25, self.show_name)
 
     def blend_out(self):
-        print "********* blend_out"
         self.text_container.effect("blend_out", once=True)
 
     def show_name(self):
-        print "********* show name"
         name = self.selected[1]
         self.name.effect("typewriter", text=name)
 
