@@ -532,7 +532,7 @@ $(function() {
     };
 
     var pulse = function(id) {
-        device = config.devices[id];
+        device = state.devices[id];
         device.$indicator
             .css("background-color", "#fff")
             .delay(device.duration)
@@ -548,24 +548,24 @@ $(function() {
     var tick = function(timestamp) {
         var completed = [];
         _.each(animations, function(device) {
-            if ( device.schedule === "patter" ) {
+            if ( device.state.schedule === "patter" ) {
                 var total = device.on + device.off;
                 var slice = timestamp % total;
                 if ( slice < device.on ) {
-                    on(device.id);
+                    on(device.device);
                 } else {
-                    off(device.id);
+                    off(device.device);
                 }
-            } else if ( device.schedule === "pulse" ) {
-                pulse(device.id);
+            } else if ( device.state.schedule === "pulse" ) {
+                pulse(device.device);
                 completed.push(device);
-            } else if ( device.schedule === "pulsed_patter" ) {
-                pulse(device.id);
+            } else if ( device.state.schedule === "pulsed_patter" ) {
+                pulse(device.device);
                 completed.push(device);
             }
         });
         _.each(completed, function(device) {
-            delete animations[device.id];
+            delete animations[device.device];
         });
         requestAnimationFrame(tick);
     };

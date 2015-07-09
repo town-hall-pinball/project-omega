@@ -22,6 +22,7 @@ import logging
 
 def init():
     loggers = [
+        #"pin.coil",
         #"pin.gi",
         #"pin.switch",
 
@@ -35,7 +36,7 @@ def init():
         #"pin.magic",
         #"pin.mixer",
         #"pin.resources",
-        "pin.server",
+        #"pin.server",
         #"pin.shows",
     ]
 

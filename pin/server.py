@@ -82,6 +82,8 @@ class Handler(WebSocket):
         log_command.debug(command)
         if command == "switch":
             self.toggle_switch(message)
+        if command == "coil":
+            self.fire_coil(message)
 
     def toggle_switch(self, message):
         switch = p.switches[message["name"]]
@@ -91,6 +93,10 @@ class Handler(WebSocket):
         else:
             event = p.proc.SWITCH_CLOSED if switch.opto else p.proc.SWITCH_OPENED
         p.proc.artificial_events += [{"type": event, "value": switch.number}]
+
+    def fire_coil(self, message):
+        coil = p.coils[message["name"]]
+        coil.pulse()
 
 
 class WebServer(Thread):
@@ -118,6 +124,7 @@ class WebServer(Thread):
         cherrypy.tools.websocket = WebSocketTool()
 
         p.events.on("switch", self.dispatch_device)
+        p.events.on("coil", self.dispatch_device)
 
         cherrypy.quickstart(Root(), "/", config={
             "/": {
@@ -136,6 +143,10 @@ class WebServer(Thread):
                 "tools.websocket.handler_cls": Handler
             }
         })
+
+        p.events.off("switch", self.dispatch_device)
+        p.events.off("coil", self.dispatch_device)
+
         plugin.unsubscribe()
         log.info("stopped")
 

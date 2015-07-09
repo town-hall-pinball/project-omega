@@ -8,6 +8,7 @@ the loggers to see the following information:
 ============== ================================================================
 Logger         Description
 ============== ================================================================
+pin.coil       Firing of coils/solenoids
 pin.command    Command received from a web client
 pin.data       Loading and saving of persistant state
 pin.dmd        Dot-matrix stack, queue, and overlay handling

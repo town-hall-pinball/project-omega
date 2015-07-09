@@ -68,13 +68,14 @@ class Device(object):
     Descriptive type of the device, such as "switch" or "coil"
     """
 
-    state = { "schedule": "disable" }
+    state = None
 
     def __init__(self, name, **config):
         self.name = name
         self.label = config.get("label", name)
         self.device = config["device"]
         self.number = p.platform.devices[self.device]
+        self.state = { "schedule": "disable" }
 
     def __str__(self):
         return "{}:{}".format(self.type, self.name)
@@ -87,6 +88,7 @@ class Driver(Device):
 
     def __init__(self, name, **config):
         super(Driver, self).__init__(name, **config)
+        self.default_pulse_length = config.get("default_pulse_length", 30)
 
     def enable(self, enabled=True):
         """
@@ -105,6 +107,24 @@ class Driver(Device):
         log[self.type].debug("- {}".format(self.name))
         p.proc.api.driver_disable(self.number)
 
+    def pulse(self, pulse_length=None):
+        """
+        Enables this devices for `pulse_length` milliseconds. If `pulse_length`
+        is not provided, it defaults to the configured `default_pulse_length`
+        """
+        suffix = ""
+        if pulse_length is None:
+            pulse_length = self.default_pulse_length
+        else:
+            suffix = "for {}ms".format(pulse_length)
+        self.state = { "schedule": "pulse", "duration": pulse_length }
+
+        log[self.type].debug("+ {} {}".format(self.name, suffix))
+        p.proc.api.driver_pulse(self.number, pulse_length)
+        p.events.post("coil", self)
+
+        p.events.dispatch()
+        self.state = { "schedule": "disable" }
 
 class Coil(Driver):
     """
