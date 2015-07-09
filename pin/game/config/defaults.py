@@ -31,8 +31,8 @@ defaults = {
     "paid_credits": 0,
     "pricing": 0.50,
     "server_enabled": False,
-    "server_publish_events": False,
-    "server_remote_control": False,
+    "server_publish_events": True,
+    "server_remote_control": True,
     "service_credits": 0,
     "tilt_warnings": 2,
 }
