@@ -18,15 +18,70 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import pin
-
-trough = None
+import p
+from pin import ball
 
 def init():
-    global trough
-    trough = pin.Trough([
-        "trough",
-        "trough_2",
-        "trough_3",
-        "trough_4"
-    ])
+    ball.total = 4
+    ball.captures = {
+        "trough": ball.Capture(
+            name="trough",
+            switches=[
+                p.switches["trough"],
+                p.switches["trough_2"],
+                p.switches["trough_3"],
+                p.switches["trough_4"]
+            ],
+            coil="trough",
+            verify={
+                "type": "failure",
+                "switch": p.switches["trough_jam"],
+                "time": 1.0
+            }
+        ),
+        "popper": ball.Capture(
+            name="popper",
+            switches=[
+                "popper",
+                "popper_2"
+            ],
+            coil="popper",
+            verify={
+                "type": "success",
+                "switch": p.switches["return_right"],
+                "time": 1.0
+            },
+            staged=1
+        ),
+        "saucer": ball.Capture(
+            name="saucer",
+            switches=["saucer"],
+            coil="saucer",
+            verify={
+                "type": "failure",
+                "switch": "saucer",
+                "time": 1.0
+            }
+        ),
+        "shooter_lane": ball.Capture(
+            name="shooter_lane",
+            switches=["shooter_lane"],
+            coil="auto_plunger",
+            verify={
+                "type": "failure",
+                "switch": "shooter_lane",
+                "time": 1.0
+            }
+        )
+    }
+
+    ball.search_sequence = [
+        p.coils["slingshot_left"],
+        p.coils["slingshot_right"],
+        p.coils["kickback"],
+        p.coils["drop_target_down"],
+        p.coils["drop_target_up"],
+        p.coils["auto_plunger"],
+        p.coils["saucer"],
+        p.coils["popper"],
+    ]

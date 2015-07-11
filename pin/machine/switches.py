@@ -232,5 +232,6 @@ def init():
             "label": "Wireform, Left",
             "device": "S54",
         }
-   })
+    })
+
 

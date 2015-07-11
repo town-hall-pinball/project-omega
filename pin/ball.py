@@ -19,23 +19,56 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import devices
-from . import coils, features, flashers, gi, lamps, switches
+from pin import util
+from pin.handler import Handler
 
-def init():
-    coils.init()
-    p.coils = devices.coils
+total = 0
+captures = {}
+search_sequence = []
 
-    flashers.init()
-    p.flashers = devices.flashers
+class Capture(Handler):
 
-    gi.init()
-    p.gi = devices.gi
+    def __init__(self, name, switches, coil, verify, staged=0):
+        self.name = name
+        self.switches = switches
+        self.coil = coil
+        self.verify = verify
+        self.staged = staged
 
-    lamps.init()
-    p.lamps = devices.lamps
+    def balls(self):
+        amount = 0
+        for switch in self.switches:
+            if switch.active:
+                amount += 1
+        return amount
 
-    switches.init()
-    p.switches = devices.switches
 
-    features.init()
+def add_captures(configs):
+    for name, config in configs.items():
+        if name in captures:
+            raise ValueError("Duplicate ball capture: {}".format(name))
+        captures[name] = Capture(name, **config)
+
+
+
+class Mode(Handler):
+    pass
+
+
+def trough_count():
+    amount = 0
+    for capture in captures:
+        balls = capture.balls()
+        if captures.name == "trough":
+            amount += balls
+        if captures.staged:
+            amount += max(balls, captures.staged)
+    return amount
+
+def trough_ready():
+    return trough_ready == total
+
+
+
+
+
