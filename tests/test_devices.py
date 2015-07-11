@@ -90,5 +90,35 @@ class TestDevices(unittest.TestCase):
             })
 
 
+class TestDriver(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+
+    def test_default_pulse(self):
+        coil = p.coils["trough"]
+        listener = Mock()
+        def state_listener():
+            self.assertEquals(coil.state["schedule"], "pulse")
+            self.assertEquals(coil.state["duration"], coil.default_pulse_length)
+        p.events.on("coil_trough", listener)
+        p.events.on("coil_trough", state_listener)
+        coil.pulse()
+        self.assertTrue(listener.called)
+        self.assertEquals("disable", coil.state["schedule"])
+
+    def test_manual_pulse(self):
+        coil = p.coils["trough"]
+        listener = Mock()
+        def state_listener():
+            self.assertEquals(coil.state["schedule"], "pulse")
+            self.assertEquals(coil.state["duration"], 100)
+        p.events.on("coil_trough", listener)
+        p.events.on("coil_trough", state_listener)
+        coil.pulse(100)
+        self.assertTrue(listener.called)
+        self.assertEquals("disable", coil.state["schedule"])
+
+
 
 

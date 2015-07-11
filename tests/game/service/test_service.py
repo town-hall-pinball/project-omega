@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from mock import Mock
+from mock import Mock, patch
 import unittest
 
 import p
@@ -40,6 +40,16 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_down")
         p.events.dispatch()
         self.assertEquals("Utilities", self.service.name.style["text"])
+
+    def test_menu_next_suspended(self):
+        self.service.suspend()
+        p.events.post("switch_service_up")
+        p.events.dispatch()
+        self.assertEquals("Settings", self.service.name.style["text"])
+        self.service.resume()
+        p.events.post("switch_service_up")
+        p.events.dispatch()
+        self.assertEquals("Tests", self.service.name.style["text"])
 
     def test_menu_exit(self):
         p.events.post("switch_service_exit")
@@ -170,6 +180,16 @@ class TestService(unittest.TestCase):
         p.events.dispatch()
         self.assertFalse(p.data["free_play"])
 
+    def test_save_with_action(self):
+        p.events.post("switch_service_down") # Utilities
+        p.events.post("switch_service_enter") # Enter Utilities
+        p.events.post("switch_service_enter") # Enter Server
+        p.events.post("switch_service_enter") # Enable Server
+        p.events.post("switch_service_up") # YES
+        p.events.post("switch_service_enter") # Select
+        with patch.object(p.modes["service"], "toggle_server") as mock:
+            p.events.dispatch()
+            self.assertTrue(mock.called)
 
 class TestServiceActions(unittest.TestCase):
 
@@ -197,5 +217,14 @@ class TestServiceActions(unittest.TestCase):
     def test_font_browser(self):
         self.service.font_browser()
         self.assertTrue(p.modes["font_browser"].enabled)
+
+    def test_image_browser(self):
+        self.service.image_browser()
+        self.assertTrue(p.modes["image_browser"].enabled)
+
+    @patch("pin.server.update")
+    def test_server_toggle(self, mock):
+        self.service.toggle_server()
+        self.assertTrue(mock.called)
 
 

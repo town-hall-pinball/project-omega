@@ -59,6 +59,15 @@ def post(event, *args, **kwargs):
         "kwargs": kwargs
     })
 
+def trigger(event, *args, **kwargs):
+    """
+    Triggers an event immediately without adding to the queue. Any additional
+    `*args` and `**kwargs` are passed to listeners registered for this event.
+    """
+    log.debug("{}: {} {}".format(event, args, kwargs))
+    for listener in listeners.get(event, []):
+        listener(*args, **kwargs)
+
 def dispatch():
     """
     Dispatches all events and empties the queue.

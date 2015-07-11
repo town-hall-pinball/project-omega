@@ -121,9 +121,8 @@ class Driver(Device):
 
         log[self.type].debug("+ {} {}".format(self.name, suffix))
         p.proc.api.driver_pulse(self.number, pulse_length)
-        p.events.post("coil", self)
-
-        p.events.dispatch()
+        p.events.trigger(self.type, self)
+        p.events.trigger("{}_{}".format(self.type, self.name))
         self.state = { "schedule": "disable" }
 
 class Coil(Driver):
