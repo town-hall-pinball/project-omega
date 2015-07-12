@@ -76,7 +76,13 @@ def dispatch():
         item = queue.pop(0)
         log.debug("{}: {} {}".format(item["event"],
                 item["args"], item["kwargs"]))
-        for listener in listeners.get(item["event"], []):
+
+        # Make a copy in case a new listener is added during
+        # the dispatch
+        event_listeners = listeners.get(item["event"], [])
+        event_listeners = list(event_listeners)
+
+        for listener in event_listeners:
             listener(*item["args"], **item["kwargs"])
         if item["event"] == "switch":
             handle_switch_event(*item["args"], **item["kwargs"])

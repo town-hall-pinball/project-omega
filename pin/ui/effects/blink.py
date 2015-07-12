@@ -24,9 +24,13 @@ from .effect import Effect
 
 class Blink(Effect):
 
-    def __init__(self, target, duration=0.5, repeat=False, once=False):
+    def __init__(self, target, duration=0.5, repeat=False, once=False,
+            on=None, off=None):
+        if not on or not off:
+            on = duration
+            off = duration
         super(Blink, self).__init__("blink", target,
-                [duration, duration], repeat, once)
+                [on, off], repeat, once)
         self.target = target
 
     def action(self, *args, **kwargs):

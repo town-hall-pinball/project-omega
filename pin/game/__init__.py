@@ -37,6 +37,7 @@ def init(load_resources=True):
         "attract",
         "banner",
         "post",
+        "starter",
         "service.font_browser",
         "service.image_browser",
         "service.movie_browser",

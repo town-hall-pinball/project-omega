@@ -64,8 +64,12 @@ class Mode(Handler):
         self.on("switch_service_exit",  self.service_credit)
 
     def start_button(self):
-        if p.modes["attract"].enabled:
-            self.show_credits()
+        if p.data["free_play"] or p.data["credits"] >= 1:
+            p.modes["starter"].enable()
+            p.modes["attract"].disable()
+        else:
+            if p.modes["attract"].enabled:
+                self.show_credits()
 
     def show_credits(self):
         p.modes["attract"].suspend()
