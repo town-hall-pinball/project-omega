@@ -24,8 +24,8 @@ from pin.ui import effects
 from pin.handler import Handler
 
 game_list = [
-    { "name": brand.name,       "mode": "main" },
-    { "name": "Practice",       "mode": "practice" },
+    { "name": brand.name,       "mode": "attract" },
+    { "name": "Practice",       "mode": "attract" },
     { "name": "Cancel",         "mode": "attract" },
 ]
 
