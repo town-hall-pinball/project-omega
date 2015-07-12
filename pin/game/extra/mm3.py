@@ -126,10 +126,10 @@ class Mode(Handler):
         self.game_start = GameStartDisplay("mm3_game_start")
 
         self.handlers = [ self.stage_select, self.game_start ]
-        self.on("switch_start_button", self.select)
         self.timer = None
 
     def on_enable(self):
+        self.on("switch_start_button", self.select)
         p.dmd.clear()
         p.mixer.play("mm3_stage_select")
         self.stage_select.enable(transition=ui.transitions.Tear())
