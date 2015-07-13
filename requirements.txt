@@ -6,3 +6,5 @@ mock
 nose
 paver
 Sphinx
+ws4py
+
