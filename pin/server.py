@@ -158,6 +158,7 @@ def update():
         start()
     else:
         stop()
+    p.data.save()
 
 def start():
     global server
