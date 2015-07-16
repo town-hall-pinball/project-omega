@@ -56,7 +56,8 @@ class Mode(Handler):
         self.timer = None
         self.credits = p.displays["credits"]
 
-        self.on("switch_start_button",  self.start_button)
+        self.on("switch_buy_extra_ball_button", self.game_menu)
+
         self.on("switch_coin_left",     self.coin_left)
         self.on("switch_coin_center",   self.coin_center)
         self.on("switch_coin_right",    self.coin_right)
@@ -66,7 +67,7 @@ class Mode(Handler):
     def on_enable(self):
         self.update_buttons()
 
-    def start_button(self):
+    def game_menu(self):
         if p.data["free_play"] or p.data["credits"] >= 1:
             p.modes["starter"].enable()
             p.modes["attract"].disable()
