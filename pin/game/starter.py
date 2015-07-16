@@ -63,7 +63,6 @@ class Mode(Handler):
         self.game.show(self.selected.get()["name"].upper())
 
     def start_mode(self):
-        print "SELECTING?????, AM I ENABLED", self.enabled
         mode = self.selected.get()["mode"]
         self.disable()
         p.modes[mode].enable()

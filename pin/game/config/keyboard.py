@@ -24,6 +24,7 @@ from pin.keyboard import event, switch
 def init():
     keyboard.register({
         "s": switch("start_button"),
+       "ss": switch("buy_extra_ball_button"),
         "l": switch("ball_launch_button"),
         "1": switch("coin_left"),
         "7": switch("service_enter"),

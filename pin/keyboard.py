@@ -20,25 +20,33 @@
 
 import logging
 import pygame
-import pygame.locals
+from pygame.locals import *
 
 import p
 
 log = logging.getLogger("pin.keyboard")
 keys = {}
 
+def mod():
+    keys = []
+    m = pygame.key.get_mods()
+    if m & KMOD_LSHIFT or m & KMOD_RSHIFT:
+        keys += ["s"]
+    return "".join(keys)
+
 def process():
     for event in pygame.event.get():
-        if event.type == pygame.locals.KEYDOWN:
+        if event.type == KEYDOWN or event.type == KEYUP:
             name = pygame.key.name(event.key)
-            log.debug("down: {}".format(name))
-            if name in keys:
-                keys[name]["down"]()
-        elif event.type == pygame.locals.KEYUP:
-            name = pygame.key.name(event.key)
-            log.debug("up  : {}".format(name))
-            if name in keys:
-                keys[name]["up"]()
+            key = mod() + name
+            if event.type == KEYDOWN:
+                log.debug("down: {}".format(name))
+                if key in keys:
+                    keys[key]["down"]()
+            elif event.type == KEYUP:
+                log.debug("up  : {}".format(name))
+                if key in keys:
+                    keys[key]["up"]()
 
 
 def event(name, *args, **kwargs):

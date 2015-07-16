@@ -67,6 +67,9 @@ def reset():
     pygame.mixer.Channel = Mock(pygame.mixer.Channel)
     pygame.font.Font = Mock(pygame.font.Font)
     pygame.mixer.music = Mock(pygame.mixer.music)
+    pygame.key.get_mods = Mock()
+    pygame.key.get_mods.return_value = 0
+
 
     movie = Mock(spec=[
         "get_size",

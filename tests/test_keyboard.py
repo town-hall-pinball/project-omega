@@ -51,6 +51,21 @@ class TestKeyboard(unittest.TestCase):
 
     @patch("pygame.event.get")
     @patch("pygame.key.name")
+    def test_event_with_shift(self, name, keys):
+        pygame.key.get_mods.return_value = pygame.locals.KMOD_LSHIFT
+        name.return_value = "a"
+        keys.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {
+            "key": pygame.locals.K_a,
+        })]
+        listener = Mock()
+        p.events.on("a_event", listener)
+        keyboard.register({"sa": keyboard.event("a_event", foo=1)})
+        keyboard.process()
+        p.events.dispatch()
+        listener.assert_called_with(foo=1)
+
+    @patch("pygame.event.get")
+    @patch("pygame.key.name")
     def test_switch_active(self, name, events):
         name.return_value = "a"
         events.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {
