@@ -24,6 +24,7 @@ def init():
     loggers = [
         #"pin.coil",
         #"pin.gi",
+        #"pin.lamp",
         #"pin.switch",
 
         #"pin.command",

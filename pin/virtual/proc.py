@@ -46,4 +46,8 @@ def driver_pulse(*args, **kwargs):
 def driver_disable(*args, **kwargs):
     pass
 
+def driver_patter(*args, **kwargs):
+    pass
+
+
 

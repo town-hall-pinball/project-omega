@@ -388,6 +388,7 @@ $(function() {
     };
 
     var updateDevice = function(device) {
+        console.log("UPDATE", device);
         if ( !device || !state.devices[device.device] ) {
             return;
         }
@@ -549,9 +550,9 @@ $(function() {
         var completed = [];
         _.each(animations, function(device) {
             if ( device.state.schedule === "patter" ) {
-                var total = device.on + device.off;
+                var total = device.state.on + device.state.off;
                 var slice = timestamp % total;
-                if ( slice < device.on ) {
+                if ( slice < device.state.on ) {
                     on(device.device);
                 } else {
                     off(device.device);

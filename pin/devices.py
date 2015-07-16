@@ -125,6 +125,23 @@ class Driver(Device):
         p.events.trigger("{}_{}".format(self.type, self.name))
         self.state = { "schedule": "disable" }
 
+    def patter(self, on, off):
+        """
+        Repeats a sequence when the device is enabled for `on` milliseconds
+        and disabled for `off` milliseconds. Maximum `on` and `off` times are
+        127ms.
+        """
+        state = { "schedule": "patter", "on": on, "off": off }
+        if self.state == state:
+            return
+        self.state = state
+        log[self.type].debug("+ {} patter on={}, off={}".format(self.name,
+                on, off))
+        p.proc.api.driver_patter(self.number, on, off, 0)
+        p.events.post(self.type, self)
+        p.events.post("{}_{}".format(self.type, self.name))
+
+
 class Coil(Driver):
     """
     :py:class:`Driver` for a coil/solenoid. Each coil is normally configured

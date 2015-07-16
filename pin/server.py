@@ -125,6 +125,7 @@ class WebServer(Thread):
 
         p.events.on("switch", self.dispatch_device)
         p.events.on("coil", self.dispatch_device)
+        p.events.on("lamp", self.dispatch_device)
 
         cherrypy.quickstart(Root(), "/", config={
             "/": {
@@ -146,6 +147,7 @@ class WebServer(Thread):
 
         p.events.off("switch", self.dispatch_device)
         p.events.off("coil", self.dispatch_device)
+        p.events.off("lamp", self.dispatch_device)
 
         plugin.unsubscribe()
         log.info("stopped")
