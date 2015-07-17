@@ -25,6 +25,7 @@ $(function() {
     var famap = {
         "coil":     "fa-database",
         "flasher":  "fa-bolt",
+        "gi":       "fa-lightbulb-o",
         "lamp":     "fa-lightbulb-o",
         "switch":   "fa-minus-square-o",
         "flippers": "fa-arrows-h",
