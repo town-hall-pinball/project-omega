@@ -59,8 +59,10 @@ class DMD(object):
         log.debug("{} replaces {} {}".format(current, previous, trans))
         if previous in self.stack:
             self.stack[self.stack.index(previous)] = current
-        if previous in self.queue:
+        elif previous in self.queue:
             self.queue[self.queue.index(previous)] = current
+        else:
+            self.stack += [current]
         self.shift_renderer(transition)
 
     def clear(self):
