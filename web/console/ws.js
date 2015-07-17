@@ -72,7 +72,7 @@ p.ws = p.ws || (function() {
         if ( data.message === "pong" ) {
             return;
         }
-        console.log("event", data);
+        //console.log("event", data);
         self.events.trigger("message", data);
     };
 

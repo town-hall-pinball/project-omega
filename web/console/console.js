@@ -62,10 +62,8 @@ $(function() {
         lampMatrix();
         coilFlasherMatrix();
         deviceList();
-
-        /*
         keyboardReference();
-        */
+
         $("#search input").keyup(filter);
         $("#device-filter input").change(filter);
         $("input [data-action='filter']").change(filter);
@@ -307,8 +305,12 @@ $(function() {
         var $key = $("<td>&nbsp;</td>");
         var $label = $("<td>&nbsp;</td>");
         if ( device ) {
-            $key.html(device.keyboard);
-            $label.html(device.label);
+            var keys = device.key;
+            if ( device.mods ) {
+                keys = keys + ":" + device.mods;
+            }
+            $key.html(keys);
+            $label.html(device.action);
         }
         $row.append($key);
         $row.append($label);
@@ -317,7 +319,7 @@ $(function() {
     var keyboardReference = function() {
         var $table = $("#keyboard-table");
         $table.empty();
-        var devices = _.sortBy(config.keys, "keyboard");
+        var devices = _.sortBy(state.keymap, "key");
         var rows = Math.ceil(devices.length / 2);
         for ( var row = 0; row < rows; row ++ ) {
             var $row = $("<tr></tr>");
@@ -388,14 +390,13 @@ $(function() {
     };
 
     var updateDevice = function(device) {
-        console.log("UPDATE", device);
         if ( !device || !state.devices[device.device] ) {
             return;
         }
         var $element = $("#" + device.device);
-        if ( device.active === true || device.schedule === "enable" ) {
+        if ( device.active === true || device.state.schedule === "enable" ) {
             enable(device.device);
-        } else if ( device.active === false || device.schedule === "disable" ) {
+        } else if ( device.active === false || device.state.schedule === "disable" ) {
             disable(device.device);
         } else {
             animations[device.device] = device;
@@ -450,6 +451,9 @@ $(function() {
         if ( device.state.schedule === "disable" ) {
             style = "disable";
         }
+        if ( device.state.show ) {
+            return;
+        }
         log(device.type, style, device.label);
     };
 
@@ -470,7 +474,7 @@ $(function() {
             return;
         }
         var char = String.fromCharCode(event.which);
-        var device = config.keys[char];
+        var device = state.keys[char];
         if ( device ) {
             deviceCommand(device);
         }

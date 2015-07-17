@@ -186,6 +186,14 @@ def init():
             "label": "Ramp, Right Circle 3",
             "device": "L65",
         },
+        "saucer_arrow_1": {
+            "label": "Saucer, Arrow 1",
+            "device": "L61"
+        },
+        "saucer_arrow_2": {
+            "label": "Saucer, Arrow 2",
+            "device": "L62",
+        },
         "scoop_left_arrow_1": {
             "label": "Scoop, Left Arrow 1",
             "device": "L45"

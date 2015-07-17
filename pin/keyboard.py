@@ -54,6 +54,7 @@ def event(name, *args, **kwargs):
         p.events.post(name, *args, **kwargs)
 
     return {
+        "name": name,
         "down": post,
         "up": lambda : None,
     }
@@ -70,6 +71,7 @@ def switch(name, *args, **kwargs):
         p.proc.artificial_events += [{"type": event, "value": switch.number}]
 
     return {
+        "name": name,
         "down": active,
         "up": inactive
     }

@@ -28,7 +28,7 @@ from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
 
 import p
-from pin import brand
+from pin import brand, keyboard
 
 log = logging.getLogger("pin.server")
 log_command = logging.getLogger("pin.command")
@@ -66,9 +66,18 @@ class Root(object):
         add_devices(p.lamps)
         add_devices(p.switches)
 
+        keymap = []
+        for key, action in keyboard.keys.items():
+            mods = ""
+            if len(key) > 1:
+                mods = key[:-1]
+                key = key[-1]
+            keymap += [{"key": key, "mods": mods, "action": action["name"]}]
+
         return {
             "branding": self.get_branding(),
-            "devices": devices
+            "devices": devices,
+            "keymap": keymap,
         }
 
 

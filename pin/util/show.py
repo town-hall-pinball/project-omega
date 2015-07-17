@@ -21,6 +21,7 @@
 import itertools
 import logging
 
+import p
 from pin.handler import Handler
 
 log = logging.getLogger("pin.shows")
@@ -29,6 +30,7 @@ class Show(Handler):
 
     running = False
     index = 0
+    count = 0
 
     def __init__(self, name, timings, repeat=False, action=None, callback=None):
         super(Show, self).__init__(name)
@@ -97,21 +99,29 @@ class Show(Handler):
         if not use_callback:
             self.timer = self.wait(self.timings[self.index], self.next)
         self.index += 1
+        self.count += 1
 
-
-    def action(self):
+    def action(self, use_callback=False):
         pass
 
 
-class DMDShow(Show):
 
-    def render_stopped(self):
-        self.disable()
-        self.stop()
+class LightShow(Show):
 
-    def render_started(self):
-        self.enable()
-        self.start()
+    def __init__(self, name, interval, lights):
+        length = 0
+        for sequence in lights.values():
+            length = max(length, len(sequence))
+        super(LightShow, self).__init__(name, [interval] * length, True)
+        self.lights = lights
+
+    def action(self, use_callback=False):
+        for light, sequence in self.lights.items():
+            index = self.count % len(sequence)
+            if sequence[index]:
+                p.lamps[light].enable(show=True)
+            else:
+                p.lamps[light].disable(show=True)
 
 
 

@@ -90,22 +90,32 @@ class Driver(Device):
         super(Driver, self).__init__(name, **config)
         self.default_pulse_length = config.get("default_pulse_length", 30)
 
-    def enable(self, enabled=True):
+    def enable(self, enabled=True, show=False):
         """
         Enables this device for an indefinate amount of time. Can be
         disabled by specifying `False` for `enabled`
         """
         if not enabled:
             self.disable()
+        state = { "schedule": "enable", "show": show }
+        if self.state == state:
+            return
+        self.state = state
         log[self.type].debug("+ {}".format(self.name))
         p.proc.api.driver_pulse(self.number, 0)
+        p.events.post(self.type, self)
 
-    def disable(self):
+    def disable(self, show=False):
         """
         Disables this device.
         """
+        state = { "schedule": "disable", "show": show }
+        if self.state == state:
+            return
+        self.state = state
         log[self.type].debug("- {}".format(self.name))
         p.proc.api.driver_disable(self.number)
+        p.events.post(self.type, self)
 
     def pulse(self, pulse_length=None):
         """
