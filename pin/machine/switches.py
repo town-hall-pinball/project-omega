@@ -192,7 +192,6 @@ def init():
         "tilt": {
             "label": "Tilt",
             "device": "S14",
-            "opto": True,
         },
         "tilt_slam": {
             "label": "Tilt, Slam",
@@ -226,7 +225,6 @@ def init():
         "u_turn": {
             "label": "U-Turn",
             "device": "S55",
-            "opto": True,
         },
         "wireform_left": {
             "label": "Wireform, Left",
