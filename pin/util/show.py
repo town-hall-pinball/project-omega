@@ -115,6 +115,11 @@ class LightShow(Show):
         super(LightShow, self).__init__(name, [interval] * length, True)
         self.lights = lights
 
+    def stop(self):
+        super(LightShow, self).stop()
+        for light in self.lights:
+            p.lamps[light].disable(show=True)
+
     def action(self, use_callback=False):
         for light, sequence in self.lights.items():
             index = self.count % len(sequence)
