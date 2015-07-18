@@ -23,7 +23,7 @@ from . import mm3
 
 def init():
     p.load_modes((
-        "extra.mm3",
+        "game.extra.mm3",
     ))
 
 def load():

@@ -25,5 +25,6 @@ pin.mixer      Music and sounds being played
 pin.resources  Loading of resource assets
 pin.server     Lifecylce events for the web server
 pin.shows      Lifecycle of scripted events to be shown to the user
+pin.sim        Simulator activity as balls move around
 pin.switch     Physical switches
 ============== ================================================================

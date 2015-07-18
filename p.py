@@ -116,7 +116,7 @@ def load_modes(names):
     if modes is None:
         modes = {}
     for name in names:
-        fullname = namespace + "." + name
+        fullname = "pin." + name
         basename = name.split(".")[-1]
         try:
             m = importlib.import_module(fullname)

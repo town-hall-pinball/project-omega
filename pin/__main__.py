@@ -27,7 +27,6 @@ import time
 import pygame
 import p
 import pin
-from pin import server
 from pin.game import extra
 from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
 
@@ -135,12 +134,11 @@ def run():
     pin.game.init()
     extra.init()
     pin.game.start()
-    server.update()
     p.engine.run()
 
 def shutdown(exit_code):
     try:
-        server.stop()
+        p.events.trigger("shutdown")
     except Exception as e:
         logging.getLogger("pin").exception("error during shutdown")
     logging.getLogger("pin").info("exited with return code {}"

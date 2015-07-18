@@ -18,43 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
+
 import p
+from pin.handler import Handler
 
-from .config import defaults, keyboard, resources
-from . import extra
+log = logging.getLogger("pin.sim")
 
-# Resources now in resources.py
+class Mode(Handler):
 
-def init(load_resources=True):
-    if load_resources:
-        resources.load()
-        extra.load()
+    def setup(self):
+        p.events.on("data_simulator_enabled", self.update)
+        self.update()
 
-    p.load_modes((
-        "server",
-        "simulator",
-        "game.main.score",
-        "game.system.coin",
-        "game.attract",
-        "game.banner",
-        "game.post",
-        "game.starter",
-        "game.service.font_browser",
-        "game.service.image_browser",
-        "game.service.movie_browser",
-        "game.service.music_browser",
-        "game.service.sound_browser",
-        "game.service.service",
-    ))
-    extra.init()
-    keyboard.init()
-
-def start():
-    for gi in p.gi.values():
-        gi.enable()
-
-    if not p.modes["service"].direct_start():
-        if p.options["fast"]:
-            p.modes["attract"].enable()
+    def update(self):
+        if p.data["simulator_enabled"]:
+            self.enable()
         else:
-            p.modes["post"].enable()
+            self.disable()
+
+    def on_enable(self):
+        log.info("started")
+
+    def on_disable(self):
+        log.info("stop")
+

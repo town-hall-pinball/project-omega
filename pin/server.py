@@ -29,6 +29,7 @@ from ws4py.websocket import WebSocket
 
 import p
 from pin import brand, keyboard
+from pin.handler import Handler
 
 log = logging.getLogger("pin.server")
 log_command = logging.getLogger("pin.command")
@@ -81,7 +82,7 @@ class Root(object):
         }
 
 
-class Handler(WebSocket):
+class WebSocketHandler(WebSocket):
 
     def received_message(self, m):
         if not p.data["server_remote_control"]:
@@ -150,7 +151,7 @@ class WebServer(Thread):
             },
             "/ws": {
                 "tools.websocket.on": True,
-                "tools.websocket.handler_cls": Handler
+                "tools.websocket.handler_cls": WebSocketHandler
             }
         })
 
@@ -162,24 +163,31 @@ class WebServer(Thread):
         log.info("stopped")
 
 
-def update():
-    if p.data["server_enabled"]:
-        start()
-    else:
-        stop()
-    p.data.save()
+class Mode(Handler):
 
-def start():
-    global server
-    if not server:
+    def setup(self):
+        p.events.on("data_server_enabled", self.update)
+        p.events.on("shutdown", self.disable)
+        self.update()
+
+    def update(self):
+        global server
+        if p.data["server_enabled"]:
+            self.enable()
+        else:
+            self.disable()
+
+    def on_enable(self):
+        global server
         server = WebServer()
         server.start()
 
-def stop():
-    global server
-    if server:
-        log.info("stopping")
+    def on_disable(self):
+        global server
         cherrypy.engine.exit()
         server = None
+
+
+
 
 

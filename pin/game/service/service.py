@@ -322,13 +322,6 @@ class Mode(Handler):
         p.modes["image_browser"].enable()
         self.suspend()
 
-    def toggle_server(self):
-        from pin import server
-        server.update()
-
-    def toggle_simulator(self):
-        print "YEAH"
-
     # --------
     # Startup
     # --------

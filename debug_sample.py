@@ -37,6 +37,7 @@ def init():
         #"pin.mixer",
         #"pin.resources",
         #"pin.server",
+        #"pin.sim",
         #"pin.shows",
     ]
 

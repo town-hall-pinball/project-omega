@@ -121,8 +121,7 @@ utilities = {
             "options": [
                 [True, "Yes"],
                 [False, "No"]
-            ],
-            "action": "toggle_server"
+            ]
         },{
             "name": "Publish Events",
             "data": "server_publish_events",
@@ -183,8 +182,7 @@ utilities = {
             "options": [
                 [True, "Yes"],
                 [False, "No"]
-            ],
-            "action": "toggle_simulator"
+            ]
         }]
     }]
 }
