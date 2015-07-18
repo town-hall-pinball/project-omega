@@ -22,25 +22,29 @@ import p
 from pin import ui
 from pin.handler import Handler
 
-font = "t5cp"
 
-class WarningDisplay(object):
+class Warning(object):
 
     def __init__(self):
         self.display = ui.Panel()
         self.icon = ui.Image("warning", left=3)
         self.title = ui.Text("WARNING", padding_left=32, fill=None)
-        self.description = ui.Text("Yeah", padding_left=32, fill=None)
+        self.description = ui.Text("description", padding_left=32, fill=None)
         ui.valign((self.title, self.description))
 
         self.display.add((self.icon, self.title, self.description))
 
-class Mode(Handler):
 
-    def setup(self):
-        pass
+class Info(object):
+
+    def __init__(self):
+        self.display = ui.Panel()
+        self.icon = ui.Image("info", left=3)
+        self.description = ui.Text("description", left=28, right=0,
+                x_align="center")
+        self.display.add((self.icon, self.description))
 
 
-def init():
-    p.displays["warning"] = WarningDisplay()
+
+
 

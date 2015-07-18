@@ -32,11 +32,12 @@ class TestPOST(unittest.TestCase):
     def test_settings_cleared(self):
         p.data["cleared"] = True
         self.post.enable()
-        self.assertEquals("SETTINGS CLEARED", self.post.message.style["text"])
+        self.assertEquals("Settings Cleared",
+                self.post.panel.description.style["text"])
         p.now = 10
         p.timers.service()
 
     def test_normal(self):
         p.data["cleared"] = False
         self.post.enable()
-        self.assertEquals("NORMAL", self.post.message.style["text"])
+        self.assertEquals(None, self.post.panel)

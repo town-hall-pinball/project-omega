@@ -24,7 +24,7 @@ import p
 from pin import ui
 from pin.ui import effects
 from pin.handler import Handler
-from . import banner
+from . import banner, display
 
 log = logging.getLogger("pin")
 
@@ -32,22 +32,21 @@ class Mode(Handler):
 
     def setup(self):
         self.timer = None
-        self.display = ui.Notice(name="post", enabled=False)
-        self.message = ui.Text("NORMAL", padding=2)
-        self.display.add(self.message)
+        self.panel = None
 
     def on_enable(self):
         if p.data.get("cleared", False):
             p.mixer.play("settings_cleared")
-            self.message.show("SETTINGS CLEARED")
-            self.display.update(enabled=True)
-            self.message.effect("fill_blink", duration=0.25, repeat=2)
+            self.panel = display.Info()
+            self.show(self.panel)
+            self.panel.description.update(padding_top=1)
+            self.panel.description.show("Settings Cleared")
+            self.panel.description.effect("fill_blink", duration=0.25, repeat=2)
             self.wait(5.0, self.done)
         elif p.data.get("simulator_enabled", False):
-            warning = p.displays["warning"]
-            self.display = warning.display
-            warning.description.show("Simulator On")
-            p.dmd.add(self.display)
+            self.panel = display.Warning()
+            self.show(self.panel)
+            self.panel.description.show("Simulator On")
             self.wait(5.0, self.done)
         else:
             self.disable()

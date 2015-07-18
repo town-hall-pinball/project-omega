@@ -39,6 +39,7 @@ class Text(Component):
             "case": "auto",
         }, **style)
         self.area = None
+        self.offset_x = 0
 
     def show(self, text, duration=None):
         self.style["text"] = text if text is not None else ""
@@ -62,9 +63,11 @@ class Text(Component):
 
         # Crop as tight as possible and only go below the baseline if
         # necessary
-        text_height = max([x[3] - x[2] for x in height_metrics])
-        self.descent = min(x[2] for x in height_metrics) * - 1
-        text_height += self.descent
+        base_height = max([x[3] - x[2] for x in height_metrics])
+        descent = min(x[2] for x in height_metrics) * - 1
+        text_height = descent + base_height
+        ascent = font.get_ascent()
+        fluff = ascent - base_height
 
         # Remove the advance on the last character
         text_width = sum([x[4] for x in width_metrics])
@@ -77,9 +80,12 @@ class Text(Component):
         if self.height == None:
             self.height = (text_height + self.style["padding_top"] +
                     self.style["padding_bottom"])
+        self.area = (0, fluff, text_width, text_height)
 
-        self.area = (0, font.get_ascent() - self.height + self.descent,
-                self.width, self.height)
+        if self.style["x_align"] == "center":
+            self.offset_x = round((self.width / 2.0) - (text_width / 2.0))
+        #print "base", base_height, "descent", descent, "text_height", text_height, "ascent", ascent, "fluff", fluff, self.style["text"]
+        #print "area", self.area
 
     def draw(self):
         super(Text, self).draw()
@@ -88,13 +94,11 @@ class Text(Component):
         font = p.fonts[self.style["font"]]
         x = self.x
         y = self.y
-        offset_x = self.style["padding_left"]
-        offset_y = self.style["padding_top"]
-        if self.style["x_align"] == "center":
-            x += round((self.width / 2.0) - (text_width / 2.0))
+        text_x = self.style["padding_left"] + self.offset_x
+        text_y = self.style["padding_top"]
         color = (0, 0, self.style["color"] * 16)
         text = font.render(self.style["text"], False, color)
-        self.frame.blit(text, (offset_x, -offset_y), self.area)
+        self.frame.blit(text, (text_x, text_y), self.area)
 
     def __str__(self):
         return "text({})".format(self.style["text"])

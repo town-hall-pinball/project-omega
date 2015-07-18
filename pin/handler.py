@@ -81,6 +81,14 @@ class Handler(object):
         self.register()
         self.on_enable()
 
+    def show(self, display, transition=None):
+        if hasattr(display, "display"):
+            self.display = display.display
+        else:
+            self.display = display
+        if self.enabled:
+            p.dmd.add(self.display, transition)
+
     def on_enable(self):
         pass
 
