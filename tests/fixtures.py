@@ -53,7 +53,11 @@ def reset():
 
     p.options = {
         "fast": False,
+        "font": None,
         "image": None,
+        "movie": None,
+        "music": None,
+        "sound": None,
         "virtual": False,
         "quiet": False,
     }
