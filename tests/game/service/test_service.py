@@ -107,6 +107,7 @@ class TestService(unittest.TestCase):
     def test_action(self):
         p.events.post("switch_service_down")    # To Utilities
         p.events.post("switch_service_enter")   # Enter Utilities
+        p.events.post("switch_service_down")    # To Debug
         p.events.post("switch_service_down")    # To Browsers
         p.events.post("switch_service_enter")   # Enter Browsers
         p.events.post("switch_service_enter")   # Select Music Browser

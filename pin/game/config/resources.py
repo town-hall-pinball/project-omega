@@ -23,6 +23,10 @@ from pin import resources
 def load():
     resources.load_images(
         ("p-roc",                   "images/p-roc.dmd"),
+
+        ("info",                    "images/notice/info.png"),
+        ("warning",                 "images/notice/warning.png"),
+
         ("service_animations",      "images/service/animations.dmd"),
         ("service_audits",          "images/service/audits.dmd"),
         ("service_browse",          "images/service/browse.dmd"),

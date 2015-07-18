@@ -19,45 +19,28 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
+from pin import ui
+from pin.handler import Handler
 
-from .config import defaults, keyboard, resources
-from . import extra
+font = "t5cp"
 
-# Resources now in resources.py
+class WarningDisplay(object):
 
-def init(load_resources=True):
-    p.namespace = "pin.game"
-    if load_resources:
-        resources.load()
-        extra.load()
+    def __init__(self):
+        self.display = ui.Panel()
+        self.icon = ui.Image("warning", left=3)
+        self.title = ui.Text("WARNING", padding_left=32, fill=None)
+        self.description = ui.Text("Yeah", padding_left=32, fill=None)
+        ui.valign((self.title, self.description))
 
-    p.load_modes((
-        "main.score",
-        "system.coin",
-        "attract",
-        "banner",
-        "post",
-        "notice",
-        "starter",
-        "service.font_browser",
-        "service.image_browser",
-        "service.movie_browser",
-        "service.music_browser",
-        "service.sound_browser",
-        "service.service",
-    ))
-    extra.init()
-    keyboard.init()
+        self.display.add((self.icon, self.title, self.description))
 
-def start():
-    for gi in p.gi.values():
-        gi.enable()
+class Mode(Handler):
 
-    if p.options["image"]:
-        p.modes["service"].enable()
-        p.modes["image_browser"].enable()
-        p.modes["image_browser"].select(p.options["image"])
-    elif p.options["fast"]:
-        p.modes["attract"].enable()
-    else:
-        p.modes["post"].enable()
+    def setup(self):
+        pass
+
+
+def init():
+    p.displays["warning"] = WarningDisplay()
+

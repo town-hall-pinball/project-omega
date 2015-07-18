@@ -39,6 +39,8 @@ def parse_arguments():
         help="enable debugging options used for development")
     parser.add_argument("-f", "--fast", action="store_true", default=False,
         help="fast startup, immediately go to attract mode")
+    parser.add_argument("--image",
+        help="show the IMAGE in the browser")
     parser.add_argument("-m", "--metrics", action="store_true", default=False,
         help="collect execution metrics and display at program end")
     parser.add_argument("-s", "--simulate", action="store_true", default=False,

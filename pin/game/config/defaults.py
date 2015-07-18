@@ -34,6 +34,7 @@ defaults = {
     "server_publish_events": True,
     "server_remote_control": True,
     "service_credits": 0,
+    "simulator_enabled": False,
     "tilt_warnings": 2,
 }
 """

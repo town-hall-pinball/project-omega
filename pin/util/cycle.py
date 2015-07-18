@@ -42,3 +42,12 @@ class Cycle():
         if self.index < 0:
             self.index = len(self.items) - 1
         return self.get()
+
+    def select(self, value):
+        for i, other in enumerate(self.items):
+            if value == other:
+                self.index = i
+                return
+        raise ValueError("Item not found: {}".format(value))
+
+

@@ -37,3 +37,7 @@ class TestCycle(unittest.TestCase):
         self.assertEquals(3, self.iter.previous())
         self.assertEquals(2, self.iter.previous())
 
+    def test_select(self):
+        self.iter.select(2)
+        self.assertEquals(2, self.iter.get())
+

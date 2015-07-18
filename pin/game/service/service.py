@@ -326,6 +326,10 @@ class Mode(Handler):
         from pin import server
         server.update()
 
+    def toggle_simulator(self):
+        print "YEAH"
+
+
 
 
 

@@ -174,6 +174,18 @@ utilities = {
             "icon": "service_animations",
             "action": "movie_browser"
         }]
+    },{
+        "name": "Debug",
+        "icon": "service_debug",
+        "menu": [{
+            "name": "Simulator",
+            "data": "simulator_enabled",
+            "options": [
+                [True, "Yes"],
+                [False, "No"]
+            ],
+            "action": "toggle_simulator"
+        }]
     }]
 }
 

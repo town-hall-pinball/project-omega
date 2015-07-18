@@ -43,6 +43,12 @@ class Mode(Handler):
             self.display.update(enabled=True)
             self.message.effect("fill_blink", duration=0.25, repeat=2)
             self.wait(5.0, self.done)
+        elif p.data.get("simulator_enabled", False):
+            warning = p.displays["warning"]
+            self.display = warning.display
+            warning.description.show("Simulator On")
+            p.dmd.add(self.display)
+            self.wait(5.0, self.done)
         else:
             self.disable()
 
