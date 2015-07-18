@@ -53,11 +53,8 @@ def start():
     for gi in p.gi.values():
         gi.enable()
 
-    if p.options["image"]:
-        p.modes["service"].enable()
-        p.modes["image_browser"].enable()
-        p.modes["image_browser"].select(p.options["image"])
-    elif p.options["fast"]:
-        p.modes["attract"].enable()
-    else:
-        p.modes["post"].enable()
+    if not p.modes["service"].direct_start():
+        if p.options["fast"]:
+            p.modes["attract"].enable()
+        else:
+            p.modes["post"].enable()

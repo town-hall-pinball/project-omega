@@ -98,3 +98,7 @@ class Mode(Handler):
 
     def exit(self):
         self.disable()
+
+    def select(self, font):
+        self.fonts.select(font)
+        self.update()

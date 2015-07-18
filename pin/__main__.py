@@ -39,12 +39,20 @@ def parse_arguments():
         help="enable debugging options used for development")
     parser.add_argument("-f", "--fast", action="store_true", default=False,
         help="fast startup, immediately go to attract mode")
+    parser.add_argument("--font",
+        help="show the FONT in the browser")
     parser.add_argument("--image",
         help="show the IMAGE in the browser")
     parser.add_argument("-m", "--metrics", action="store_true", default=False,
         help="collect execution metrics and display at program end")
+    parser.add_argument("--movie",
+        help="show the MOVIE in the browser")
+    parser.add_argument("--music",
+        help="play the MUSIC in the browser")
     parser.add_argument("-s", "--simulate", action="store_true", default=False,
         help="Simulate the P-ROC")
+    parser.add_argument("--sound",
+        help="play the SOUND in the browser")
     parser.add_argument("-q", "--quiet", action="store_true", default=False,
         help="Do not emit any sounds")
 

@@ -329,7 +329,35 @@ class Mode(Handler):
     def toggle_simulator(self):
         print "YEAH"
 
+    # --------
+    # Startup
+    # --------
 
+    def direct_start(self):
+
+        def start(resource):
+            p.modes["service"].enable()
+            p.modes["service"].suspend()
+            p.modes[resource + "_browser"].enable()
+            p.modes[resource + "_browser"].select(p.options[resource])
+
+        if p.options["font"]:
+            start("font")
+            return True
+        if p.options["image"]:
+            start("image")
+            return True
+        if p.options["movie"]:
+            start("movie")
+            return True
+        if p.options["music"]:
+            start("music")
+            return True
+        if p.options["sound"]:
+            start("sound")
+            return True
+
+        return False
 
 
 

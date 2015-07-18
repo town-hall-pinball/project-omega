@@ -66,3 +66,8 @@ class Mode(Handler):
     def exit(self):
         self.disable()
 
+    def select(self, movie):
+        self.movies.select(movie)
+        self.update(show_label=True)
+
+

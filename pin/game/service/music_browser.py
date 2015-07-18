@@ -61,3 +61,8 @@ class Mode(Handler):
 
     def exit(self):
         self.disable()
+
+    def select(self, music):
+        self.music.select(music)
+        self.update()
+
