@@ -44,9 +44,11 @@ class Mode(Handler):
             self.panel.description.effect("fill_blink", duration=0.25, repeat=2)
             self.wait(5.0, self.done)
         elif p.data.get("simulator_enabled", False):
+            p.mixer.play("warning")
             self.panel = display.Warning()
             self.show(self.panel)
             self.panel.description.show("Simulator On")
+            self.panel.title.effect("blink", on=0.4, off=0.1, repeat=4)
             self.wait(5.0, self.done)
         else:
             self.disable()

@@ -60,7 +60,8 @@ def load():
         ("service_exit",        "sounds/service/exit.ogg"),
         ("service_save",        "sounds/service/save.ogg"),
         ("service_select",      "sounds/service/select.ogg"),
-        ("coin_drop",           "sounds/coinDrop.ogg")
+        ("coin_drop",           "sounds/coinDrop.ogg"),
+        ("warning",             "sounds/warning.ogg")
     )
     resources.register_music(
         ("credits",         "music/Credits.ogg",       { "start_time": 2.25 }),
