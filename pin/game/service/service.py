@@ -239,9 +239,6 @@ class Mode(Handler):
             p.data.save()
             self.result.show("Saved")
             p.mixer.play("service_save")
-            action = self.menu.node.get("action")
-            if action:
-                getattr(self, action)()
         else:
             self.result.show("No Change")
             p.mixer.play("service_exit")

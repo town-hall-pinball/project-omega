@@ -181,16 +181,6 @@ class TestService(unittest.TestCase):
         p.events.dispatch()
         self.assertFalse(p.data["free_play"])
 
-    def test_save_with_action(self):
-        p.events.post("switch_service_down") # Utilities
-        p.events.post("switch_service_enter") # Enter Utilities
-        p.events.post("switch_service_enter") # Enter Server
-        p.events.post("switch_service_enter") # Enable Server
-        p.events.post("switch_service_up") # YES
-        p.events.post("switch_service_enter") # Select
-        with patch.object(p.modes["service"], "toggle_server") as mock:
-            p.events.dispatch()
-            self.assertTrue(mock.called)
 
 class TestServiceActions(unittest.TestCase):
 
@@ -223,9 +213,5 @@ class TestServiceActions(unittest.TestCase):
         self.service.image_browser()
         self.assertTrue(p.modes["image_browser"].enabled)
 
-    @patch("pin.server.update")
-    def test_server_toggle(self, mock):
-        self.service.toggle_server()
-        self.assertTrue(mock.called)
 
 
