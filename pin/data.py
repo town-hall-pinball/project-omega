@@ -36,6 +36,12 @@ class Data(dict):
     Load and save activities are logged to `pin.data`
     """
 
+    read_only = False
+    """
+    If True, the save method will do nothing. This is useful for test
+    running
+    """
+
     def load(self, defaults):
         """
         Loads the dictonary with values stored in ``var/data.json``. Values
@@ -61,6 +67,8 @@ class Data(dict):
         cannot be saved, the dictonary contains a `save_failure` key with
         the value of `True`.
         """
+        if self.read_only:
+            return
         log.debug("Saving data to {}".format(path))
         try:
             with open(path, "w") as fp:

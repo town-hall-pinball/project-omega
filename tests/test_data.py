@@ -52,6 +52,7 @@ class TestDevices(unittest.TestCase):
         self.assertTrue(data["cleared"])
 
     def test_save(self):
+        data.read_only = False
         with patch("__builtin__.open", mock_open(), create=True) as mo:
             data["test"] = 12
             data.save()
@@ -59,6 +60,7 @@ class TestDevices(unittest.TestCase):
 
     @patch("__builtin__.open")
     def test_save_failure(self, mo):
+        data.read_only = False
         mo.side_effect = IOError
         data.save()
         self.assertTrue(data["save_failure"])

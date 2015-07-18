@@ -50,6 +50,7 @@ def reset():
     p.timers = pin.timers
 
     p.data.reset(p.defaults)
+    p.data.read_only = True
 
     p.options = {
         "fast": False,
@@ -74,7 +75,6 @@ def reset():
     pygame.mixer.music = Mock(pygame.mixer.music)
     pygame.key.get_mods = Mock()
     pygame.key.get_mods.return_value = 0
-
 
     movie = Mock(spec=[
         "get_size",
