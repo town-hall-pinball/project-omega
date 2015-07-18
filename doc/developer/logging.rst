@@ -17,6 +17,8 @@ pin.gi         General illumination lights
 pin.keyboard   Key down and up events
 pin.handler    Lifecycle events of the game handlers that implement the modes
                of the game
+pin.lamp       Lamp activitiy. Light shows are not logged as these can be
+               excessive.
 pin.magic      Shows if switch events are accepted, rejected, or trigger by
                a given magic sequence
 pin.mixer      Music and sounds being played

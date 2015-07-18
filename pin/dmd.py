@@ -26,7 +26,6 @@ width = 128
 height = 32
 
 log = logging.getLogger("pin.dmd")
-log_shift = logging.getLogger("pin.dmd_shift")
 
 class DMD(object):
 
@@ -124,9 +123,6 @@ class DMD(object):
             self.renderer = renderer
             self.transition = transition
             self.renderer.render_start()
-
-        log_shift.debug("Renderer {}, Previous {}".format(self.renderer,
-                self.previous_renderer))
 
     def render(self):
         self.frame, self.previous_frame = self.previous_frame, self.frame

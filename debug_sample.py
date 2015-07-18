@@ -30,7 +30,6 @@ def init():
         #"pin.command",
         #"pin.data",
         #"pin.dmd",
-        #"pin.dmd_shift",
         #"pin.event",
         #"pin.keyboard",
         #"pin.handler",
