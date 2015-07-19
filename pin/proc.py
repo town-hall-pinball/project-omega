@@ -87,7 +87,8 @@ def handle_events(events):
     for event in events:
         if event["type"] == DMD_READY:
             frame = p.dmd.render()
-            refresh_dmd(frame)
+            if frame:
+                refresh_dmd(frame)
             if p.options["virtual"]:
                 virtual_dmd.update(frame)
         elif event["type"] in (SWITCH_OPENED, SWITCH_CLOSED):

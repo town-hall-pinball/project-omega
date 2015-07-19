@@ -25,10 +25,18 @@ from pin.handler import Handler
 
 log = logging.getLogger("pin.sim")
 
+initial = []
+rules = {}
+
 class Mode(Handler):
 
     def setup(self):
+        self.balls = set()
+        self.free = 0
+
         p.events.on("data_simulator_enabled", self.update)
+        self.on("coil", self.handle_device)
+        self.on("switch", self.handle_device)
         self.update()
 
     def update(self):
@@ -39,7 +47,68 @@ class Mode(Handler):
 
     def on_enable(self):
         log.info("started")
+        for switch in initial:
+            switch.activate()
+            self.balls.add(switch)
 
     def on_disable(self):
         log.info("stop")
+        for switch in set(self.balls):
+            switch.deactivate()
+            self.balls.remove(switch)
+
+    def handle_device(self, device, state=None):
+        condition = "{}:{}={}".format(device.type, device.name,
+                device.state["schedule"])
+        if condition in rules:
+            log.debug(condition)
+            for rule in rules[condition]:
+                self.evaluate_rule(condition, rule)
+
+    def evaluate_rule(self, condition, rule):
+        if "disable" in rule:
+            rule["disable"].deactivate()
+            return
+
+        source = rule.get("from")
+        target = rule.get("to")
+
+        # Is a free ball the source? Is one available?
+        if not source and self.free == 0:
+            log.warn("No free balls on the playfield to acquire")
+            return
+
+        # Is the ball actually at the source location?
+        if source and source not in self.balls:
+            # Free ball on playfield?
+            if self.free > 0:
+                source = None # Grab from playfield
+            else:
+                log.warn("Ball not at source and no free ball to acquire")
+                return
+
+        # Is the target location blocked by a ball?
+        if target in self.balls:
+            return
+
+        # If playfield to playfield, ignore
+        if not source and not target:
+            return
+
+        source_name = source.name if source else "playfield"
+        target_name = target.name if target else "playfield"
+        log.debug("{} to {}".format(source_name, target_name))
+        p.events.post("simulate", source, target)
+
+        if source:
+            self.balls.remove(source)
+            source.deactivate()
+        else:
+            self.free -= 1
+
+        if target:
+            self.balls.add(target)
+            target.activate()
+        else:
+            self.free += 1
 

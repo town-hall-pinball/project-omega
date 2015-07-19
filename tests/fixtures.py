@@ -96,3 +96,20 @@ def reset():
         pin.game.init()
 
 
+
+class LoopError(Exception):
+    pass
+
+def loop():
+    done = False
+    loops = 0
+    while not done:
+        if loops > 100:
+            raise LoopError()
+        p.events.dispatch()
+        p.proc.process()
+        if len(p.events.queue) == 0:
+            done = True
+        loops += 1
+
+

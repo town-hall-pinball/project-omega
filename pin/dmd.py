@@ -128,8 +128,10 @@ class DMD(object):
         self.frame, self.previous_frame = self.previous_frame, self.frame
         self.frame.fill(0)
 
-        if not self.renderer:
+        if not self.renderer and (len(self.stack) > 0 or len(self.queue) > 0):
             raise ValueError("No Renderer")
+        elif not self.renderer:
+            return
 
         if self.transition and self.transition.done:
             self.transition = None

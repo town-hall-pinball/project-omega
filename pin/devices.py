@@ -212,6 +212,14 @@ class Switch(Device):
     def disable(self):
         self.enable(False)
 
+    def activate(self):
+        event = p.proc.SWITCH_OPENED if self.opto else p.proc.SWITCH_CLOSED
+        p.proc.artificial_events += [{"type": event, "value": self.number}]
+
+    def deactivate(self):
+        event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
+        p.proc.artificial_events += [{"type": event, "value": self.number}]
+
 
 def add(collection, clazz, configs):
     for name, config in configs.items():

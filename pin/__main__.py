@@ -138,7 +138,8 @@ def run():
 
 def shutdown(exit_code):
     try:
-        p.events.trigger("shutdown")
+        if p.events:
+            p.events.trigger("shutdown")
     except Exception as e:
         logging.getLogger("pin").exception("error during shutdown")
     logging.getLogger("pin").info("exited with return code {}"

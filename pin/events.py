@@ -75,7 +75,7 @@ def dispatch():
     while queue:
         item = queue.pop(0)
         log.debug("{}: {} {}".format(item["event"],
-                item["args"], item["kwargs"]))
+                map(str, item["args"]), item["kwargs"]))
 
         # Make a copy in case a new listener is added during
         # the dispatch
