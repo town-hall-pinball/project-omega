@@ -41,3 +41,8 @@ class TestCycle(unittest.TestCase):
         self.iter.select(2)
         self.assertEquals(2, self.iter.get())
 
+    def test_select_not_found(self):
+        with self.assertRaises(ValueError):
+            self.iter.select(4)
+
+

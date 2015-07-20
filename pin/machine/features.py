@@ -23,6 +23,7 @@ from pin import ball, simulator
 
 def init():
     sw = p.switches
+    coil = p.coils
 
     ball.total = 4
     ball.captures = {
@@ -34,11 +35,12 @@ def init():
                 sw["trough_3"],
                 sw["trough_4"]
             ],
-            coil="trough",
+            coil=coil["trough"],
             verify={
                 "type": "failure",
                 "switch": sw["trough_jam"],
-                "time": 1.0
+                "time": 1.00,
+                "retry_time": 3.00
             }
         ),
         "popper": ball.Capture(
@@ -47,7 +49,7 @@ def init():
                 sw["popper"],
                 sw["popper_2"]
             ],
-            coil="popper",
+            coil=coil["popper"],
             verify={
                 "type": "success",
                 "switch": sw["return_right"],
@@ -60,7 +62,7 @@ def init():
             switches=[
                 sw["saucer"],
             ],
-            coil="saucer",
+            coil=coil["saucer"],
             verify={
                 "type": "failure",
                 "switch": sw["saucer"],
@@ -72,7 +74,7 @@ def init():
             switches=[
                 sw["shooter_lane"],
             ],
-            coil="auto_plunger",
+            coil=coil["auto_plunger"],
             verify={
                 "type": "failure",
                 "switch": sw["shooter_lane"],
@@ -82,14 +84,14 @@ def init():
     }
 
     ball.search_sequence = [
-        p.coils["slingshot_left"],
-        p.coils["slingshot_right"],
-        p.coils["kickback"],
-        p.coils["drop_target_down"],
-        p.coils["drop_target_up"],
-        p.coils["auto_plunger"],
-        p.coils["saucer"],
-        p.coils["popper"],
+        coil["slingshot_left"],
+        coil["slingshot_right"],
+        coil["kickback"],
+        coil["drop_target_down"],
+        coil["drop_target_up"],
+        coil["auto_plunger"],
+        coil["saucer"],
+        coil["popper"],
     ]
 
     simulator.initial = [

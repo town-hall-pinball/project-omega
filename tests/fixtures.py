@@ -108,6 +108,7 @@ def loop():
             raise LoopError()
         p.events.dispatch()
         p.proc.process()
+        p.timers.service()
         if len(p.events.queue) == 0:
             done = True
         loops += 1

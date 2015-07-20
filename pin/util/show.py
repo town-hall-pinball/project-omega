@@ -78,18 +78,20 @@ class Show(Handler):
 
     def next(self):
         self.cancel(self.timer)
-        if not self.running:
-            return
+        #if not self.running:
+        #    return
         if self.index == len(self.timings):
-            if self.repeat != 0:
+            if self.repeat > 1:
                 self.index = 0
                 if self.repeat > 0:
                     self.repeat -= 1
-            else:
+            elif self.repeat >= 0 and self.repeat <= 1:
                 self.stop()
                 if self.fn_finished:
                     self.fn_finished()
                 return
+            else:
+                self.index = 0
         use_callback = False
         if self.fn_action:
             self.fn_action()
@@ -102,7 +104,7 @@ class Show(Handler):
         self.count += 1
 
     def action(self, use_callback=False):
-        pass
+        pass #pragma: no cover
 
 
 

@@ -100,6 +100,9 @@ class TestSlideIn(unittest.TestCase):
         with self.assertRaises(ValueError):
             SlideIn(direction="foo")
 
+    def test_str(self):
+        self.assertEquals("slide_in", str(SlideIn()))
+
 
 class TestSlideOut(unittest.TestCase):
 
@@ -174,4 +177,6 @@ class TestSlideOut(unittest.TestCase):
         with self.assertRaises(ValueError):
             SlideOut(direction="foo")
 
+    def test_str(self):
+        self.assertEquals("slide_out", str(SlideOut()))
 

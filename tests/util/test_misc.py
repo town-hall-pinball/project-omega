@@ -51,6 +51,9 @@ class TestDictMerge(unittest.TestCase):
         expected = { "x": { "one": 1, "two": 2, "three": 3 } }
         self.assertEquals(expected, util.dict_merge(a, b, c))
 
+    def test_non_dict(self):
+        self.assertEquals("foo", util.dict_merge({}, "foo"))
+
 
 class TestFraction(unittest.TestCase):
 
