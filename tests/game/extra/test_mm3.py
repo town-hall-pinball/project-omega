@@ -69,6 +69,12 @@ class TestMM3(unittest.TestCase):
         self.assertFalse(self.mm3.enabled)
         self.assertTrue(p.modes["attract"].enabled)
 
+    def test_timeout_restart(self):
+        # fixes #6: Listener already registered for switch_start_button
+        p.now = 100
+        p.timers.service()
+        self.mm3.enable()
+
     @patch("pin.resources.available")
     def test_no_init(self, mock_available):
         mock_available.return_value = False

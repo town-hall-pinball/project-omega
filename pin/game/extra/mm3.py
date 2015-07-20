@@ -145,6 +145,7 @@ class Mode(Handler):
         self.wait(8.0, self.finish)
 
     def timeout(self):
+        self.off("switch_start_button", self.select)
         self.disable()
         p.modes["attract"].enable()
 
