@@ -29,6 +29,10 @@ class Mode(Handler):
     def setup(self):
         self.handlers += [p.modes["coin"]]
 
+    def on_enable(self):
+        for handler in self.handlers:
+            handler.enable()
+
 
 def init():
     p.load_modes({
