@@ -61,6 +61,7 @@ class DMD(object):
         elif previous in self.queue:
             self.queue[self.queue.index(previous)] = current
         else:
+            transition = None
             self.stack += [current]
         self.shift_renderer(transition)
 
