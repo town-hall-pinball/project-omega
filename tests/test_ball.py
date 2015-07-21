@@ -22,9 +22,10 @@ import p
 from pin import ball
 
 import unittest
+from mock import Mock
 from tests import fixtures
 
-class TestBall(unittest.TestCase):
+class TestCaptures(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
@@ -125,6 +126,42 @@ class TestBall(unittest.TestCase):
         fixtures.loop()
         self.assertTrue(popper.ejecting)
         self.assertEquals(2, popper.eject_attempts)
+
+
+class TestSearch(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        ball.search_sequence = [
+            p.coils["saucer"],
+            p.coils["popper"]
+        ]
+
+    def test_search(self):
+        listener1 = Mock()
+        listener2 = Mock()
+        p.events.on("coil_saucer", listener1)
+        p.events.on("coil_popper", listener2)
+        ball.search()
+        fixtures.loop()
+        self.assertTrue(listener1.called)
+        p.now += ball.search_interval
+        fixtures.loop()
+        self.assertTrue(listener2.called)
+        self.assertFalse(ball.search.running)
+
+    def test_search_already_running(self):
+        listener1 = Mock()
+        listener2 = Mock()
+        p.events.on("coil_saucer", listener1)
+        p.events.on("coil_popper", listener2)
+        ball.search()
+        fixtures.loop()
+        ball.search()
+        self.assertTrue(listener1.called)
+        self.assertFalse(listener2.called)
+        self.assertTrue(ball.search.running)
+
 
 
 

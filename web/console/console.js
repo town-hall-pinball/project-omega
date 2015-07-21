@@ -85,7 +85,7 @@ $(function() {
             }
         });
         $("#ball-search").click(function() {
-            p.ws.send({ command: "trigger", event: "request_ball_search" });
+            p.ws.send({ command: "ball_search" });
         });
         $(document).keydown(keydown);
         $(document).keyup(keyup);

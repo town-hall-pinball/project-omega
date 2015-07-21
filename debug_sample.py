@@ -27,6 +27,7 @@ def init():
         #"pin.lamp",
         #"pin.switch",
 
+        #"pin.ball",
         #"pin.command",
         #"pin.data",
         #"pin.dmd",
@@ -35,6 +36,7 @@ def init():
         #"pin.handler",
         #"pin.magic",
         #"pin.mixer",
+        #"pin.notice",
         #"pin.resources",
         #"pin.server",
         #"pin.sim",

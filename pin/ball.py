@@ -24,11 +24,13 @@ import p
 from pin import util
 from pin.handler import Handler
 
-log = logging.getLogger("pin.capture")
+log = logging.getLogger("pin.ball")
 
 total = 0
 captures = {}
 search_sequence = []
+search_interval = 0.25
+
 max_eject_attempts = 20
 
 class Capture(Handler):
@@ -99,6 +101,31 @@ class Capture(Handler):
                 self.confirm_eject()
 
 
+class Search(object):
+
+    running = False
+    index = 0
+    timer = None
+
+    def __call__(self):
+        if self.running:
+            log.warn("search already running")
+            return
+        log.debug("searching")
+        p.notify("game", "Ball Search")
+        self.running = True
+        self.next()
+
+    def next(self):
+        search_sequence[self.index].pulse()
+        self.index += 1
+        if self.index == len(search_sequence):
+            self.index = 0
+            self.running = False
+        else:
+            self.timer = p.timers.wait(search_interval, self.next)
+
+
 
 class Mode(Handler):
     pass
@@ -118,6 +145,8 @@ def trough_count():
 
 def trough_ready():
     return trough_count() == total
+
+search = Search()
 
 
 

@@ -130,3 +130,8 @@ def load_modes(names):
             raise
 
 
+def notify(mtype, message):
+    logging.getLogger("pin.notice").debug(message)
+    events.post("notice", mtype, message)
+
+

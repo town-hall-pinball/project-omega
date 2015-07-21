@@ -28,7 +28,7 @@ from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
 
 import p
-from pin import brand, keyboard
+from pin import ball, brand, keyboard
 from pin.handler import Handler
 
 log = logging.getLogger("pin.server")
@@ -89,11 +89,14 @@ class WebSocketHandler(WebSocket):
             return
         message = json.loads(str(m))
         command = message["command"]
-        log_command.debug(command)
+        if command != "ping":
+            log_command.debug(command)
         if command == "switch":
             self.toggle_switch(message)
         if command == "coil":
             self.fire_coil(message)
+        if command == "ball_search":
+            ball.search()
 
     def toggle_switch(self, message):
         switch = p.switches[message["name"]]
@@ -127,6 +130,12 @@ class WebServer(Thread):
         payload["message"] = item.type
         cherrypy.engine.publish("websocket-broadcast", json.dumps(payload))
 
+    def dispatch_notice(self, mtype, message):
+        if not p.data["server_publish_events"]:
+            return
+        payload = { "message": "notice", "type": mtype, "text": message }
+        cherrypy.engine.publish("websocket-broadcast", json.dumps(payload))
+
     def run(self):
         log.info("starting on port {}".format(port))
         plugin = WebSocketPlugin(cherrypy.engine)
@@ -136,6 +145,7 @@ class WebServer(Thread):
         p.events.on("switch", self.dispatch_device)
         p.events.on("coil", self.dispatch_device)
         p.events.on("lamp", self.dispatch_device)
+        p.events.on("notice", self.dispatch_notice)
 
         cherrypy.quickstart(Root(), "/", config={
             "/": {
@@ -158,6 +168,7 @@ class WebServer(Thread):
         p.events.off("switch", self.dispatch_device)
         p.events.off("coil", self.dispatch_device)
         p.events.off("lamp", self.dispatch_device)
+        p.events.off("notice", self.dispatch_notice)
 
         plugin.unsubscribe()
         log.info("stopped")
