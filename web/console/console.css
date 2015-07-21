@@ -323,15 +323,14 @@ li.on {
     color: #8f8;
 }
 
-li.enable[data-type='music'],
-li.enable[data-type='sound'] {
+li[data-type='music'] {
+    color: #d8d;
+}
+/* a8a */
+li[data-type='sound'] {
     color: #a8a;
 }
 
-li.disable[data-type='music'],
-li.disable[data-type='sound'] {
-    color: #888;
-}
 
 .btn-primary {
     background-color: #000;
