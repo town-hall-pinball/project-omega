@@ -60,4 +60,5 @@ class Mode(Handler):
     def done(self):
         self.disable()
         p.mixer.stop()
+        p.modes["system"].enable()
         p.modes["attract"].enable()

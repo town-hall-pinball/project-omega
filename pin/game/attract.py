@@ -138,7 +138,6 @@ class Mode(Handler):
         self.light_show = util.LightShow("attract.light", 0.1, lights)
 
     def on_enable(self):
-        p.modes["coin"].enable()
         self.show.start()
         p.mixer.play("introduction")
         self.mm3.enable()

@@ -40,7 +40,7 @@ class Root(object):
 
     @cherrypy.expose
     def ws(self):
-        handler = cherrypy.request.ws_handler
+        pass
 
     def get_branding(self):
         return {
@@ -145,6 +145,8 @@ class WebServer(Thread):
         p.events.on("switch", self.dispatch_device)
         p.events.on("coil", self.dispatch_device)
         p.events.on("lamp", self.dispatch_device)
+        p.events.on("flasher", self.dispatch_device)
+        p.events.on("gi", self.dispatch_device)
         p.events.on("notice", self.dispatch_notice)
 
         cherrypy.quickstart(Root(), "/", config={
@@ -164,10 +166,14 @@ class WebServer(Thread):
                 "tools.websocket.handler_cls": WebSocketHandler
             }
         })
+        self.done(plugin)
 
+    def done(self, plugin):
         p.events.off("switch", self.dispatch_device)
         p.events.off("coil", self.dispatch_device)
         p.events.off("lamp", self.dispatch_device)
+        p.events.off("flasher", self.dispatch_device)
+        p.events.off("gi", self.dispatch_device)
         p.events.off("notice", self.dispatch_notice)
 
         plugin.unsubscribe()

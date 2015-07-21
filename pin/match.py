@@ -18,19 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import ui, util
-from pin.handler import Handler
-
-from . import coin
-
-class Mode(Handler):
-
-    def setup(self):
-        self.handlers += [p.modes["coin"]]
+class Match(object):
+    pass
 
 
-def init():
-    p.load_modes({
-        "game.system.coin"
-    })

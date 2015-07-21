@@ -34,7 +34,7 @@ def init(load_resources=True):
         "server",
         "simulator",
         "game.main.score",
-        "game.system.coin",
+        "game.system",
         "game.attract",
         "game.banner",
         "game.post",
@@ -55,6 +55,7 @@ def start():
 
     if not p.modes["service"].direct_start():
         if p.options["fast"]:
+            p.modes["system"].enable()
             p.modes["attract"].enable()
         else:
             p.modes["post"].enable()
