@@ -56,19 +56,28 @@ class Mode(Handler):
         self.timer = None
         self.credits = p.displays["credits"]
 
-        self.on("switch_buy_extra_ball_button", self.game_menu)
+        self.on("switch_start_button", self.start_match)
+        self.on("switch_buy_extra_ball_button", self.match_menu)
 
         self.on("switch_coin_left",     self.coin_left)
         self.on("switch_coin_center",   self.coin_center)
         self.on("switch_coin_right",    self.coin_right)
         self.on("switch_coin_fourth",   self.coin_fourth)
         self.on("switch_service_exit",  self.service_credit)
+        self.on("data_credits",         self.update_buttons)
 
     def on_enable(self):
         self.update_buttons()
 
-    def game_menu(self):
-        if p.data["free_play"] or p.data["credits"] >= 1:
+    def start_match(self):
+        if self.can_start():
+            p.data["credits"] -= 1
+        else:
+            if p.modes["attract"].enabled:
+                self.show_credits()
+
+    def match_menu(self):
+        if self.can_start():
             p.modes["starter"].enable()
             p.modes["attract"].disable()
         else:
@@ -118,16 +127,17 @@ class Mode(Handler):
         if p.modes["attract"].enabled and not p.data["free_play"]:
             self.show_credits()
         p.data.save()
-        p.events.post("credits")
-        self.update_buttons()
 
     def update_buttons(self):
-        if p.data["credits"] >= 1 or p.data["free_play"]:
+        if self.can_start():
             p.lamps["start_button"].patter(on=127, off=127)
             p.lamps["buy_extra_ball_button"].patter(on=127, off=127)
         else:
             p.lamps["start_button"].disable()
             p.lamps["buy_extra_ball_button"].disable()
+
+    def can_start(self):
+        return p.data["credits"] >= 1 or p.data["free_play"]
 
 
 def init():

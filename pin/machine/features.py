@@ -19,11 +19,13 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import ball, simulator
+from pin import ball, devices, simulator
 
 def init():
     sw = p.switches
     coil = p.coils
+
+    devices.flippers = devices.Flippers()
 
     ball.total = 4
     ball.captures = {

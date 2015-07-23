@@ -33,6 +33,7 @@ log = {
 devices = {}
 switch_numbers = {}
 flashers = {}
+flippers = []
 gi = {}
 lamps = {}
 switches = {}
@@ -219,6 +220,33 @@ class Switch(Device):
     def deactivate(self):
         event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
         p.proc.artificial_events += [{"type": event, "value": self.number}]
+
+
+class Flippers(object):
+
+    default_pulse_time = 30
+
+    flippers = {
+        "lower_left": {
+            "pulse_time": default_pulse_time
+         },
+        "lower_right": {
+            "pulse_time": default_pulse_time
+        },
+        "upper_left": {
+            "pulse_time": default_pulse_time
+        },
+        "upper_right": {
+            "pulse_time": default_pulse_time
+        }
+    }
+
+    def enable(self, enable=True):
+        # From: https://github.com/preble/pyprocgame/blob/master/procgame/game/game.py#L417-L459
+        pass
+
+    def disable(self):
+        self.enable(False)
 
 
 def add(collection, clazz, configs):
