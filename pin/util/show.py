@@ -78,8 +78,8 @@ class Show(Handler):
 
     def next(self):
         self.cancel(self.timer)
-        #if not self.running:
-        #    return
+        if not self.running:
+            return
         if self.index == len(self.timings):
             if self.repeat > 1:
                 self.index = 0

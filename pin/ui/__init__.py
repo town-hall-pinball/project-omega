@@ -21,6 +21,7 @@
 from .effects import *
 from .transitions import *
 
+from .canvas import *
 from .component import *
 from .image import *
 from .notice import *

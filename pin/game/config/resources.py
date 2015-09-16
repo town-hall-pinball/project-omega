@@ -60,6 +60,7 @@ def load():
         ("service_exit",        "sounds/service/exit.ogg"),
         ("service_save",        "sounds/service/save.ogg"),
         ("service_select",      "sounds/service/select.ogg"),
+        ("service_switch_edge", "sounds/service/switch_edge.ogg"),
         ("coin_drop",           "sounds/coinDrop.ogg"),
         ("warning",             "sounds/warning.ogg")
     )

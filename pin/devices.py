@@ -32,6 +32,7 @@ log = {
 
 devices = {}
 switch_numbers = {}
+switch_devices = {}
 flashers = {}
 flippers = []
 gi = {}
@@ -221,6 +222,8 @@ class Switch(Device):
         event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
         p.proc.artificial_events += [{"type": event, "value": self.number}]
 
+    def is_closed(self):
+        return self.active if not self.opto else not self.active
 
 class Flippers(object):
 
