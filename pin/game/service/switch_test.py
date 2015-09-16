@@ -35,7 +35,8 @@ class Mode(Handler):
         self.title = ui.Text("Switch Edges", top=5, left=self.matrix_width,
                 width=self.info_width, font="t5cpb", x_align="center")
         self.name = ui.Text(" ", left=self.matrix_width, bottom=5,
-                width=self.info_width, font="t5cp", x_align="center")
+                width=self.info_width, font="t5cp", x_align="center",
+                case="full")
 
         self.display.add([self.canvas, self.title, self.name])
         self.on("switch_service_exit",  self.exit)
