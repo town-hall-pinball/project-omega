@@ -1,0 +1,68 @@
+# Copyright (c) 2014 - 2015 townhallpinball.org
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+
+from pin import dmd
+from pin.devices import devices
+from pin.ui import Canvas
+
+class Matrix(Canvas):
+
+    box_when = "closed"
+
+    def __init__(self):
+        super(Matrix, self).__init__(left=0, top=0, width=40)
+        self.layout()
+
+    def redraw(self):
+        self.clear()
+        self.dot_column(2, "SD")
+        self.vline(5, 2, dmd.height - 4, color=0x8)
+        col = 1
+        for x in xrange(8, 8 + (8 * 3), 3):
+            self.dot_column(x, "S" + str(col))
+            col += 1
+        x += 3
+        self.vline(x, 2, dmd.height - 4, color=0x8)
+        x += 3
+        self.dot_column(x, "SF")
+        self.invalidate()
+
+    def cell_rendering(self, switch):
+        if not switch:
+            return "empty"
+        if self.box_when == "closed" and switch.is_closed():
+            return "box"
+        if self.box_when == "active" and switch.is_active():
+            return "box"
+        return "dot"
+
+    def dot_column(self, x, prefix):
+        y = 5
+        row = 1
+        for y in xrange(5, 5 + (8 * 3), 3):
+            ident = prefix + str(row)
+            switch = devices.get(ident)
+            rendering = self.cell_rendering(switch)
+            if rendering == "box":
+                self.box(x - 1, y - 1, 3, 3)
+            elif rendering == "dot":
+                self.dot(x, y)
+            row += 1
+
