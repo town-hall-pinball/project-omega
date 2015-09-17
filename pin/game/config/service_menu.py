@@ -65,7 +65,16 @@ tests = {
     "menu": [{
         "name": "Switches",
         "icon": "service_switches",
-        "action": "switch_test"
+        "menu": [{
+            "name": "Test Edges",
+            "action": "switch_edges_test"
+        },{
+            "name": "Test Levels",
+            "action": "switch_levels_test"
+        },{
+            "name": "Test Single",
+            "action": "single_switches_test"
+        }],
     },{
         "name": "Coils",
         "icon": "service_coils",

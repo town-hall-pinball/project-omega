@@ -319,8 +319,8 @@ class Mode(Handler):
         p.modes["image_browser"].enable()
         self.suspend()
 
-    def switch_test(self):
-        p.modes["switch_test"].enable()
+    def switch_edges_test(self):
+        p.modes["switch_edges_test"].enable()
         self.suspend()
 
     # --------
