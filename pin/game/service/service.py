@@ -323,6 +323,10 @@ class Mode(Handler):
         p.modes["switch_edges_test"].enable()
         self.suspend()
 
+    def switch_levels_test(self):
+        p.modes["switch_levels_test"].enable()
+        self.suspend()
+
     # --------
     # Startup
     # --------

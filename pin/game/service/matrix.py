@@ -25,9 +25,13 @@ from pin.ui import Canvas
 class Matrix(Canvas):
 
     box_when = "closed"
+    selected = None
+    pulse_color = 0x8
 
-    def __init__(self):
+    def __init__(self, box_when=None):
         super(Matrix, self).__init__(left=0, top=0, width=40)
+        if box_when:
+            self.box_when = box_when
         self.layout()
 
     def redraw(self):
@@ -47,9 +51,11 @@ class Matrix(Canvas):
     def cell_rendering(self, switch):
         if not switch:
             return "empty"
+        if switch == self.selected:
+            return "selected"
         if self.box_when == "closed" and switch.is_closed():
             return "box"
-        if self.box_when == "active" and switch.is_active():
+        if self.box_when == "active" and switch.active:
             return "box"
         return "dot"
 
@@ -64,5 +70,11 @@ class Matrix(Canvas):
                 self.box(x - 1, y - 1, 3, 3)
             elif rendering == "dot":
                 self.dot(x, y)
+            elif rendering == "selected":
+                self.dot(x, y, self.pulse_color)
+                self.dot(x-1, y-1, self.pulse_color)
+                self.dot(x-1, y+1, self.pulse_color)
+                self.dot(x+1, y-1, self.pulse_color)
+                self.dot(x+1, y+1, self.pulse_color)
             row += 1
 
