@@ -27,11 +27,14 @@ class Matrix(Canvas):
     box_when = "closed"
     selected = None
     pulse_color = 0x8
+    pulse_timer = None
+    handler = None
 
-    def __init__(self, box_when=None):
+    def __init__(self, handler=None, box_when=None):
         super(Matrix, self).__init__(left=0, top=0, width=40)
         if box_when:
             self.box_when = box_when
+        self.handler = handler
         self.layout()
 
     def redraw(self):
@@ -47,6 +50,21 @@ class Matrix(Canvas):
         x += 3
         self.dot_column(x, "SF")
         self.invalidate()
+
+    def select(self, switch):
+        self.handler.cancel(self.pulse_timer)
+        self.selected = switch
+        if self.handler and self.selected:
+            self.pulse_selection()
+        elif self.handler and not self.selected:
+            self.redraw()
+
+    def pulse_selection(self):
+        self.pulse_color += 0x2
+        if self.pulse_color > 0xf:
+            self.pulse_color = 0x8
+        self.redraw()
+        self.pulse_timer = self.handler.wait(0.1, self.pulse_selection)
 
     def cell_rendering(self, switch):
         if not switch:

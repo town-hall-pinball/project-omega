@@ -28,13 +28,12 @@ class Mode(Handler):
 
     row = 1
     col = 0
-    current = None
     update_count = 0
     timer = None
 
     def setup(self):
         self.display = ui.Panel(name="switch_levels_test")
-        self.matrix = Matrix(box_when="active")
+        self.matrix = Matrix(handler=self, box_when="active")
         self.info_width = dmd.width - self.matrix.width
 
         self.title = ui.Text("Switch Levels", top=10,
@@ -51,6 +50,7 @@ class Mode(Handler):
         self.on("switch", self.update_switches)
 
     def on_enable(self):
+        self.update_count = 0
         self.update_switches()
         self.advance_switch()
         self.update_active()
@@ -59,24 +59,22 @@ class Mode(Handler):
         self.matrix.redraw()
         if sw and sw.active:
             p.mixer.play("service_switch_edge")
+        if sw and not sw.active and sw == self.matrix.selected:
+            self.advance_switch()
 
     def update_active(self):
         self.update_count += 1
         if self.update_count % 20 == 0:
             self.advance_switch()
-        self.matrix.pulse_color += 2
-        if self.matrix.pulse_color > 0xf:
-            self.matrix.pulse_color = 0x8
-        self.matrix.redraw()
+            self.matrix.redraw()
         self.timer = self.wait(0.1, self.update_active)
 
     def advance_switch(self, direction=1):
         self.find_next_switch(direction)
-        if not self.current:
+        if not self.matrix.selected:
             self.name.show("None active")
         else:
-            self.matrix.selected = self.current
-            self.name.show(self.current.label)
+            self.name.show(self.matrix.selected.label)
 
     def get_ident(self):
         r = self.row
@@ -105,10 +103,11 @@ class Mode(Handler):
             ident = self.get_ident()
             switch = devices.get(ident)
             if switch and switch.active:
-                self.current = switch
+                self.matrix.select(switch)
                 return
             if count > 8 * 10:
-                self.current = None
+                self.matrix.select(None)
+                self.update_count = 0
                 return
 
     def next(self):
