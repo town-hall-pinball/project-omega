@@ -19,25 +19,54 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
+from pin import dmd, ui, util
 from pin.devices import devices
 from pin.handler import Handler
-from pin import dmd, ui, util
+from .matrix import Matrix
+
+toggle_time = 1
 
 class Mode(Handler):
 
-    matrix_width = 40
+    lamps_on = False
+    timer = None
 
     def setup(self):
-        self.info_width = dmd.width - self.matrix_width
-        self.display = ui.Panel(name="switch_test")
-        self.canvas = ui.Canvas(left=0, top=0, width=self.matrix_width)
+        self.display = ui.Panel(name="lamps_all_test")
 
-        self.title = ui.Text("Switch Edges", top=5, left=self.matrix_width,
-                width=self.info_width, font="t5cpb", x_align="center")
-        self.name = ui.Text(" ", left=self.matrix_width, bottom=5,
-                width=self.info_width, font="t5cp", x_align="center",
-                case="full")
+        self.icon = ui.Image("service_lamps", left=0)
+        self.title = ui.Text("All Lamps", font="t5cpb")
+        self.light_label = ui.Text("Light", font="t5cp",
+                padding=[1,5], fill=0x8, enabled=False)
+        ui.valign((self.title, self.light_label))
 
-        self.display.add([self.canvas, self.title, self.name])
+        self.display.add([self.icon, self.title, self.light_label])
         self.on("switch_service_exit",  self.exit)
-        self.on("switch", self.update_switches)
+
+    def on_enable(self):
+        self.lamps_on = False
+        self.toggle()
+
+    def toggle(self):
+        self.cancel(self.timer)
+        self.lamps_on = not self.lamps_on
+        if self.lamps_on:
+            self.light_label.show("Light")
+        else:
+            self.light_label.hide()
+        self.light()
+        self.timer = self.wait(toggle_time, self.toggle)
+
+    def light(self):
+        map(lambda l: l.enable(self.lamps_on, show=True), p.lamps.values())
+
+    def exit(self):
+        self.disable()
+        p.mixer.play("service_exit")
+
+    def on_disable(self):
+        self.lamps_on = False
+        self.light()
+        p.modes["service"].resume()
+
+

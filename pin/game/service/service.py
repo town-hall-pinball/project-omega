@@ -335,6 +335,10 @@ class Mode(Handler):
         p.modes["coils_test"].enable()
         self.suspend()
 
+    def lamps_all_test(self):
+        p.modes["lamps_all_test"].enable()
+        self.suspend()
+
     # --------
     # Startup
     # --------

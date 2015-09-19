@@ -98,7 +98,8 @@ class Driver(Device):
         disabled by specifying `False` for `enabled`
         """
         if not enabled:
-            self.disable()
+            self.disable(show)
+            return
         state = { "schedule": "enable", "show": show }
         if self.state == state:
             return

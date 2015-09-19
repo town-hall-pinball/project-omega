@@ -83,11 +83,11 @@ tests = {
         "name": "Lamps",
         "icon": "service_lamps",
         "menu": [{
-            "name": "All",
-            "action": "lamp_test_all"
+            "name": "Test All",
+            "action": "lamps_all_test"
         },{
-            "name": "Individual",
-            "action": "lamp_test_individual"
+            "name": "Test Single",
+            "action": "lamps_single_test"
         }]
     },{
         "name": "Flashers",
