@@ -41,7 +41,7 @@ class Text(Component):
         self.area = None
         self.offset_x = 0
 
-    def show(self, text, duration=None):
+    def show(self, text=None, duration=None):
         self.style["text"] = text if text is not None else ""
         super(Text, self).show(duration)
         self.auto_size()

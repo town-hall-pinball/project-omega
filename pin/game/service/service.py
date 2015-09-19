@@ -327,6 +327,10 @@ class Mode(Handler):
         p.modes["switch_levels_test"].enable()
         self.suspend()
 
+    def switch_single_test(self):
+        p.modes["switch_single_test"].enable()
+        self.suspend()
+
     # --------
     # Startup
     # --------

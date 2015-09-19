@@ -225,6 +225,9 @@ class Switch(Device):
     def is_closed(self):
         return self.active if not self.opto else not self.active
 
+    def is_opened(self):
+        return not self.is_closed()
+
 class Flippers(object):
 
     default_pulse_time = 30

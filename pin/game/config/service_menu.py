@@ -73,7 +73,7 @@ tests = {
             "action": "switch_levels_test"
         },{
             "name": "Test Single",
-            "action": "single_switches_test"
+            "action": "switch_single_test"
         }],
     },{
         "name": "Coils",

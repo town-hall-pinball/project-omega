@@ -46,6 +46,7 @@ def init(load_resources=True):
         "game.service.sound_browser",
         "game.service.switch_edges_test",
         "game.service.switch_levels_test",
+        "game.service.switch_single_test",
         "game.service.service",
     ))
     extra.init()
