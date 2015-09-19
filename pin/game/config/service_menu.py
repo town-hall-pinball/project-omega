@@ -78,7 +78,7 @@ tests = {
     },{
         "name": "Coils",
         "icon": "service_coils",
-        "action": "coil_test"
+        "action": "coils_test"
     },{
         "name": "Lamps",
         "icon": "service_lamps",

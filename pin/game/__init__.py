@@ -39,6 +39,7 @@ def init(load_resources=True):
         "game.banner",
         "game.post",
         "game.starter",
+        "game.service.coils_test",
         "game.service.font_browser",
         "game.service.image_browser",
         "game.service.movie_browser",

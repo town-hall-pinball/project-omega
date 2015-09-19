@@ -331,6 +331,10 @@ class Mode(Handler):
         p.modes["switch_single_test"].enable()
         self.suspend()
 
+    def coils_test(self):
+        p.modes["coils_test"].enable()
+        self.suspend()
+
     # --------
     # Startup
     # --------

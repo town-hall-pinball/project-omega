@@ -30,12 +30,13 @@ class Mode(Handler):
         self.matrix = Matrix()
         self.info_width = dmd.width - self.matrix.width
 
-        self.title = ui.Text("Switch Edges", top=10,
+        self.title = ui.Text("Switch Edges",
                 left=self.matrix.width, width=self.info_width,
                 font="t5cpb", x_align="center")
-        self.name = ui.Text(" ", left=self.matrix.width, top=18,
+        self.name = ui.Text(" ", left=self.matrix.width,
                 width=self.info_width, font="t5cp", x_align="center",
                 case="full")
+        ui.valign((self.title, self.name))
 
         self.display.add([self.matrix, self.title, self.name])
         self.on("switch_service_exit",  self.exit)

@@ -26,23 +26,20 @@ from .matrix import Matrix
 
 class Mode(Handler):
 
-    row = 1
-    col = 0
-    update_count = 0
-    timer = None
-
     def setup(self):
         self.display = ui.Panel(name="switch_single_test")
         self.matrix = Matrix(handler=self)
         self.info_width = dmd.width - self.matrix.width
 
-        self.status = ui.Text("OPEN", top=10,
+        self.status = ui.Text("OPEN",
                 left=self.matrix.width, width=self.info_width,
                 font="t5cpb", x_align="center")
-        self.name = ui.Text("Switch Name", left=self.matrix.width, top=18,
+        self.name = ui.Text("Switch Name", left=self.matrix.width,
                 width=self.info_width, font="t5cp", x_align="center",
                 case="full")
-        self.opto = ui.Text("Opto", right=3, top=10, font="t5cp")
+        self.opto = ui.Text("Opto", left=self.matrix.width,
+                width=self.info_width, font="t5cp", x_align="center")
+        ui.valign((self.status, self.name, self.opto))
 
         self.display.add([self.matrix, self.status, self.name, self.opto])
 
