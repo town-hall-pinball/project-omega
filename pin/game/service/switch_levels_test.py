@@ -26,8 +26,6 @@ from .matrix import Matrix
 
 class Mode(Handler):
 
-    row = 1
-    col = 0
     update_count = 0
     timer = None
 
