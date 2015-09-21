@@ -93,11 +93,11 @@ tests = {
         "name": "Flashers",
         "icon": "service_flashers",
         "menu": [{
-            "name": "All",
-            "event": "flasher_test_all"
+            "name": "Test All",
+            "action": "flashers_all_test"
         },{
-            "name": "Individual",
-            "event": "flasher_test_individual"
+            "name": "Test Single",
+            "action": "flashers_single_test"
         }]
     }]
 }

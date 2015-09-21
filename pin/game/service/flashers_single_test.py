@@ -18,35 +18,12 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-__all__ = ["Cycle"]
+import p
+from .pulse_test import PulseTest
 
-class Cycle():
+class Mode(PulseTest):
 
-    index = 0
-    items = None
-
-    def __init__(self, items):
-        self.items = list(items)
-
-    def get(self):
-        return self.items[self.index]
-
-    def next(self):
-        self.index += 1
-        if self.index >= len(self.items):
-            self.index = 0
-        return self.get()
-
-    def previous(self):
-        self.index -= 1
-        if self.index < 0:
-            self.index = len(self.items) - 1
-        return self.get()
-
-    def select(self, value):
-        for i, other in enumerate(self.items):
-            if value == other:
-                self.index = i
-                return
-        raise ValueError("Item not found: {}".format(value))
-
+    def __init__(self, name):
+        compare = lambda x, y: cmp(x.label, y.label)
+        flashers = sorted(p.flashers.values(), cmp=compare)
+        super(Mode, self).__init__(name, "service_flashers", flashers)

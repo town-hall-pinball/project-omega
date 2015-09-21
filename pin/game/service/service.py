@@ -343,6 +343,15 @@ class Mode(Handler):
         p.modes["lamps_single_test"].enable()
         self.suspend()
 
+    def flashers_all_test(self):
+        p.modes["flashers_all_test"].enable()
+        self.suspend()
+
+    def flashers_single_test(self):
+        p.modes["flashers_single_test"].enable()
+        self.suspend()
+
+
     # --------
     # Startup
     # --------

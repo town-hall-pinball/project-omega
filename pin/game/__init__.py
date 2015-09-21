@@ -40,6 +40,8 @@ def init(load_resources=True):
         "game.post",
         "game.starter",
         "game.service.coils_test",
+        "game.service.flashers_all_test",
+        "game.service.flashers_single_test",
         "game.service.font_browser",
         "game.service.image_browser",
         "game.service.lamps_all_test",
