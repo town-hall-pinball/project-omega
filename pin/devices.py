@@ -123,7 +123,7 @@ class Driver(Device):
     def is_active(self):
         return self.state["schedule"] != "disable"
 
-    def pulse(self, pulse_length=None):
+    def pulse(self, pulse_length=None, show=False):
         """
         Enables this devices for `pulse_length` milliseconds. If `pulse_length`
         is not provided, it defaults to the configured `default_pulse_length`
@@ -133,7 +133,8 @@ class Driver(Device):
             pulse_length = self.default_pulse_length
         else:
             suffix = "for {}ms".format(pulse_length)
-        self.state = { "schedule": "pulse", "duration": pulse_length }
+        self.state = { "schedule": "pulse", "duration": pulse_length,
+                "show": show }
 
         log[self.type].debug("+ {} {}".format(self.name, suffix))
         p.proc.api.driver_pulse(self.number, pulse_length)

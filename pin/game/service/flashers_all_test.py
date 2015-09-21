@@ -50,7 +50,7 @@ class Mode(Handler):
     def flash(self):
         self.cancel(self.timer)
         flasher = self.flashers.next()
-        flasher.pulse()
+        flasher.pulse(show=True)
         self.timer = self.wait(0.1, self.flash)
 
     def exit(self):
