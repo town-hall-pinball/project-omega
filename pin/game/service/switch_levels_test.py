@@ -28,6 +28,8 @@ class Mode(Handler):
 
     update_count = 0
     timer = None
+    row = 0
+    col = 1
 
     def setup(self):
         self.display = ui.Panel(name="switch_levels_test")

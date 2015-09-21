@@ -25,30 +25,35 @@ from pin.ui import Canvas
 class Matrix(Canvas):
 
     box_when = "closed"
+    devices = None
     selected = None
     pulse_color = 0x8
     pulse_timer = None
     handler = None
 
-    def __init__(self, handler=None, box_when=None):
+    def __init__(self, handler=None, box_when=None, devices="switches"):
         super(Matrix, self).__init__(left=0, top=0, width=40)
         if box_when:
             self.box_when = box_when
+        self.devices = devices
         self.handler = handler
         self.layout()
 
     def redraw(self):
         self.clear()
-        self.dot_column(2, "SD")
-        self.vline(5, 2, dmd.height - 4, color=0x8)
+        if self.devices == "switches":
+            self.dot_column(2, "SD")
+            self.vline(5, 2, dmd.height - 4, color=0x8)
         col = 1
         for x in xrange(8, 8 + (8 * 3), 3):
-            self.dot_column(x, "S" + str(col))
+            prefix = "S" if self.devices == "switches" else "L"
+            self.dot_column(x, prefix + str(col))
             col += 1
         x += 3
-        self.vline(x, 2, dmd.height - 4, color=0x8)
-        x += 3
-        self.dot_column(x, "SF")
+        if self.devices == "switches":
+            self.vline(x, 2, dmd.height - 4, color=0x8)
+            x += 3
+            self.dot_column(x, "SF")
         self.invalidate()
 
     def select(self, switch):
@@ -66,15 +71,19 @@ class Matrix(Canvas):
         self.redraw()
         self.pulse_timer = self.handler.wait(0.1, self.pulse_selection)
 
-    def cell_rendering(self, switch):
-        if not switch:
+    def cell_rendering(self, device):
+        if not device:
             return "empty"
-        if switch == self.selected:
+        if device == self.selected:
             return "selected"
-        if self.box_when == "closed" and switch.is_closed():
-            return "box"
-        if self.box_when == "active" and switch.active:
-            return "box"
+        if self.devices == "switches":
+            if self.box_when == "closed" and device.is_closed():
+                return "box"
+            if self.box_when == "active" and device.active:
+                return "box"
+        else:
+            if device.is_active():
+                return "box"
         return "dot"
 
     def dot_column(self, x, prefix):
@@ -82,8 +91,8 @@ class Matrix(Canvas):
         row = 1
         for y in xrange(5, 5 + (8 * 3), 3):
             ident = prefix + str(row)
-            switch = devices.get(ident)
-            rendering = self.cell_rendering(switch)
+            device = devices.get(ident)
+            rendering = self.cell_rendering(device)
             if rendering == "box":
                 self.box(x - 1, y - 1, 3, 3)
             elif rendering == "dot":

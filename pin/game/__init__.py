@@ -43,6 +43,7 @@ def init(load_resources=True):
         "game.service.font_browser",
         "game.service.image_browser",
         "game.service.lamps_all_test",
+        "game.service.lamps_single_test",
         "game.service.movie_browser",
         "game.service.music_browser",
         "game.service.sound_browser",

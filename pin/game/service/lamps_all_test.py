@@ -35,7 +35,7 @@ class Mode(Handler):
         self.display = ui.Panel(name="lamps_all_test")
 
         self.icon = ui.Image("service_lamps", left=0)
-        self.title = ui.Text("All Lamps", font="t5cpb")
+        self.title = ui.Text("All Lamps", font="t5b")
         self.light_label = ui.Text("Light", font="t5cp",
                 padding=[1,5], fill=0x8, enabled=False)
         ui.valign((self.title, self.light_label))

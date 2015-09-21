@@ -120,6 +120,9 @@ class Driver(Device):
         p.proc.api.driver_disable(self.number)
         p.events.post(self.type, self)
 
+    def is_active(self):
+        return self.state["schedule"] != "disable"
+
     def pulse(self, pulse_length=None):
         """
         Enables this devices for `pulse_length` milliseconds. If `pulse_length`
@@ -138,7 +141,7 @@ class Driver(Device):
         p.events.trigger("{}_{}".format(self.type, self.name))
         self.state = { "schedule": "disable" }
 
-    def patter(self, on, off):
+    def patter(self, on=127, off=127):
         """
         Repeats a sequence when the device is enabled for `on` milliseconds
         and disabled for `off` milliseconds. Maximum `on` and `off` times are

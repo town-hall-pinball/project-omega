@@ -19,98 +19,12 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin.handler import Handler
-from pin import dmd, ui, util
+from .pulse_test import PulseTest
 
-default_pulse_wait = 2.0
-mode_labels = (
-    "Manual",
-    "Repeat",
-    "Cycle",
-)
+class Mode(PulseTest):
 
-class Mode(Handler):
-
-    timer = None
-
-    def setup(self):
-        self.display = ui.Panel(name="coils_test")
-
-        self.icon = ui.Image("service_coils", left=0)
-        self.mode_label = ui.Text("Mode", font="t5cpb")
-        self.name = ui.Text("Name", font="t5cp", case="full")
-        self.pulse_label = ui.Text("Pulse", font="t5cp", fill=0x08,
-                padding=[1, 5], enabled=False)
-
-        ui.valign((self.mode_label, self.name, self.pulse_label))
-        self.display.add((self.icon, self.mode_label, self.name,
-                self.pulse_label))
-
+    def __init__(self, name):
         compare = lambda x, y: cmp(x.label, y.label)
-        ordered_coils = sorted(p.coils.values(), cmp=compare)
-        self.coils = util.Cycle(ordered_coils)
-        self.modes = util.Cycle(mode_labels)
+        coils = sorted(p.coils.values(), cmp=compare)
+        super(Mode, self).__init__(name, "service_coils", coils)
 
-        self.on("switch_service_exit",  self.exit)
-        self.on("switch_service_up", self.next)
-        self.on("switch_service_down", self.previous)
-        self.on("switch_service_enter", self.next_mode)
-        self.on("switch_start_button", self.manual_pulse)
-
-    def on_enable(self):
-        self.update_mode()
-
-    def on_disable(self):
-        self.cancel(self.timer)
-
-    def update_mode(self):
-        mode = self.modes.get()
-        self.mode_label.show(mode)
-        self.update_selection()
-
-    def update_selection(self):
-        coil = self.coils.get()
-        self.name.show(coil.label)
-        if self.modes.get() in ("Repeat", "Cycle"):
-            self.schedule_pulse()
-        else:
-            self.cancel(self.timer)
-
-    def next(self):
-        self.coils.next()
-        self.update_selection()
-
-    def previous(self):
-        self.coils.previous()
-        self.update_selection()
-
-    def next_mode(self):
-        mode = self.modes.next()
-        self.update_mode()
-
-    def schedule_pulse(self):
-        self.cancel(self.timer)
-        self.timer = self.wait(default_pulse_wait, self.scheduled_pulse)
-
-    def scheduled_pulse(self):
-        if self.modes.get() == "Cycle":
-            self.coils.next()
-        coil = self.coils.get()
-        self.name.show(coil.label)
-        self.pulse()
-        self.schedule_pulse()
-
-    def manual_pulse(self):
-        if self.modes.get() == "Manual":
-            self.pulse()
-
-    def pulse(self):
-        self.coils.get().pulse()
-        self.pulse_label.show("Pulse", 1.0)
-
-    def exit(self):
-        self.disable()
-        p.mixer.play("service_exit")
-
-    def on_disable(self):
-        p.modes["service"].resume()
