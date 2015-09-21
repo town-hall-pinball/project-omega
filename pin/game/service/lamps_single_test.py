@@ -76,16 +76,19 @@ class Mode(Handler):
             self.action()
 
     def next(self):
+        p.mixer.play("service_select")
         self.off()
         self.devices.next()
         self.update_selection()
 
     def previous(self):
+        p.mixer.play("service_select")
         self.off()
         self.devices.previous()
         self.update_selection()
 
     def next_mode(self):
+        p.mixer.play("service_enter")
         self.off()
         mode = self.modes.next()
         self.update_mode()

@@ -77,16 +77,19 @@ class PulseTest(Handler):
             self.cancel(self.timer)
 
     def next(self):
+        p.mixer.play("service_select")
         self.devices.get().disable()
         self.devices.next()
         self.update_selection()
 
     def previous(self):
+        p.mixer.play("service_select")
         self.devices.get().disable()
         self.devices.previous()
         self.update_selection()
 
     def next_mode(self):
+        p.mixer.play("service_enter")
         mode = self.modes.next()
         self.update_mode()
 
