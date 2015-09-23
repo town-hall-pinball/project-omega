@@ -23,7 +23,6 @@ from collections import deque
 import p
 from pin import ui, util
 from pin.handler import Handler
-from ..config import service_menu as menu
 
 
 def text_for_value(options, search):
@@ -135,7 +134,7 @@ class Mode(Handler):
 
     def on_enable(self):
         p.modes["attract"].suspend()
-        self.push_menu(menu.main)
+        self.push_menu(p.service_menu.main)
         p.dmd.clear()
 
     def enter(self):

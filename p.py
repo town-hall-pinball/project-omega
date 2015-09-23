@@ -99,8 +99,9 @@ proc = None
 platform = None
 namespace = None
 save = None
-switches = None
+service_menu = None
 sounds = None
+switches = None
 
 timers = None
 """

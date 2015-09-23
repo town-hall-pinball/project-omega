@@ -20,12 +20,14 @@
 
 import p
 
-from .config import defaults, keyboard, resources
+from .config import defaults, keyboard, service_menu, resources
 from . import extra
 
 # Resources now in resources.py
 
 def init(load_resources=True):
+    p.service_menu = service_menu
+
     if load_resources:
         resources.load()
         extra.load()
@@ -39,21 +41,21 @@ def init(load_resources=True):
         "game.banner",
         "game.post",
         "game.starter",
-        "game.service.coils_test",
-        "game.service.flashers_all_test",
-        "game.service.flashers_single_test",
-        "game.service.flippers_test",
-        "game.service.font_browser",
-        "game.service.image_browser",
-        "game.service.lamps_all_test",
-        "game.service.lamps_single_test",
-        "game.service.movie_browser",
-        "game.service.music_browser",
-        "game.service.sound_browser",
-        "game.service.switch_edges_test",
-        "game.service.switch_levels_test",
-        "game.service.switch_single_test",
-        "game.service.service",
+        "service.coils_test",
+        "service.flashers_all_test",
+        "service.flashers_single_test",
+        "service.flippers_test",
+        "service.font_browser",
+        "service.image_browser",
+        "service.lamps_all_test",
+        "service.lamps_single_test",
+        "service.movie_browser",
+        "service.music_browser",
+        "service.sound_browser",
+        "service.switch_edges_test",
+        "service.switch_levels_test",
+        "service.switch_single_test",
+        "service.service",
     ))
     extra.init()
     keyboard.init()
