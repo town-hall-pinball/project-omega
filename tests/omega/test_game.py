@@ -19,22 +19,24 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import ui, util
-from pin.handler import Handler
+from pin import omega as game
 
-from . import coin
+import unittest
+from tests import fixtures
 
-class Mode(Handler):
+class TestGame(unittest.TestCase):
 
-    def setup(self):
-        self.handlers += [p.modes["coin"]]
+    def setUp(self):
+        fixtures.reset()
 
-    def on_enable(self):
-        for handler in self.handlers:
-            handler.enable()
+    def test_start_regular(self):
+        game.start()
+        self.assertTrue(p.modes["post"].enabled)
+        self.assertFalse(p.modes["attract"].enabled)
 
+    def test_start_fast(self):
+        p.options["fast"] = True
+        game.start()
+        self.assertFalse(p.modes["post"].enabled)
+        self.assertTrue(p.modes["attract"].enabled)
 
-def init():
-    p.load_modes({
-        "game.system.coin"
-    })

@@ -27,8 +27,10 @@ import time
 import pygame
 import p
 import pin
-from pin.game import extra
 from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
+
+from pin import omega as impl
+from pin.omega import extra
 
 def parse_arguments():
     parser = argparse.ArgumentParser(prog=pin.brand.prog)
@@ -94,7 +96,7 @@ def init():
 
 def bind():
     p.data = pin.data
-    p.defaults = pin.game.config.defaults.defaults
+    p.defaults = impl.config.defaults.defaults
     p.dmd = pin.dmd
     p.engine = pin.engine
     p.events = pin.events
@@ -131,9 +133,9 @@ def run():
     p.engine.processors += [pin.events.dispatch]
 
     p.now = time.time()
-    pin.game.init()
+    impl.init()
     extra.init()
-    pin.game.start()
+    impl.start()
     p.engine.run()
 
 def shutdown(exit_code):

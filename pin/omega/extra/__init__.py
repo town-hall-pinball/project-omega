@@ -19,24 +19,12 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import game
+from . import mm3
 
-import unittest
-from tests import fixtures
+def init():
+    p.load_modes((
+        "omega.extra.mm3",
+    ))
 
-class TestGame(unittest.TestCase):
-
-    def setUp(self):
-        fixtures.reset()
-
-    def test_start_regular(self):
-        game.start()
-        self.assertTrue(p.modes["post"].enabled)
-        self.assertFalse(p.modes["attract"].enabled)
-
-    def test_start_fast(self):
-        p.options["fast"] = True
-        game.start()
-        self.assertFalse(p.modes["post"].enabled)
-        self.assertTrue(p.modes["attract"].enabled)
-
+def load():
+    mm3.load()

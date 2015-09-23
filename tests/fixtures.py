@@ -20,7 +20,7 @@
 
 import p
 import pin
-from pin.game.config.defaults import defaults
+from pin.omega.config.defaults import defaults
 from pin.virtual import proc as virtual_proc
 from mock import MagicMock as Mock, patch
 import pygame
@@ -93,7 +93,7 @@ def reset():
 
     pin.machine.init()
     with patch("pin.resources.load_dmd_animation") as load_patch:
-        pin.game.init()
+        pin.omega.init()
 
 
 
