@@ -43,10 +43,19 @@ def dmd_draw(*args, **kwargs):
 def driver_pulse(*args, **kwargs):
     pass
 
+def driver_state_pulse(*args, **kwargs):
+    pass
+
 def driver_disable(*args, **kwargs):
     pass
 
+def driver_state_disable(*args, **kwargs):
+    pass
+
 def driver_patter(*args, **kwargs):
+    pass
+
+def driver_get_state(*args, **kwargs):
     pass
 
 

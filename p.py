@@ -66,6 +66,8 @@ button is pressed::
 """
 
 fonts = None
+flashers = None
+flippers = None
 game = None
 gi = None
 images = None

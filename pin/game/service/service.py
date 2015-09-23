@@ -351,6 +351,9 @@ class Mode(Handler):
         p.modes["flashers_single_test"].enable()
         self.suspend()
 
+    def flippers_test(self):
+        p.modes["flippers_test"].enable()
+        self.suspend()
 
     # --------
     # Startup

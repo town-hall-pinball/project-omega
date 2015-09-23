@@ -25,8 +25,6 @@ def init():
     sw = p.switches
     coil = p.coils
 
-    devices.flippers = devices.Flippers()
-
     ball.total = 4
     ball.captures = {
         "trough": ball.Capture(

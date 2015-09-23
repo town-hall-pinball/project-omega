@@ -34,6 +34,7 @@ def load():
         ("service_coils",           "images/service/coils.dmd"),
         ("service_debug",           "images/service/debug.dmd"),
         ("service_flashers",        "images/service/flashers.dmd"),
+        ("service_flippers",        "images/service/flippers.png"),
         ("service_font",            "images/service/font.dmd"),
         ("service_game_settings",   "images/service/game_settings.dmd"),
         ("service_image",           "images/service/image.png"),

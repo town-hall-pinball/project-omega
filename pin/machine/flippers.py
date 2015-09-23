@@ -18,27 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import devices
-from . import coils, features, flashers, flippers, gi, lamps, switches
+from .. import devices
 
 def init():
-    coils.init()
-    p.coils = devices.coils
+    devices.add_flippers({
+        "flipper_left": {
+            "label": "Flipper, Left",
+            "device": "flipper_lower_left_main",
+            "hold_device": "flipper_lower_left_hold",
+            "switch": "flipper_left"
+        },
+        "flipper_right": {
+            "label": "Flipper, Right",
+            "device": "flipper_lower_right_main",
+            "hold_device": "flipper_lower_right_hold",
+            "switch": "flipper_right"
+        },
+        "flipper_right_up": {
+            "label": "Flipper, Right Upper",
+            "device": "flipper_upper_right_main",
+            "hold_device": "flipper_upper_right_hold",
+            "switch": "flipper_right_up"
+        }
+    })
 
-    flashers.init()
-    p.flashers = devices.flashers
 
-    gi.init()
-    p.gi = devices.gi
-
-    lamps.init()
-    p.lamps = devices.lamps
-
-    switches.init()
-    p.switches = devices.switches
-
-    flippers.init()
-    p.flippers = devices.flippers
-
-    features.init()

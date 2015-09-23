@@ -34,7 +34,7 @@ devices = {}
 switch_numbers = {}
 switch_devices = {}
 flashers = {}
-flippers = []
+flippers = {}
 gi = {}
 lamps = {}
 switches = {}
@@ -233,31 +233,58 @@ class Switch(Device):
     def is_opened(self):
         return not self.is_closed()
 
-class Flippers(object):
 
-    default_pulse_time = 30
+class Flipper(Device):
 
-    flippers = {
-        "lower_left": {
-            "pulse_time": default_pulse_time
-         },
-        "lower_right": {
-            "pulse_time": default_pulse_time
-        },
-        "upper_left": {
-            "pulse_time": default_pulse_time
-        },
-        "upper_right": {
-            "pulse_time": default_pulse_time
-        }
-    }
+    pulse_time = 30
+
+    def __init__(self, name, **config):
+        super(Flipper, self).__init__(name, **config)
+        self.hold_device = config["hold_device"]
+        self.hold_number = p.platform.devices[self.hold_device]
+        self.switch = p.switches[config["switch"]]
 
     def enable(self, enable=True):
+        if not enable:
+            self.disable()
+            return
+        main_coil_state = p.proc.api.driver_get_state(self.number)
+        hold_coil_state = p.proc.api.driver_get_state(self.hold_number)
+
         # From: https://github.com/preble/pyprocgame/blob/master/procgame/game/game.py#L417-L459
-        pass
+        on_drivers = [
+            p.proc.api.driver_state_pulse(main_coil_state, self.pulse_time),
+            p.proc.api.driver_state_pulse(hold_coil_state, 0)
+        ]
+        p.proc.api.switch_update_rule(self.switch.number,
+            "closed_nondebounced", {
+                "notifyHost": False,
+                "reloadActive": False
+            }, on_drivers, True)
+
+        off_drivers = [
+            p.proc.api.driver_state_disable(hold_coil_state)
+        ]
+        p.proc.api.switch_update_rule(self.switch.number,
+            "open_nondebounced", {
+                "notifyHost": False,
+                "reloadAct ive": False
+            }, off_drivers, True)
+
 
     def disable(self):
-        self.enable(False)
+        p.proc.api.switch_update_rule(self.switch.number,
+            "closed_nondebounced", {
+                "notifyHost": False,
+                "reloadActive": False
+            }, [], False)
+        p.proc.api.switch_update_rule(self.switch.number,
+            "open_nondebounced", {
+                "notifyHost": False,
+                "reloadActive": False
+            }, [], False)
+        p.proc.api.driver_disable(self.number)
+        p.proc.api.driver_disable(self.hold_number)
 
 
 def add(collection, clazz, configs):
@@ -294,10 +321,14 @@ def add_lamps(configs):
 def add_flashers(configs):
     add(flashers, Flasher, configs)
 
+def add_flippers(configs):
+    add(flippers, Flipper, configs)
+
 def reset():
     coils.clear()
     devices.clear()
     flashers.clear()
+    flippers.clear()
     gi.clear()
     lamps.clear()
     switches.clear()

@@ -99,6 +99,10 @@ tests = {
             "name": "Test Single",
             "action": "flashers_single_test"
         }]
+    },{
+        "name": "Flippers",
+        "icon": "service_flippers",
+        "action": "flippers_test"
     }]
 }
 

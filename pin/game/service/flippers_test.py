@@ -19,26 +19,31 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import devices
-from . import coils, features, flashers, flippers, gi, lamps, switches
+from pin import dmd, ui, util
+from pin.devices import devices
+from pin.handler import Handler
+from .matrix import Matrix
 
-def init():
-    coils.init()
-    p.coils = devices.coils
+class Mode(Handler):
 
-    flashers.init()
-    p.flashers = devices.flashers
+    def setup(self):
+        self.display = ui.Panel(name="flippers_test")
 
-    gi.init()
-    p.gi = devices.gi
+        self.icon = ui.Image("service_flippers", left=5)
+        self.title = ui.Text("Flippers", font="t5b")
+        self.action = ui.Text("Enable", font="t5cp",
+                padding=[1,5], fill=0x8)
+        ui.valign([self.title, self.action])
+        self.display.add([self.icon, self.title, self.action])
+        self.on("switch_service_exit",  self.exit)
 
-    lamps.init()
-    p.lamps = devices.lamps
+    def on_enable(self):
+        map(lambda flipper: flipper.enable(), p.flippers.values())
 
-    switches.init()
-    p.switches = devices.switches
+    def exit(self):
+        self.disable()
+        p.mixer.play("service_exit")
 
-    flippers.init()
-    p.flippers = devices.flippers
-
-    features.init()
+    def on_disable(self):
+        map(lambda flipper: flipper.disable(), p.flippers.values())
+        p.modes["service"].resume()
