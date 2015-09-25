@@ -97,6 +97,8 @@ Example to see if the ``-q`` or ``--quiet`` option was passed in::
 
 proc = None
 platform = None
+player = None
+players = None
 namespace = None
 save = None
 service_menu = None

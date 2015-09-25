@@ -18,37 +18,37 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-__all__ = ["Cycle"]
+import p
+from pin.game import Game
 
-class Cycle():
+import unittest
+from mock import Mock
+from tests import fixtures
 
-    index = 0
-    items = None
+class TestGame(unittest.TestCase):
 
-    def __init__(self, items=None):
-        if not items:
-            items = []
-        self.items = list(items)
+    def setUp(self):
+        fixtures.reset()
+        self.game = Game("main")
 
-    def get(self):
-        return self.items[self.index]
+    def test_initial(self):
+        self.assertEquals(0, self.game.ball)
+        self.assertFalse(self.game.active)
 
-    def next(self):
-        self.index += 1
-        if self.index >= len(self.items):
-            self.index = 0
-        return self.get()
+    def test_start(self):
+        listener1 = Mock()
+        p.events.on("game_start", listener1)
+        listener2 = Mock()
+        p.events.on("game_start_main", listener2)
 
-    def previous(self):
-        self.index -= 1
-        if self.index < 0:
-            self.index = len(self.items) - 1
-        return self.get()
+        self.game.start()
+        p.events.dispatch()
+        self.assertEquals(1, self.game.ball)
+        self.assertTrue(self.game.active)
+        self.assertEquals(1, len(self.game.players))
+        self.assertEquals(1, p.player["number"])
+        listener1.assert_called_with("main")
+        self.assertTrue(listener2.called)
 
-    def select(self, value):
-        for i, other in enumerate(self.items):
-            if value == other:
-                self.index = i
-                return
-        raise ValueError("Item not found: {}".format(value))
+
 
