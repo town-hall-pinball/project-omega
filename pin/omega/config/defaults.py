@@ -36,6 +36,8 @@ defaults = {
     "service_credits": 0,
     "simulator_enabled": False,
     "tilt_warnings": 2,
+
+    "main.balls": 3
 }
 """
 Dictonary of defaults to be used if the persistant state in ``var/data.json``

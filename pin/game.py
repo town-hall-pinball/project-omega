@@ -49,12 +49,12 @@ class Game(object):
     ball = 0
     max_players = 4
 
-    def __init__(self, name):
+    def __init__(self, name="main"):
         self.name = name
 
     def start(self):
         if self.active:
-            raise ValueError("Game ({}) already started".format(name))
+            raise ValueError("Game ({}) already started".format(self.name))
         self.players = []
         self.order = util.Cycle()
         self.active = True
@@ -62,6 +62,7 @@ class Game(object):
         p.events.post("game_start", self.name)
         p.events.post("game_start_" + self.name)
         self.add_player()
+        p.players = self.players
         p.player = self.players[0]
         p.events.post("next_player")
 
@@ -72,7 +73,7 @@ class Game(object):
             self.players += [player]
             self.order.items += [player]
             p.events.post("add_player", player)
-            p.notify("game", "Add Player {}".format(player["index"]))
+            p.notify("game", "Add Player {}".format(player["number"]))
         else:
             raise ValueError("Cannot add player")
 
@@ -80,16 +81,15 @@ class Game(object):
         p.player = self.order.next()
         if p.player["index"] == 0:
             self.ball += 1
-            if self.ball > p.data["game.balls"]:
+            if self.ball > self.data("balls"):
                 self.over()
         if self.active:
-            self.activate_playfield()
             p.events.trigger("next_player")
             p.notify("game", "Next Player")
-            if p.player.index == 0:
+            if p.player["index"] == 0:
                 p.events.post("next_ball")
             p.notify("game", "Ball {}, Player {}".format(
-                    self.ball, p.player.number))
+                    self.ball, p.player["number"]))
 
     def end_of_turn(self):
         p.events.post("end_of_turn")
@@ -100,6 +100,8 @@ class Game(object):
         p.events.trigger("game_over")
         p.notify("game", "Game Over")
 
+    def data(self, name):
+        return p.data[self.name + "." + name]
 
 
 
