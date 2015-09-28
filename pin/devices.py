@@ -154,7 +154,7 @@ class Driver(Device):
         self.state = state
         log[self.type].debug("+ {} patter on={}, off={}".format(self.name,
                 on, off))
-        p.proc.api.driver_patter(self.number, on, off, 0)
+        p.proc.api.driver_patter(self.number, on, off, 0, 0)
         p.events.post(self.type, self)
         p.events.post("{}_{}".format(self.type, self.name))
 
