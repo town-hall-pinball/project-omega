@@ -40,6 +40,7 @@ def load():
         ("service_image",           "images/service/image.png"),
         ("service_lamps",           "images/service/lamps.dmd"),
         ("service_money",           "images/service/money.dmd"),
+        ("service_more",            "images/service/more.png"),
         ("service_music",           "images/service/music.dmd"),
         ("service_server",          "images/service/server.dmd"),
         ("service_settings",        "images/service/settings.dmd"),

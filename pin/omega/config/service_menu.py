@@ -99,6 +99,11 @@ tests = {
         "name": "Flippers",
         "icon": "service_flippers",
         "action": "flippers_test"
+    },{
+        "name": "More...",
+        "icon": "service_more",
+        "menu": [{
+        }]
     }]
 }
 
