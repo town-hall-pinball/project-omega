@@ -37,7 +37,7 @@ class Mode(Handler):
         compare = lambda x, y: cmp(x.label, y.label)
         lamps = sorted(p.lamps.values(), cmp=compare)
         self.devices = util.Cycle(lamps)
-        self.interval = 2.0
+        self.interval = 0.75
 
         self.display = ui.Panel(name=self.name)
 
