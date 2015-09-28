@@ -80,23 +80,19 @@ tests = {
         "icon": "service_coils",
         "action": "coils_test"
     },{
-        "name": "Lamps",
+        "name": "Lights",
         "icon": "service_lamps",
         "menu": [{
-            "name": "Test All",
+            "name": "Test All Lamps",
             "action": "lamps_all_test"
         },{
-            "name": "Test Single",
+            "name": "Test Single Lamps",
             "action": "lamps_single_test"
-        }]
-    },{
-        "name": "Flashers",
-        "icon": "service_flashers",
-        "menu": [{
-            "name": "Test All",
+        },{
+            "name": "Test All Flashers",
             "action": "flashers_all_test"
         },{
-            "name": "Test Single",
+            "name": "Test Single Flashers",
             "action": "flashers_single_test"
         }]
     },{
