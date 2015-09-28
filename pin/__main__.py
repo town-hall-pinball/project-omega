@@ -90,8 +90,12 @@ def init():
     if p.options["simulate"]:
         p.proc.api = virtual_proc
     else:
-        from pinproc import PinPROC
-        p.proc.api = PinPROC(p.platform.name)
+        import pinproc
+        p.proc.api = pinproc.PinPROC(p.platform.name)
+        p.proc.api.driver_state_disable = pinproc.driver_state_disable
+        p.proc.api.drvier_state_pulse = pinproc.driver_state_pulse
+        p.proc.api.driver_state_patter = pinproc.driver_state_patter
+        p.proc.api.driver_state_pulsed_patter = pinproc.driver_state_pulsed_patter
     p.proc.init()
 
 def bind():
