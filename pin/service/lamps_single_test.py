@@ -23,9 +23,9 @@ from pin.handler import Handler
 from pin import dmd, ui, util
 
 mode_labels = (
-    "Manual",
     "Repeat",
     "Cycle",
+    "Manual",
 )
 
 class Mode(Handler):
