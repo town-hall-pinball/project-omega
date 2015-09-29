@@ -354,6 +354,10 @@ class Mode(Handler):
         p.modes["flippers_test"].enable()
         self.suspend()
 
+    def virtual_palette(self):
+        p.modes["virtual_palette"].enable()
+        self.suspend()
+
     # --------
     # Startup
     # --------

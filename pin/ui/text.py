@@ -40,6 +40,7 @@ class Text(Component):
         }, **style)
         self.area = None
         self.offset_x = 0
+        self.offset_y = 0
 
     def show(self, text=None, duration=None):
         self.style["text"] = text if text is not None else ""
@@ -84,6 +85,8 @@ class Text(Component):
 
         if self.style["x_align"] == "center":
             self.offset_x = round((self.width / 2.0) - (text_width / 2.0))
+        if self.style["y_align"] == "top":
+            self.offset_y = text_height - self.height
         #print "base", base_height, "descent", descent, "text_height", text_height, "ascent", ascent, "fluff", fluff, self.style["text"]
         #print "area", self.area
 
@@ -95,7 +98,7 @@ class Text(Component):
         x = self.x
         y = self.y
         text_x = self.style["padding_left"] + self.offset_x
-        text_y = self.style["padding_top"]
+        text_y = self.style["padding_top"] + self.offset_y
         color = (0, 0, self.style["color"] * 16)
         text = font.render(self.style["text"], False, color)
         self.frame.blit(text, (text_x, text_y), self.area)

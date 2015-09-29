@@ -196,7 +196,14 @@ utilities = {
             "options": [
                 [True, "Yes"],
                 [False, "No"]
-            ]
+            ],
+        }]
+    },{
+        "name": "More...",
+        "icon": "service_more",
+        "menu": [{
+            "name": "Virtual Palette",
+            "action": "virtual_palette"
         }]
     }]
 }

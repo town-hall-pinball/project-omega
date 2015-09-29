@@ -55,6 +55,7 @@ def init(load_resources=True):
         "service.switch_edges_test",
         "service.switch_levels_test",
         "service.switch_single_test",
+        "service.virtual_palette",
         "service.service",
     ))
     extra.init()
