@@ -291,8 +291,9 @@ class Flipper(Device):
         self.hold_device = config["hold_device"]
         self.hold_number = p.platform.devices[self.hold_device]
         self.switch = p.switches[config["switch"]]
+        self.auto_switch = None
 
-    def enable(self, enable=True):
+    def auto_pulse(self, enable=True):
         if not enable:
             self.disable()
             return
@@ -318,9 +319,9 @@ class Flipper(Device):
                 "notifyHost": False,
                 "reloadActive": False
             }, off_drivers, True)
+        self.auto_switch = self.switch
 
-
-    def disable(self):
+    def auto_cancel(self):
         p.proc.api.switch_update_rule(self.switch.number,
             "closed_nondebounced", {
                 "notifyHost": False,
@@ -333,6 +334,7 @@ class Flipper(Device):
             }, [], False)
         p.proc.api.driver_disable(self.number)
         p.proc.api.driver_disable(self.hold_number)
+        self.auto_switch = None
 
 
 def add(collection, clazz, configs):

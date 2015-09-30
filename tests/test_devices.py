@@ -173,11 +173,11 @@ class TestFlippers(unittest.TestCase):
 
     # Coverage only
     def test_enable(self):
-        p.flippers["left"].enable()
+        p.flippers["left"].auto_pulse()
 
     # Coverage only
     def test_disable(self):
-        p.flippers["left"].enable(False)
+        p.flippers["left"].auto_cancel()
 
 
 

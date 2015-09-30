@@ -38,12 +38,12 @@ class Mode(Handler):
         self.on("switch_service_exit",  self.exit)
 
     def on_enable(self):
-        map(lambda flipper: flipper.enable(), p.flippers.values())
+        map(lambda flipper: flipper.auto_pulse(), p.flippers.values())
 
     def exit(self):
         self.disable()
         p.mixer.play("service_exit")
 
     def on_disable(self):
-        map(lambda flipper: flipper.disable(), p.flippers.values())
+        map(lambda flipper: flipper.auto_cancel(), p.flippers.values())
         p.modes["service"].resume()
