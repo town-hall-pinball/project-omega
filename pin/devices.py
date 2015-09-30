@@ -268,7 +268,7 @@ class Flipper(Device):
         p.proc.api.switch_update_rule(self.switch.number,
             "open_nondebounced", {
                 "notifyHost": False,
-                "reloadAct ive": False
+                "reloadActive": False
             }, off_drivers, True)
 
 
