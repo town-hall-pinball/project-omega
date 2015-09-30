@@ -55,6 +55,9 @@ def driver_state_disable(*args, **kwargs):
 def driver_patter(*args, **kwargs):
     pass
 
+def driver_state_patter(*args, **kwargs):
+    pass
+
 def driver_get_state(*args, **kwargs):
     pass
 

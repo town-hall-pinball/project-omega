@@ -91,6 +91,7 @@ class Driver(Device):
     def __init__(self, name, **config):
         super(Driver, self).__init__(name, **config)
         self.default_pulse_length = config.get("default_pulse_length", 30)
+        self.default_patter_length = config.get("deafult_patter_length", 127)
 
     def enable(self, enabled=True, show=False):
         """
@@ -142,12 +143,14 @@ class Driver(Device):
         p.events.trigger("{}_{}".format(self.type, self.name))
         self.state = { "schedule": "disable" }
 
-    def patter(self, on=127, off=127):
+    def patter(self, on=None, off=None):
         """
         Repeats a sequence when the device is enabled for `on` milliseconds
         and disabled for `off` milliseconds. Maximum `on` and `off` times are
         127ms.
         """
+        on = on or self.default_patter_length
+        off = off or self.default_patter_length
         state = { "schedule": "patter", "on": on, "off": off }
         if self.state == state:
             return
@@ -170,6 +173,51 @@ class Coil(Driver):
     def __init__(self, name, **config):
         super(Coil, self).__init__(name, **config)
         self.type = "coil"
+        self.auto_switch = None
+
+    def auto_pulse(self, switch, pulse_length=None):
+        if self.auto_switch:
+            raise ValueError("Coil already in auto mode")
+        self.auto_switch = switch
+        pulse_length = pulse_length or self.default_pulse_length
+
+        coil_state = p.proc.api.driver_get_state(self.number)
+        on_drivers = [
+            p.proc.api.driver_state_pulse(coil_state, pulse_length),
+        ]
+        event = "open_debounced" if switch.opto else "closed_debounced"
+        p.proc.api.switch_update_rule(switch.number, event, {
+            "notifyHost": False,
+            "reloadActive": False
+        }, on_drivers, True)
+
+    def auto_patter(self, switch, on=None, off=None):
+        if self.auto_switch:
+            raise ValueError("Coil already in auto mode")
+        self.auto_switch = switch
+        on = on or self.default_patter_length
+        off = off or self.default_patter_length
+
+        coil_state = p.proc.api.driver_get_state(self.number)
+        on_drivers = [
+            p.proc.api.driver_state_patter(coil_state, on, off, 0, 0),
+        ]
+        event = "open_debounced" if switch.opto else "closed_debounced"
+        p.proc.api.switch_update_rule(switch.number, event, {
+            "notifyHost": False,
+            "reloadActive": False
+        }, on_drivers, True)
+
+    def auto_cancel(self):
+        if not self.auto_switch:
+            return
+        event = ("open_debounced" if self.auto_switch.opto
+                else "closed_debounced")
+        p.proc.api.switch_update_rule(self.auto_switch.number, event, {
+            "notifyHost": False,
+            "reloadActive": False
+        }, [], False)
+        self.auto_switch = None
 
 
 class GI(Driver):

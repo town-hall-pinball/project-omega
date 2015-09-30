@@ -119,6 +119,65 @@ class TestDriver(unittest.TestCase):
         self.assertTrue(listener.called)
         self.assertEquals("disable", coil.state["schedule"])
 
+    def test_is_active(self):
+        coil = p.coils["trough"]
+        coil.patter()
+        self.assertTrue(coil.is_active())
+
+    def test_is_not_active(self):
+        coil = p.coils["trough"]
+        coil.patter()
+        coil.disable()
+        self.assertFalse(coil.is_active())
+
+
+class TestCoil(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+
+    # Coverage only
+    def test_auto_pulse(self):
+        p.coils["kickback"].auto_pulse(p.switches["kickback"])
+
+    def test_auto_pulse_duplicate(self):
+        with self.assertRaises(ValueError):
+            p.coils["kickback"].auto_pulse(p.switches["kickback"])
+            p.coils["kickback"].auto_pulse(p.switches["kickback"])
+
+    # Coverage only
+    def test_auto_patter(self):
+        p.coils["kickback"].auto_patter(p.switches["kickback"])
+
+    def test_auto_patter_duplicate(self):
+        with self.assertRaises(ValueError):
+            p.coils["kickback"].auto_patter(p.switches["kickback"])
+            p.coils["kickback"].auto_patter(p.switches["kickback"])
+
+    # Coverage only
+    def test_auto_cancel(self):
+        p.coils["kickback"].auto_pulse(p.switches["kickback"])
+        p.coils["kickback"].auto_cancel()
+
+    # Coverage only
+    def test_auto_cancel_duplicate(self):
+        p.coils["kickback"].auto_pulse(p.switches["kickback"])
+        p.coils["kickback"].auto_cancel()
+        p.coils["kickback"].auto_cancel()
+
+
+class TestFlippers(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+
+    # Coverage only
+    def test_enable(self):
+        p.flippers["left"].enable()
+
+    # Coverage only
+    def test_disable(self):
+        p.flippers["left"].enable(False)
 
 
 
