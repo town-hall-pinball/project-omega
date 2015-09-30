@@ -18,25 +18,29 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import omega as game
+settings = {
+    "cleared": True,
+    "coin_left": 0.25,
+    "coin_center": 0.25,
+    "coin_right": 0.25,
+    "coin_fourth": 1.00,
+    "credits": 0,
+    "earnings": 0,
+    "free_play": False,
+    "max_credits": 99,
+    "paid_credits": 0,
+    "pricing": 0.50,
+    "server_enabled": False,
+    "server_publish_events": True,
+    "server_remote_control": True,
+    "service_credits": 0,
+    "simulator_enabled": False,
+    "tilt_warnings": 2,
 
-import unittest
-from tests import fixtures
-
-class TestGame(unittest.TestCase):
-
-    def setUp(self):
-        fixtures.reset()
-
-    def test_start_regular(self):
-        game.start()
-        self.assertTrue(p.modes["post"].enabled)
-        self.assertFalse(p.modes["attract"].enabled)
-
-    def test_start_fast(self):
-        p.options["fast"] = True
-        game.start()
-        self.assertFalse(p.modes["post"].enabled)
-        self.assertTrue(p.modes["attract"].enabled)
+    "main.balls": 3
+}
+"""
+Dictonary of defaults to be used if the persistant state in ``var/data.json``
+is not available
+"""
 

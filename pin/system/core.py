@@ -19,12 +19,22 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from . import mm3
+from pin import ui, util
+from pin.handler import Handler
+
+from . import coin
+
+class Mode(Handler):
+
+    def setup(self):
+        self.handlers += [p.modes["coin"]]
+
+    def on_enable(self):
+        for handler in self.handlers:
+            handler.enable()
+
 
 def init():
-    p.load_modes((
-        "omega.extra.mm3",
-    ))
-
-def load():
-    mm3.load()
+    p.load_modes({
+        "system.coin"
+    })

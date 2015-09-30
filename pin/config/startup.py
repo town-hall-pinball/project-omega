@@ -20,8 +20,8 @@
 
 import p
 
-from .config import defaults, keyboard, service_menu, resources
-from . import extra
+from . import defaults, keyboard, service_menu, resources
+from .. import extra
 
 # Resources now in resources.py
 
@@ -35,12 +35,12 @@ def init(load_resources=True):
     p.load_modes((
         "server",
         "simulator",
-        "omega.main.score",
-        "omega.system",
-        "omega.attract",
-        "omega.banner",
-        "omega.post",
-        "omega.starter",
+        "system.coin",
+        "system.attract",
+        "system.banner",
+        "system.core",
+        "system.post",
+        "system.starter",
         "service.coils_test",
         "service.flashers_all_test",
         "service.flashers_single_test",
@@ -61,13 +61,13 @@ def init(load_resources=True):
     extra.init()
     keyboard.init()
 
-def start():
+def bootstrap():
     for gi in p.gi.values():
         gi.enable()
 
     if not p.modes["service"].direct_start():
         if p.options["fast"]:
-            p.modes["system"].enable()
+            p.modes["core"].enable()
             p.modes["attract"].enable()
         else:
             p.modes["post"].enable()

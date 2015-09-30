@@ -19,32 +19,46 @@
 # DEALINGS IN THE SOFTWARE.
 
 import p
-from pin import ui
+from pin import brand, ui
 from pin.handler import Handler
-
-font = "t5cp"
-
-class ScoreDisplay(object):
-
-    def __init__(self):
-        self.display = ui.Panel()
-        self.p = [
-            ui.Text("123,456,123", font=font, left=0),
-            ui.Text("123,456,123", font=font, left=0),
-            ui.Text("123,456,123", font=font, left=0),
-            ui.Text("123,456,123", font=font, left=0),
-        ]
-        ui.valign(self.p, padding=1)
-        self.display.add(self.p)
+from . import attract
 
 class Mode(Handler):
 
     def setup(self):
-        pass
+        self.display = ui.Notice(
+            name="banner",
+            callback=self.done
+        )
+        self.title = ui.Text(
+            brand.name,
+            font="t5exb"
+        )
+        self.version = ui.Text(
+            "Version {}".format(brand.version),
+            font="t5cpb"
+        )
+        self.release = ui.Text(
+            brand.release,
+            font="t5cpb"
+        )
+        self.display.add((self.title, self.version, self.release))
 
+        self.on("switch_flipper_left", self.bypass)
+        self.on("switch_flipper_right", self.bypass)
+        self.on("switch_start_button", self.bypass)
+        self.on("switch_service_enter", self.bypass)
+        self.on("switch_service_exit", self.bypass)
 
-def init():
-    p.displays["main_score"] = ScoreDisplay()
+    def on_enable(self):
+        p.mixer.play("boot")
+        self.wait(8, self.done)
 
+    def bypass(self):
+        self.done()
 
-
+    def done(self):
+        self.disable()
+        p.mixer.stop()
+        p.modes["core"].enable()
+        p.modes["attract"].enable()

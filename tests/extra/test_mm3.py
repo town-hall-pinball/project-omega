@@ -78,7 +78,7 @@ class TestMM3(unittest.TestCase):
     @patch("pin.resources.available")
     def test_no_init(self, mock_available):
         mock_available.return_value = False
-        from pin.omega.extra import mm3
+        from pin.extra import mm3
         self.assertEquals(False, mm3.init())
         self.assertEquals(False, mm3.load())
 

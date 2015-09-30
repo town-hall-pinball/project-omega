@@ -29,8 +29,8 @@ import p
 import pin
 from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
 
-from pin import omega as impl
-from pin.omega import extra
+from pin.config import default, startup
+from pin import extra
 
 def parse_arguments():
     parser = argparse.ArgumentParser(prog=pin.brand.prog)
@@ -96,7 +96,7 @@ def init():
 
 def bind():
     p.data = pin.data
-    p.defaults = impl.config.defaults.defaults
+    p.defaults = default.settings
     p.dmd = pin.dmd
     p.engine = pin.engine
     p.events = pin.events
@@ -133,9 +133,9 @@ def run():
     p.engine.processors += [pin.events.dispatch]
 
     p.now = time.time()
-    impl.init()
+    startup.init()
     extra.init()
-    impl.start()
+    startup.bootstrap()
     p.engine.run()
 
 def shutdown(exit_code):

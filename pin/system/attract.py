@@ -116,7 +116,7 @@ class Mode(Handler):
 
     def setup(self):
         credits = p.displays["credits"].display
-        score = p.displays["main_score"].display
+        #score = p.displays["main_score"].display
 
         self.show = ui.Slides("attract.show", self, (
             #(score,                 3.0),
