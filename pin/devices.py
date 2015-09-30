@@ -91,7 +91,7 @@ class Driver(Device):
     def __init__(self, name, **config):
         super(Driver, self).__init__(name, **config)
         self.default_pulse_length = config.get("default_pulse_length", 30)
-        self.default_patter_length = config.get("deafult_patter_length", 127)
+        self.default_patter_length = config.get("default_patter_length", 127)
 
     def enable(self, enabled=True, show=False):
         """
