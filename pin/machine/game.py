@@ -18,8 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from ..game import Game as BaseGame
+from ..lib import p
+from ..lib.game import Game as BaseGame
 
 class Game(BaseGame):
 

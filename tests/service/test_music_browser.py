@@ -21,8 +21,7 @@
 from mock import Mock, patch
 import unittest
 
-import p
-from pin import resources
+from pin.lib import p, resources
 from tests import fixtures
 
 class TestMusicBrowser(unittest.TestCase):
@@ -44,7 +43,7 @@ class TestMusicBrowser(unittest.TestCase):
         p.events.dispatch()
         self.assertNotEquals(previous, self.browser.label.style["text"])
 
-    @patch("p.mixer.play")
+    @patch("pin.lib.p.mixer.play")
     def test_restart(self, mock_play):
         p.events.post("switch_service_enter")
         p.events.dispatch()

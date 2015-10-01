@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
+from pin.lib import p
 
 import unittest
 from tests import fixtures
@@ -26,14 +26,14 @@ from mock import patch
 
 class TestAttract(unittest.TestCase):
 
-    @patch("pin.resources.available")
+    @patch("pin.lib.resources.available")
     def setUp(self, mock_available):
         mock_available.return_code = True
         fixtures.reset()
         self.attract = p.modes["attract"]
         self.attract.enable()
 
-    @patch("p.mixer.stop")
+    @patch("pin.lib.p.mixer.stop")
     def test_disable(self, mixer_stop):
         self.attract.disable()
         self.assertTrue(mixer_stop.called)

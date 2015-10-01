@@ -21,8 +21,7 @@
 from mock import Mock
 import unittest
 
-import p
-from pin import resources
+from pin.lib import p, resources
 from tests import fixtures
 
 class TestFontBrowser(unittest.TestCase):

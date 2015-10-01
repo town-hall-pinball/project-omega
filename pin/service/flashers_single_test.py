@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
+from ..lib import p
 from .pulse_test import PulseTest
 
 class Mode(PulseTest):

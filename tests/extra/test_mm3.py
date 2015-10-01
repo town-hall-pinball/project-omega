@@ -18,8 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-
+from pin.lib import p
 import unittest
 from tests import fixtures
 from mock import patch
@@ -27,7 +26,7 @@ from mock import patch
 class TestMM3(unittest.TestCase):
 
     def setUp(self):
-        with patch("pin.resources.available") as mock_available:
+        with patch("pin.lib.resources.available") as mock_available:
             mock_available.return_value = True
             fixtures.reset()
             self.mm3 = p.modes["mm3"]
@@ -75,7 +74,7 @@ class TestMM3(unittest.TestCase):
         p.timers.service()
         self.mm3.enable()
 
-    @patch("pin.resources.available")
+    @patch("pin.lib.resources.available")
     def test_no_init(self, mock_available):
         mock_available.return_value = False
         from pin.extra import mm3

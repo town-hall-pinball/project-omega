@@ -20,9 +20,8 @@
 
 import os
 
-import p
-from pin import resources, ui, util
-from pin.handler import Handler
+from pin.lib import p, resources, ui, util
+from pin.lib.handler import Handler
 
 available = False
 

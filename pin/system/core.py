@@ -18,9 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import ui, util
-from pin.handler import Handler
+from pin.lib import p, ui, util
+from pin.lib.handler import Handler
 
 from . import coin
 

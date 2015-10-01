@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
+from pin.lib import p
 
 import unittest
 from tests import fixtures
@@ -133,13 +133,13 @@ class TestAttract(unittest.TestCase):
         self.coin = p.modes["coin"]
         self.coin.enable()
 
-    @patch("p.dmd.enqueue")
+    @patch("pin.lib.p.dmd.enqueue")
     def test_not_attract_mode(self, enqueue):
         p.events.post("switch_coin_left")
         p.events.dispatch()
         self.assertFalse(enqueue.called)
 
-    @patch("p.dmd.enqueue")
+    @patch("pin.lib.p.dmd.enqueue")
     def test_attract_mode_banner(self, enqueue):
         self.attract.enable()
         p.events.post("switch_coin_left")
@@ -147,7 +147,7 @@ class TestAttract(unittest.TestCase):
         self.assertTrue(enqueue.called)
         self.assertTrue(self.attract.suspended)
 
-    @patch("p.dmd.enqueue")
+    @patch("pin.lib.p.dmd.enqueue")
     def test_attract_mode_banner_done(self, enqueue):
         self.attract.enable()
         p.events.post("switch_coin_left")

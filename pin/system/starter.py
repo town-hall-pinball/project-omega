@@ -18,10 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import brand, ui, util
-from pin.ui import effects
-from pin.handler import Handler
+from pin.lib import p, brand, ui, util
+from pin.lib.ui import effects
+from pin.lib.handler import Handler
 
 game_list = [
     { "name": "Old School",     "mode": "classic" },

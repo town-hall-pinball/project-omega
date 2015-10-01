@@ -21,8 +21,7 @@
 from mock import Mock, patch
 import unittest
 
-import p
-from pin import resources
+from pin.lib import p, resources
 from tests import fixtures
 
 class TestMovieBrowser(unittest.TestCase):
@@ -33,14 +32,14 @@ class TestMovieBrowser(unittest.TestCase):
         self.browser.player.start = Mock()
         self.browser.enable()
 
-    @patch("pin.resources.load_dmd_animation")
+    @patch("pin.lib.resources.load_dmd_animation")
     def test_next(self, patch1):
         previous = self.browser.label.style["text"]
         p.events.post("switch_service_up")
         p.events.dispatch()
         self.assertNotEquals(previous, self.browser.label.style["text"])
 
-    @patch("pin.resources.load_dmd_animation")
+    @patch("pin.lib.resources.load_dmd_animation")
     def test_previous(self, patch1):
         previous = self.browser.label.style["text"]
         p.events.post("switch_service_down")

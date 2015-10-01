@@ -18,9 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import dmd
-from pin.devices import devices
-from pin.ui import Canvas
+from ..lib import dmd
+from ..lib.devices import devices
+from ..lib.ui import Canvas
 
 class Matrix(Canvas):
 

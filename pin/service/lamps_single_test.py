@@ -18,9 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin.handler import Handler
-from pin import dmd, ui, util
+from ..lib.handler import Handler
+from ..lib import p, dmd, ui, util
 
 mode_labels = (
     "Repeat",

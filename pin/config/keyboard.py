@@ -18,8 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import keyboard
-from pin.keyboard import event, switch
+from pin.lib import keyboard
+from pin.lib.keyboard import event, switch
 
 def init():
     keyboard.register({

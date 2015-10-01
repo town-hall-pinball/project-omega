@@ -20,9 +20,8 @@
 
 from collections import deque
 
-import p
-from pin import ui, util
-from pin.handler import Handler
+from ..lib import p, ui, util
+from ..lib.handler import Handler
 
 
 def text_for_value(options, search):

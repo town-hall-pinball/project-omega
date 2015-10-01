@@ -18,10 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import brand, ui, util
-from pin.ui.transitions import SlideIn, SlideOut
-from pin.handler import Handler
+from pin.lib import p, brand, ui, util
+from pin.lib.ui.transitions import SlideIn, SlideOut
+from pin.lib.handler import Handler
 
 ON = 0x7f
 __ = 0x00

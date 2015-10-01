@@ -18,9 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-
-from . import defaults, keyboard, service_menu, resources
+from pin.lib import p
+from . import keyboard, service_menu, resources
 from .. import extra
 
 # Resources now in resources.py
@@ -33,8 +32,8 @@ def init(load_resources=True):
         extra.load()
 
     p.load_modes((
-        "server",
-        "simulator",
+        "lib.server",
+        "lib.simulator",
         "system.coin",
         "system.attract",
         "system.banner",

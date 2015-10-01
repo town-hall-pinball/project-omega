@@ -20,10 +20,9 @@
 
 import logging
 
-import p
-from pin import ui
-from pin.ui import effects
-from pin.handler import Handler
+from pin.lib import p, ui
+from pin.lib.ui import effects
+from pin.lib.handler import Handler
 from . import banner, display
 
 log = logging.getLogger("pin")
