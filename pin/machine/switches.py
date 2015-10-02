@@ -25,30 +25,37 @@ def init():
         "ball_launch_button": {
             "label": "Ball Launch Button",
             "device": "S11",
+            "tags": ["user"]
         },
         "buy_extra_ball_button": {
             "label": "Buy Extra Ball Button",
             "device": "S23",
+            "tags": ["user"],
         },
         "coin_door": {
             "label": "Coin Door",
             "device": "S22",
+            "tags": ["user"],
         },
         "coin_left": {
             "label": "Coin, Left",
             "device": "SD1",
+            "tags": ["user"],
         },
         "coin_center": {
             "label": "Coin, Center",
-            "device": "SD2"
+            "device": "SD2",
+            "tags": ["user"],
         },
         "coin_right": {
             "label": "Coin, Right",
-            "device": "SD3"
+            "device": "SD3",
+            "tags": ["user"],
         },
         "coin_fourth": {
             "label": "Coin, Fourth",
             "device": "SD4",
+            "tags": ["user"],
         },
         "drop_target": {
             "label": "Drop Target",
@@ -57,14 +64,17 @@ def init():
         "flipper_left": {
             "label": "Flipper, Left",
             "device": "SF4",
+            "tags": ["user"]
         },
         "flipper_right": {
             "label": "Flipper, Right",
             "device": "SF2",
+            "tags": ["user"]
         },
         "flipper_right_up": {
             "label": "Flipper, Upper Right",
             "device": "SF6",
+            "tags": ["user"],
         },
         "kickback": {
             "label": "Kickback",
@@ -137,19 +147,23 @@ def init():
         },
         "service_down": {
             "label": "Service, Down",
-            "device": "SD6"
+            "device": "SD6",
+            "tags": ["user"],
         },
         "service_enter": {
             "label": "Service, Enter",
             "device": "SD8",
+            "tags": ["user"],
         },
         "service_exit": {
             "label": "Service, Exit",
             "device": "SD5",
+            "tags": ["user"],
         },
         "service_up": {
             "label": "Service, Up",
             "device": "SD7",
+            "tags": ["user"],
         },
         "shooter_lane": {
             "label": "Shooter Lane",
@@ -178,6 +192,7 @@ def init():
         "start_button": {
             "label": "Start Button",
             "device": "S13",
+            "tags": ["user"]
         },
         "subway_left": {
             "label": "Subway, Left",
@@ -192,10 +207,12 @@ def init():
         "tilt": {
             "label": "Tilt",
             "device": "S14",
+            "tags": ["user"],
         },
         "tilt_slam": {
             "label": "Tilt, Slam",
             "device": "S21",
+            "tags": ["user"],
         },
         "trough_jam": {
             "label": "Trough, Jam",

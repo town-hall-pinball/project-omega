@@ -91,6 +91,7 @@ class Game(BaseGame):
         p.coils["slingshot_right"].auto_pulse(p.switches["slingshot_right"])
         self.flippers_enable()
         self.playfield_enabled = True
+        p.events.post("playfield_enable")
 
     def playfield_disable(self):
         #if not self.playfield_enabled:
@@ -101,4 +102,4 @@ class Game(BaseGame):
         self.magnets_disable()
         self.flippers_disable()
         self.playfield_enabled = False
-
+        p.events.post("playfield_disable")

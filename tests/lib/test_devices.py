@@ -89,6 +89,10 @@ class TestDevices(unittest.TestCase):
                 }
             })
 
+    def test_tag(self):
+        self.assertTrue("user" in devices.switches["tilt"].tags)
+        self.assertFalse("user" in devices.switches["trough"].tags)
+
 
 class TestDriver(unittest.TestCase):
 

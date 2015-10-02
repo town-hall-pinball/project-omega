@@ -18,6 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import collections
 import logging
 
 from . import p, util
@@ -27,6 +28,7 @@ log = logging.getLogger("pin.ball")
 
 total = 0
 captures = {}
+shots = {}
 search_sequence = []
 search_interval = 0.25
 
@@ -100,6 +102,7 @@ class Capture(Handler):
                 self.confirm_eject()
 
 
+
 class Search(object):
 
     running = False
@@ -125,9 +128,35 @@ class Search(object):
             self.timer = p.timers.wait(search_interval, self.next)
 
 
-
 class Mode(Handler):
-    pass
+
+    history = collections.deque(maxlen=5)
+
+    def setup(self):
+        p.events.on("playfield_enable", self.enable)
+        p.events.on("playfield_disable", self.disable)
+        self.on("switch_active", self.switch_active)
+
+    def switch_active(self, switch=None):
+        if not "user" in switch.tags:
+            self.history.appendleft(switch)
+        for shot_name, rules in shots.items():
+            self.evaluate_shot(shot_name, rules)
+
+    def evaluate_shot(self, shot_name, rules):
+        for rule, switch in zip(rules, self.history):
+            if "eq" in rule and rule["eq"].name != switch.name:
+                return
+            elif "neq" in rule and rule["neq"].name == switch.name:
+                return
+            elif "eq" not in rule and "neq" not in rule:
+                raise ValueError("Invalid rule in {}: {}".format(shot_name,
+                        rule))
+        p.events.trigger(shot_name)
+
+    def on_disable(self):
+        self.history.clear()
+
 
 
 def trough_count():

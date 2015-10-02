@@ -127,6 +127,62 @@ class TestCaptures(unittest.TestCase):
         self.assertEquals(2, popper.eject_attempts)
 
 
+class TestShots(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+
+    def tearDown(self):
+        p.modes["ball"].disable()
+
+    def test_left_orbit(self):
+        listen_left = Mock()
+        listen_right = Mock()
+
+        p.events.on("shot_orbit_left", listen_left)
+        p.events.on("shot_orbit_right", listen_right)
+
+        p.modes["ball"].enable()
+        p.proc.switch_active(p.switches["orbit_left"])
+        p.proc.switch_active(p.switches["orbit_right"])
+        p.events.dispatch()
+
+        self.assertTrue(listen_left.called)
+        self.assertFalse(listen_right.called)
+
+    def test_right_orbit(self):
+        listen_left = Mock()
+        listen_right = Mock()
+
+        p.events.on("shot_orbit_left", listen_left)
+        p.events.on("shot_orbit_right", listen_right)
+
+        p.modes["ball"].enable()
+        p.proc.switch_active(p.switches["orbit_right"])
+        p.proc.switch_active(p.switches["orbit_left"])
+        p.events.dispatch()
+
+        self.assertFalse(listen_left.called)
+        self.assertTrue(listen_right.called)
+
+    def test_playfield_enable(self):
+        listener = Mock()
+        p.events.on("shot_saucer", listener)
+        p.events.post("playfield_enable")
+        p.proc.switch_active(p.switches["saucer"])
+        p.events.dispatch()
+        self.assertTrue(listener.called)
+
+    def test_playfield_disable(self):
+        listener = Mock()
+        p.events.on("shot_saucer", listener)
+        p.events.post("playfield_enable")
+        p.events.post("playfield_disable")
+        p.proc.switch_active(p.switches["saucer"])
+        p.events.dispatch()
+        self.assertFalse(listener.called)
+
+
 class TestSearch(unittest.TestCase):
 
     def setUp(self):

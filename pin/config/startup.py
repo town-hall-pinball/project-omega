@@ -32,6 +32,7 @@ def init(load_resources=True):
         extra.load()
 
     p.load_modes((
+        "lib.ball",
         "lib.server",
         "lib.simulator",
         "system.coin",
