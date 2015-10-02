@@ -170,13 +170,12 @@ def shutdown(exit_code):
 exit_code = 0
 try:
     run()
-    shutdown(0)
 except KeyboardInterrupt as ki:
     logging.getLogger("pin").info("exiting on console interrupt")
-    shutdown(0)
 except Exception as e:
     logging.getLogger("pin").exception("exiting on unexpected error")
     exit_code = 1
-    raise
+finally:
+    shutdown(exit_code)
 
 
