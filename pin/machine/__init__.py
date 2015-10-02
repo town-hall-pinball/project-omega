@@ -18,8 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import devices
+from pin.lib import p, devices
 from . import coils, features, flashers, flippers, gi, lamps, switches
 
 def init():

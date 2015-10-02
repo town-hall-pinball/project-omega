@@ -18,8 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import ball, devices, simulator
+from ..lib import p, ball, devices, simulator
 
 def init():
     sw = p.switches

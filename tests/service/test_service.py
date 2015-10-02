@@ -21,7 +21,7 @@
 from mock import Mock, patch
 import unittest
 
-import p
+from pin.lib import p
 from tests import fixtures
 
 class TestService(unittest.TestCase):

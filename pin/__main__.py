@@ -25,15 +25,14 @@ import os
 import time
 
 import pygame
-import p
-import pin
-from pin.virtual import dmd as virtual_dmd, proc as virtual_proc
+from pin.lib import p, brand, util
+from pin.lib.virtual import dmd as virtual_dmd, proc as virtual_proc
 
-from pin import omega as impl
-from pin.omega import extra
+from pin.config import default, platform, startup
+from pin import extra, machine
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(prog=pin.brand.prog)
+    parser = argparse.ArgumentParser(prog=brand.prog)
     parser.add_argument("-c", "--console", action="store_true", default=False,
         help="also print log file to console")
     parser.add_argument("-d", "--develop", action="store_true", default=False,
@@ -63,7 +62,7 @@ def parse_arguments():
     p.options["virtual"] = p.options["develop"]
 
 def init_logging():
-    log_file = os.path.join("var", "{}.log".format(pin.brand.prog))
+    log_file = os.path.join("var", "{}.log".format(brand.prog))
     log_format = "%(asctime)s %(name)s: %(message)s"
     date_format = "%Y-%m-%d %H:%M:%S"
 
@@ -95,24 +94,44 @@ def init():
     p.proc.init()
 
 def bind():
-    p.data = pin.data
-    p.defaults = impl.config.defaults.defaults
-    p.dmd = pin.dmd
-    p.engine = pin.engine
-    p.events = pin.events
-    p.fonts = pin.resources.fonts
-    p.images = pin.resources.images
-    p.mixer = pin.mixer
-    p.movies = pin.resources.movies
-    p.music = pin.resources.music
-    p.sounds = pin.resources.sounds
-    p.proc = pin.proc
-    p.timers = pin.timers
+    from pin.lib.data import data
+    p.data = data
+
+    from pin.config import default
+    p.defaults = default.settings
+
+    from pin.lib import dmd
+    p.dmd = dmd
+
+    from pin.lib import engine
+    p.engine = engine
+
+    from pin.lib import events
+    p.events = events
+
+    from pin.lib import resources
+    p.fonts = resources.fonts
+    p.images = resources.images
+    p.movies = resources.movies
+    p.music = resources.music
+    p.sounds = resources.sounds
+
+    from pin.lib import mixer
+    p.mixer = mixer
+
+    from pin.lib import proc
+    p.proc = proc
+
+    from pin.lib import timers
+    p.timers = timers
+
+    from pin.lib import keyboard
+    p.keyboard = keyboard
 
 def run():
     parse_arguments()
     log = init_logging()
-    log.info("{}, Version {}".format(pin.brand.name, pin.brand.version))
+    log.info("{}, Version {}".format(brand.name, brand.version))
 
     try:
         import debug
@@ -121,21 +140,21 @@ def run():
         pass
 
     pygame.init()
-    p.platform = pin.platform
-    pin.machine.init()
+    p.platform = platform
+    machine.init()
     bind()
     init()
 
     if p.options["develop"]:
-        p.engine.processors += [pin.keyboard.process]
-    p.engine.processors += [pin.proc.process]
-    p.engine.processors += [pin.timers.service]
-    p.engine.processors += [pin.events.dispatch]
+        p.engine.processors += [p.keyboard.process]
+    p.engine.processors += [p.proc.process]
+    p.engine.processors += [p.timers.service]
+    p.engine.processors += [p.events.dispatch]
 
     p.now = time.time()
-    impl.init()
+    startup.init()
     extra.init()
-    impl.start()
+    startup.bootstrap()
     p.engine.run()
 
 def shutdown(exit_code):
@@ -151,11 +170,13 @@ def shutdown(exit_code):
 exit_code = 0
 try:
     run()
+    shutdown(0)
 except KeyboardInterrupt as ki:
     logging.getLogger("pin").info("exiting on console interrupt")
+    shutdown(0)
 except Exception as e:
     logging.getLogger("pin").exception("exiting on unexpected error")
     exit_code = 1
-finally:
-    shutdown(exit_code)
+    raise
+
 

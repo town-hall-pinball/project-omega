@@ -18,23 +18,23 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from .. import devices
+from ..lib import devices
 
 def init():
     devices.add_flippers({
-        "flipper_left": {
+        "left": {
             "label": "Flipper, Left",
             "device": "flipper_lower_left_main",
             "hold_device": "flipper_lower_left_hold",
             "switch": "flipper_left"
         },
-        "flipper_right": {
+        "right": {
             "label": "Flipper, Right",
             "device": "flipper_lower_right_main",
             "hold_device": "flipper_lower_right_hold",
             "switch": "flipper_right"
         },
-        "flipper_right_up": {
+        "right_up": {
             "label": "Flipper, Right Upper",
             "device": "flipper_upper_right_main",
             "hold_device": "flipper_upper_right_hold",

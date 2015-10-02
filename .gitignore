@@ -7,5 +7,5 @@ var
 os/ext/dist
 *.nosync
 .DS_Store
-debug.py
+pin/debug.py
 resources/extra/*

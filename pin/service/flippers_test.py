@@ -18,10 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import p
-from pin import dmd, ui, util
-from pin.devices import devices
-from pin.handler import Handler
+from ..lib import p, dmd, ui, util
+from ..lib.devices import devices
+from ..lib.handler import Handler
 from .matrix import Matrix
 
 class Mode(Handler):
@@ -38,12 +37,12 @@ class Mode(Handler):
         self.on("switch_service_exit",  self.exit)
 
     def on_enable(self):
-        map(lambda flipper: flipper.enable(), p.flippers.values())
+        map(lambda flipper: flipper.auto_pulse(), p.flippers.values())
 
     def exit(self):
         self.disable()
         p.mixer.play("service_exit")
 
     def on_disable(self):
-        map(lambda flipper: flipper.disable(), p.flippers.values())
+        map(lambda flipper: flipper.auto_cancel(), p.flippers.values())
         p.modes["service"].resume()
