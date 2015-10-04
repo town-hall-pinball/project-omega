@@ -381,9 +381,9 @@ $(function() {
         console.log("status", data);
         _.each(data, function(group) {
             _.each(group, function(device) {
-                if ( config.devices[device.id] && device.schedule !== "pulse" ) {
+                //if ( state.devices[device.id] && device.schedule !== "pulse" ) {
                     updateDevice(device);
-                }
+                //}
             });
         });
         modes = data.modes;
@@ -391,7 +391,16 @@ $(function() {
     };
 
     var updateDevice = function(device) {
+        /*
         if ( !device || !state.devices[device.device] ) {
+            return;
+        }
+        */
+        if ( !device ) {
+            return;
+        }
+        if ( !state.devices[device.device] ) {
+            console.log("Cannot find " + device.name);
             return;
         }
         var $element = $("#" + device.device);

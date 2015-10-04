@@ -28,6 +28,7 @@ from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
 
 from . import p, ball, brand, keyboard
+from .devices import devices
 from .handler import Handler
 
 log = logging.getLogger("pin.server")
@@ -96,6 +97,8 @@ class WebSocketHandler(WebSocket):
             self.fire_coil(message)
         if command == "ball_search":
             ball.search()
+        if command == "status":
+            self.status()
 
     def toggle_switch(self, message):
         switch = p.switches[message["name"]]
@@ -109,6 +112,16 @@ class WebSocketHandler(WebSocket):
     def fire_coil(self, message):
         coil = p.coils[message["name"]]
         coil.pulse()
+
+    def status(self):
+        items = []
+        for device in devices.values():
+            items += [device.__dict__]
+        payload = {
+            "message": "status",
+            "devices": items
+        }
+        cherrypy.engine.publish("websocket-broadcast", json.dumps(payload))
 
 
 class WebServer(Thread):

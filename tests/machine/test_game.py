@@ -33,45 +33,45 @@ class TestGame(unittest.TestCase):
     def test_kickback_enable(self):
         self.game.kickback_enable()
         self.assertTrue(self.game.kickback_enabled)
-        self.assertTrue(p.coils["kickback"].auto_switch)
+        self.assertTrue(p.coils["kickback"].auto_switch_name)
 
     def test_kickback_disable(self):
         self.game.kickback_enable()
         self.game.kickback_disable()
         self.assertFalse(self.game.kickback_enabled)
-        self.assertFalse(p.coils["kickback"].auto_switch)
+        self.assertFalse(p.coils["kickback"].auto_switch_name)
 
     def test_magnets_assist(self):
         self.game.magnets_assist()
         self.assertEquals(self.game.magnets_enabled, "assist")
-        self.assertTrue(p.coils["magnet_left"].auto_switch)
-        self.assertTrue(p.coils["magnet_center"].auto_switch)
-        self.assertTrue(p.coils["magnet_right"].auto_switch)
+        self.assertTrue(p.coils["magnet_left"].auto_switch_name)
+        self.assertTrue(p.coils["magnet_center"].auto_switch_name)
+        self.assertTrue(p.coils["magnet_right"].auto_switch_name)
 
     def test_magnets_disable(self):
         self.game.magnets_assist()
         self.game.magnets_disable()
         self.assertFalse(self.game.magnets_enabled)
-        self.assertFalse(p.coils["magnet_left"].auto_switch)
-        self.assertFalse(p.coils["magnet_center"].auto_switch)
-        self.assertFalse(p.coils["magnet_right"].auto_switch)
+        self.assertFalse(p.coils["magnet_left"].auto_switch_name)
+        self.assertFalse(p.coils["magnet_center"].auto_switch_name)
+        self.assertFalse(p.coils["magnet_right"].auto_switch_name)
 
     def test_flippers_enable(self):
         self.game.flippers_enable()
         self.assertTrue(self.game.flippers_enabled)
-        self.assertTrue(p.flippers["left"].auto_switch)
-        self.assertTrue(p.flippers["right"].auto_switch)
-        self.assertFalse(p.flippers["right_up"].auto_switch)
+        self.assertTrue(p.flippers["left"].auto_switch_name)
+        self.assertTrue(p.flippers["right"].auto_switch_name)
+        self.assertFalse(p.flippers["right_up"].auto_switch_name)
 
     def test_loop_enable(self):
         self.game.loop_enable()
         self.assertTrue(self.game.loop_enabled)
-        self.assertTrue(p.flippers["right_up"].auto_switch)
+        self.assertTrue(p.flippers["right_up"].auto_switch_name)
 
     def test_loop_disable(self):
         self.game.loop_disable()
         self.assertFalse(self.game.loop_enabled)
-        self.assertFalse(p.flippers["right_up"].auto_switch)
+        self.assertFalse(p.flippers["right_up"].auto_switch_name)
 
     def test_flippers_disable(self):
         self.game.flippers_enable()
@@ -79,16 +79,16 @@ class TestGame(unittest.TestCase):
         self.game.flippers_disable()
         self.assertFalse(self.game.flippers_enabled)
         self.assertFalse(self.game.loop_enabled)
-        self.assertFalse(p.flippers["left"].auto_switch)
-        self.assertFalse(p.flippers["right"].auto_switch)
-        self.assertFalse(p.flippers["right_up"].auto_switch)
+        self.assertFalse(p.flippers["left"].auto_switch_name)
+        self.assertFalse(p.flippers["right"].auto_switch_name)
+        self.assertFalse(p.flippers["right_up"].auto_switch_name)
 
     def test_playfield_enable(self):
         self.game.playfield_enable()
         self.assertTrue(self.game.flippers_enabled)
         self.assertTrue(self.game.playfield_enabled)
-        self.assertTrue(p.coils["slingshot_left"].auto_switch)
-        self.assertTrue(p.coils["slingshot_right"].auto_switch)
+        self.assertTrue(p.coils["slingshot_left"].auto_switch_name)
+        self.assertTrue(p.coils["slingshot_right"].auto_switch_name)
 
     def test_playfield_disable(self):
         self.game.playfield_enable()
@@ -99,7 +99,7 @@ class TestGame(unittest.TestCase):
         self.assertFalse(self.game.loop_enabled)
         self.assertFalse(self.game.kickback_enabled)
         self.assertFalse(self.game.playfield_enabled)
-        self.assertFalse(p.coils["slingshot_left"].auto_switch)
-        self.assertFalse(p.coils["slingshot_right"].auto_switch)
+        self.assertFalse(p.coils["slingshot_left"].auto_switch_name)
+        self.assertFalse(p.coils["slingshot_right"].auto_switch_name)
 
 
