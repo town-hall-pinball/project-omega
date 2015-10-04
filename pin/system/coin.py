@@ -54,6 +54,7 @@ class Mode(Handler):
     def setup(self):
         self.timer = None
         self.credits = p.displays["credits"]
+        self.service = False
 
         self.on("switch_start_button", self.start_match)
         self.on("switch_buy_extra_ball_button", self.match_menu)
@@ -64,6 +65,7 @@ class Mode(Handler):
         self.on("switch_coin_fourth",   self.coin_fourth)
         self.on("switch_service_exit",  self.service_credit)
         self.on("data_credits",         self.update_buttons)
+        self.on("mode_service",         self.update_service)
 
     def on_enable(self):
         self.update_buttons()
@@ -128,12 +130,14 @@ class Mode(Handler):
         p.data.save()
 
     def update_buttons(self):
-        if self.can_start():
+        if self.can_start() and not self.service:
             p.lamps["start_button"].patter(on=127, off=127)
-            p.lamps["buy_extra_ball_button"].patter(on=127, off=127)
         else:
             p.lamps["start_button"].disable()
-            p.lamps["buy_extra_ball_button"].disable()
+
+    def update_service(self, enabled):
+        self.service = enabled
+        self.update_buttons()
 
     def can_start(self):
         return p.data["credits"] >= 1 or p.data["free_play"]

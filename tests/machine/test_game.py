@@ -46,7 +46,7 @@ class TestGame(unittest.TestCase):
         self.assertEquals(self.game.magnets_enabled, "assist")
         self.assertTrue(p.coils["magnet_left"].auto_switch_name)
         self.assertTrue(p.coils["magnet_center"].auto_switch_name)
-        self.assertTrue(p.coils["magnet_right"].auto_switch_name)
+        self.assertTrue(p.coils["magnet_right"].auto_switch_name )
 
     def test_magnets_disable(self):
         self.game.magnets_assist()

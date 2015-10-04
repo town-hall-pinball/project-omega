@@ -75,7 +75,7 @@ class Mode(Handler):
         self.depth = 0
 
         self.breadcrumbs = ui.Text(left=2, top=1, font="t5cd")
-        self.name = ui.Text("Settings", top=1)
+        self.title = ui.Text("Settings", top=1)
         self.value = ui.Text(top=12, padding=[1, 5])
         self.icons = ui.Panel(top=5, fill=None)
         self.icons.add(ui.Image("service_settings"))
@@ -91,7 +91,7 @@ class Mode(Handler):
         self.confirmed = None
 
         self.display = ui.Panel(name="service")
-        self.display.add([self.breadcrumbs, self.name, self.value, self.icons,
+        self.display.add([self.breadcrumbs, self.title, self.value, self.icons,
                 self.default, self.result, self.question])
 
         self.result_timer = None
@@ -115,7 +115,7 @@ class Mode(Handler):
 
     def new_menu(self):
         self.breadcrumbs.show("<" * self.depth)
-        self.name.hide()
+        self.title.hide()
         self.value.hide()
         self.icons.clear()
         if self.menu.type == "icon":
@@ -196,16 +196,16 @@ class Mode(Handler):
         self.value.update(fill=None)
 
         if menu.type == "text":
-            self.name.show(self.menu.node.get("name", ""))
+            self.title.show(self.menu.node.get("name", ""))
             self.value.show(selected["name"])
         elif menu.type == "icon":
-            self.name.show(selected["name"])
+            self.title.show(selected["name"])
             for i in xrange(len(menu.items)):
                 fill = 0xf if i == menu.iter.index else 0
                 reverse = i == menu.iter.index
                 self.icons.children[i].update(fill=fill, reverse=reverse)
         elif menu.type == "option":
-            self.name.show(selected["name"])
+            self.title.show(selected["name"])
             value = p.data[selected["data"]]
             default_value = p.defaults[selected["data"]]
             text = text_for_value(selected["options"], value)
@@ -213,7 +213,7 @@ class Mode(Handler):
             if value != None and value == default_value:
                 self.default.show("Default")
         elif menu.type == "edit":
-            self.name.show(menu.node["name"])
+            self.title.show(menu.node["name"])
             value = selected[0]
             default_value = p.defaults[menu.node["data"]]
             self.value.show(selected[1])
@@ -221,7 +221,7 @@ class Mode(Handler):
             if value != None and value == default_value:
                 self.default.show("Default")
         elif menu.type == "value":
-            self.name.show(selected["name"])
+            self.title.show(selected["name"])
             value = p.data[selected["data"]]
             if "format" in selected:
                 value = selected["format"].format(value)

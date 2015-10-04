@@ -158,3 +158,32 @@ class TestAttract(unittest.TestCase):
         self.assertFalse(self.attract.suspended)
 
 
+class TestLights(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        p.modes["coin"].enable()
+
+    def test_not_ready(self):
+        p.data["credits"] = 0.75
+        p.events.dispatch()
+        self.assertEquals("disable", p.lamps["start_button"].state["schedule"])
+
+    def test_ready_to_start(self):
+        p.data["credits"] = 1
+        p.events.dispatch()
+        self.assertEquals("patter", p.lamps["start_button"].state["schedule"])
+
+    def test_service_mode(self):
+        p.data["credits"] = 1
+        p.events.dispatch()
+        self.assertEquals("patter", p.lamps["start_button"].state["schedule"])
+        p.modes["service"].enable()
+        p.events.dispatch()
+        self.assertEquals("disable", p.lamps["start_button"].state["schedule"])
+        p.modes["service"].disable()
+        p.events.dispatch()
+        self.assertEquals("patter", p.lamps["start_button"].state["schedule"])
+
+
+

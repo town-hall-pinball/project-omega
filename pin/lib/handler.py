@@ -80,6 +80,8 @@ class Handler(object):
             p.dmd.add(self.display, transition)
         self.register()
         self.on_enable()
+        p.events.post("mode_{}_enable".format(self.name))
+        p.events.post("mode_{}".format(self.name), True)
 
     def show(self, display, transition=None):
         if hasattr(display, "display"):
@@ -103,6 +105,8 @@ class Handler(object):
         for handler in self.handlers:
             handler.disable()
         self.on_disable()
+        p.events.post("mode_{}_disable".format(self.name))
+        p.events.post("mode_{}".format(self.name), False)
 
     def on_disable(self):
         pass

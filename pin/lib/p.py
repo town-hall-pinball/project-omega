@@ -130,7 +130,7 @@ def load_modes(names):
             if hasattr(m, "init"):
                 create_mode = m.init() != False
             if create_mode:
-                modes[basename] = m.Mode(basename + ".mode")
+                modes[basename] = m.Mode(basename)
         except Exception as e:
             logging.getLogger("pin").error("Unable to load {}".format(fullname))
             raise
