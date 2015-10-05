@@ -40,6 +40,7 @@ def reset():
     p.data = data
     p.events = events
     p.fonts = resources.fonts
+    p.game = None
     p.images = resources.images
     p.machine = machine
     p.mixer = mixer

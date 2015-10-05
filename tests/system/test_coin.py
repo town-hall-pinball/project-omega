@@ -176,8 +176,12 @@ class TestLights(unittest.TestCase):
 
     def test_game_menu(self):
         p.data["credits"] = 2
+        p.proc.switch_active(p.switches["trough"])
+        p.proc.switch_active(p.switches["trough_2"])
+        p.proc.switch_active(p.switches["trough_3"])
+        p.proc.switch_active(p.switches["trough_4"])
+        p.proc.switch_active(p.switches["start_button"])
         p.events.dispatch()
-        p.modes["game_menu"].enable()
         self.assertEquals("enable", p.lamps["start_button"].state["schedule"])
 
     def test_service_mode(self):
