@@ -174,6 +174,12 @@ class TestLights(unittest.TestCase):
         p.events.dispatch()
         self.assertEquals("patter", p.lamps["start_button"].state["schedule"])
 
+    def test_game_menu(self):
+        p.data["credits"] = 2
+        p.events.dispatch()
+        p.modes["game_menu"].enable()
+        self.assertEquals("enable", p.lamps["start_button"].state["schedule"])
+
     def test_service_mode(self):
         p.data["credits"] = 1
         p.events.dispatch()
