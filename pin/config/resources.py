@@ -84,6 +84,7 @@ def load():
         ("r7",      "fonts/pf_ronda_seven.ttf", 8),
         ("a5",      "fonts/pf_arma_five.ttf", 8),
         ("c128",    "fonts/PetMe128.ttf", 8),
+        ("c128_16", "fonts/PetMe128.ttf", 16),
     )
     resources.alias_fonts(
         ("r7b",     "title")

@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ui, util
+from pin.lib import p, ball, ui, util
 from pin.lib.handler import Handler
 
 class CreditsDisplay(object):
@@ -56,8 +56,7 @@ class Mode(Handler):
         self.credits = p.displays["credits"]
         self.service = False
 
-        self.on("switch_start_button", self.start_match)
-        self.on("switch_buy_extra_ball_button", self.match_menu)
+        self.on("switch_start_button", self.start_button)
 
         self.on("switch_coin_left",     self.coin_left)
         self.on("switch_coin_center",   self.coin_center)
@@ -70,17 +69,15 @@ class Mode(Handler):
     def on_enable(self):
         self.update_buttons()
 
-    def start_match(self):
+    def start_button(self):
         if self.can_start():
+            if not p.game:
+                p.modes["attract"].disable()
+                if not ball.trough_ready():
+                    p.modes["pinball_missing"].enable()
+                else:
+                    p.modes["game_menu"].enable()
             p.data["credits"] -= 1
-        else:
-            if p.modes["attract"].enabled:
-                self.show_credits()
-
-    def match_menu(self):
-        if self.can_start():
-            p.modes["starter"].enable()
-            p.modes["attract"].disable()
         else:
             if p.modes["attract"].enabled:
                 self.show_credits()

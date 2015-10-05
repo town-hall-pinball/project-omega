@@ -87,8 +87,8 @@ class Text(Component):
             self.offset_x = round((self.width / 2.0) - (text_width / 2.0))
         if self.style["y_align"] == "top":
             self.offset_y = text_height - self.height
-        #print "base", base_height, "descent", descent, "text_height", text_height, "ascent", ascent, "fluff", fluff, self.style["text"]
-        #print "area", self.area
+        #print "text", self.style["text"], "base", base_height, "descent", descent, "text_height", text_height, "ascent", ascent, "fluff", fluff, self.style["text"]
+        #print "HEIGHT", self.height, "WIDTH", self.width, "area", self.area
 
     def draw(self):
         super(Text, self).draw()

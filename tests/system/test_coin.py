@@ -186,4 +186,47 @@ class TestLights(unittest.TestCase):
         self.assertEquals("patter", p.lamps["start_button"].state["schedule"])
 
 
+class TestStart(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        p.modes["attract"].enable()
+        p.modes["coin"].enable()
+
+    def test_no_credits(self):
+        p.data["credits"] = 0.5
+        p.proc.switch_active(p.switches["start_button"])
+        p.events.dispatch()
+        self.assertTrue(p.modes["attract"].enabled)
+
+    def test_pinball_missing(self):
+        p.data["credits"] = 1.0
+        p.proc.switch_active(p.switches["start_button"])
+        p.events.dispatch()
+        self.assertFalse(p.modes["attract"].enabled)
+        self.assertTrue(p.modes["pinball_missing"].enabled)
+
+    def test_start(self):
+        p.data["credits"] = 1.0
+        p.proc.switch_active(p.switches["trough"])
+        p.proc.switch_active(p.switches["trough_2"])
+        p.proc.switch_active(p.switches["trough_3"])
+        p.proc.switch_active(p.switches["trough_4"])
+        p.proc.switch_active(p.switches["start_button"])
+        p.events.dispatch()
+        self.assertFalse(p.modes["attract"].enabled)
+        self.assertTrue(p.modes["game_menu"].enabled)
+
+    def test_start_free_play(self):
+        p.data["credits"] = 0
+        p.data["free_play"] = True
+        p.proc.switch_active(p.switches["trough"])
+        p.proc.switch_active(p.switches["trough_2"])
+        p.proc.switch_active(p.switches["trough_3"])
+        p.proc.switch_active(p.switches["trough_4"])
+        p.proc.switch_active(p.switches["start_button"])
+        p.events.dispatch()
+        self.assertFalse(p.modes["attract"].enabled)
+        self.assertTrue(p.modes["game_menu"].enabled)
+
 

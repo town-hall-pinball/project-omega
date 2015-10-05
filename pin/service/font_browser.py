@@ -25,7 +25,7 @@ from ..lib import p, ui, util
 class Mode(Handler):
 
     def setup(self):
-        self.sample = ".,1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        self.sample = ".,1234567890:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         self.fonts = util.Cycle(sorted(p.fonts.keys()))
         self.display = ui.Panel(name="font_viewer")
         self.label = ui.Text(top=0, right=0, font="r7", padding=[1, 1])
@@ -73,7 +73,7 @@ class Mode(Handler):
         self.timer = self.wait(0.2, self.scroll_left.start)
 
     def flipper_right_down(self):
-        self.text_left()
+        self.text_right()
         self.timer = self.wait(0.2, self.scroll_right.start)
 
     def flipper_up(self):

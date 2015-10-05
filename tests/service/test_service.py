@@ -34,22 +34,22 @@ class TestService(unittest.TestCase):
     def test_menu_next(self):
         p.events.post("switch_service_up")
         p.events.dispatch()
-        self.assertEquals("Tests", self.service.name.style["text"])
+        self.assertEquals("Tests", self.service.title.style["text"])
 
     def test_menu_previous(self):
         p.events.post("switch_service_down")
         p.events.dispatch()
-        self.assertEquals("Utilities", self.service.name.style["text"])
+        self.assertEquals("Utilities", self.service.title.style["text"])
 
     def test_menu_next_suspended(self):
         self.service.suspend()
         p.events.post("switch_service_up")
         p.events.dispatch()
-        self.assertEquals("Settings", self.service.name.style["text"])
+        self.assertEquals("Settings", self.service.title.style["text"])
         self.service.resume()
         p.events.post("switch_service_up")
         p.events.dispatch()
-        self.assertEquals("Tests", self.service.name.style["text"])
+        self.assertEquals("Tests", self.service.title.style["text"])
 
     def test_menu_exit(self):
         p.events.post("switch_service_exit")
@@ -59,7 +59,7 @@ class TestService(unittest.TestCase):
     def test_menu_down(self):
         p.events.post("switch_service_enter")
         p.events.dispatch()
-        self.assertEquals("Pricing", self.service.name.style["text"])
+        self.assertEquals("Pricing", self.service.title.style["text"])
 
     def test_menu_cache(self):
         p.events.post("switch_service_up")      # Go to Tests
@@ -68,7 +68,7 @@ class TestService(unittest.TestCase):
         p.events.post("switch_service_exit")    # Back to main
         p.events.post("switch_service_enter")   # Enter Tests
         p.events.dispatch()
-        self.assertEquals("Coils", self.service.name.style["text"])
+        self.assertEquals("Coils", self.service.title.style["text"])
 
     def test_option_select(self):
         p.events.post("switch_service_enter")
