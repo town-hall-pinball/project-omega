@@ -136,6 +136,9 @@ class Mode(Handler):
         self.push_menu(p.service_menu.main)
         p.dmd.clear()
 
+    def on_disable(self):
+        self.result.hide()
+
     def enter(self):
         if self.confirmed:
             self.select_confirmed()
