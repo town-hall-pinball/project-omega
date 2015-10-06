@@ -27,12 +27,38 @@ class Mode(BaseGame):
     def setup(self):
         super(Mode, self).setup()
         self.max_players = 1
+        self.max_time = 3 * 60
         self.display = ui.Panel()
-        self.time = ui.Text("3:00", font="c128_16")
+        self.time = ui.Text("0:00", font="c128_16")
         self.display.add((self.time,))
+        self.ticker = None
+        self.start_time = None
+        self.on("live_ball", self.start)
 
     def on_enable(self):
         super(Mode, self).on_enable()
         p.captures["trough"].eject()
+        self.update_time()
+
+    def on_disable(self):
+        p.timers.cancel(self.ticker)
+
+    def start(self):
+        self.ticker = p.timers.tick(self.update_time)
+        self.start_time = p.now
+
+    def update_time(self):
+        elapsed = 0
+        if self.start_time:
+            elapsed = p.now - self.start_time
+        remaining = self.max_time - elapsed
+        if remaining < 0:
+            remaining = 0
+        minutes = int(remaining / 60)
+        seconds = int(remaining % 60)
+        self.time.show("{}:{:02d}".format(minutes, seconds))
+
+
+
 
 

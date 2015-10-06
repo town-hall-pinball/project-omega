@@ -50,6 +50,7 @@ class Game(BaseGame):
                 "live" in switch.tags and
                 switch.name != "shooter_lane"):
             p.notify("game", "Live Ball")
+            p.events.post("live_ball")
             self.balls_in_play = 1
 
 
