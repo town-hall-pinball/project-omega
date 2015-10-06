@@ -28,7 +28,7 @@ class TestGame(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
-        self.game = Game()
+        self.game = Game("test")
 
     def test_kickback_enable(self):
         self.game.kickback_enable()

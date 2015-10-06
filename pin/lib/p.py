@@ -22,6 +22,8 @@ import importlib
 import logging
 import time
 
+captures = None
+
 coils = None
 """
 Dictionary of :py:class:`pin.devices.Coil` objects keyed by identifier.

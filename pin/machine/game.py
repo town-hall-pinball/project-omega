@@ -29,6 +29,30 @@ class Game(BaseGame):
     loop_enabled = False
     playfield_enabled = False
 
+    def setup(self):
+        self.on("switch_shooter_lane_active", self.shooter_lane_active)
+        self.on("switch_shooter_lane_inactive", self.shooter_lane_inactive)
+        self.on("switch_ball_launch_button", self.ball_launch_button)
+        self.on("switch", self.switch_update)
+
+    def shooter_lane_active(self):
+        p.lamps["ball_launch_button"].patter()
+
+    def shooter_lane_inactive(self):
+        p.lamps["ball_launch_button"].disable()
+
+    def ball_launch_button(self):
+        if p.switches["shooter_lane"].active:
+            p.coils["auto_plunger"].pulse()
+
+    def switch_update(self, switch, enabled):
+        if (self.balls_in_play == 0 and
+                "live" in switch.tags and
+                switch.name != "shooter_lane"):
+            p.notify("game", "Live Ball")
+            self.balls_in_play = 1
+
+
     def kickback_enable(self):
         #if self.kickback_enabled:
         #    return

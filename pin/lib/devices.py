@@ -106,7 +106,8 @@ class Driver(Device):
         if self.state == state:
             return
         self.state = state
-        log[self.type].debug("+ {}".format(self.name))
+        if not show:
+            log[self.type].debug("+ {}".format(self.name))
         p.proc.api.driver_pulse(self.number, 0)
         p.events.post(self.type, self)
 
@@ -118,7 +119,8 @@ class Driver(Device):
         if self.state == state:
             return
         self.state = state
-        log[self.type].debug("- {}".format(self.name))
+        if not show:
+            log[self.type].debug("- {}".format(self.name))
         p.proc.api.driver_disable(self.number)
         p.events.post(self.type, self)
 

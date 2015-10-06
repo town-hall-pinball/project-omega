@@ -20,6 +20,7 @@
 
 import logging
 from . import p, util
+from .handler import Handler
 
 log = logging.getLogger("pin.game")
 
@@ -39,7 +40,7 @@ def create_player(index):
     return player
 
 
-class Game(object):
+class Game(Handler):
 
     name = None
     active = False
@@ -47,23 +48,23 @@ class Game(object):
     order = None
     ball = 0
     max_players = 4
+    balls_in_play = 0
 
-    def __init__(self, name="main"):
-        self.name = name
-
-    def start(self):
-        if self.active:
-            raise ValueError("Game ({}) already started".format(self.name))
+    def on_enable(self):
+        if p.game:
+            raise ValueError("Game ({}) already running".format(p.game.name))
+        p.game = self
         self.players = []
         self.order = util.Cycle()
         self.active = True
         self.ball = 1
-        p.events.post("game_start", self.name)
-        p.events.post("game_start_" + self.name)
         self.add_player()
         p.players = self.players
         p.player = self.players[0]
         p.events.post("next_player")
+
+    def on_disable(self):
+        p.game = None
 
     def add_player(self):
         if self.ball == 1 and len(self.players) < self.max_players:

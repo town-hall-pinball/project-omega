@@ -36,12 +36,13 @@ max_eject_attempts = 20
 
 class Capture(Handler):
 
-    def __init__(self, name, switches, coil, verify, staged=0):
+    def __init__(self, name, switches, coil, verify=None, staged=0):
         self.switches = switches
         self.coil = coil
-        self.verify = verify
-        self.verify["time"] = verify.get("time", 1.0)
-        self.verify["retry_time"] = verify.get("retry_time", 3.0)
+        self.verify = verify or {}
+        self.verify["type"] = self.verify.get("type", "none")
+        self.verify["time"] = self.verify.get("time", 1.0)
+        self.verify["retry_time"] = self.verify.get("retry_time", 3.0)
         self.staged = staged
         super(Capture, self).__init__(name)
 

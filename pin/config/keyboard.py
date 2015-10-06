@@ -33,5 +33,7 @@ def init():
         "0": switch("service_exit"),
         "[": switch("flipper_left"),
         "]": switch("flipper_right"),
+        ",": switch("slingshot_left"),
+        ".": switch("slingshot_right")
     })
 

@@ -22,21 +22,17 @@ from pin.lib import p, ui
 from pin.lib.handler import Handler
 from pin.machine.game import Game as BaseGame
 
-class Game(BaseGame):
-
-    def __init__(self):
-        super(Game, self).__init__()
-        self.max_players = 1
-
-
-class Mode(Handler):
+class Mode(BaseGame):
 
     def setup(self):
+        super(Mode, self).setup()
+        self.max_players = 1
         self.display = ui.Panel()
         self.time = ui.Text("3:00", font="c128_16")
         self.display.add((self.time,))
 
     def on_enable(self):
-        p.game = Game()
-        p.game.start()
+        super(Mode, self).on_enable()
+        p.captures["trough"].eject()
+
 

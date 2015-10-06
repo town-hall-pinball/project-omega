@@ -75,11 +75,6 @@ def init():
                 sw["shooter_lane"],
             ],
             coil=coil["auto_plunger"],
-            verify={
-                "type": "failure",
-                "switch": sw["shooter_lane"],
-                "time": 1.0
-            }
         )
     }
 
