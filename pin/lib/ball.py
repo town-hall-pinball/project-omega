@@ -25,6 +25,7 @@ from . import p, util
 from .handler import Handler
 
 log = logging.getLogger("pin.ball")
+shot_log = logging.getLogger("pin.shot")
 
 total = 0
 captures = {}
@@ -153,6 +154,7 @@ class Mode(Handler):
             elif "eq" not in rule and "neq" not in rule:
                 raise ValueError("Invalid rule in {}: {}".format(shot_name,
                         rule))
+        shot_log.debug("+ {}".format(shot_name))
         p.events.trigger(shot_name)
 
     def on_disable(self):
@@ -160,7 +162,7 @@ class Mode(Handler):
 
 
 
-def trough_count():
+def in_trough():
     amount = 0
     for capture in captures.values():
         balls = capture.balls()
@@ -172,8 +174,17 @@ def trough_count():
             amount += balls
     return amount
 
-def trough_ready():
-    return trough_count() == total
+def in_play():
+    return total - in_trough()
+
+def missing():
+    return in_play() > 0
+
+def dead():
+    return in_trough() == total
+
+def status():
+    log.debug("in play {}, in trough {}".format(in_play(), in_trough()))
 
 search = Search()
 

@@ -271,12 +271,14 @@ class Switch(Device):
         self.enable(False)
 
     def activate(self):
-        event = p.proc.SWITCH_OPENED if self.opto else p.proc.SWITCH_CLOSED
-        p.proc.artificial_events += [{"type": event, "value": self.number}]
+        if not self.active:
+            event = p.proc.SWITCH_OPENED if self.opto else p.proc.SWITCH_CLOSED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
 
     def deactivate(self):
-        event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
-        p.proc.artificial_events += [{"type": event, "value": self.number}]
+        if self.active:
+            event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
 
     def is_closed(self):
         return self.active if not self.opto else not self.active

@@ -74,11 +74,11 @@ class Mode(Handler):
         if self.can_start():
             if not p.game:
                 p.modes["attract"].disable()
-                if not ball.trough_ready():
+                if ball.missing():
                     p.modes["pinball_missing"].enable()
                 else:
                     p.modes["game_menu"].enable()
-            p.data["credits"] -= 1
+                    p.data["credits"] -= 1
         else:
             if p.modes["attract"].enabled:
                 self.show_credits()

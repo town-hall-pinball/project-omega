@@ -39,6 +39,7 @@ def init():
         #"pin.notice",
         #"pin.resources",
         #"pin.server",
+        #"pin.shot",
         #"pin.sim",
         #"pin.shows",
     ]

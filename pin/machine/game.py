@@ -28,8 +28,10 @@ class Game(BaseGame):
     flippers_enabled = False
     loop_enabled = False
     playfield_enabled = False
+    live = False
 
     def setup(self):
+        super(Game, self).setup()
         self.on("switch_shooter_lane_active", self.shooter_lane_active)
         self.on("switch_shooter_lane_inactive", self.shooter_lane_inactive)
         self.on("switch_ball_launch_button", self.ball_launch_button)
@@ -46,13 +48,12 @@ class Game(BaseGame):
             p.coils["auto_plunger"].pulse()
 
     def switch_update(self, switch, enabled):
-        if (self.balls_in_play == 0 and
-                "live" in switch.tags and
+        if (not self.live and "live" in switch.tags and
                 switch.name != "shooter_lane"):
+            self.live = True
             p.notify("game", "Live Ball")
             p.events.post("live_ball")
-            self.balls_in_play = 1
-
+            ball.status()
 
     def kickback_enable(self):
         #if self.kickback_enabled:

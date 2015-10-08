@@ -32,7 +32,7 @@ class TestCaptures(unittest.TestCase):
             capture.enable()
 
     def test_empty(self):
-        self.assertEquals(0, ball.trough_count())
+        self.assertEquals(0, ball.in_trough())
 
     def test_full_trough(self):
         p.switches["trough"].activate()
@@ -40,8 +40,8 @@ class TestCaptures(unittest.TestCase):
         p.switches["trough_3"].activate()
         p.switches["trough_4"].activate()
         fixtures.loop()
-        self.assertEquals(4, ball.trough_count())
-        self.assertTrue(ball.trough_ready())
+        self.assertEquals(4, ball.in_trough())
+        self.assertTrue(ball.dead())
 
     def test_staged_ball(self):
         p.switches["trough"].activate()
@@ -49,7 +49,7 @@ class TestCaptures(unittest.TestCase):
         p.switches["trough_3"].activate()
         p.switches["popper"].activate()
         fixtures.loop()
-        self.assertEquals(4, ball.trough_count())
+        self.assertEquals(4, ball.in_trough())
 
     def test_full_popper(self):
         p.switches["trough"].activate()
@@ -57,8 +57,8 @@ class TestCaptures(unittest.TestCase):
         p.switches["popper"].activate()
         p.switches["popper_2"].activate()
         fixtures.loop()
-        self.assertEquals(3, ball.trough_count())
-        self.assertFalse(ball.trough_ready())
+        self.assertEquals(3, ball.in_trough())
+        self.assertFalse(ball.dead())
 
     def test_trough_eject(self):
         trough = ball.captures["trough"]
@@ -166,6 +166,7 @@ class TestShots(unittest.TestCase):
         self.assertTrue(listen_right.called)
 
     def test_playfield_enable(self):
+        p.modes["ball"].enable()
         listener = Mock()
         p.events.on("shot_saucer", listener)
         p.events.post("playfield_enable")
@@ -174,6 +175,7 @@ class TestShots(unittest.TestCase):
         self.assertTrue(listener.called)
 
     def test_playfield_disable(self):
+        p.modes["ball"].enable()
         listener = Mock()
         p.events.on("shot_saucer", listener)
         p.events.post("playfield_enable")
@@ -181,6 +183,14 @@ class TestShots(unittest.TestCase):
         p.proc.switch_active(p.switches["saucer"])
         p.events.dispatch()
         self.assertFalse(listener.called)
+
+    def test_drain(self):
+        p.modes["ball"].enable()
+        listener = Mock()
+        p.events.on("drain", listener)
+        p.proc.switch_active(p.switches["trough_4"])
+        p.events.dispatch()
+        self.assertTrue(listener.called)
 
 
 class TestSearch(unittest.TestCase):

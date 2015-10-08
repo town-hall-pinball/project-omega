@@ -22,6 +22,7 @@ from pin.lib import p
 
 import unittest
 from tests import fixtures
+from mock import patch
 
 class TestSimulator(unittest.TestCase):
 
@@ -45,7 +46,8 @@ class TestSimulator(unittest.TestCase):
         self.assertFalse(p.switches["trough_3"].active)
         self.assertFalse(p.switches["popper"].active)
 
-    def test_trough_feed(self):
+    @patch("pin.lib.p.proc.refresh_dmd")
+    def test_trough_feed(self, *args):
         p.coils["trough"].pulse()
         fixtures.loop()
 
@@ -56,7 +58,8 @@ class TestSimulator(unittest.TestCase):
         self.assertTrue(p.switches["shooter_lane"].active)
         self.assertEquals(0, self.sim.free)
 
-    def test_launch(self):
+    @patch("pin.lib.p.proc.refresh_dmd")
+    def test_launch(self, *args):
         p.coils["trough"].pulse()
         p.coils["auto_plunger"].pulse()
         fixtures.loop()
@@ -68,7 +71,8 @@ class TestSimulator(unittest.TestCase):
         self.assertFalse(p.switches["shooter_lane"].active)
         self.assertEquals(1, self.sim.free)
 
-    def test_drain(self):
+    @patch("pin.lib.p.proc.refresh_dmd")
+    def test_drain(self, *args):
         p.coils["trough"].pulse()
         p.coils["auto_plunger"].pulse()
         p.switches["trough_4"].activate()
@@ -100,7 +104,8 @@ class TestSimulator(unittest.TestCase):
         self.assertFalse(p.switches["trough_4"].active)
         self.assertEquals(0, self.sim.free)
 
-    def test_ball_not_at_source(self):
+    @patch("pin.lib.p.proc.refresh_dmd")
+    def test_ball_not_at_source(self, *args):
         p.coils["popper"].pulse()
         fixtures.loop()
         self.assertEquals(1, self.sim.free)

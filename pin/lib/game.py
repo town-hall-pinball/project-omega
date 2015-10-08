@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import logging
-from . import p, util
+from . import p, ball, util
 from .handler import Handler
 
 log = logging.getLogger("pin.game")
@@ -48,7 +48,9 @@ class Game(Handler):
     order = None
     ball = 0
     max_players = 4
-    balls_in_play = 0
+
+    def setup(self):
+        self.on("drain", self.request_dead_ball_check)
 
     def on_enable(self):
         if p.game:
@@ -62,9 +64,17 @@ class Game(Handler):
         p.players = self.players
         p.player = self.players[0]
         p.events.post("next_player")
+        self.playfield_enable()
+
+    def playfield_enable(self):
+        pass
 
     def on_disable(self):
         p.game = None
+        self.playfield_disable()
+
+    def playfield_disable(self):
+        pass
 
     def add_player(self):
         if self.ball == 1 and len(self.players) < self.max_players:
@@ -99,6 +109,15 @@ class Game(Handler):
         self.ball = 0
         p.events.trigger("game_over")
         p.notify("game", "Game Over")
+
+    def request_dead_ball_check(self):
+        self.wait(0.25, self.dead_ball_check)
+
+    def dead_ball_check(self):
+        ball.status()
+        if ball.dead():
+            p.notify("game", "Dead Ball")
+            p.events.trigger("dead_ball")
 
     def data(self, name):
         return p.data[self.name + "." + name]

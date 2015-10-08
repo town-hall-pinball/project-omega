@@ -96,19 +96,27 @@ class Mode(Handler):
             return
 
         source_name = source.name if source else "playfield"
+        source_label = source.label if source else "Playfield"
         target_name = target.name if target else "playfield"
+        target_label = target.label if target else "Playfield"
+
         log.debug("{} to {}".format(source_name, target_name))
         p.events.post("simulate", source, target)
+        p.notify("simulate", "{} to {}".format(source_label, target_label))
 
         if source:
             self.balls.remove(source)
             source.deactivate()
+            p.proc.process()
+            p.events.dispatch()
         else:
             self.free -= 1
 
         if target:
             self.balls.add(target)
             target.activate()
+            p.proc.process()
+            p.events.dispatch()
         else:
             self.free += 1
 
