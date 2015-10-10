@@ -177,12 +177,9 @@ class TestLights(unittest.TestCase):
 
     def test_game_menu(self):
         p.data["credits"] = 2
-        p.proc.switch_active(p.switches["trough"])
-        p.proc.switch_active(p.switches["trough_2"])
-        p.proc.switch_active(p.switches["trough_3"])
-        p.proc.switch_active(p.switches["trough_4"])
-        p.proc.switch_active(p.switches["start_button"])
-        p.events.dispatch()
+        p.data["simulator_enabled"] = True
+        p.switches["start_button"].activate()
+        fixtures.loop()
         self.assertEquals("enable", p.lamps["start_button"].state["schedule"])
 
     def test_service_mode(self):
@@ -206,49 +203,41 @@ class TestStart(unittest.TestCase):
 
     def test_no_credits(self):
         p.data["credits"] = 0.5
-        p.proc.switch_active(p.switches["start_button"])
-        p.events.dispatch()
+        p.data["simulator_enabled"] = True
+        p.switches["start_button"].activate()
+        fixtures.loop()
         self.assertTrue(p.modes["attract"].enabled)
 
     def test_pinball_missing(self):
         p.data["credits"] = 1.0
-        p.proc.switch_active(p.switches["start_button"])
-        p.events.dispatch()
+        p.switches["start_button"].activate()
+        fixtures.loop()
         self.assertFalse(p.modes["attract"].enabled)
         self.assertTrue(p.modes["pinball_missing"].enabled)
 
     def test_start(self):
         p.data["credits"] = 1.0
-        p.proc.switch_active(p.switches["trough"])
-        p.proc.switch_active(p.switches["trough_2"])
-        p.proc.switch_active(p.switches["trough_3"])
-        p.proc.switch_active(p.switches["trough_4"])
-        p.proc.switch_active(p.switches["start_button"])
-        p.events.dispatch()
+        p.data["simulator_enabled"] = True
+        p.switches["start_button"].activate()
+        fixtures.loop()
         self.assertFalse(p.modes["attract"].enabled)
         self.assertTrue(p.modes["game_menu"].enabled)
 
     def test_no_attrat(self):
         p.data["credits"] = 1.0
         p.modes["attract"].disable()
-        p.proc.switch_active(p.switches["trough"])
-        p.proc.switch_active(p.switches["trough_2"])
-        p.proc.switch_active(p.switches["trough_3"])
-        p.proc.switch_active(p.switches["trough_4"])
-        p.proc.switch_active(p.switches["start_button"])
-        p.events.dispatch()
+        p.data["simulator_enabled"] = True
+        p.switches["start_button"].activate()
+        fixtures.loop()
         self.assertFalse(p.modes["attract"].enabled)
         self.assertFalse(p.modes["game_menu"].enabled)
 
     def test_start_free_play(self):
         p.data["credits"] = 0
         p.data["free_play"] = True
-        p.proc.switch_active(p.switches["trough"])
-        p.proc.switch_active(p.switches["trough_2"])
-        p.proc.switch_active(p.switches["trough_3"])
-        p.proc.switch_active(p.switches["trough_4"])
-        p.proc.switch_active(p.switches["start_button"])
-        p.events.dispatch()
+        p.data["simulator_enabled"] = True
+        p.switches["start_button"].activate()
+        fixtures.loop()
         self.assertFalse(p.modes["attract"].enabled)
         self.assertTrue(p.modes["game_menu"].enabled)
 

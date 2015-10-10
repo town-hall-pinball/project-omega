@@ -32,6 +32,7 @@ class TestPROC(unittest.TestCase):
         p.proc.api.reset()
 
     def test_get_events(self):
+        p.proc.api.dmd_enabled = True
         events = p.proc.api.get_events()
         self.assertEquals(1, len(events))
         self.assertEquals(p.proc.DMD_READY, events[0]["type"])

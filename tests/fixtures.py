@@ -54,6 +54,7 @@ def reset():
     p.switches = devices.switches
     p.timers = timers
 
+    p.proc.api.dmd_enabled = False
     p.data.reset(p.defaults)
     p.data.read_only = True
 

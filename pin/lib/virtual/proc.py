@@ -20,13 +20,13 @@
 
 from pin.lib import proc
 
+dmd_enabled = False
+
 def reset(*args, **kwargs):
     pass
 
 def get_events():
-    return [
-        { "type": proc.DMD_READY }
-    ]
+    return [{"type": proc.DMD_READY}] if dmd_enabled else []
 
 def switch_update_rule(*args, **kwargs):
     pass
