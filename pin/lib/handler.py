@@ -42,15 +42,14 @@ class Handler(object):
         pass
 
     def on(self, event, listener):
-        if event in self.listeners:
-            raise ValueError("Listener already registered for {}"
-                    .format(event))
-        self.listeners[event] = listener
+        listeners = self.listeners.get(event, [])
+        listeners += [listener]
+        self.listeners[event] = listeners
         if self.enabled:
             p.events.on(event, listener)
 
     def off(self, event, listener):
-        del self.listeners[event]
+        self.listeners[event].remove(listener)
         p.events.off(event, listener)
 
     def wait(self, duration, callback):
@@ -142,14 +141,16 @@ class Handler(object):
     def register(self):
         #for handler in self.handlers:
         #    handler.enable()
-        for event, listener in self.listeners.items():
-            p.events.on(event, listener)
+        for event, listeners in self.listeners.items():
+            for listener in listeners:
+                p.events.on(event, listener)
 
     def unregister(self):
         for handler in self.handlers:
             self.disable()
-        for event, listener in self.listeners.items():
-            p.events.off(event, listener)
+        for event, listeners in self.listeners.items():
+            for listener in listeners:
+                p.events.off(event, listener)
         for ident in self.timers:
             p.timers.clear(ident)
 

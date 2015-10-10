@@ -59,6 +59,9 @@ class Mode(BaseGame):
         self.time.show("{}:{:02d}".format(minutes, seconds))
 
 
+    def live_ball(self):
+        super(Mode, self).live_ball()
+        self.auto_launch = True
 
 
 

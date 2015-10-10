@@ -120,3 +120,10 @@ class Mode(Handler):
         else:
             self.free += 1
 
+        switch_hit = rule.get("hit")
+        if switch_hit:
+            switch_hit.activate()
+            switch_hit.deactivate()
+
+
+

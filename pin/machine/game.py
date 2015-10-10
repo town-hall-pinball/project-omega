@@ -37,6 +37,8 @@ class Game(BaseGame):
         self.on("switch_shooter_lane_inactive", self.shooter_lane_inactive)
         self.on("switch_ball_launch_button", self.ball_launch_button)
         self.on("switch", self.switch_update)
+        self.on("drain", self.auto_feed_check)
+        p.events.on_switch("shooter_lane", self.auto_launch_check, 0.25)
 
     def shooter_lane_active(self):
         p.lamps["ball_launch_button"].patter()
@@ -46,7 +48,18 @@ class Game(BaseGame):
 
     def ball_launch_button(self):
         if p.switches["shooter_lane"].active:
-            p.coils["auto_plunger"].pulse()
+            ball.auto_plunger.eject()
+
+    def auto_feed_check(self):
+        if self.auto_launch:
+            self.wait(0.5, self.auto_feed)
+
+    def auto_feed(self):
+        ball.trough.eject()
+
+    def auto_launch_check(self):
+        if self.auto_launch:
+            ball.auto_plunger.eject()
 
     def switch_update(self, switch, enabled):
         if (not self.live and "live" in switch.tags and

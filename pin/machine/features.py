@@ -69,7 +69,7 @@ def init():
                 "time": 1.0
             }
         ),
-        "shooter_lane": ball.Capture(
+        "auto_plunger": ball.Capture(
             name="shooter_lane",
             switches=[
                 sw["shooter_lane"],
@@ -77,6 +77,8 @@ def init():
             coil=coil["auto_plunger"],
         )
     }
+    ball.trough = ball.captures["trough"]
+    ball.auto_plunger = ball.captures["auto_plunger"]
 
     ball.shots = {
         "shot_orbit_left": [
@@ -134,7 +136,7 @@ def init():
             { "from": sw["trough_2"],   "to": sw["trough"] }
         ],
         "coil:auto_plunger=pulse": [
-            { "from": sw["shooter_lane"] }
+            { "from": sw["shooter_lane"], "hit": sw["slingshot_left"] }
         ],
         "coil:popper=pulse": [
             { "from": sw["popper"] }

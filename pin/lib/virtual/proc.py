@@ -20,7 +20,7 @@
 
 from pin.lib import proc
 
-dmd_enabled = False
+dmd_enabled = True
 
 def reset(*args, **kwargs):
     pass
