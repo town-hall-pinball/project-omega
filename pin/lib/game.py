@@ -48,6 +48,7 @@ class Game(Handler):
     order = None
     ball = 0
     max_players = 4
+    live = False
 
     def setup(self):
         self.on("drain", self.request_dead_ball_check)
@@ -116,11 +117,18 @@ class Game(Handler):
     def dead_ball_check(self):
         ball.status()
         if ball.dead():
+            self.live = False
             p.notify("game", "Dead Ball")
             p.events.trigger("dead_ball")
 
     def data(self, name):
         return p.data[self.name + "." + name]
+
+    def live_ball(self):
+        self.live = True
+        p.notify("game", "Live Ball")
+        p.events.post("live_ball")
+        ball.status()
 
 
 

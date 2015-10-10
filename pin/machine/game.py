@@ -29,6 +29,7 @@ class Game(BaseGame):
     loop_enabled = False
     playfield_enabled = False
     live = False
+    auto_launch = False
 
     def setup(self):
         super(Game, self).setup()
@@ -50,10 +51,7 @@ class Game(BaseGame):
     def switch_update(self, switch, enabled):
         if (not self.live and "live" in switch.tags and
                 switch.name != "shooter_lane"):
-            self.live = True
-            p.notify("game", "Live Ball")
-            p.events.post("live_ball")
-            ball.status()
+            self.live_ball()
 
     def kickback_enable(self):
         #if self.kickback_enabled:

@@ -72,7 +72,7 @@ class Mode(Handler):
 
     def start_button(self):
         if self.can_start():
-            if not p.game:
+            if p.modes["attract"].enabled:
                 p.modes["attract"].disable()
                 if ball.missing():
                     p.modes["pinball_missing"].enable()

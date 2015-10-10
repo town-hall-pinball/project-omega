@@ -163,6 +163,7 @@ class TestLights(unittest.TestCase):
     def setUp(self):
         fixtures.reset()
         p.modes["coin"].enable()
+        p.modes["attract"].enable()
 
     def test_not_ready(self):
         p.data["credits"] = 0.75
@@ -226,6 +227,18 @@ class TestStart(unittest.TestCase):
         p.events.dispatch()
         self.assertFalse(p.modes["attract"].enabled)
         self.assertTrue(p.modes["game_menu"].enabled)
+
+    def test_no_attrat(self):
+        p.data["credits"] = 1.0
+        p.modes["attract"].disable()
+        p.proc.switch_active(p.switches["trough"])
+        p.proc.switch_active(p.switches["trough_2"])
+        p.proc.switch_active(p.switches["trough_3"])
+        p.proc.switch_active(p.switches["trough_4"])
+        p.proc.switch_active(p.switches["start_button"])
+        p.events.dispatch()
+        self.assertFalse(p.modes["attract"].enabled)
+        self.assertFalse(p.modes["game_menu"].enabled)
 
     def test_start_free_play(self):
         p.data["credits"] = 0
