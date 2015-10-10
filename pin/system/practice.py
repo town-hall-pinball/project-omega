@@ -27,7 +27,7 @@ class Mode(BaseGame):
     def setup(self):
         super(Mode, self).setup()
         self.max_players = 1
-        self.max_time = 3 * 60
+        self.max_time = 0
         self.display = ui.Panel()
         self.time = ui.Text("0:00", font="c128_16")
         self.display.add((self.time,))
@@ -38,6 +38,7 @@ class Mode(BaseGame):
     def on_enable(self):
         super(Mode, self).on_enable()
         p.captures["trough"].eject()
+        self.max_time = p.data["practice_timer"]
         self.update_time()
 
     def on_disable(self):

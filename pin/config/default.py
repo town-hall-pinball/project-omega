@@ -30,6 +30,7 @@ settings = {
     "max_credits": 99,
     "paid_credits": 0,
     "pricing": 0.50,
+    "practice_timer": 180,
     "server_enabled": False,
     "server_publish_events": True,
     "server_remote_control": True,

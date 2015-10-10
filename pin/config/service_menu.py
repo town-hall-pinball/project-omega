@@ -20,44 +20,75 @@
 
 __all__ = ["main"]
 
-settings = {
-    "name": "Settings",
-    "icon": "service_settings",
+game_pricing = {
+    "name": "Pricing",
+    "icon": "service_money",
     "menu": [{
-        "name": "Pricing",
-        "icon": "service_money",
-        "menu": [{
-            "name": "Free Play",
-            "data": "free_play",
-            "options": [
-                [True, "Yes"],
-                [False, "No"],
-            ]},{
-            "name": "Game Pricing",
-            "data": "pricing",
-            "options": [
-                [ 0.25,  "1 for 0.25" ],
-                [ 0.50,  "1 for 0.50" ],
-                [ 0.75,  "1 for 0.75" ],
-                [ 1.00,  "1 for 1.00" ],
-            ]}
-        ]
-    },{
-        "name": "Gameplay",
-        "icon": "service_game_settings",
-        "menu": [{
-            "name": "Tilt Warnings",
-            "data": "tilt_warnings",
-            "options": [
-                [ 1, "1" ],
-                [ 2, "2" ],
-                [ 3, "3" ],
-                [ 4, "4" ],
-            ]}
+        "name": "Free Play",
+        "data": "free_play",
+        "options": [
+            [True, "Yes"],
+            [False, "No"],
+        ]},{
+        "name": "Game Pricing",
+        "data": "pricing",
+        "options": [
+            [ 0.25,  "1 for 0.25" ],
+            [ 0.50,  "1 for 0.50" ],
+            [ 0.75,  "1 for 0.75" ],
+            [ 1.00,  "1 for 1.00" ],
         ]
     }]
 }
 
+general_gameplay = {
+    "name": "General",
+    "menu": [{
+        "name": "Tilt Warnings",
+        "data": "tilt_warnings",
+        "options": [
+            [ 1, "1" ],
+            [ 2, "2" ],
+            [ 3, "3" ],
+            [ 4, "4" ],
+        ]
+    }]
+}
+
+practice_gameplay = {
+    "name": "Practice",
+    "menu": [{
+        "name": "Timer",
+        "data": "practice_timer",
+        "options": [
+            [5,     "0:05"],
+            [60,    "1:00"],
+            [120,   "2:00"],
+            [180,   "3:00"],
+            [240,   "4:00"],
+            [300,   "5:00"],
+            [6000,  "10:00"]
+        ]}
+    ]
+}
+
+gameplay = {
+    "name": "Gameplay",
+    "icon": "service_game_settings",
+    "menu": [
+        general_gameplay,
+        practice_gameplay
+    ]
+}
+
+settings = {
+    "name": "Settings",
+    "icon": "service_settings",
+    "menu": [
+        game_pricing,
+        gameplay,
+    ]
+}
 
 tests = {
     "name": "Tests",
