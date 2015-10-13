@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 from ..lib.handler import Handler
-from ..lib import dmd, ui, util
+from ..lib import p, dmd, ui, util
 from .matrix import Matrix
 
 class Mode(Handler):

@@ -34,7 +34,7 @@ class Mode(Handler):
             font="t5exb"
         )
         self.version = ui.Text(
-            "Version {}".format(brand.version),
+            brand.version,
             font="t5cpb"
         )
         self.release = ui.Text(

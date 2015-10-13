@@ -134,7 +134,7 @@ def bind():
 def run():
     parse_arguments()
     log = init_logging()
-    log.info("{}, Version {}".format(brand.name, brand.version))
+    log.info("{}, {}".format(brand.name, brand.version))
 
     try:
         import debug
