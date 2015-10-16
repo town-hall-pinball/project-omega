@@ -19,7 +19,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from ..lib import p, ball, devices, simulator
+from ..lib import p, ball, devices, shots, simulator
 
 def init():
     sw = p.switches
@@ -80,7 +80,7 @@ def init():
     ball.trough = ball.captures["trough"]
     ball.auto_plunger = ball.captures["auto_plunger"]
 
-    ball.shots = {
+    shots.rule_set = {
         "shot_orbit_left": [
             {  "eq": sw["orbit_left"] },
             { "neq": sw["orbit_right"] },

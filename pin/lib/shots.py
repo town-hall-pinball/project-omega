@@ -18,28 +18,42 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ui, util
+import collections
+import logging
+
+from pin.lib import p
 from pin.lib.handler import Handler
 
-from . import coin
+log = logging.getLogger("pin.shot")
+rule_set = {}
 
 class Mode(Handler):
 
+    history = collections.deque(maxlen=5)
+
     def setup(self):
-        self.handlers += [
-            p.modes["ball"],
-            p.modes["coin"],
-            p.modes["shots"]
-        ]
+        p.events.on("playfield_enable", self.enable)
+        p.events.on("playfield_disable", self.disable)
+        self.on("switch_active", self.switch_active)
 
-    def on_enable(self):
-        for handler in self.handlers:
-            handler.enable()
+    def switch_active(self, switch=None):
+        log.warn("****** GOT IT: " + switch.name)
+        if not "user" in switch.tags:
+            self.history.appendleft(switch)
+        for shot_name, rules in rule_set.items():
+            self.evaluate_shot(shot_name, rules)
 
+    def evaluate_shot(self, shot_name, rules):
+        for rule, switch in zip(rules, self.history):
+            if "eq" in rule and rule["eq"].name != switch.name:
+                return
+            elif "neq" in rule and rule["neq"].name == switch.name:
+                return
+            elif "eq" not in rule and "neq" not in rule:
+                raise ValueError("Invalid rule in {}: {}".format(shot_name,
+                        rule))
+        log.debug("+ {}".format(shot_name))
+        p.events.trigger(shot_name)
 
-def init():
-    p.load_modes({
-        "system.coin",
-        "lib.ball",
-        "lib.shots",
-    })
+    def on_disable(self):
+        self.history.clear()

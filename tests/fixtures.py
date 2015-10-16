@@ -101,6 +101,7 @@ def reset():
     with patch("pin.lib.resources.load_dmd_animation") as load_patch:
         startup.init()
 
+    p.modes["shots"].enable()
 
 
 class LoopError(Exception):
