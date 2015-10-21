@@ -37,7 +37,6 @@ class Mode(Handler):
         self.on("switch_active", self.switch_active)
 
     def switch_active(self, switch=None):
-        log.warn("****** GOT IT: " + switch.name)
         if not "user" in switch.tags:
             self.history.appendleft(switch)
         for shot_name, rules in rule_set.items():

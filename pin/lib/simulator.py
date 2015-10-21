@@ -84,7 +84,8 @@ class Mode(Handler):
             if self.free > 0:
                 source = None # Grab from playfield
             else:
-                log.warn("Ball not at source and no free ball to acquire")
+                log.warn("Ball not at {} and no free ball to acquire".format(
+                        source.name))
                 return
 
         # Is the target location blocked by a ball?

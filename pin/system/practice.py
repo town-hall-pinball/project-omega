@@ -33,7 +33,7 @@ class Mode(BaseGame):
         self.display.add((self.time,))
         self.ticker = None
         self.start_time = None
-        self.on("live_ball", self.start)
+        self.on("live_ball", self.live_ball_check)
 
     def on_enable(self):
         super(Mode, self).on_enable()
@@ -44,9 +44,10 @@ class Mode(BaseGame):
     def on_disable(self):
         p.timers.cancel(self.ticker)
 
-    def start(self):
-        self.ticker = p.timers.tick(self.update_time)
-        self.start_time = p.now
+    def live_ball_check(self):
+        if not self.start_time:
+            self.ticker = p.timers.tick(self.update_time)
+            self.start_time = p.now
 
     def update_time(self):
         elapsed = 0
