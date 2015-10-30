@@ -18,12 +18,12 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+from pin import config
 from pin.lib import (
     p, dmd, devices, events, keyboard, resources, mixer, proc,
     timers
 )
 from pin.lib.data import data
-from pin import machine
 from pin.config import default, platform, startup
 from pin.lib.virtual import proc as virtual_proc
 from mock import MagicMock as Mock, patch
@@ -42,7 +42,6 @@ def reset():
     p.fonts = resources.fonts
     p.game = None
     p.images = resources.images
-    p.machine = machine
     p.mixer = mixer
     p.music = resources.music
     p.movies = resources.movies
@@ -97,7 +96,7 @@ def reset():
     font.metrics.return_value = ((5, 5, 5, 5, 5),)
     font.get_ascent.return_value = 5
 
-    machine.init()
+    config.init()
     with patch("pin.lib.resources.load_dmd_animation") as load_patch:
         startup.init()
 

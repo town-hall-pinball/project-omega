@@ -20,7 +20,7 @@
 
 from pin.lib import p, ui
 from pin.lib.handler import Handler
-from pin.machine.game import Game as BaseGame
+from pin.config.game import Game as BaseGame
 
 class Mode(BaseGame):
 

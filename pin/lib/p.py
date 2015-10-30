@@ -75,7 +75,6 @@ gi = None
 images = None
 keyboard = None
 lamps = None
-machine = None
 modes = None
 movies = None
 mixer = None

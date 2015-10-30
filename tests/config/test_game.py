@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.machine.game import Game
+from pin.config.game import Game
 
 import unittest
 from tests import fixtures
