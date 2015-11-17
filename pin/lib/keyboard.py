@@ -30,7 +30,11 @@ keys = {}
 def mod():
     keys = []
     m = pygame.key.get_mods()
-    if m & KMOD_LSHIFT or m & KMOD_RSHIFT:
+    if m & KMOD_CTRL:
+        keys += ["c"]
+    if m & KMOD_ALT:
+        keys += ["a"]
+    if m & KMOD_SHIFT:
         keys += ["s"]
     return "".join(keys)
 
