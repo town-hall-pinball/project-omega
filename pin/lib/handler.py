@@ -30,6 +30,7 @@ class Handler(object):
     def __init__(self, name):
         self.name = name
         self.listeners = {}
+        self.switch_listeners = {}
         self.timers = set()
         self.enabled = False
         self.suspended = False
@@ -48,8 +49,25 @@ class Handler(object):
         if self.enabled:
             p.events.on(event, listener)
 
+    def on_switch(self, event, listener, duration, active=True):
+        switch_listeners = self.switch_listeners.get(event, [])
+        listener_info = {
+            "event": event,
+            "listener": listener,
+            "duration": duration,
+            "active": active
+        }
+        switch_listeners += [listener_info]
+        self.switch_listeners[event] = switch_listeners
+        if self.enabled:
+            p.events.on_switch(event, listener, duration, active)
+
     def off(self, event, listener):
         self.listeners[event].remove(listener)
+        p.events.off(event, listener)
+
+    def off_switch(self, event, listener):
+        self.switch_listeners[event].remove(listener)
         p.events.off(event, listener)
 
     def wait(self, duration, callback):
@@ -144,6 +162,10 @@ class Handler(object):
         for event, listeners in self.listeners.items():
             for listener in listeners:
                 p.events.on(event, listener)
+        for event, infos in self.switch_listeners.items():
+            for i in infos:
+                p.events.on_switch(event, i["listener"], i["duration"],
+                        i["active"])
 
     def unregister(self):
         for handler in self.handlers:
@@ -151,8 +173,12 @@ class Handler(object):
         for event, listeners in self.listeners.items():
             for listener in listeners:
                 p.events.off(event, listener)
+        for event, infos in self.switch_listeners.items():
+            for i in infos:
+                p.events.off_switch(event, i["listener"])
         for ident in self.timers:
             p.timers.clear(ident)
+
 
 
 

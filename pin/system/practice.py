@@ -33,7 +33,9 @@ class Mode(BaseGame):
         self.display.add((self.time,))
         self.ticker = None
         self.start_time = None
+
         self.on("live_ball", self.live_ball_check)
+        self.on_switch("saucer", self.saucer, 1.0)
 
     def on_enable(self):
         super(Mode, self).on_enable()
@@ -65,5 +67,7 @@ class Mode(BaseGame):
         super(Mode, self).live_ball()
         self.auto_launch = True
 
+    def saucer(self):
+        p.captures["saucer"].eject()
 
 

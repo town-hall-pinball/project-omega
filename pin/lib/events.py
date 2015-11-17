@@ -98,6 +98,7 @@ def reset():
     switch_timings = {}
 
 def on_switch(name, listener, duration=0, active=True):
+    # FIXME: Should duration and active be a part of the hashed name?
     info = switch_timings.get(name, {
         "change_to": None,
         "change_time": 0,
@@ -112,6 +113,7 @@ def on_switch(name, listener, duration=0, active=True):
     switch_timings[name] = info
 
 def off_switch(name, listener, duration=0, active=True):
+    # FIXME: Why is duration and active here?
     if name not in switch_timings:
         return
     info = switch_timings[name]
