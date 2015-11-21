@@ -93,3 +93,17 @@ white = [
     (237, 237, 237),
     (255, 255, 255),
 ]
+
+def gamma(amount, palette):
+    result = []
+    for r, g, b in palette:
+        result += [[
+            round(255.0 * ((r / 255.0) ** amount)),
+            round(255.0 * ((g / 255.0) ** amount)),
+            round(255.0 * ((b / 255.0) ** amount)),
+        ]]
+    #print "RESULT", result
+    #raise SystemExit()
+    return result
+
+
