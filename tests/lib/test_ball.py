@@ -65,7 +65,7 @@ class TestCaptures(unittest.TestCase):
         trough.eject()
         self.assertTrue(trough.ejecting)
         p.switches["shooter_lane"].activate()
-        p.now = 1
+        p.now = 3
         fixtures.loop()
         self.assertFalse(trough.ejecting)
 
@@ -76,17 +76,17 @@ class TestCaptures(unittest.TestCase):
         self.assertEquals(1, trough.eject_attempts)
 
         p.switches["trough_jam"].activate()
-        p.now = 1
+        p.now = 3
         fixtures.loop()
         self.assertTrue(trough.ejecting)
         self.assertEquals(2, trough.eject_attempts)
 
-        p.now = 4
+        p.now = 6
         fixtures.loop()
         self.assertTrue(trough.ejecting)
         self.assertEquals(3, trough.eject_attempts)
 
-        p.now = 7
+        p.now = 9
         p.switches["trough_jam"].deactivate()
         fixtures.loop()
         self.assertFalse(trough.ejecting)
