@@ -39,7 +39,7 @@ def init():
             verify={
                 "type": "failure",
                 "switch": sw["trough_jam"],
-                "time": 1.00,
+                "time": 3.00,
                 "retry_time": 3.00
             }
         ),

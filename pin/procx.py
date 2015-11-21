@@ -24,6 +24,7 @@ class PinPROC(pinproc.PinPROC):
 
     driver_state_disable = pinproc.driver_state_disable
     driver_state_patter = pinproc.driver_state_patter
+    driver_state_pulse = pinproc.driver_state_pulse
     driver_state_pulsed_patter = pinproc.driver_state_pulsed_patter
 
 
