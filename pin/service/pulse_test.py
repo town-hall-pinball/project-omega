@@ -34,7 +34,7 @@ class PulseTest(Handler):
     def __init__(self, name, icon, devices):
         self.image = ui.Image(icon, left=0)
         self.devices = util.Cycle(devices)
-        self.interval = 2.0
+        self.interval = 0.75
         super(PulseTest, self).__init__(name)
 
     def setup(self):
