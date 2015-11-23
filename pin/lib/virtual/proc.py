@@ -65,6 +65,6 @@ def driver_schedule(*args, **kwargs):
     pass
 
 def switch_get_states(*args, **kwargs):
-    pass
+    return []
 
 

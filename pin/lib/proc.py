@@ -44,9 +44,10 @@ def init():
     # DMD needs to be "primed" with a frame before it starts sending
     # ready events
     artificial_events += [{ "type": DMD_READY }]
-
-    states = api.switch_get_states()
-    # TODO: Update states here
+    devices.update_switch_states()
+    print devices.switch_numbers
+    for key, switch in devices.switch_numbers.items():
+        print key, switch.name
 
 def create_buffer():
     import pinproc

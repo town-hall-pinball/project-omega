@@ -184,4 +184,34 @@ class TestFlippers(unittest.TestCase):
         p.flippers["left"].auto_cancel()
 
 
+class TestSwitches(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+
+    def test_update_open(self):
+        p.switches["coin_left"].update_state(1)
+        self.assertTrue(p.switches["coin_left"].active)
+
+    def test_update_closed(self):
+        p.switches["coin_left"].update_state(2)
+        self.assertFalse(p.switches["coin_left"].active)
+
+    def test_update_open_opto(self):
+        p.switches["trough"].update_state(1)
+        self.assertFalse(p.switches["trough"].active)
+
+    def test_update_closed_optp(self):
+        p.switches["trough"].update_state(2)
+        self.assertTrue(p.switches["trough"].active)
+
+    @patch("pin.lib.proc.api.switch_get_states")
+    def test_update_switch_states(self, gss):
+        states = [1] * 256
+        states[p.switches["trough"].number] = 2
+        gss.return_value = states
+        devices.update_switch_states()
+        self.assertTrue(p.switches["trough"].active)
+
+
 
