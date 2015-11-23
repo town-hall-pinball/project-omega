@@ -31,7 +31,7 @@ class Mode(Handler):
         self.icon = ui.Image("service_flippers", left=5)
         self.title = ui.Text("Flippers", font="t5b")
         self.action = ui.Text("Enable", font="t5cp",
-                padding=[1,5], fill=0x8)
+                padding=[1,5], fill=0x2)
         ui.valign([self.title, self.action])
         self.display.add([self.icon, self.title, self.action])
         self.on("switch_service_exit",  self.exit)

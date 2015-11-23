@@ -33,7 +33,7 @@ class Mode(Handler):
         self.icon = ui.Image("service_flashers", left=0)
         self.title = ui.Text("All Flashers", font="t5b")
         self.light_label = ui.Text("Cycle", font="t5cp",
-                padding=[1,5], fill=0x8)
+                padding=[1,5], fill=0x2)
         ui.valign((self.title, self.light_label))
 
         self.display.add([self.icon, self.title, self.light_label])

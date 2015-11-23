@@ -42,7 +42,7 @@ class PulseTest(Handler):
 
         self.mode_label = ui.Text("Mode", font="t5b")
         self.name_label = ui.Text("Name", font="t5cp", case="full")
-        self.action_label = ui.Text("Action", font="t5cp", fill=0x08,
+        self.action_label = ui.Text("Action", font="t5cp", fill=0x02,
                 padding=[1, 5], enabled=False)
 
         ui.valign((self.mode_label, self.name_label, self.action_label))
