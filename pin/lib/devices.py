@@ -108,7 +108,7 @@ class Driver(Device):
         self.state = state
         if not show:
             log[self.type].debug("+ {}".format(self.name))
-        p.proc.api.driver_pulse(self.number, 0)
+        p.proc.api.driver_schedule(self.number, 0xffffffff, 0, True)
         p.events.post(self.type, self)
 
     def disable(self, show=False):

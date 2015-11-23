@@ -61,5 +61,10 @@ def driver_state_patter(*args, **kwargs):
 def driver_get_state(*args, **kwargs):
     pass
 
+def driver_schedule(*args, **kwargs):
+    pass
+
+def switch_get_states(*args, **kwargs):
+    pass
 
 

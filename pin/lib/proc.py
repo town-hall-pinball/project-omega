@@ -45,6 +45,9 @@ def init():
     # ready events
     artificial_events += [{ "type": DMD_READY }]
 
+    states = api.switch_get_states()
+    # TODO: Update states here
+
 def create_buffer():
     import pinproc
     return pinproc.DMDBuffer(p.dmd.width, p.dmd.height)

@@ -42,6 +42,7 @@ lights = {
     "circle_10":                [__, __, __, __, __, ON],
     "circle_11":                [__, __, __, __, ON, __],
     "circle_12":                [__, __, __, ON, __, __],
+    "shoot_again":              [ON, __, __, ON, __, __],
 
     "outlane_left":             [ON, ON, __, __, __, __, __, __, __, __, __, __],
     "inlane_left":              [__, __, ON, ON, __, __, __, __, __, __, ON, ON],
@@ -69,6 +70,9 @@ lights = {
     "ramp_right_circle_2":      [__, ON, __, __],
     "ramp_right_circle_1":      [__, __, ON, __],
 
+    "ramp_right_arrow_2":       [ON, __],
+    "ramp_right_arrow_1":       [__, ON],
+
     "saucer_arrow_2":           [ON, __],
     "saucer_arrow_1":           [__, ON],
 
@@ -76,6 +80,7 @@ lights = {
     "scoop_center_arrow_3":     [__, ON, __, __],
     "scoop_center_arrow_2":     [__, __, ON, __],
     "scoop_center_arrow_1":     [__, __, __, ON],
+    "scoop_center_circle":      [ON, __, ON, __],
 
     "scoop_left_arrow_3":       [ON, __, __, __],
     "scoop_left_arrow_2":       [__, ON, __, __],

@@ -33,7 +33,7 @@ version = "Alpha 6"
 Version string.
 """
 
-release = "Nov 21 2015"
+release = "Nov 22 2015"
 """
 Release string.
 """
