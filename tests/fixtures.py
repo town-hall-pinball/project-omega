@@ -20,7 +20,7 @@
 
 from pin import config
 from pin.lib import (
-    p, dmd, devices, events, keyboard, resources, mixer, proc,
+    p, dmd, devices, events, keyboard, resources, mixer, proc, shots,
     timers
 )
 from pin.lib.data import data
@@ -35,6 +35,7 @@ def reset():
     keyboard.reset()
     events.reset()
     timers.reset()
+    #shots.reset()
 
     p.dmd = dmd
     p.data = data

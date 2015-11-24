@@ -89,9 +89,6 @@ def init():
             {  "eq": sw["orbit_right"] },
             { "neq": sw["orbit_left"] },
         ],
-        "shot_saucer": [
-            {   "eq": sw["saucer"] }
-        ],
         "shot_subway_left": [
             {  "eq": sw["subway_left"] }
         ],

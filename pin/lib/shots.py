@@ -39,11 +39,14 @@ class Mode(Handler):
     def switch_active(self, switch=None):
         if not "user" in switch.tags:
             self.history.appendleft(switch)
-        for shot_name, rules in rule_set.items():
-            self.evaluate_shot(shot_name, rules)
+            for shot_name, rules in rule_set.items():
+                self.evaluate_shot(shot_name, rules)
 
     def evaluate_shot(self, shot_name, rules):
-        for rule, switch in zip(rules, self.history):
+        for i, switch in enumerate(self.history):
+            if i >= len(rules):
+                return
+            rule = rules[i]
             if "eq" in rule and rule["eq"].name != switch.name:
                 return
             elif "neq" in rule and rule["neq"].name == switch.name:
@@ -54,5 +57,14 @@ class Mode(Handler):
         log.debug("+ {}".format(shot_name))
         p.events.trigger(shot_name)
 
+    def on_enable(self):
+        self.history.clear()
+
     def on_disable(self):
         self.history.clear()
+
+
+def reset():
+    rule_set.clear()
+
+
