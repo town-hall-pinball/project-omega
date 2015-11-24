@@ -23,5 +23,4 @@ Feel free to clone the repository and see development in action. This code can b
    user/index
    machine/index
    developer/index
-   api/index
 
