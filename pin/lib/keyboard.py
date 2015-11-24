@@ -76,6 +76,7 @@ def switch(name, *args, **kwargs):
 
     return {
         "name": name,
+        "label": switch.label,
         "down": active,
         "up": inactive
     }

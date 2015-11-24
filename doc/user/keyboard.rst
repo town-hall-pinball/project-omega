@@ -7,18 +7,18 @@ Keyboard Bindings
 =========  =====================
 Key        Action               
 =========  =====================
-,          slingshot_left       
-.          slingshot_right      
-0          service_exit         
-1          coin_left            
-7          service_enter        
-8          service_down         
-9          service_up           
-[          flipper_left         
-]          flipper_right        
-d          trough_4             
-l          ball_launch_button   
-s          saucer               
-control-s  buy_extra_ball_button
-shift-s    start_button         
+,          Slingshot, Left      
+.          Slingshot, Right     
+0          Service, Exit        
+1          Coin, Left           
+7          Service, Enter       
+8          Service, Down        
+9          Service, Up          
+[          Flipper, Left        
+]          Flipper, Right       
+d          Trough, 4            
+l          Ball Launch Button   
+s          Saucer               
+control-s  Buy Extra Ball Button
+shift-s    Start Button         
 =========  =====================

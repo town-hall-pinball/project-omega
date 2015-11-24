@@ -117,7 +117,7 @@ def keys():
                 elif mod == "a":
                     name == ["alt"]
             name += k[-1]
-            table.add("-".join(name), keyboard.keys[k]["name"])
+            table.add("-".join(name), keyboard.keys[k]["label"])
         rst.write(table.render())
         rst.write("\n")
 
