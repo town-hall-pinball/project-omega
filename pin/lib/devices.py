@@ -77,6 +77,7 @@ class Device(object):
         self.label = config.get("label", name)
         self.device = config["device"]
         self.tags = config.get("tags", [])
+        self.original = config.get("original", "")
         self.number = p.platform.devices[self.device]
         self.state = { "schedule": "disable" }
 

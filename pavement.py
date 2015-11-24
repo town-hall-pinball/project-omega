@@ -54,6 +54,9 @@ def test():
 
 @task
 def doc():
+    sys.path.insert(0, os.path.join(os.path.abspath(".")))
+    from tools.autodoc import main
+    main.run()
     from sphinx import main as sphinx
     sphinx(["", "-b", "html", "doc", "build/doc"])
 
