@@ -177,14 +177,17 @@ class Coil(Driver):
     def __init__(self, name, **config):
         super(Coil, self).__init__(name, **config)
         self.type = "coil"
-        self.auto_switch_name = None
+        self.auto = None
 
     def auto_pulse(self, switch, pulse_length=None):
-        if self.auto_switch_name:
+        if self.auto:
             raise ValueError("Coil already in auto mode")
-        self.auto_switch_name = switch.name
         pulse_length = pulse_length or self.default_pulse_length
-
+        self.auto = {
+            "switch_name": switch.name,
+            "schedule": "pulse",
+            "pulse_length": pulse_length
+        }
         coil_state = p.proc.api.driver_get_state(self.number)
         on_drivers = [
             p.proc.api.driver_state_pulse(coil_state, pulse_length),
@@ -196,12 +199,16 @@ class Coil(Driver):
         }, on_drivers, True)
 
     def auto_patter(self, switch, on=None, off=None):
-        if self.auto_switch_name:
+        if self.auto:
             raise ValueError("Coil already in auto mode")
-        self.auto_switch_name = switch.name
         on = on or self.default_patter_length
         off = off or self.default_patter_length
-
+        self.auto = {
+            "switch_name": switch.name,
+            "schedule": "patter",
+            "patter_on_length": on,
+            "patter_off_length": off
+        }
         coil_state = p.proc.api.driver_get_state(self.number)
         on_drivers = [
             p.proc.api.driver_state_patter(coil_state, on, off, 0, 0),
@@ -213,15 +220,15 @@ class Coil(Driver):
         }, on_drivers, True)
 
     def auto_cancel(self):
-        if not self.auto_switch_name:
+        if not self.auto:
             return
-        switch = p.switches[self.auto_switch_name]
+        switch = p.switches[self.auto["switch_name"]]
         event = ("open_debounced" if switch.opto else "closed_debounced")
         p.proc.api.switch_update_rule(switch.number, event, {
             "notifyHost": False,
             "reloadActive": False
         }, [], False)
-        self.auto_switch_name = None
+        self.auto = None
 
 
 class GI(Driver):
@@ -297,7 +304,7 @@ class Flipper(Device):
         self.hold_device = config["hold_device"]
         self.hold_number = p.platform.devices[self.hold_device]
         self.switch_name = config["switch"]
-        self.auto_switch_name = None
+        self.auto = None
 
     def auto_pulse(self, enable=True):
         if not enable:
@@ -326,10 +333,17 @@ class Flipper(Device):
                 "notifyHost": False,
                 "reloadActive": False
             }, off_drivers, True)
-        self.auto_switch_name = self.switch_name
+
+        self.auto = {
+            "switch_name": self.switch_name,
+            "schedule": "pulse",
+            "pulse_length": self.pulse_time
+        }
 
     def auto_cancel(self):
-        switch = p.switches[self.switch_name]
+        if not self.auto:
+            return
+        switch = p.switches[self.auto["switch_name"]]
         p.proc.api.switch_update_rule(switch.number,
             "closed_nondebounced", {
                 "notifyHost": False,
@@ -342,7 +356,7 @@ class Flipper(Device):
             }, [], False)
         p.proc.api.driver_disable(self.number)
         p.proc.api.driver_disable(self.hold_number)
-        self.auto_switch_name = None
+        self.auto = None
 
 
 def add(collection, clazz, configs):
