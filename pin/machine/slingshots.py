@@ -18,51 +18,18 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from ..lib import p, ball
-from ..lib.game import Game as BaseGame
+from pin.lib import p
+from pin.lib.handler import Handler
 
-class Game(BaseGame):
+class Mode(Handler):
 
-    def setup(self):
-        super(Game, self).setup()
-
-        self.flippers = p.modes["flippers"]
-        self.kickback = p.modes["kickback"]
-        self.magnets = p.modes["magnets"]
-        self.plunger = p.modes["plunger"]
-        self.slingshots = p.modes["slingshots"]
-        self.trough = p.modes["trough"]
-
-        self.handlers += [
-            self.flippers,
-            self.kickback,
-            self.magnets,
-            self.plunger,
-            self.slingshots,
-            self.trough
-        ]
-
-
-    def playfield_enable(self):
-        """
-        #if self.playfield_enabled:
-        #    return
+    def on_enable(self):
+        p.notify("mode", "Slingshots enabled")
         p.coils["slingshot_left"].auto_pulse(p.switches["slingshot_left"])
         p.coils["slingshot_right"].auto_pulse(p.switches["slingshot_right"])
-        self.flippers_enable()
-        """
-        self.playfield_enabled = True
-        p.events.post("playfield_enable")
 
-    def playfield_disable(self):
-        """
-        #if not self.playfield_enabled:
-        #    return
+    def on_disable(self):
+        p.notify("mode", "Slingshots disabled")
         p.coils["slingshot_left"].auto_cancel()
         p.coils["slingshot_right"].auto_cancel()
-        self.kickback_disable()
-        self.magnets_disable()
-        self.flippers_disable()
-        """
-        self.playfield_enabled = False
-        p.events.post("playfield_disable")
+

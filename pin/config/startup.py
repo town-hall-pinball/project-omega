@@ -35,6 +35,7 @@ def init(load_resources=True):
         "lib.ball",
         "lib.server",
         "lib.simulator",
+
         "system.coin",
         "system.attract",
         "system.banner",
@@ -42,7 +43,14 @@ def init(load_resources=True):
         "system.game_menu",
         "system.pinball_missing",
         "system.post",
-        "system.practice",
+
+        "machine.flippers",
+        "machine.kickback",
+        "machine.magnets",
+        "machine.plunger",
+        "machine.slingshots",
+        "machine.trough",
+
         "service.coils_test",
         "service.flashers_all_test",
         "service.flashers_single_test",
@@ -59,6 +67,8 @@ def init(load_resources=True):
         "service.switch_single_test",
         "service.virtual_palette",
         "service.service",
+
+        "games.practice",
     ))
     extra.init()
     keyboard.init()
