@@ -299,6 +299,10 @@ html, body {
     color: #f80;
 }
 
+.mode {
+    color: #aaf;
+}
+
 .left {
     float: left;
 }

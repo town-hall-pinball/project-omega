@@ -39,7 +39,8 @@ class Mode(BaseGame):
 
     def on_enable(self):
         super(Mode, self).on_enable()
-        p.captures["trough"].eject()
+        self.trough.enable()
+        self.trough.feed()
         self.max_time = p.data["practice_timer"]
         self.update_time()
 
@@ -66,6 +67,12 @@ class Mode(BaseGame):
     def live_ball(self):
         super(Mode, self).live_ball()
         self.auto_launch = True
+
+        self.flippers.enable()
+        self.kickback.enable()
+        self.magnets.enable()
+        self.plunger.enable()
+        self.slingshots.enable()
 
     def saucer(self):
         p.captures["saucer"].eject()
