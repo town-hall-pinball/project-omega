@@ -4,21 +4,21 @@
 Coils by Device
 ==================
 
-======  ================  ======  ====  ========
-Device  Name              Number  Tags  Original
-======  ================  ======  ====  ========
-C01     popper            40                    
-C02     auto_plunger      41                    
-C03     magnet_right      42                    
-C04     kickback          43                    
-C05     magnet_center     44                    
-C06     magnet_left       45                    
-C07     knocker           46                    
-C08     drop_target_down  47                    
-C10     slingshot_right   49                    
-C11     slingshot_left    50                    
-C12     drop_target_up    51                    
-C14     trough            53                    
-C15     saucer            54                    
-C16     toy               55                    
-======  ================  ======  ====  ========
+======  ================  ======  ====  =====
+Device  Name              Number  Tags  Notes
+======  ================  ======  ====  =====
+C01     popper            40                 
+C02     auto_plunger      41                 
+C03     magnet_right      42                 
+C04     kickback          43                 
+C05     magnet_center     44                 
+C06     magnet_left       45                 
+C07     knocker           46                 
+C08     drop_target_down  47                 
+C10     slingshot_right   49                 
+C11     slingshot_left    50                 
+C12     drop_target_up    51                 
+C14     trough            53                 
+C15     saucer            54                 
+C16     toy               55                 
+======  ================  ======  ====  =====

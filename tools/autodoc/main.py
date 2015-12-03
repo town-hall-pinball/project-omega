@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import os
-from pin import config
+from pin import machine
 from pin.config import platform
 from pin.lib import p, devices, keyboard
 
@@ -73,11 +73,11 @@ def by_name(filename, title, objects):
         rst.write("================\n")
         rst.write("\n")
         table = Table()
-        table.add("Device", "Name", "Number", "Tags", "Original")
+        table.add("Device", "Name", "Number", "Tags", "Notes")
         for key in sorted(objects):
             o = objects[key]
             table.add(o.device, key, o.number,
-                    ",".join(sorted(o.tags)), o.original)
+                    ",".join(sorted(o.tags)), o.notes)
         rst.write(table.render())
         rst.write("\n")
 
@@ -90,10 +90,10 @@ def by_device(filename, title, objects):
         rst.write("==================\n")
         rst.write("\n")
         table = Table()
-        table.add("Device", "Name", "Number", "Tags", "Original")
+        table.add("Device", "Name", "Number", "Tags", "Notes")
         for o in sorted(objects.values(), key=lambda o: o.device):
             table.add(o.device, o.name, o.number,
-                    ",".join(sorted(o.tags)), o.original)
+                    ",".join(sorted(o.tags)), o.notes)
         rst.write(table.render())
         rst.write("\n")
 
@@ -125,7 +125,7 @@ def keys():
 
 def run():
     p.platform = platform
-    config.init()
+    machine.init()
     from pin.config import keyboard
     keyboard.init()
 

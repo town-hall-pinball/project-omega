@@ -4,19 +4,19 @@
 Flashers by Name
 ================
 
-======  ================  ======  ====  ========
-Device  Name              Number  Tags  Original
-======  ================  ======  ====  ========
-C25     auto_fire         64                    
-C19     circle_center     58                    
-C17     flipper_return    56                    
-C22     insert_explode    61                    
-C26     insert_top_left   65                    
-C27     insert_top_right  66                    
-C24     outside           63                    
-C28     popper            67                    
-C23     ramp_left         62                    
-C20     ramp_right        59                    
-C18     spinner           57                    
-C21     toy               60                    
-======  ================  ======  ====  ========
+======  ================  ======  ====  =====
+Device  Name              Number  Tags  Notes
+======  ================  ======  ====  =====
+C25     auto_fire         64                 
+C19     circle_center     58                 
+C17     flipper_return    56                 
+C22     insert_explode    61                 
+C26     insert_top_left   65                 
+C27     insert_top_right  66                 
+C24     outside           63                 
+C28     popper            67                 
+C23     ramp_left         62                 
+C20     ramp_right        59                 
+C18     spinner           57                 
+C21     toy               60                 
+======  ================  ======  ====  =====
