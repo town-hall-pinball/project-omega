@@ -20,7 +20,7 @@
 
 import pinproc
 
-class PinPROC(pinproc.PinPROC):
+class PinPROC(pinproc.PinPROC): #pragma: no cover
 
     driver_state_disable = pinproc.driver_state_disable
     driver_state_patter = pinproc.driver_state_patter
