@@ -18,45 +18,61 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+from pin.lib import p
+from pin.lib.eject import Eject
+
 import unittest
+from tests import fixtures
 from mock import Mock
 
-from pin.lib import p
-from tests import fixtures
-
-class TestPlunger(unittest.TestCase):
+class TestEject(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
-        self.mode = p.modes["saucer"]
-        self.mode.enable()
+        self.saucer = Eject(p.modes["saucer"], p.coils["saucer"])
+        p.modes["saucer"].enable()
 
-    def test_enter(self):
-        listener = Mock()
-        p.events.on("enter_saucer", listener)
-        p.switches["saucer"].activate()
+    def test_retry(self):
+        success = Mock()
+        retry = Mock()
+        p.events.on("saucer_retry", retry)
+        p.events.on("saucer_ejected", success)
+        self.saucer.eject()
+        p.now = 4
         fixtures.loop()
-        self.assertFalse(listener.called)
-        p.now = 1
-        fixtures.loop()
-        self.assertTrue(listener.called)
+        self.assertFalse(success.called)
+        self.assertTrue(retry.called)
 
-    def test_exit(self):
-        listener = Mock()
-        p.events.on("exit_saucer", listener)
-        p.switches["saucer"].activate()
+    def test_success(self):
+        success = Mock()
+        retry = Mock()
+        p.events.on("saucer_retry", retry)
+        p.events.on("saucer_ejected", success)
+        self.saucer.eject()
         fixtures.loop()
-        p.now = 1
+        self.saucer.success()
         fixtures.loop()
-        self.mode.eject()
-        p.switches["saucer"].deactivate()
-        p.now = 1.1
+        p.now = 4
         fixtures.loop()
-        self.assertFalse(listener.called)
-        p.now = 2
-        fixtures.loop()
-        self.assertTrue(listener.called)
+        self.assertTrue(success.called)
+        self.assertFalse(retry.called)
 
-    def test_disable(self):
-        self.mode.disable()
+    def test_failure(self):
+        failed = Mock()
+        p.events.on("saucer_failed", failed)
+        self.saucer.max_attempts = 2
+        self.saucer.eject()
+        fixtures.loop()
+        self.assertEquals(1, self.saucer.attempts)
+        self.assertFalse(failed.called)
+        p.now = 3
+        fixtures.loop()
+        self.assertEquals(2, self.saucer.attempts)
+        self.assertFalse(failed.called)
+        p.now = 6
+        fixtures.loop()
+        self.assertEquals(2, self.saucer.attempts)
+        self.assertTrue(failed.called)
+
+
 

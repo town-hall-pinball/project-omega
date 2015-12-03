@@ -19,32 +19,31 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.lib.eject import Eject
-from pin.lib.handler import Handler
 
-class Mode(Handler):
+import unittest
+from tests import fixtures
+from mock import Mock
 
-    live = False
+class TestTrough(unittest.TestCase):
 
-    def setup(self):
-        self.on_switch("shooter_lane", self.shooter_lane, 0.25)
-        self.trough = Eject(self, p.coils["trough"])
+    def setUp(self):
+        fixtures.reset()
+        self.trough = p.modes["trough"]
+        self.trough.enable()
 
-    def on_enable(self):
-        p.notify("mode", "Trough enabled")
-        self.live = False
+    def test_feed(self):
+        live = Mock()
+        p.events.on("live_ball", live)
+        self.trough.feed()
+        p.switches["shooter_lane"].activate()
+        fixtures.loop()
+        p.now = 0.5
+        fixtures.loop()
+        self.assertTrue(live.called)
 
-    def on_disable(self):
-        p.notify("mode", "Trough disabled")
+    def test_disable(self):
+        # Coverage only test
+        self.trough.disable()
 
-    def feed(self):
-        p.notify("mode", "Trough feed")
-        self.trough.eject()
 
-    def shooter_lane(self):
-        if not self.live:
-            p.notify("mode", "Live ball")
-            p.events.trigger("live_ball")
-        self.live = True
-        self.trough.success()
 
