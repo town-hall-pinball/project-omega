@@ -28,7 +28,7 @@ import pygame
 from pin.lib import p, brand, util
 from pin.lib.virtual import dmd as virtual_dmd, proc as virtual_proc
 
-from pin import config
+from pin import config, machine
 from pin.config import default, platform, startup
 from pin import extra
 
@@ -145,6 +145,7 @@ def run():
 
     pygame.init()
     p.platform = platform
+    machine.init()
     config.init()
     bind()
     init()

@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import config
+from pin import config, machine
 from pin.lib import (
     p, dmd, devices, events, keyboard, resources, mixer, proc, shots,
     timers
@@ -97,6 +97,7 @@ def reset():
     font.metrics.return_value = ((5, 5, 5, 5, 5),)
     font.get_ascent.return_value = 5
 
+    machine.init()
     config.init()
     with patch("pin.lib.resources.load_dmd_animation") as load_patch:
         startup.init()

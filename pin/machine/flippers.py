@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p
+from pin.lib import p, devices
 from pin.lib.handler import Handler
 
 class Mode(Handler):
@@ -42,3 +42,26 @@ class Mode(Handler):
         self.left.auto_cancel()
         self.right.auto_cancel()
         self.upper.auto_cancel()
+
+
+def init():
+    devices.add_flippers({
+        "left": {
+            "label": "Flipper, Left",
+            "device": "flipper_lower_left_main",
+            "hold_device": "flipper_lower_left_hold",
+            "switch": "flipper_left"
+        },
+        "right": {
+            "label": "Flipper, Right",
+            "device": "flipper_lower_right_main",
+            "hold_device": "flipper_lower_right_hold",
+            "switch": "flipper_right"
+        },
+        "right_up": {
+            "label": "Flipper, Right Upper",
+            "device": "flipper_upper_right_main",
+            "hold_device": "flipper_upper_right_hold",
+            "switch": "flipper_right_up"
+        }
+    })
