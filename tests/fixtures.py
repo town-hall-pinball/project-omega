@@ -23,6 +23,7 @@ from pin.lib import (
     p, dmd, devices, events, keyboard, resources, mixer, proc, shots,
     timers
 )
+from pin.lib.handler import Handler
 from pin.lib.data import data
 from pin.config import default, platform, startup
 from pin.lib.virtual import proc as virtual_proc
@@ -122,5 +123,12 @@ def loop():
             if len(p.events.queue) == 0:
                 done = True
             loops += 1
+
+
+class NullHandler(Handler):
+
+    def __init__(self):
+        super(NullHandler, self).__init__("null")
+
 
 

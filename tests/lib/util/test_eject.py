@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.lib.eject import Eject
+from pin.lib.util import Eject
 
 import unittest
 from tests import fixtures

@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.lib.eject import Eject
+from pin.lib.util import Eject
 from pin.lib.handler import Handler
 
 class Mode(Handler):

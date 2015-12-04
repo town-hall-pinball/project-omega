@@ -19,34 +19,47 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.lib.util import Eject
-from pin.lib.handler import Handler
+from pin.lib.util import BallCounter
 
-class Mode(Handler):
+import unittest
+from tests import fixtures
+from mock import Mock
 
-    def setup(self):
-        self.on_switch("saucer", self.enter, 0.25)
-        self.on_switch("saucer", self.exit, 0.25, active=False)
-        self.saucer = Eject(self, p.coils["saucer"])
+class TestBallCounter(unittest.TestCase):
 
-    def on_enable(self):
-        p.notify("mode", "Saucer enabled")
-        self.saucer.reset()
+    handler = None
+    counter = None
 
-    def on_disable(self):
-        p.notify("mode", "Saucer disabled")
-
-    def enter(self):
-        if p.switches["saucer"].active:
-            p.events.trigger("enter_saucer")
-
-    def exit(self):
-        if not p.switches["saucer"].active:
-            self.saucer.success()
-            p.events.trigger("exit_saucer")
-
-    def eject(self):
-        self.saucer.eject()
+    def setUp(self):
+        fixtures.reset()
+        self.handler = fixtures.NullHandler()
+        self.handler.enable()
+        p.switches["trough"].activate()
+        fixtures.loop()
+        self.counter = BallCounter(self.handler, "trough", [
+            p.switches["trough"],
+            p.switches["trough_2"],
+            p.switches["trough_3"],
+            p.switches["trough_4"]
+        ])
 
 
+    def test_initial(self):
+        self.assertEquals(1, self.counter.balls)
+
+    def test_enter(self):
+        p.switches["trough_2"].activate()
+        fixtures.loop()
+        self.assertEquals(1, self.counter.balls)
+        p.now = 1
+        fixtures.loop()
+        self.assertEquals(2, self.counter.balls)
+
+    def test_exit(self):
+        p.switches["trough"].deactivate()
+        fixtures.loop()
+        self.assertEquals(1, self.counter.balls)
+        p.now = 1
+        fixtures.loop()
+        self.assertEquals(0, self.counter.balls)
 

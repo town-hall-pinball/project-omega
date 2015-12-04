@@ -24,29 +24,56 @@ from pin.lib.handler import Handler
 
 class Mode(Handler):
 
+    entering = False
+    exiting = False
+
+    # TODO: During multiball it is probably not possible to track enter/exit
+    # states of the ball. Might need to simply keep firing the popper until
+    # the queue is clear?
+    multi = False
+
     def setup(self):
-        self.on_switch("saucer", self.enter, 0.25)
-        self.on_switch("saucer", self.exit, 0.25, active=False)
-        self.saucer = Eject(self, p.coils["saucer"])
+        self.on("switch_subway_center", self.subway)
+        self.on("switch_subway_left", self.subway)
+        self.on("switch_popper_2", self.enter)
+        self.on("return_right", self.exit)
+        self.popper = Eject(self, p.coils["popper"])
 
     def on_enable(self):
-        p.notify("mode", "Saucer enabled")
-        self.saucer.reset()
+        self.reset()
 
     def on_disable(self):
-        p.notify("mode", "Saucer disabled")
+        self.reset()
+        p.flashers["popper"].disable()
+
+    def reset(self):
+        self.entering = False
+        self.exiting = False
+        self.multi = False
+
+    def subway(self):
+        if not self.entering:
+            self.entering = True
+            p.events.trigger("entering_popper")
 
     def enter(self):
-        if p.switches["saucer"].active:
-            p.events.trigger("enter_saucer")
-
-    def exit(self):
-        if not p.switches["saucer"].active:
-            self.saucer.success()
-            p.events.trigger("exit_saucer")
+        self.entering = False
+        p.events.trigger("enter_popper")
 
     def eject(self):
-        self.saucer.eject()
+        p.flashers["popper").patter(100, 127)
+        self.wait(1.0, self.pop)
+
+    def pop(self):
+        p.flashers["popper"].disable()
+        self.popper.eject()
+        self.exiting = True
+
+    def exit(self):
+        if self.exiting:
+            self.exiting = False
+            p.events.trigger("exit_popper")
+            self.popper.success()
 
 
 

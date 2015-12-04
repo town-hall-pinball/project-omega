@@ -19,34 +19,34 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.lib.util import Eject
-from pin.lib.handler import Handler
 
-class Mode(Handler):
+class BallCounter(object):
 
-    def setup(self):
-        self.on_switch("saucer", self.enter, 0.25)
-        self.on_switch("saucer", self.exit, 0.25, active=False)
-        self.saucer = Eject(self, p.coils["saucer"])
+    settle_time = 0.25
+    balls = 0
 
-    def on_enable(self):
-        p.notify("mode", "Saucer enabled")
-        self.saucer.reset()
+    def __init__(self, handler, name, switches):
+        self.name = name
+        self.switches = switches
+        for switch in self.switches:
+            handler.on_switch(switch.name, self.check_count,
+                    self.settle_time, active=True)
+            handler.on_switch(switch.name, self.check_count,
+                    self.settle_time, active=False)
+        self.balls = self.count()
 
-    def on_disable(self):
-        p.notify("mode", "Saucer disabled")
+    def count(self):
+        count = 0
+        for switch in self.switches:
+            if switch.active:
+                count += 1
+        return count
 
-    def enter(self):
-        if p.switches["saucer"].active:
-            p.events.trigger("enter_saucer")
-
-    def exit(self):
-        if not p.switches["saucer"].active:
-            self.saucer.success()
-            p.events.trigger("exit_saucer")
-
-    def eject(self):
-        self.saucer.eject()
-
+    def check_count(self):
+        previous = self.balls
+        current = self.count()
+        if previous != current:
+            self.balls = current
+            p.events.post("{}_changed", current)
 
 
