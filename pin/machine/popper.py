@@ -36,7 +36,7 @@ class Mode(Handler):
         self.on("switch_subway_center", self.subway)
         self.on("switch_subway_left", self.subway)
         self.on("switch_popper_2", self.enter)
-        self.on("return_right", self.exit)
+        self.on("switch_return_right", self.exit)
         self.popper = Eject(self, p.coils["popper"])
 
     def on_enable(self):
@@ -61,7 +61,7 @@ class Mode(Handler):
         p.events.post("enter_popper")
 
     def eject(self):
-        p.flashers["popper").patter(100, 127)
+        p.flashers["popper"].patter(100, 127)
         self.wait(1.0, self.pop)
 
     def pop(self):

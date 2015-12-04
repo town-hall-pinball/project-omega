@@ -48,6 +48,7 @@ def init(load_resources=True):
         "machine.kickback",
         "machine.magnets",
         "machine.plunger",
+        "machine.popper",
         "machine.saucer",
         "machine.slingshots",
         "machine.trough",
