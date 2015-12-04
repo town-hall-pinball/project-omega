@@ -18,8 +18,33 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+from pin.lib import p
+from pin.lib.eject import Eject
+from pin.lib.handler import Handler
 
-def init():
-    features.init()
+class Mode(Handler):
+
+    live = False
+
+    def setup(self):
+        self.on_switch("shooter_lane", self.shooter_lane, 0.25)
+        self.trough = Eject(self, p.coils["trough"])
+
+    def on_enable(self):
+        p.notify("mode", "Trough enabled")
+        self.live = False
+
+    def on_disable(self):
+        p.notify("mode", "Trough disabled")
+
+    def feed(self):
+        p.notify("mode", "Trough feed")
+        self.trough.eject()
+
+    def shooter_lane(self):
+        if not self.live:
+            p.notify("mode", "Live ball")
+            p.events.trigger("live_ball")
+        self.live = True
+        self.trough.success()
+

@@ -18,8 +18,45 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+import unittest
+from mock import Mock
 
-def init():
-    features.init()
+from pin.lib import p
+from tests import fixtures
+
+class TestPlunger(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.mode = p.modes["saucer"]
+        self.mode.enable()
+
+    def test_enter(self):
+        listener = Mock()
+        p.events.on("enter_saucer", listener)
+        p.switches["saucer"].activate()
+        fixtures.loop()
+        self.assertFalse(listener.called)
+        p.now = 1
+        fixtures.loop()
+        self.assertTrue(listener.called)
+
+    def test_exit(self):
+        listener = Mock()
+        p.events.on("exit_saucer", listener)
+        p.switches["saucer"].activate()
+        fixtures.loop()
+        p.now = 1
+        fixtures.loop()
+        self.mode.eject()
+        p.switches["saucer"].deactivate()
+        p.now = 1.1
+        fixtures.loop()
+        self.assertFalse(listener.called)
+        p.now = 2
+        fixtures.loop()
+        self.assertTrue(listener.called)
+
+    def test_disable(self):
+        self.mode.disable()
+

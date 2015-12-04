@@ -28,7 +28,7 @@ import pygame
 from pin.lib import p, brand, util
 from pin.lib.virtual import dmd as virtual_dmd, proc as virtual_proc
 
-from pin import config
+from pin import config, machine
 from pin.config import default, platform, startup
 from pin import extra
 
@@ -90,12 +90,8 @@ def init():
     if p.options["simulate"]:
         p.proc.api = virtual_proc
     else:
-        import procx
+        from pin.lib import procx
         p.proc.api = procx.PinPROC(p.platform.name)
-        #p.proc.api.driver_state_disable = pinproc.driver_state_disable.__get__(p.proc.api, p.proc.api.__class__)
-        #p.proc.api.drvier_state_pulse = pinproc.driver_state_pulse
-        #p.proc.api.driver_state_patter = pinproc.driver_state_patter
-        #p.proc.api.driver_state_pulsed_patter = pinproc.driver_state_pulsed_patter
     p.proc.init()
 
 def bind():
@@ -149,6 +145,7 @@ def run():
 
     pygame.init()
     p.platform = platform
+    machine.init()
     config.init()
     bind()
     init()

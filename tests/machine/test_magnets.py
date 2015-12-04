@@ -18,8 +18,31 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+import unittest
 
-def init():
-    features.init()
+from pin.lib import p
+from tests import fixtures
+
+class TestMagnets(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.mode = p.modes["magnets"]
+
+    def test_assist(self):
+        self.mode.enable()
+        self.assertTrue(p.coils["magnet_left"].auto)
+        self.assertTrue(p.coils["magnet_center"].auto)
+        self.assertTrue(p.coils["magnet_right"].auto)
+
+        self.assertEquals("patter", p.coils["magnet_left"].auto["schedule"])
+        self.assertEquals("patter", p.coils["magnet_center"].auto["schedule"])
+        self.assertEquals("patter", p.coils["magnet_right"].auto["schedule"])
+
+    def test_disable(self):
+        self.mode.enable()
+        self.mode.disable()
+        self.assertFalse(p.coils["magnet_left"].auto)
+        self.assertFalse(p.coils["magnet_center"].auto)
+        self.assertFalse(p.coils["magnet_right"].auto)
+

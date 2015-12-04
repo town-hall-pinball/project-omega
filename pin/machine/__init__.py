@@ -19,7 +19,25 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p, devices
-from . import features
+from . import coils, flashers, flippers, gi, lamps, switches
 
 def init():
-    features.init()
+    coils.init()
+    p.coils = devices.coils
+
+    flashers.init()
+    p.flashers = devices.flashers
+
+    gi.init()
+    p.gi = devices.gi
+
+    lamps.init()
+    p.lamps = devices.lamps
+
+    switches.init()
+    p.switches = devices.switches
+
+    """
+    flippers.init()
+    """
+    p.flippers = devices.flippers

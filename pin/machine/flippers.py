@@ -18,7 +18,31 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from ..lib import devices
+from pin.lib import p, devices
+from pin.lib.handler import Handler
+
+class Mode(Handler):
+
+    left = None
+    right = None
+    upper = None
+
+    def setup(self):
+        self.left = p.flippers["left"]
+        self.right = p.flippers["right"]
+        self.upper = p.flippers["right_up"]
+
+    def on_enable(self):
+        p.notify("mode", "Flippers enabled")
+        self.left.auto_pulse()
+        self.right.auto_pulse()
+
+    def on_disable(self):
+        p.notify("mode", "Flippers disabled")
+        self.left.auto_cancel()
+        self.right.auto_cancel()
+        self.upper.auto_cancel()
+
 
 def init():
     devices.add_flippers({
@@ -41,5 +65,3 @@ def init():
             "switch": "flipper_right_up"
         }
     })
-
-

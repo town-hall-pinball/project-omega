@@ -21,4 +21,6 @@
 [report]
 omit =
     pin/__main__.py
+    pin/lib/procx.py
+    pin/debug_sample.py
 

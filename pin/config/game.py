@@ -23,114 +23,39 @@ from ..lib.game import Game as BaseGame
 
 class Game(BaseGame):
 
-    kickback_enabled = False
-    magnets_enabled = False
-    flippers_enabled = False
-    loop_enabled = False
-    playfield_enabled = False
-    live = False
-    auto_launch = False
-
     def setup(self):
         super(Game, self).setup()
-        self.on("switch_shooter_lane_active", self.shooter_lane_active)
-        self.on("switch_shooter_lane_inactive", self.shooter_lane_inactive)
-        self.on("switch_ball_launch_button", self.ball_launch_button)
-        self.on("switch", self.switch_update)
-        self.on("drain", self.auto_feed_check)
-        p.events.on_switch("shooter_lane", self.auto_launch_check, 0.25)
 
-    def shooter_lane_active(self):
-        p.lamps["ball_launch_button"].patter()
+        self.flippers = p.modes["flippers"]
+        self.kickback = p.modes["kickback"]
+        self.magnets = p.modes["magnets"]
+        self.plunger = p.modes["plunger"]
+        self.slingshots = p.modes["slingshots"]
+        self.trough = p.modes["trough"]
 
-    def shooter_lane_inactive(self):
-        p.lamps["ball_launch_button"].disable()
+        self.handlers += [
+            self.flippers,
+            self.kickback,
+            self.magnets,
+            self.plunger,
+            self.slingshots,
+            self.trough
+        ]
 
-    def ball_launch_button(self):
-        if p.switches["shooter_lane"].active:
-            ball.auto_plunger.eject()
-
-    def auto_feed_check(self):
-        if self.auto_launch:
-            self.wait(0.5, self.auto_feed)
-
-    def auto_feed(self):
-        ball.trough.eject()
-
-    def auto_launch_check(self):
-        if self.auto_launch:
-            ball.auto_plunger.eject()
-
-    def switch_update(self, switch, enabled):
-        if (not self.live and "live" in switch.tags and
-                switch.name != "shooter_lane"):
-            self.live_ball()
-
-    def kickback_enable(self):
-        #if self.kickback_enabled:
-        #    return
-        p.coils["kickback"].auto_pulse(p.switches["kickback"])
-        self.kickback_enabled = True
-
-    def kickback_disable(self):
-        #if not self.kickback_enabled:
-        #    return
-        p.coils["kickback"].auto_cancel()
-        self.kickback_enabled = False
-
-    def magnets_assist(self):
-        #if self.magnets_enabled == "assist":
-        #    return
-        p.coils["magnet_left"].auto_patter(p.switches["magnet_left"], 1, 1)
-        p.coils["magnet_center"].auto_patter(p.switches["magnet_center"], 1, 1)
-        p.coils["magnet_right"].auto_patter(p.switches["magnet_right"], 1, 1)
-        self.magnets_enabled = "assist"
-
-    def magnets_disable(self):
-        #if not self.magnets_enabled:
-        #    return
-        p.coils["magnet_left"].auto_cancel()
-        p.coils["magnet_center"].auto_cancel()
-        p.coils["magnet_right"].auto_cancel()
-        self.magnets_enabled = False
-
-    def flippers_enable(self):
-        #if self.flippers_enabled:
-        #    return
-        p.flippers["left"].auto_pulse()
-        p.flippers["right"].auto_pulse()
-        self.flippers_enabled = True
-
-    def loop_enable(self):
-        #if self.loop_enabled:
-        #    return
-        p.flippers["right_up"].auto_pulse()
-        self.loop_enabled = True
-
-    def loop_disable(self):
-        #if not self.loop_enabled:
-        #    return
-        p.flippers["right_up"].auto_cancel()
-        self.loop_enabled = False
-
-    def flippers_disable(self):
-        #if not self.flippers_enabled:
-        #    return
-        self.loop_disable()
-        p.flippers["left"].auto_cancel()
-        p.flippers["right"].auto_cancel()
-        self.flippers_enabled = False
 
     def playfield_enable(self):
+        """
         #if self.playfield_enabled:
         #    return
         p.coils["slingshot_left"].auto_pulse(p.switches["slingshot_left"])
         p.coils["slingshot_right"].auto_pulse(p.switches["slingshot_right"])
         self.flippers_enable()
+        """
         self.playfield_enabled = True
         p.events.post("playfield_enable")
 
     def playfield_disable(self):
+        """
         #if not self.playfield_enabled:
         #    return
         p.coils["slingshot_left"].auto_cancel()
@@ -138,5 +63,6 @@ class Game(BaseGame):
         self.kickback_disable()
         self.magnets_disable()
         self.flippers_disable()
+        """
         self.playfield_enabled = False
         p.events.post("playfield_disable")

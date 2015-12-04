@@ -18,8 +18,15 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+from pin.lib import p
+from pin.lib.handler import Handler
 
-def init():
-    features.init()
+class Mode(Handler):
+
+    def on_enable(self):
+        p.notify("mode", "Kickback enabled")
+        p.coils["kickback"].auto_pulse(p.switches["kickback"])
+
+    def on_disable(self):
+        p.notify("mode", "Kickback disabled")
+        p.coils["kickback"].auto_cancel()

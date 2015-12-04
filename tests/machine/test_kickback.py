@@ -18,8 +18,22 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+import unittest
 
-def init():
-    features.init()
+from pin.lib import p
+from tests import fixtures
+
+class TestKickback(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.mode = p.modes["kickback"]
+
+    def test_enable(self):
+        self.mode.enable()
+        self.assertTrue(p.coils["kickback"].auto)
+
+    def test_disable(self):
+        self.mode.enable()
+        self.mode.disable()
+        self.assertFalse(p.coils["kickback"].auto)

@@ -18,53 +18,43 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import collections
-import logging
-
 from pin.lib import p
 from pin.lib.handler import Handler
 
-log = logging.getLogger("pin.shot")
-rule_set = {}
-
 class Mode(Handler):
 
-    history = collections.deque(maxlen=5)
+    auto = False
 
     def setup(self):
-        p.events.on("playfield_enable", self.enable)
-        p.events.on("playfield_disable", self.disable)
-        self.on("switch_active", self.switch_active)
-
-    def switch_active(self, switch=None):
-        if not "user" in switch.tags:
-            self.history.appendleft(switch)
-            for shot_name, rules in rule_set.items():
-                self.evaluate_shot(shot_name, rules)
-
-    def evaluate_shot(self, shot_name, rules):
-        for i, switch in enumerate(self.history):
-            if i >= len(rules):
-                return
-            rule = rules[i]
-            if "eq" in rule and rule["eq"].name != switch.name:
-                return
-            elif "neq" in rule and rule["neq"].name == switch.name:
-                return
-            elif "eq" not in rule and "neq" not in rule:
-                raise ValueError("Invalid rule in {}: {}".format(shot_name,
-                        rule))
-        log.debug("+ {}".format(shot_name))
-        p.events.trigger(shot_name)
+        self.on("switch_shooter_lane_active", self.shooter_lane_active)
+        self.on("switch_shooter_lane_inactive", self.shooter_lane_inactive)
+        self.on("switch_ball_launch_button", self.ball_launch_button)
+        self.on_switch("shooter_lane", self.auto_launch_check, 0.25)
 
     def on_enable(self):
-        self.history.clear()
+        p.notify("mode", "Plunger enabled")
+        self.auto = False
 
     def on_disable(self):
-        self.history.clear()
+        p.notify("mode", "Plunger disabled")
+        p.lamps["ball_launch_button"].disable()
 
+    def shooter_lane_active(self):
+        p.lamps["ball_launch_button"].patter()
 
-def reset():
-    rule_set.clear()
+    def shooter_lane_inactive(self):
+        p.lamps["ball_launch_button"].disable()
 
+    def ball_launch_button(self):
+        if p.switches["shooter_lane"].active:
+            self.launch()
+
+    def auto_launch_check(self):
+        if self.auto:
+            self.launch()
+
+    def launch(self):
+        p.notify("game", "Launch")
+        p.coils["auto_plunger"].pulse()
+        p.events.trigger("launch")
 

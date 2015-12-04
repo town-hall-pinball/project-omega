@@ -18,8 +18,35 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+from pin.lib import p
+from pin.lib.eject import Eject
+from pin.lib.handler import Handler
 
-def init():
-    features.init()
+class Mode(Handler):
+
+    def setup(self):
+        self.on_switch("saucer", self.enter, 0.25)
+        self.on_switch("saucer", self.exit, 0.25, active=False)
+        self.saucer = Eject(self, p.coils["saucer"])
+
+    def on_enable(self):
+        p.notify("mode", "Saucer enabled")
+        self.saucer.reset()
+
+    def on_disable(self):
+        p.notify("mode", "Saucer disabled")
+
+    def enter(self):
+        if p.switches["saucer"].active:
+            p.events.trigger("enter_saucer")
+
+    def exit(self):
+        if not p.switches["saucer"].active:
+            self.saucer.success()
+            p.events.trigger("exit_saucer")
+
+    def eject(self):
+        self.saucer.eject()
+
+
+

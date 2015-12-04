@@ -18,8 +18,22 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+from pin.lib import p
+from pin.lib.handler import Handler
 
-def init():
-    features.init()
+class Mode(Handler):
+
+    def on_enable(self):
+        p.notify("mode", "Magnet assist")
+        p.coils["magnet_left"].auto_patter(
+                p.switches["magnet_left"], 1, 1)
+        p.coils["magnet_center"].auto_patter(
+                p.switches["magnet_center"], 1, 1)
+        p.coils["magnet_right"].auto_patter(
+                p.switches["magnet_right"], 1, 1)
+
+    def on_disable(self):
+        p.notify("mode", "Magnets disabled")
+        p.coils["magnet_left"].auto_cancel()
+        p.coils["magnet_center"].auto_cancel()
+        p.coils["magnet_right"].auto_cancel()

@@ -245,10 +245,12 @@ def init():
         "toy_left": {
             "label": "Toy, Left",
             "device": "L82",
+            "notes": "Skull, left eye"
         },
         "toy_right": {
             "label": "Toy, Right",
-            "device": "L85"
+            "device": "L85",
+            "notes": "Skull, right eye"
         },
         "u_turn_left_arrow": {
             "label": "U-Turn, Left Arrow",

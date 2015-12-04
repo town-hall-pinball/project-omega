@@ -18,8 +18,32 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+from pin.lib import p
 
-def init():
-    features.init()
+import unittest
+from tests import fixtures
+from mock import Mock
+
+class TestTrough(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.trough = p.modes["trough"]
+        self.trough.enable()
+
+    def test_feed(self):
+        live = Mock()
+        p.events.on("live_ball", live)
+        self.trough.feed()
+        p.switches["shooter_lane"].activate()
+        fixtures.loop()
+        p.now = 0.5
+        fixtures.loop()
+        self.assertTrue(live.called)
+
+    def test_disable(self):
+        # Coverage only test
+        self.trough.disable()
+
+
+

@@ -18,8 +18,27 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features
+import unittest
 
-def init():
-    features.init()
+from pin.lib import p
+from tests import fixtures
+
+class TestFlippers(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        self.mode = p.modes["flippers"]
+
+    def test_enable(self):
+        self.mode.enable()
+        self.assertTrue(self.mode.left.auto)
+        self.assertTrue(self.mode.right.auto)
+        self.assertFalse(self.mode.upper.auto)
+
+    def test_disable(self):
+        self.mode.enable()
+        self.mode.upper.auto_pulse()
+        self.mode.disable()
+        self.assertFalse(self.mode.left.auto)
+        self.assertFalse(self.mode.right.auto)
+        self.assertFalse(self.mode.upper.auto)
