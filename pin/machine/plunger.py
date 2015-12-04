@@ -56,5 +56,5 @@ class Mode(Handler):
     def launch(self):
         p.notify("game", "Launch")
         p.coils["auto_plunger"].pulse()
-        p.events.trigger("launch")
+        p.events.post("launch")
 

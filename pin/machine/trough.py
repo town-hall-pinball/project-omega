@@ -44,7 +44,7 @@ class Mode(Handler):
     def shooter_lane(self):
         if not self.live:
             p.notify("mode", "Live ball")
-            p.events.trigger("live_ball")
+            p.events.post("live_ball")
         self.live = True
         self.trough.success()
 

@@ -54,11 +54,11 @@ class Mode(Handler):
     def subway(self):
         if not self.entering:
             self.entering = True
-            p.events.trigger("entering_popper")
+            p.events.post("entering_popper")
 
     def enter(self):
         self.entering = False
-        p.events.trigger("enter_popper")
+        p.events.post("enter_popper")
 
     def eject(self):
         p.flashers["popper").patter(100, 127)
@@ -72,7 +72,7 @@ class Mode(Handler):
     def exit(self):
         if self.exiting:
             self.exiting = False
-            p.events.trigger("exit_popper")
+            p.events.post("exit_popper")
             self.popper.success()
 
 

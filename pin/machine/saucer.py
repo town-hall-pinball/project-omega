@@ -38,12 +38,12 @@ class Mode(Handler):
 
     def enter(self):
         if p.switches["saucer"].active:
-            p.events.trigger("enter_saucer")
+            p.events.post("enter_saucer")
 
     def exit(self):
         if not p.switches["saucer"].active:
             self.saucer.success()
-            p.events.trigger("exit_saucer")
+            p.events.post("exit_saucer")
 
     def eject(self):
         self.saucer.eject()
