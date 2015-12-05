@@ -185,3 +185,16 @@ class TestFlippers(unittest.TestCase):
 
 
 
+class TestSwitches(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+
+    def test_elapsed(self):
+        p.now = 100
+        p.switches["shooter_lane"].activate()
+        fixtures.loop()
+        p.now = 150
+        fixtures.loop()
+        self.assertEquals(50, p.switches["shooter_lane"].elapsed())
+

@@ -260,6 +260,7 @@ class Switch(Device):
         self.debounce = self.number < 192
         self.opto = config.get("opto", False)
         self.active = False
+        self.timestamp = 0
 
     def enable(self, enable=True):
         if self.debounce:
@@ -293,6 +294,9 @@ class Switch(Device):
 
     def is_opened(self):
         return not self.is_closed()
+
+    def elapsed(self):
+        return p.now - self.timestamp
 
 
 class Flipper(Device):

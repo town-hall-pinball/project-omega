@@ -44,6 +44,7 @@ def init(load_resources=True):
         "system.pinball_missing",
         "system.post",
 
+        "machine.drop_target",
         "machine.flippers",
         "machine.kickback",
         "machine.magnets",

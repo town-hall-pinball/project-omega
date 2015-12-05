@@ -58,6 +58,7 @@ def switch_active(switch):
     p.events.post("switch_active", switch)
     p.events.post("switch", switch, True)
     switch.active = True
+    switch.timestamp = p.now
     switch.state = { "schedule": "enable" }
     switch_log.debug("+ {}".format(switch.name))
 
@@ -66,6 +67,7 @@ def switch_inactive(switch):
     p.events.post("switch_inactive", switch)
     p.events.post("switch", switch, False)
     switch.active = False
+    switch.timestamp = p.now
     switch.state = { "schedule": "disable" }
     switch_log.debug("- {}".format(switch.name))
 
