@@ -48,18 +48,24 @@ class TestBallCounter(unittest.TestCase):
         self.assertEquals(1, self.counter.balls)
 
     def test_enter(self):
+        listener = Mock()
+        p.events.on("trough_changed", listener)
         p.switches["trough_2"].activate()
         fixtures.loop()
         self.assertEquals(1, self.counter.balls)
         p.now = 1
         fixtures.loop()
         self.assertEquals(2, self.counter.balls)
+        self.assertTrue(listener.called)
 
     def test_exit(self):
+        listener = Mock()
+        p.events.on("trough_changed", listener)
         p.switches["trough"].deactivate()
         fixtures.loop()
         self.assertEquals(1, self.counter.balls)
         p.now = 1
         fixtures.loop()
         self.assertEquals(0, self.counter.balls)
+        self.assertTrue(listener.called)
 

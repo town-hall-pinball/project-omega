@@ -66,7 +66,20 @@ class TestPopper(unittest.TestCase):
         fixtures.loop()
         self.assertTrue(exit.called)
 
+    def test_count_change(self):
+        p.switches["popper"].activate()
+        fixtures.loop()
+        p.now = 1
+        fixtures.loop()
+        self.assertEquals(1, self.popper.balls)
+        p.switches["popper_2"].activate()
+        fixtures.loop()
+        p.now = 2
+        fixtures.loop()
+        self.assertEquals(2, self.popper.balls)
+
     def test_disable(self): # Coverage only
         self.popper.disable()
+
 
 

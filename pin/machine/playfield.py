@@ -18,34 +18,30 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p
-from pin.lib.util import BallCounter, Eject
+from pin.lib import p, devices
 from pin.lib.handler import Handler
 
 class Mode(Handler):
 
-    balls = 0
+    total_balls = 4
 
     def setup(self):
-        self.on_switch("shooter_lane", self.shooter_lane, 0.25)
-        self.coil = Eject(self, p.coils["trough"])
-        self.counter = BallCounter(self, "trough", [
+        self.trough = p.modes["trough"]
+        self.popper = p.modes["popper"]
+        self.home = BallCounter(self, "home", [
             p.switches["trough"],
             p.switches["trough_2"],
             p.switches["trough_3"],
-            p.switches["trough_4"]
-        ])
-        self.on("trough_changed", self.count_changed)
+            p.switches["trough_4"],
+            p.switches["popper"],
+            p.switches["popper_2"]
+        ]
+        self.on("home_changed", check_capture)
 
-    def on_enabled(self):
-        self.count_changed()
+    def check_capture(self):
+        if self.home.balls = self.total_balls:
+            p.events.post("all_balls_home")
 
-    def eject(self):
-        self.coil.eject()
 
-    def shooter_lane(self):
-        self.coil.success()
 
-    def count_changed(self):
-        self.balls = self.counter.balls
 

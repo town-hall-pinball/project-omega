@@ -47,6 +47,6 @@ class BallCounter(object):
         current = self.count()
         if previous != current:
             self.balls = current
-            p.events.post("{}_changed", current)
+            p.events.post("{}_changed".format(self.name))
 
 

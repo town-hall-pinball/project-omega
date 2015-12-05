@@ -19,11 +19,12 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.lib.util import Eject
+from pin.lib.util import BallCounter, Eject
 from pin.lib.handler import Handler
 
 class Mode(Handler):
 
+    balls = 0
     entering = False
     exiting = False
 
@@ -37,9 +38,15 @@ class Mode(Handler):
         self.on("switch_subway_left", self.subway)
         self.on("switch_popper_2", self.enter)
         self.on("switch_return_right", self.exit)
-        self.popper = Eject(self, p.coils["popper"])
+        self.coil = Eject(self, p.coils["popper"])
+        self.counter = BallCounter(self, "popper", [
+            p.switches["popper"],
+            p.switches["popper_2"]
+        ])
+        self.on("popper_changed", self.count_changed)
 
     def on_enable(self):
+        self.count_changed()
         self.reset()
 
     def on_disable(self):
@@ -66,14 +73,16 @@ class Mode(Handler):
 
     def pop(self):
         p.flashers["popper"].disable()
-        self.popper.eject()
+        self.coil.eject()
         self.exiting = True
 
     def exit(self):
         if self.exiting:
             self.exiting = False
             p.events.post("exit_popper")
-            self.popper.success()
+            self.coil.success()
 
+    def count_changed(self):
+        self.balls = self.counter.balls
 
 
