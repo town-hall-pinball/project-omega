@@ -27,14 +27,10 @@ class Mode(Handler):
     def setup(self):
         self.on_switch("saucer", self.enter, 0.25)
         self.on_switch("saucer", self.exit, 0.25, active=False)
-        self.saucer = Eject(self, p.coils["saucer"])
+        self.coil = Eject(self, p.coils["saucer"])
 
     def on_enable(self):
-        p.notify("mode", "Saucer enabled")
-        self.saucer.reset()
-
-    def on_disable(self):
-        p.notify("mode", "Saucer disabled")
+        self.coil.reset()
 
     def enter(self):
         if p.switches["saucer"].active:
@@ -42,11 +38,11 @@ class Mode(Handler):
 
     def exit(self):
         if not p.switches["saucer"].active:
-            self.saucer.success()
+            self.coil.success()
             p.events.post("exit_saucer")
 
     def eject(self):
-        self.saucer.eject()
+        self.coil.eject()
 
 
 

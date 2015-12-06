@@ -34,17 +34,13 @@ class Mode(BaseGame):
         self.ticker = None
         self.start_time = None
 
-        self.playfield = p.modes["playfield"]
-        self.plunger = p.modes["plunger"]
-        self.trough = p.modes["trough"]
-
         self.handlers = [
-            self.playfield,
-            self.plunger,
+            p.modes["playfield"],
+            p.modes["plunger"],
         ]
 
         self.on("live", self.live_ball_check)
-        #self.on_switch("enter_saucer", self.saucer, 1.0)
+        self.on("enter_saucer", self.saucer)
 
 
     def on_enable(self):
@@ -63,9 +59,9 @@ class Mode(BaseGame):
             self.start_time = p.now
 
     def enable_playfield(self):
-        self.playfield.enable(children=True)
-        self.kickback.enable()
-        self.magnets.enable()
+        p.modes["playfield"].enable(children=True)
+        p.modes["kickback"].enable()
+        p.modes["magnets"].enable()
 
     def update_time(self):
         elapsed = 0
@@ -83,6 +79,10 @@ class Mode(BaseGame):
         self.auto_launch = True
 
     def saucer(self):
-        p.captures["saucer"].eject()
+        self.wait(2.0, self.eject_saucer)
+
+    def eject_saucer(self):
+        p.modes["saucer"].eject()
+
 
 

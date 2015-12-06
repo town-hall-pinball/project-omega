@@ -62,7 +62,7 @@ class Mode(Handler):
             self.live = False
 
     def check_live(self, switch):
-        log.debug("live check on {}".format(switch.name))
+        #log.debug("live check on {}".format(switch.name))
         if not self.live and "live" in switch.tags:
             #log.debug("live on " + switch.name)
             p.events.post("live")
