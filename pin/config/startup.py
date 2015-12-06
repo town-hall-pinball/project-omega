@@ -53,6 +53,7 @@ def init(load_resources=True):
         "machine.saucer",
         "machine.slingshots",
         "machine.trough",
+        "machine.playfield",
 
         "service.coils_test",
         "service.flashers_all_test",

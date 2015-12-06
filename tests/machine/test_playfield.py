@@ -18,31 +18,42 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p
-
 import unittest
-from tests import fixtures
-from mock import Mock
 
-class TestTrough(unittest.TestCase):
+from pin.lib import p
+from tests import fixtures
+
+import logging
+log = logging.getLogger("pin")
+
+class TestPlayfield(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
-        self.trough = p.modes["trough"]
-        self.trough.enable()
+        self.playfield = p.modes["playfield"]
+        self.playfield.enable(children=True)
+        p.modes["simulator"].enable()
 
-    def test_eject(self):
-        listener = Mock()
-        p.events.on("trough_ejected", listener)
-        self.trough.eject()
-        p.switches["shooter_lane"].activate()
+    def test_live(self):
+        p.modes["trough"].eject()
         fixtures.loop()
-        p.now = 0.5
+        p.now = 1
+        p.switches["ball_launch_button"].activate()
         fixtures.loop()
-        self.assertTrue(listener.called)
+        p.now = 2
+        self.assertTrue(self.playfield.live)
 
-    def test_disable(self):
-        # Coverage only test
-        self.trough.disable()
+    def test_dead(self):
+        p.modes["trough"].eject()
+        fixtures.loop()
+        p.now = 1
+        p.switches["ball_launch_button"].activate()
+        fixtures.loop()
+        p.now = 2
+        p.switches["trough_4"].activate()
+        fixtures.loop()
+        p.now = 3
+        fixtures.loop()
+        self.assertFalse(self.playfield.live)
 
 

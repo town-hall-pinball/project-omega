@@ -85,7 +85,7 @@ class Handler(object):
             p.timers.clear(ident)
 
 
-    def enable(self, enabled=True, transition=None):
+    def enable(self, enabled=True, transition=None, children=False):
         if not enabled:
             self.disable()
             return
@@ -97,6 +97,11 @@ class Handler(object):
             p.dmd.add(self.display, transition)
         self.register()
         self.on_enable()
+
+        if children:
+            for handler in self.handlers:
+                handler.enable()
+
         p.events.post("mode_{}_enable".format(self.name))
         p.events.post("mode_{}".format(self.name), True)
 

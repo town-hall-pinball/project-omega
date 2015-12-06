@@ -24,7 +24,6 @@ from pin.lib.handler import Handler
 
 class Mode(Handler):
 
-    balls = 0
     entering = False
     exiting = False
 
@@ -43,10 +42,8 @@ class Mode(Handler):
             p.switches["popper"],
             p.switches["popper_2"]
         ])
-        self.on("popper_changed", self.count_changed)
 
     def on_enable(self):
-        self.count_changed()
         self.reset()
 
     def on_disable(self):
@@ -81,8 +78,5 @@ class Mode(Handler):
             self.exiting = False
             p.events.post("exit_popper")
             self.coil.success()
-
-    def count_changed(self):
-        self.balls = self.counter.balls
 
 

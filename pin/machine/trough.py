@@ -24,8 +24,6 @@ from pin.lib.handler import Handler
 
 class Mode(Handler):
 
-    balls = 0
-
     def setup(self):
         self.on_switch("shooter_lane", self.shooter_lane, 0.25)
         self.coil = Eject(self, p.coils["trough"])
@@ -35,17 +33,10 @@ class Mode(Handler):
             p.switches["trough_3"],
             p.switches["trough_4"]
         ])
-        self.on("trough_changed", self.count_changed)
-
-    def on_enabled(self):
-        self.count_changed()
 
     def eject(self):
         self.coil.eject()
 
     def shooter_lane(self):
         self.coil.success()
-
-    def count_changed(self):
-        self.balls = self.counter.balls
 

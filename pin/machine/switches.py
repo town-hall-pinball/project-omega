@@ -119,7 +119,6 @@ def init():
             "label": "Popper",
             "device": "S41",
             "opto": True,
-            "tags": ["live"],
         },
         "popper_2": {
             "label": "Popper, #2",

@@ -18,29 +18,50 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
+
 from pin.lib import p, devices
 from pin.lib.handler import Handler
 
+log = logging.getLogger("pin")
+
 class Mode(Handler):
 
-    total_balls = 4
+    live = False
 
     def setup(self):
         self.trough = p.modes["trough"]
+        self.plunger = p.modes["plunger"]
         self.popper = p.modes["popper"]
-        self.home = BallCounter(self, "home", [
-            p.switches["trough"],
-            p.switches["trough_2"],
-            p.switches["trough_3"],
-            p.switches["trough_4"],
-            p.switches["popper"],
-            p.switches["popper_2"]
-        ]
-        self.on("home_changed", check_capture)
 
-    def check_capture(self):
-        if self.home.balls = self.total_balls:
-            p.events.post("all_balls_home")
+        self.handlers = [
+            self.trough,
+            self.plunger,
+            self.popper,
+        ]
+
+        self.on("trough_changed", self.check_home)
+        self.on("popper_changed", self.check_home)
+        self.on("switch_active", self.check_live)
+
+    def check_home(self):
+        in_trough = self.trough.counter.count()
+        in_popper = self.popper.counter.count()
+        #log.debug("home check, trough {}, popper {}".format(
+        #        in_trough, in_popper))
+        if (in_trough == 3 and in_popper == 1) or in_trough == 4:
+            p.events.post("home")
+            self.live = False
+
+    def check_live(self, switch):
+        if not self.live and "live" in switch.tags:
+            #log.debug("live on " + switch.name)
+            p.events.post("live")
+            self.live = True
+
+
+
+
 
 
 

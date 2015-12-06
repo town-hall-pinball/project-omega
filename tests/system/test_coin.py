@@ -223,7 +223,7 @@ class TestStart(unittest.TestCase):
         self.assertFalse(p.modes["attract"].enabled)
         self.assertTrue(p.modes["game_menu"].enabled)
 
-    def test_no_attrat(self):
+    def test_no_attract(self):
         p.data["credits"] = 1.0
         p.modes["attract"].disable()
         p.data["simulator_enabled"] = True
