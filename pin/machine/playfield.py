@@ -68,6 +68,13 @@ class Mode(Handler):
             p.events.post("live")
             self.live = True
 
+    def popper_eject(self, entering=True):
+        not_staged = 0 if entering else 1
+        if p.modes["popper"].counter.count() == not_staged:
+            p.modes["trough"].eject()
+        else:
+            p.modes["popper"].eject()
+
 
 
 

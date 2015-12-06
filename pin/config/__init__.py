@@ -19,7 +19,8 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p, devices
-from . import features
+from . import features, simulator
 
 def init():
     features.init()
+    simulator.init()

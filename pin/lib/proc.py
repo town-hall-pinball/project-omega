@@ -53,22 +53,22 @@ def create_buffer():
     return pinproc.DMDBuffer(p.dmd.width, p.dmd.height)
 
 def switch_active(switch):
+    switch.active = True
+    switch.timestamp = p.now
+    switch.state = { "schedule": "enable" }
     p.events.post("switch_{}".format(switch.name))
     p.events.post("switch_{}_active".format(switch.name))
     p.events.post("switch_active", switch)
     p.events.post("switch", switch, True)
-    switch.active = True
-    switch.timestamp = p.now
-    switch.state = { "schedule": "enable" }
     switch_log.debug("+ {}".format(switch.name))
 
 def switch_inactive(switch):
-    p.events.post("switch_{}_inactive".format(switch.name))
-    p.events.post("switch_inactive", switch)
-    p.events.post("switch", switch, False)
     switch.active = False
     switch.timestamp = p.now
     switch.state = { "schedule": "disable" }
+    p.events.post("switch_{}_inactive".format(switch.name))
+    p.events.post("switch_inactive", switch)
+    p.events.post("switch", switch, False)
     switch_log.debug("- {}".format(switch.name))
 
 def handle_switch(event):

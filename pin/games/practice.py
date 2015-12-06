@@ -41,7 +41,7 @@ class Mode(BaseGame):
 
         self.on("live", self.live_ball_check)
         self.on("enter_saucer", self.saucer)
-
+        self.on("entering_popper", self.popper)
 
     def on_enable(self):
         super(Mode, self).on_enable()
@@ -84,5 +84,7 @@ class Mode(BaseGame):
     def eject_saucer(self):
         p.modes["saucer"].eject()
 
+    def popper(self):
+        p.modes["playfield"].popper_eject(entering=True)
 
 

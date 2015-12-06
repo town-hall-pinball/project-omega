@@ -18,7 +18,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
 from pin.lib import p
+
+log = logging.getLogger("pin.eject")
 
 class Eject(object):
 
@@ -45,6 +48,7 @@ class Eject(object):
         self.failed = False
         self.handler.cancel(self.retry_timer)
         p.events.post("{}_ejecting".format(self.coil.name))
+        log.debug("ejecting {}".format(self.coil.name))
         self.pulse()
 
     def pulse(self):
@@ -56,15 +60,19 @@ class Eject(object):
         if self.ejecting:
             if self.attempts < self.max_attempts:
                 p.events.post("{}_retry".format(self.coil.name))
+                log.debug("retrying {}".format(self.coil.name))
                 self.pulse()
             else:
                 self.failed = True
                 p.events.post("{}_failed".format(self.coil.name))
+                log.debug("failure on {}".format(self.coil.name))
 
     def success(self):
         self.ejecting = False
         self.handler.cancel(self.retry_timer)
         p.events.post("{}_ejected".format(self.coil.name))
+        log.debug("{} ejected".format(self.coil.name))
+
 
 
 

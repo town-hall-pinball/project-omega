@@ -73,6 +73,8 @@ class Mode(Handler):
         source = rule.get("from")
         target = rule.get("to")
 
+        #log.debug("from {}, to {}, free {}".format(source, target, self.free))
+
         # Is a free ball the source? Is one available?
         if not source and self.free == 0:
             log.warn("No free balls on the playfield to acquire")
@@ -81,12 +83,12 @@ class Mode(Handler):
         # Is the ball actually at the source location?
         if source and source not in self.balls:
             # Free ball on playfield?
-            if self.free > 0:
-                source = None # Grab from playfield
-            else:
-                log.warn("Ball not at {} and no free ball to acquire".format(
-                        source.name))
-                return
+            #if self.free > 0:
+            #    source = None # Grab from playfield
+            #else:
+            #    log.warn("Ball not at {} and no free ball to acquire".format(
+            #            source.name))
+            return
 
         # Is the target location blocked by a ball?
         if target in self.balls:
@@ -115,7 +117,8 @@ class Mode(Handler):
 
         if target:
             self.balls.add(target)
-            target.activate()
+            if not target.active:
+                target.activate()
             p.proc.process()
             p.events.dispatch()
         else:
@@ -123,8 +126,8 @@ class Mode(Handler):
 
         switch_hit = rule.get("hit")
         if switch_hit:
-            switch_hit.activate()
-            switch_hit.deactivate()
+            p.timers.wait(0.05, switch_hit.activate)
+            p.timers.wait(0.10, switch_hit.deactivate)
 
 
 

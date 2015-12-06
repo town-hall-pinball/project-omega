@@ -103,16 +103,26 @@ class TestSimulator(unittest.TestCase):
 
     def test_ball_not_at_source(self):
         p.coils["popper"].pulse()
+        p.now = 1
         fixtures.loop()
         self.assertEquals(1, self.sim.free)
+        p.now = 2
+        fixtures.loop()
         p.coils["popper"].pulse()
+        p.now = 3
+        fixtures.loop()
         self.assertEquals(1, self.sim.free)
 
     def test_switch_hit(self):
         listener = Mock()
         p.events.on("switch_slingshot_left", listener)
         p.coils["trough"].pulse()
+        p.now = 1
+        fixtures.loop()
         p.coils["auto_plunger"].pulse()
+        p.now = 2
+        fixtures.loop()
+        p.now = 3
         fixtures.loop()
         self.assertTrue(listener.called)
 

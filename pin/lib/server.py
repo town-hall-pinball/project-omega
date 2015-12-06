@@ -154,12 +154,12 @@ class WebServer(Thread):
         plugin.subscribe()
         cherrypy.tools.websocket = WebSocketTool()
 
-        p.events.on("switch", self.dispatch_device)
-        p.events.on("coil", self.dispatch_device)
-        p.events.on("lamp", self.dispatch_device)
-        p.events.on("flasher", self.dispatch_device)
-        p.events.on("gi", self.dispatch_device)
-        p.events.on("notice", self.dispatch_notice)
+        p.events.on("switch", self.dispatch_device, priority=True)
+        p.events.on("coil", self.dispatch_device, priority=True)
+        p.events.on("lamp", self.dispatch_device, priority=True)
+        p.events.on("flasher", self.dispatch_device, priority=True)
+        p.events.on("gi", self.dispatch_device, priority=True)
+        p.events.on("notice", self.dispatch_notice, priority=True)
 
         cherrypy.quickstart(Root(), "/", config={
             "/": {

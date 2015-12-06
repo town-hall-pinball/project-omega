@@ -36,23 +36,33 @@ class TestPlayfield(unittest.TestCase):
 
     def test_live(self):
         p.modes["trough"].eject()
-        fixtures.loop()
         p.now = 1
-        p.switches["ball_launch_button"].activate()
         fixtures.loop()
+        p.switches["ball_launch_button"].activate()
         p.now = 2
+        fixtures.loop()
+        p.now = 3
+        fixtures.loop()
+        p.now = 4
+        fixtures.loop()
         self.assertTrue(self.playfield.live)
+
 
     def test_dead(self):
         p.modes["trough"].eject()
-        fixtures.loop()
         p.now = 1
-        p.switches["ball_launch_button"].activate()
         fixtures.loop()
+        p.switches["ball_launch_button"].activate()
         p.now = 2
-        p.switches["trough_4"].activate()
         fixtures.loop()
         p.now = 3
+        fixtures.loop()
+        p.now = 4
+        fixtures.loop()
+        self.assertTrue(self.playfield.live)
+        p.switches["trough_4"].activate()
+        fixtures.loop()
+        p.now = 5
         fixtures.loop()
         self.assertFalse(self.playfield.live)
 

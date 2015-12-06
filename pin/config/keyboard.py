@@ -36,6 +36,8 @@ def init():
         "[": switch("flipper_left"),
         "]": switch("flipper_right"),
         ",": switch("slingshot_left"),
-        ".": switch("slingshot_right")
+        ".": switch("slingshot_right"),
+        "m": switch("subway_center"),
+        "n": switch("subway_left"),
     })
 
