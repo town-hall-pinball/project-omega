@@ -30,14 +30,22 @@ class Mode(Handler):
     live = False
 
     def setup(self):
-        self.trough = p.modes["trough"]
+        self.drop_target = p.modes["drop_target"]
+        self.flippers = p.modes["flippers"]
         self.plunger = p.modes["plunger"]
         self.popper = p.modes["popper"]
+        self.saucer = p.modes["saucer"]
+        self.slingshots = p.modes["slingshots"]
+        self.trough = p.modes["trough"]
 
         self.handlers = [
-            self.trough,
+            self.drop_target,
+            self.flippers,
             self.plunger,
             self.popper,
+            self.saucer,
+            self.trough,
+            self.slingshots,
         ]
 
         self.on("trough_changed", self.check_home)
@@ -54,6 +62,7 @@ class Mode(Handler):
             self.live = False
 
     def check_live(self, switch):
+        log.debug("live check on {}".format(switch.name))
         if not self.live and "live" in switch.tags:
             #log.debug("live on " + switch.name)
             p.events.post("live")

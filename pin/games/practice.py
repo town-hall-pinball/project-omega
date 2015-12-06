@@ -34,15 +34,25 @@ class Mode(BaseGame):
         self.ticker = None
         self.start_time = None
 
-        self.on("live_ball", self.live_ball_check)
-        self.on_switch("saucer", self.saucer, 1.0)
+        self.playfield = p.modes["playfield"]
+        self.plunger = p.modes["plunger"]
+        self.trough = p.modes["trough"]
+
+        self.handlers = [
+            self.playfield,
+            self.plunger,
+        ]
+
+        self.on("live", self.live_ball_check)
+        #self.on_switch("enter_saucer", self.saucer, 1.0)
+
 
     def on_enable(self):
         super(Mode, self).on_enable()
-        self.trough.enable()
-        self.trough.feed()
         self.max_time = p.data["practice_timer"]
         self.update_time()
+        self.enable_playfield()
+        self.trough.eject()
 
     def on_disable(self):
         p.timers.cancel(self.ticker)
@@ -51,6 +61,11 @@ class Mode(BaseGame):
         if not self.start_time:
             self.ticker = p.timers.tick(self.update_time)
             self.start_time = p.now
+
+    def enable_playfield(self):
+        self.playfield.enable(children=True)
+        self.kickback.enable()
+        self.magnets.enable()
 
     def update_time(self):
         elapsed = 0
@@ -63,16 +78,9 @@ class Mode(BaseGame):
         seconds = int(remaining % 60)
         self.time.show("{}:{:02d}".format(minutes, seconds))
 
-
     def live_ball(self):
         super(Mode, self).live_ball()
         self.auto_launch = True
-
-        self.flippers.enable()
-        self.kickback.enable()
-        self.magnets.enable()
-        self.plunger.enable()
-        self.slingshots.enable()
 
     def saucer(self):
         p.captures["saucer"].eject()
