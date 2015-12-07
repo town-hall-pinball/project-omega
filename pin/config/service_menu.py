@@ -72,6 +72,21 @@ practice_gameplay = {
     ]
 }
 
+general = {
+    "name": "General",
+    "icon": "service_settings",
+    "menu": [{
+        "name": "Power Save",
+        "data": "power_save_timer",
+        "options": [
+            [5,         "0:05"],
+            [2 * 60,    "2:00"],
+            [5 * 60,    "5:00"],
+            [10 * 60,  "10:00"]
+        ]}
+    ]
+}
+
 gameplay = {
     "name": "Gameplay",
     "icon": "service_game_settings",
@@ -85,8 +100,9 @@ settings = {
     "name": "Settings",
     "icon": "service_settings",
     "menu": [
-        game_pricing,
+        general,
         gameplay,
+        game_pricing,
     ]
 }
 

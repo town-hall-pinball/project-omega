@@ -18,28 +18,39 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ui, util
+from pin.lib import p
 from pin.lib.handler import Handler
-
-from . import coin
 
 class Mode(Handler):
 
+    timer = None
+
     def setup(self):
-        self.handlers += [
-            p.modes["coin"],
-            p.modes["gi"],
-            p.modes["shots"],
-        ]
+        self.on("switch", self.switch)
+        self.on("data_power_save_timer", self.reset_timer)
 
     def on_enable(self):
-        for handler in self.handlers:
-            handler.enable()
+        self.reset_timer()
 
+    def switch(self, *args, **kwargs):
+        self.reset_timer()
+        self.wake()
 
-def init():
-    p.load_modes({
-        "system.coin",
-        "system.gi",
-        "lib.shots",
-    })
+    def reset_timer(self):
+        self.cancel(self.timer)
+        self.timer = self.wait(p.data["power_save_timer"], self.sleep)
+
+    def sleep(self):
+        p.events.post("sleep")
+        p.notify("mode", "Sleep")
+        for gi in p.gi.values():
+            # TODO: Some hard-coded value for now, configure brightness level
+            # in service mode.
+            gi.patter(100, 20)
+
+    def wake(self):
+        p.events.post("wake")
+        p.notify("mode", "Wake")
+        for gi in p.gi.values():
+            gi.enable()
+

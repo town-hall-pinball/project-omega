@@ -59,7 +59,7 @@ class TestService(unittest.TestCase):
     def test_menu_down(self):
         p.events.post("switch_service_enter")
         p.events.dispatch()
-        self.assertEquals("Pricing", self.service.title.style["text"])
+        self.assertEquals("General", self.service.title.style["text"])
 
     def test_menu_cache(self):
         p.events.post("switch_service_up")      # Go to Tests
@@ -71,28 +71,31 @@ class TestService(unittest.TestCase):
         self.assertEquals("Coils", self.service.title.style["text"])
 
     def test_option_select(self):
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_up")
-        p.events.post("switch_service_enter")
+        p.events.post("switch_service_enter")       # Enter Settings
+        p.events.post("switch_service_down")        # General -> Pricing
+        p.events.post("switch_service_enter")       # Enter Pricing
+        p.events.post("switch_service_up")          # Free Play -> Game Pricing
+        p.events.post("switch_service_enter")       # Select Game Pricing
         p.events.dispatch()
         self.assertEquals("1 for 0.50", self.service.value.style["text"])
 
     def test_option_select_next(self):
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_up")
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_up")
+        p.events.post("switch_service_enter")       # Enter Settings
+        p.events.post("switch_service_down")        # General -> Pricing
+        p.events.post("switch_service_enter")       # Enter Pricing
+        p.events.post("switch_service_up")          # Free Play -> Game Pricing
+        p.events.post("switch_service_enter")       # Select Game Pricing
+        p.events.post("switch_service_up")          # Up to 1 for 0.75
         p.events.dispatch()
         self.assertEquals("1 for 0.75", self.service.value.style["text"])
 
     def test_option_select_previous(self):
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_up")
-        p.events.post("switch_service_enter")
-        p.events.post("switch_service_down")
+        p.events.post("switch_service_enter")       # Enter Settings
+        p.events.post("switch_service_down")        # General -> Pricing
+        p.events.post("switch_service_enter")       # Enter Pricing
+        p.events.post("switch_service_up")          # Free Play -> Game Pricing
+        p.events.post("switch_service_enter")       # Select Game Pricing
+        p.events.post("switch_service_down")        # Down to 1 for 0.25
         p.events.dispatch()
         self.assertEquals("1 for 0.25", self.service.value.style["text"])
 
@@ -163,11 +166,13 @@ class TestService(unittest.TestCase):
 
     def test_save(self):
         p.data["free_play"] = False
-        p.events.post("switch_service_enter") # Enter Settings
-        p.events.post("switch_service_enter") # Enter Pricing
-        p.events.post("switch_service_enter") # Enter Free Play
-        p.events.post("switch_service_up") # Select YES
-        p.events.post("switch_service_enter") # Save
+        p.events.post("switch_service_enter")   # Enter Settings
+        p.events.post("switch_service_up")      # General -> Gameplay
+        p.events.post("switch_service_up")      # Gameplay -> Pricing
+        p.events.post("switch_service_enter")   # Enter Pricing
+        p.events.post("switch_service_enter")   # Enter Free Play
+        p.events.post("switch_service_up")      # Select YES
+        p.events.post("switch_service_enter")   # Save
         p.events.dispatch()
         self.assertTrue(p.data["free_play"])
         p.now = 5                             # Remove confirmation message
@@ -176,6 +181,8 @@ class TestService(unittest.TestCase):
     def test_no_change(self):
         p.data["free_play"] = False
         p.events.post("switch_service_enter") # Enter Settings
+        p.events.post("switch_service_up")    # General -> Gameplay
+        p.events.post("switch_service_up")    # Gameplay -> Pricing
         p.events.post("switch_service_enter") # Enter Pricing
         p.events.post("switch_service_enter") # Enter Free Play
         p.events.post("switch_service_enter") # No Change

@@ -29,6 +29,7 @@ settings = {
     "free_play": False,
     "max_credits": 99,
     "paid_credits": 0,
+    "power_save_timer": 60 * 5,
     "pricing": 0.50,
     "practice_timer": 180,
     "server_enabled": False,

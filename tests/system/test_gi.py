@@ -18,28 +18,32 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ui, util
-from pin.lib.handler import Handler
+from pin.lib import p
 
-from . import coin
+import unittest
+from tests import fixtures
+from mock import Mock
 
-class Mode(Handler):
+class TestGI(unittest.TestCase):
 
-    def setup(self):
-        self.handlers += [
-            p.modes["coin"],
-            p.modes["gi"],
-            p.modes["shots"],
-        ]
+    def setUp(self):
+        fixtures.reset()
+        p.modes["gi"].enable()
+        p.gi["gi01"].enable()
 
-    def on_enable(self):
-        for handler in self.handlers:
-            handler.enable()
+    def test_power_save(self):
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+        p.now = 10 * 60
+        fixtures.loop()
+        self.assertEquals("patter", p.gi["gi01"].state["schedule"])
 
-
-def init():
-    p.load_modes({
-        "system.coin",
-        "system.gi",
-        "lib.shots",
-    })
+    def test_wake(self):
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+        p.now = 10 * 60
+        fixtures.loop()
+        self.assertEquals("patter", p.gi["gi01"].state["schedule"])
+        p.switches["start_button"].activate()
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
