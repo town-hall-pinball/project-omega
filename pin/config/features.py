@@ -25,61 +25,6 @@ def init():
     sw = p.switches
     coil = p.coils
 
-    ball.total = 4
-    ball.captures = {
-        "trough": ball.Capture(
-            name="trough",
-            switches=[
-                sw["trough"],
-                sw["trough_2"],
-                sw["trough_3"],
-                sw["trough_4"]
-            ],
-            coil=coil["trough"],
-            verify={
-                "type": "failure",
-                "switch": sw["trough_jam"],
-                "time": 3.00,
-                "retry_time": 3.00
-            }
-        ),
-        "popper": ball.Capture(
-            name="popper",
-            switches=[
-                sw["popper"],
-                sw["popper_2"]
-            ],
-            coil=coil["popper"],
-            verify={
-                "type": "success",
-                "switch": sw["return_right"],
-                "time": 1.0
-            },
-            staged=1
-        ),
-        "saucer": ball.Capture(
-            name="saucer",
-            switches=[
-                sw["saucer"],
-            ],
-            coil=coil["saucer"],
-            verify={
-                "type": "failure",
-                "switch": sw["saucer"],
-                "time": 1.0
-            }
-        ),
-        "auto_plunger": ball.Capture(
-            name="shooter_lane",
-            switches=[
-                sw["shooter_lane"],
-            ],
-            coil=coil["auto_plunger"],
-        )
-    }
-    ball.trough = ball.captures["trough"]
-    ball.auto_plunger = ball.captures["auto_plunger"]
-
     shots.rule_set = {
         "shot_orbit_left": [
             {  "eq": sw["orbit_left"] },
@@ -112,42 +57,4 @@ def init():
         coil["popper"],
     ]
 
-    simulator.initial = [
-        sw["trough"],
-        sw["trough_2"],
-        sw["trough_3"],
-        sw["popper"]
-    ]
 
-    simulator.rules = {
-        "coil:trough=pulse": [
-            { "from": sw["trough"],     "to": sw["shooter_lane"] },
-            { "from": sw["trough_2"],   "to": sw["trough"] },
-            { "from": sw["trough_3"],   "to": sw["trough_2"] },
-            { "from": sw["trough_4"],   "to": sw["trough_3"] }
-        ],
-        "switch:trough_4=enable": [
-            { "to": sw["trough_4"] },
-            { "from": sw["trough_4"],   "to": sw["trough_3"] },
-            { "from": sw["trough_3"],   "to": sw["trough_2"] },
-            { "from": sw["trough_2"],   "to": sw["trough"] }
-        ],
-        "coil:auto_plunger=pulse": [
-            { "from": sw["shooter_lane"], "hit": sw["slingshot_left"] }
-        ],
-        "coil:popper=pulse": [
-            { "from": sw["popper"] }
-        ],
-        "switch:subway_left=enable": [
-            { "to": sw["subway_center"] }
-        ],
-        "switch:subway_center=enable": [
-            { "from": sw["subway_center"], "to": sw["popper_2"] }
-        ],
-        "switch:popper_2=enable": [
-            { "from": sw["popper_2"], "to": sw["popper"] }
-        ],
-        "coil:drop_target_up=pulse": [
-            { "disable": sw["drop_target"] }
-        ]
-    }

@@ -33,10 +33,16 @@ class Mode(Handler):
             p.switches["trough_3"],
             p.switches["trough_4"]
         ])
+        self.on("switch_trough_4", self.drain)
 
     def eject(self):
         self.coil.eject()
 
     def shooter_lane(self):
         self.coil.success()
+
+    def drain(self):
+        p.notify("game", "Drain")
+        p.events.post("drain")
+
 

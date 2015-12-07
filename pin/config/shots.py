@@ -1,3 +1,4 @@
+
 # Copyright (c) 2014 - 2015 townhallpinball.org
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
@@ -18,10 +19,29 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, devices
-from . import features, shots, simulator
+from ..lib import p, shots
 
 def init():
-    features.init()
-    shots.init()
-    simulator.init()
+
+    sw = p.switches
+
+    shots.rule_set = {
+        "shot_orbit_left": [
+            {  "eq": sw["orbit_left"] },
+            { "neq": sw["orbit_right"] },
+        ],
+        "shot_orbit_right": [
+            {  "eq": sw["orbit_right"] },
+            { "neq": sw["orbit_left"] },
+        ],
+        "shot_subway_left": [
+            {  "eq": sw["subway_left"] }
+        ],
+        "shot_subway_center": [
+            {  "eq": sw["subway_center"] },
+            { "neq": sw["subway_left"] }
+        ],
+        "drain": [
+            {  "eq": sw["trough_4"] }
+        ]
+    }

@@ -24,6 +24,13 @@ from ..lib import p, simulator
 def init():
     sw = p.switches
 
+    simulator.initial = [
+        sw["trough"],
+        sw["trough_2"],
+        sw["trough_3"],
+        sw["popper"]
+    ]
+
     simulator.rules = {
         "coil:trough=pulse": [
             { "from": sw["trough"],     "to": sw["shooter_lane"] },

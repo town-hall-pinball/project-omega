@@ -74,7 +74,7 @@ class Mode(Handler):
         if self.can_start():
             if p.modes["attract"].enabled:
                 p.modes["attract"].disable()
-                if ball.missing():
+                if not p.modes["playfield"].is_home():
                     p.modes["pinball_missing"].enable()
                 else:
                     p.modes["game_menu"].enable()

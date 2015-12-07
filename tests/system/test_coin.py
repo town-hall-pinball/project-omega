@@ -218,6 +218,7 @@ class TestStart(unittest.TestCase):
     def test_start(self):
         p.data["credits"] = 1.0
         p.data["simulator_enabled"] = True
+        fixtures.loop()
         p.switches["start_button"].activate()
         fixtures.loop()
         self.assertFalse(p.modes["attract"].enabled)
@@ -236,6 +237,8 @@ class TestStart(unittest.TestCase):
         p.data["credits"] = 0
         p.data["free_play"] = True
         p.data["simulator_enabled"] = True
+        fixtures.loop()
+        p.now = 1
         p.switches["start_button"].activate()
         fixtures.loop()
         self.assertFalse(p.modes["attract"].enabled)

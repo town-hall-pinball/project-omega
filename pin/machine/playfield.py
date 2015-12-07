@@ -48,18 +48,18 @@ class Mode(Handler):
             self.slingshots,
         ]
 
-        self.on("trough_changed", self.check_home)
-        self.on("popper_changed", self.check_home)
+        self.on("trough_changed", self.is_home)
+        self.on("popper_changed", self.is_home)
         self.on("switch_active", self.check_live)
 
-    def check_home(self):
+    def is_home(self):
         in_trough = self.trough.counter.count()
         in_popper = self.popper.counter.count()
-        #log.debug("home check, trough {}, popper {}".format(
-        #        in_trough, in_popper))
         if (in_trough == 3 and in_popper == 1) or in_trough == 4:
             p.events.post("home")
             self.live = False
+            return True
+        return False
 
     def check_live(self, switch):
         #log.debug("live check on {}".format(switch.name))
@@ -75,7 +75,10 @@ class Mode(Handler):
         else:
             p.modes["popper"].eject()
 
-
+    def ball_status(self):
+        log.debug("ball status: {} trough, {} popper".format(
+                self.trough.counter.count(),
+                self.popper.counter.count()))
 
 
 
