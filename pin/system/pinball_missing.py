@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ball, ui, util
+from pin.lib import p, search, ui, util
 from pin.lib.handler import Handler
 
 class Mode(Handler):
@@ -29,7 +29,7 @@ class Mode(Handler):
         self.display.add((self.title,))
 
     def on_enable(self):
-        ball.search()
+        search.run()
         self.title.effect("blink", on=0.4, off=0.1, repeat=4)
         self.wait(3.0, self.disable)
 

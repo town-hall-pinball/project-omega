@@ -19,34 +19,12 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from ..lib import p, ball, devices, shots, simulator
+from ..lib import p, search
 
 def init():
-    sw = p.switches
     coil = p.coils
 
-    shots.rule_set = {
-        "shot_orbit_left": [
-            {  "eq": sw["orbit_left"] },
-            { "neq": sw["orbit_right"] },
-        ],
-        "shot_orbit_right": [
-            {  "eq": sw["orbit_right"] },
-            { "neq": sw["orbit_left"] },
-        ],
-        "shot_subway_left": [
-            {  "eq": sw["subway_left"] }
-        ],
-        "shot_subway_center": [
-            {  "eq": sw["subway_center"] },
-            { "neq": sw["subway_left"] }
-        ],
-        "drain": [
-            {  "eq": sw["trough_4"] }
-        ]
-    }
-
-    ball.search_sequence = [
+    search.sequence = [
         coil["slingshot_left"],
         coil["slingshot_right"],
         coil["kickback"],

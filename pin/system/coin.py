@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ball, ui, util
+from pin.lib import p, ui, util
 from pin.lib.handler import Handler
 
 class CreditsDisplay(object):

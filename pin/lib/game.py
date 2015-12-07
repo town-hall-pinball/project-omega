@@ -19,7 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import logging
-from . import p, ball, util
+from . import p, util
 from .handler import Handler
 
 log = logging.getLogger("pin.game")
@@ -128,7 +128,6 @@ class Game(Handler):
         self.live = True
         p.notify("game", "Live Ball")
         p.events.post("live_ball")
-        ball.status()
 
 
 

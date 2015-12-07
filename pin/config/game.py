@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from ..lib import p, ball
+from ..lib import p
 from ..lib.game import Game as BaseGame
 
 class Game(BaseGame):

@@ -27,7 +27,7 @@ import cherrypy
 from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
 
-from . import p, ball, brand, keyboard
+from . import p, brand, keyboard, search
 from .devices import devices
 from .handler import Handler
 
@@ -96,7 +96,7 @@ class WebSocketHandler(WebSocket):
         if command == "coil":
             self.fire_coil(message)
         if command == "ball_search":
-            ball.search()
+            search.run()
         if command == "status":
             self.status()
 

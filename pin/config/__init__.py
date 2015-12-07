@@ -19,9 +19,9 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p, devices
-from . import features, shots, simulator
+from . import search, shots, simulator
 
 def init():
-    features.init()
+    search.init()
     shots.init()
     simulator.init()

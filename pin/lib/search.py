@@ -18,46 +18,42 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ball
+import collections
+import logging
 
-import unittest
-from mock import Mock
-from tests import fixtures
+from . import p, util
+from .handler import Handler
+
+sequence = []
+interval = 0.25
+
+log = logging.getLogger("pin")
+
+class Search(object):
+
+    active = False
+    index = 0
+    timer = None
+
+    def __call__(self):
+        if self.active:
+            log.warn("search already running")
+            return
+        p.notify("game", "Ball Search")
+        self.active = True
+        self.next()
+
+    def next(self):
+        sequence[self.index].pulse()
+        self.index += 1
+        if self.index == len(sequence):
+            self.index = 0
+            self.active = False
+        else:
+            self.timer = p.timers.wait(interval, self.next)
 
 
-class TestSearch(unittest.TestCase):
-
-    def setUp(self):
-        fixtures.reset()
-        ball.search_sequence = [
-            p.coils["saucer"],
-            p.coils["popper"]
-        ]
-
-    def test_search(self):
-        listener1 = Mock()
-        listener2 = Mock()
-        p.events.on("coil_saucer", listener1)
-        p.events.on("coil_popper", listener2)
-        ball.search()
-        fixtures.loop()
-        self.assertTrue(listener1.called)
-        p.now += ball.search_interval
-        fixtures.loop()
-        self.assertTrue(listener2.called)
-        self.assertFalse(ball.search.running)
-
-    def test_search_already_running(self):
-        listener1 = Mock()
-        listener2 = Mock()
-        p.events.on("coil_saucer", listener1)
-        p.events.on("coil_popper", listener2)
-        ball.search()
-        fixtures.loop()
-        ball.search()
-        self.assertTrue(listener1.called)
-        self.assertFalse(listener2.called)
-        self.assertTrue(ball.search.running)
+run = Search()
 
 
 
