@@ -41,15 +41,11 @@ class Notice(Panel):
         valign(self.children)
 
     def on_render_start(self):
-        self.timer = p.timers.wait(self.style["duration"], self.done)
+        if self.style["duration"]:
+            self.timer = p.timers.wait(self.style["duration"], self.done)
 
     def on_render_stopped(self):
         p.timers.clear(self.timer)
-
-    def render_restarted(self):
-        super(Notice, self).render_restarted()
-        p.timers.clear(self.timer)
-        self.timer = p.timers.wait(self.style["duration"], self.done)
 
     def done(self):
         p.timers.clear(self.timer)
@@ -62,5 +58,12 @@ def notify(message, duration=2.0, callback=None):
     panel = Notice(duration=duration, callback=callback)
     panel.add(Text(message))
     p.dmd.enqueue(panel)
+
+def message(message, duration=None, callback=None):
+    panel = Notice(duration=duration, callback=callback)
+    panel.add(Text(message))
+    return panel
+
+
 
 

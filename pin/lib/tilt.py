@@ -21,25 +21,46 @@
 from pin.lib import p, ui, util
 from pin.lib.handler import Handler
 
-class TiltWarningDisplay(object):
+class TiltWarningDisplay(ui.Notice):
 
     def __init__(self):
-        self.display = ui.Notice(name="tilt_warning", duration=2.0, fill=0xf)
+        super(TiltWarningDisplay, self).__init__(name="tilt_warning",
+                duration=2.0, fill=0xf)
         self.message = ui.Text("WARNING", fill=0xf, color=0x0)
-        self.display.add([self.message])
+        self.add([self.message])
         self.message.effect("blink", duration=0.1, repeat=3)
 
 
 class Mode(Handler):
 
-    def setup(self):
-        self.on("switch_tilt", self.warning)
+    warnings = 0
 
-    def warning(self):
-        p.dmd.interrupt(p.displays["tilt_warning"].display)
+    def setup(self):
+        self.on("switch_tilt", self.check_tilt)
+        self.on("switch_tilt_slam", self.slam_tilt)
+
+    def on_enable(self):
+        self.warnings = 0
+
+    def check_tilt(self):
+        self.warnings += 1
+        if self.warnings > p.data["tilt_warnings"]:
+            self.tilt()
+        else:
+            p.dmd.interrupt(p.displays["tilt_warning"])
+
+    def tilt(self):
+        p.dmd.add(p.displays["tilt"])
+        p.events.post("tilt")
+
+    def slam_tilt(self):
+        p.dmd.add(p.displays["slam_tilt"])
+        p.events.post("slam_tilt")
 
 
 def init():
     p.displays["tilt_warning"] = TiltWarningDisplay()
+    p.displays["tilt"] = ui.message("TILT")
+    p.displays["slam_tilt"] = ui.message("SLAM TILT")
 
 

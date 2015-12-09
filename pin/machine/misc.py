@@ -18,42 +18,11 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin import machine
-from pin.lib import p, brand, ui
-from pin.lib.handler import Handler
+def user_bypass(handler, callback):
+    handler.on("switch_flipper_left",   callback)
+    handler.on("switch_flipper_right",  callback)
+    handler.on("switch_start_button",   callback)
+    handler.on("switch_service_enter",  callback)
+    handler.on("switch_service_exit",   callback)
 
-from . import attract
 
-class Mode(Handler):
-
-    def setup(self):
-        self.display = ui.Notice(
-            name="banner"
-        )
-        self.title = ui.Text(
-            brand.name,
-            font="t5exb"
-        )
-        self.version = ui.Text(
-            brand.version,
-            font="t5cpb"
-        )
-        self.release = ui.Text(
-            brand.release,
-            font="t5cpb"
-        )
-        self.display.add((self.title, self.version, self.release))
-        machine.user_bypass(self, self.bypass)
-
-    def on_enable(self):
-        p.mixer.play("boot")
-        self.wait(8, self.done)
-
-    def bypass(self):
-        self.done()
-
-    def done(self):
-        self.disable()
-        p.mixer.stop()
-        p.modes["core"].enable()
-        p.modes["attract"].enable()

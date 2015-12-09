@@ -20,6 +20,7 @@
 
 from pin.lib import p, devices
 from . import coils, flashers, flippers, gi, lamps, switches
+from .misc import *
 
 def init():
     coils.init()
