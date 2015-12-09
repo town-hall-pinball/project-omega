@@ -18,27 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import keyboard
-from pin.lib.keyboard import event, switch
+from pin.lib import p, ui, util
+from pin.lib.handler import Handler
+
+class TiltWarningDisplay(object):
+
+    def __init__(self):
+        self.display = ui.Notice(name="tilt_warning", duration=2.0, fill=0xf)
+        self.message = ui.Text("WARNING", fill=0xf, color=0x0)
+        self.display.add([self.message])
+        self.message.effect("blink", duration=0.1, repeat=3)
+
+
+class Mode(Handler):
+
+    def setup(self):
+        self.on("switch_tilt", self.warning)
+
+    def warning(self):
+        p.dmd.interrupt(p.displays["tilt_warning"].display)
+
 
 def init():
-    keyboard.register({
-        "d": switch("trough_4"),
-        "s": switch("saucer"),
-       "ss": switch("start_button"),
-       "cs": switch("buy_extra_ball_button"),
-        "l": switch("ball_launch_button"),
-        "1": switch("coin_left"),
-        "7": switch("service_enter"),
-        "8": switch("service_down"),
-        "9": switch("service_up"),
-        "0": switch("service_exit"),
-        "[": switch("flipper_left"),
-        "]": switch("flipper_right"),
-        ",": switch("slingshot_left"),
-        ".": switch("slingshot_right"),
-        "m": switch("subway_center"),
-        "n": switch("subway_left"),
-        "z": switch("tilt"),
-    })
+    p.displays["tilt_warning"] = TiltWarningDisplay()
+
 

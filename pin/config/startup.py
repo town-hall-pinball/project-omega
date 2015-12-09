@@ -34,6 +34,7 @@ def init(load_resources=True):
     p.load_modes((
         "lib.server",
         "lib.simulator",
+        "lib.tilt",
 
         "system.coin",
         "system.attract",

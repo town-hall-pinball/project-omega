@@ -44,6 +44,7 @@ class Mode(Handler):
             self.plunger,
             self.popper,
             self.saucer,
+            p.modes["tilt"],
             self.trough,
             self.slingshots,
         ]

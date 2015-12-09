@@ -58,6 +58,21 @@ class TestDMD(unittest.TestCase):
         dmd.enqueue(self.r1)
         self.assertEquals(1, len(dmd.dmd.queue))
 
+    def test_interrupt(self):
+        dmd.add(self.r1)
+        dmd.interrupt(self.r2)
+        dmd.render()
+        self.assertEquals(0, self.r1.render.call_count)
+        self.assertEquals(1, self.r2.render.call_count)
+
+    def test_interrupt_remove(self):
+        dmd.add(self.r1)
+        dmd.interrupt(self.r2)
+        dmd.remove(self.r2)
+        dmd.render()
+        self.assertEquals(1, self.r1.render.call_count)
+        self.assertEquals(0, self.r2.render.call_count)
+
     def test_replace_stack(self):
         dmd.add(self.r1)
         dmd.replace(self.r1, self.r2)
@@ -67,6 +82,12 @@ class TestDMD(unittest.TestCase):
 
     def test_replace_queue(self):
         dmd.enqueue(self.r1)
+        dmd.replace(self.r1, self.r2)
+        dmd.render()
+        self.assertEquals(0, self.r1.render.call_count)
+        self.assertEquals(1, self.r2.render.call_count)
+
+    def test_replace_none(self):
         dmd.replace(self.r1, self.r2)
         dmd.render()
         self.assertEquals(0, self.r1.render.call_count)
@@ -161,5 +182,10 @@ class TestDMD(unittest.TestCase):
     @patch("pygame.PixelArray")
     def test_create_dots(self, mock_pixel_array):
         dmd.create_dots(None)
+
+    def test_no_renderer(self):
+        with self.assertRaises(ValueError):
+            dmd.dmd.stack += [None]
+            dmd.render()
 
 

@@ -40,6 +40,7 @@ class DMD(object):
         self.frame_to = pygame.Surface((width, height))
 
         self.transition = None
+        self.override = None
         self.stack = []
         self.queue = []
 
@@ -52,6 +53,11 @@ class DMD(object):
         if renderer in self.queue:
             return
         self.add_renderer(self.queue, renderer, transition)
+
+    def interrupt(self, renderer):
+        self.override = renderer
+        self.override.render_start()
+        log.debug("interrupting with {}".format(renderer))
 
     def replace(self, previous, current, transition=None):
         trans = "using {}".format(transition) if transition else ""
@@ -69,6 +75,9 @@ class DMD(object):
         for renderer in self.queue:
             renderer.on_render_stop()
         self.queue[:] = []
+        if self.override:
+            self.override.on_render_stop()
+            self.override = None
         self.shift_renderer()
 
     def reset(self):
@@ -89,6 +98,10 @@ class DMD(object):
         self.shift_renderer(transition)
 
     def remove(self, renderer):
+        if renderer == self.override:
+            self.override.render_stop()
+            self.override = None
+            return
         if renderer in self.stack:
             self.stack.remove(renderer)
         if renderer in self.queue:
@@ -129,6 +142,10 @@ class DMD(object):
         self.frame, self.previous_frame = self.previous_frame, self.frame
         self.frame.fill(0)
 
+        if self.override:
+            self.override.render(self.frame)
+            return self.frame
+
         if not self.renderer and (len(self.stack) > 0 or len(self.queue) > 0):
             raise ValueError("No Renderer")
         elif not self.renderer:
@@ -156,6 +173,7 @@ dmd = DMD()
 
 add = dmd.add
 replace = dmd.replace
+interrupt = dmd.interrupt
 remove = dmd.remove
 enqueue = dmd.enqueue
 clear = dmd.clear

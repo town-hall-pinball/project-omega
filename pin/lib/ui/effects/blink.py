@@ -30,16 +30,17 @@ class Blink(Effect):
             off = duration
         super(Blink, self).__init__("blink", target,
                 [on, off], repeat, once)
+        self.base_color = target.style["color"]
         self.target = target
 
     def action(self, *args, **kwargs):
         if self.index % 2 == 0:
-            self.target.update(color=0xf)
+            self.target.update(color=self.base_color)
         else:
-            self.target.update(color=0x0)
+            self.target.update(color=0x0f - self.base_color)
 
     def on_finish(self):
-        self.target.update(color=0xf)
+        self.target.update(color=self.base_color)
 
 p.effects["blink"] = Blink
 
