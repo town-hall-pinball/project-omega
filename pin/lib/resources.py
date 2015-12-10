@@ -58,7 +58,7 @@ class Movie(object):
 
     def stop(self):
         self.playing = False
-        p.timers.clear(self.timer)
+        p.timers.cancel(self.timer)
 
     def rewind(self):
         self.current = 0

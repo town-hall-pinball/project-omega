@@ -50,10 +50,12 @@ class Mode(Handler):
             p.dmd.interrupt(p.displays["tilt_warning"])
 
     def tilt(self):
+        p.dmd.reset()
         p.dmd.add(p.displays["tilt"])
         p.events.post("tilt")
 
     def slam_tilt(self):
+        p.dmd.reset()
         p.dmd.add(p.displays["slam_tilt"])
         p.events.post("slam_tilt")
 

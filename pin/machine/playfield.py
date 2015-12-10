@@ -23,7 +23,7 @@ import logging
 from pin.lib import p, devices
 from pin.lib.handler import Handler
 
-log = logging.getLogger("pin")
+log = logging.getLogger("pin.ball")
 
 class Mode(Handler):
 
@@ -45,11 +45,18 @@ class Mode(Handler):
         self.on("popper_changed", self.is_home)
         self.on("switch_active", self.check_live)
 
+    def dead(self):
+        p.modes["drop_target"].disable()
+        p.modes["flippers"].disable()
+        p.modes["tilt"].disable()
+        p.modes["slingshots"].disable()
+
     def is_home(self):
         in_trough = p.modes["trough"].counter.count()
         in_popper = p.modes["popper"].counter.count()
         if (in_trough == 3 and in_popper == 1) or in_trough == 4:
             p.events.post("home")
+            p.notify("mode", "Home")
             self.live = False
             return True
         return False
@@ -57,6 +64,7 @@ class Mode(Handler):
     def check_live(self, switch):
         if not self.live and "live" in switch.tags:
             p.events.post("live")
+            p.notify("mode", "Live")
             self.live = True
 
     def popper_eject(self, entering=True):
@@ -65,9 +73,6 @@ class Mode(Handler):
             p.modes["trough"].eject()
         else:
             p.modes["popper"].eject()
-
-    def collect_balls(self):
-        self.collecting_balls = True
 
     def ball_status(self):
         log.debug("ball status: {} trough, {} popper".format(

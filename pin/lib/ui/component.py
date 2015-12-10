@@ -91,13 +91,13 @@ class Component(object):
         self.enabled = True
         self.invalidate()
         if duration:
-            p.timers.clear(self.show_timer)
+            p.timers.cancel(self.show_timer)
             self.show_timer = p.timers.wait(duration, self.hide)
 
     def hide(self):
         self.enabled = False
         self.invalidate()
-        p.timers.clear(self.show_timer)
+        p.timers.cancel(self.show_timer)
 
     def invalidate(self):
         self.dirty = True

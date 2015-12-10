@@ -23,6 +23,8 @@ from pin.lib.handler import Handler
 
 class Mode(Handler):
 
+    tilted = False
+
     def setup(self):
         self.max_time = 0
         self.display = ui.Panel()
@@ -40,6 +42,9 @@ class Mode(Handler):
         self.on("enter_saucer", self.saucer)
         self.on("entering_popper", self.popper)
         self.on("drain", self.drain)
+        self.on("tilt", self.tilt)
+        self.on("slam_tilt", self.tilt)
+        self.on("home", self.home_check)
 
     def on_enable(self):
         self.max_time = p.data["practice_timer"]
@@ -85,5 +90,22 @@ class Mode(Handler):
         p.modes["playfield"].popper_eject(entering=True)
 
     def drain(self):
-        p.modes["trough"].eject()
+        p.modes["playfield"].ball_status()
+        if not self.tilted:
+            p.modes["trough"].eject()
+
+    def tilt(self):
+        p.modes["playfield"].dead()
+        self.tilted = True
+
+    def home_check(self):
+        if self.tilted:
+            self.game_over()
+
+    def game_over(self):
+        ui.notify("GAME OVER", duration=5.0, callback=self.done)
+
+    def done(self):
+        self.disable()
+        p.modes["attract"].restart()
 

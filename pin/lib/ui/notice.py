@@ -45,10 +45,10 @@ class Notice(Panel):
             self.timer = p.timers.wait(self.style["duration"], self.done)
 
     def on_render_stopped(self):
-        p.timers.clear(self.timer)
+        p.timers.cancel(self.timer)
 
     def done(self):
-        p.timers.clear(self.timer)
+        p.timers.cancel(self.timer)
         p.dmd.remove(self)
         if self.callback:
             self.callback()

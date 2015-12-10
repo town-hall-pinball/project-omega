@@ -40,5 +40,6 @@ def init():
         "m": switch("subway_center"),
         "n": switch("subway_left"),
         "z": switch("tilt"),
+        "x": switch("tilt_slam"),
     })
 

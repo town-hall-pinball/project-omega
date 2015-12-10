@@ -168,6 +168,9 @@ class Mode(Handler):
             self.disable()
             p.modes["mm3"].enable()
 
+    def restart(self):
+        self.show.index = 0
+        self.enable()
 
 
 

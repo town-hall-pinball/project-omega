@@ -82,7 +82,7 @@ class Handler(object):
         if ident:
             if ident in self.timers:
                 self.timers.remove(ident)
-            p.timers.clear(ident)
+            p.timers.cancel(ident)
 
 
     def enable(self, enabled=True, transition=None, children=False):
@@ -182,7 +182,7 @@ class Handler(object):
             for i in infos:
                 p.events.off_switch(event, i["listener"])
         for ident in self.timers:
-            p.timers.clear(ident)
+            p.timers.cancel(ident)
 
 
 
