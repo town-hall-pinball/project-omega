@@ -20,13 +20,10 @@
 
 from pin.lib import p, ui
 from pin.lib.handler import Handler
-from pin.config.game import Game as BaseGame
 
-class Mode(BaseGame):
+class Mode(Handler):
 
     def setup(self):
-        super(Mode, self).setup()
-        self.max_players = 1
         self.max_time = 0
         self.display = ui.Panel()
         self.time = ui.Text("0:00", font="c128_16")
@@ -45,11 +42,10 @@ class Mode(BaseGame):
         self.on("drain", self.drain)
 
     def on_enable(self):
-        super(Mode, self).on_enable()
         self.max_time = p.data["practice_timer"]
         self.update_time()
         self.enable_playfield()
-        self.trough.eject()
+        p.modes["trough"].eject()
 
     def on_disable(self):
         p.timers.cancel(self.ticker)

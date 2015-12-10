@@ -30,23 +30,15 @@ class Mode(Handler):
     live = False
 
     def setup(self):
-        self.drop_target = p.modes["drop_target"]
-        self.flippers = p.modes["flippers"]
-        self.plunger = p.modes["plunger"]
-        self.popper = p.modes["popper"]
-        self.saucer = p.modes["saucer"]
-        self.slingshots = p.modes["slingshots"]
-        self.trough = p.modes["trough"]
-
         self.handlers = [
-            self.drop_target,
-            self.flippers,
-            self.plunger,
-            self.popper,
-            self.saucer,
+            p.modes["drop_target"],
+            p.modes["flippers"],
+            p.modes["plunger"],
+            p.modes["popper"],
+            p.modes["saucer"],
             p.modes["tilt"],
-            self.trough,
-            self.slingshots,
+            p.modes["trough"],
+            p.modes["slingshots"],
         ]
 
         self.on("trough_changed", self.is_home)
@@ -54,8 +46,8 @@ class Mode(Handler):
         self.on("switch_active", self.check_live)
 
     def is_home(self):
-        in_trough = self.trough.counter.count()
-        in_popper = self.popper.counter.count()
+        in_trough = p.modes["trough"].counter.count()
+        in_popper = p.modes["popper"].counter.count()
         if (in_trough == 3 and in_popper == 1) or in_trough == 4:
             p.events.post("home")
             self.live = False
@@ -63,9 +55,7 @@ class Mode(Handler):
         return False
 
     def check_live(self, switch):
-        #log.debug("live check on {}".format(switch.name))
         if not self.live and "live" in switch.tags:
-            #log.debug("live on " + switch.name)
             p.events.post("live")
             self.live = True
 
@@ -76,10 +66,13 @@ class Mode(Handler):
         else:
             p.modes["popper"].eject()
 
+    def collect_balls(self):
+        self.collecting_balls = True
+
     def ball_status(self):
         log.debug("ball status: {} trough, {} popper".format(
-                self.trough.counter.count(),
-                self.popper.counter.count()))
+                p.modes["trough"].counter.count(),
+                p.modes["popper"].counter.count()))
 
 
 
