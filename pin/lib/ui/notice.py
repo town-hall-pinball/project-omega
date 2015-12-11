@@ -25,7 +25,7 @@ from .text import Text
 
 class Notice(Panel):
 
-    def __init__(self, duration=2.0, callback=None,
+    def __init__(self, duration=None, callback=None,
             defaults=None, **style):
         defaults = defaults or {}
         style["duration"] = duration
