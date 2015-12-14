@@ -139,4 +139,6 @@ def notify(mtype, message):
     logging.getLogger("pin.notice").debug(message)
     events.post("notice", mtype, message)
 
+def debug(message):
+    logging.getLogger("pin").debug(message)
 

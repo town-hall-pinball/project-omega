@@ -31,6 +31,7 @@ class Mode(Handler):
         self.left = p.flippers["left"]
         self.right = p.flippers["right"]
         self.upper = p.flippers["right_up"]
+        self.on("mode_magnets_enable", self.magnets_enable)
 
     def on_enable(self):
         self.left.auto_pulse()
@@ -53,6 +54,10 @@ class Mode(Handler):
         p.lamps["ramp_left_sign_bottom"].disable()
         p.notify("mode-disabled", "loop flipper disabled")
         p.events.post("loop_flipper_disable")
+
+    def magnets_enable(self):
+        if self.upper.auto:
+            p.lamps["ramp_left_sign_bottom"].patter()
 
 
 def init():

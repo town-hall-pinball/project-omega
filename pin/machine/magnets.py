@@ -42,6 +42,5 @@ class Mode(Handler):
         p.lamps["ramp_left_sign_bottom"].disable()
 
     def adjust_lamp(self):
-        print "****** ENABLE"
         p.lamps["ramp_left_sign_bottom"].enable()
 
