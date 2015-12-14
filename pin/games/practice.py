@@ -46,11 +46,14 @@ class Mode(Handler):
         self.on("tilt", self.tilt)
         self.on("slam_tilt", self.tilt)
         self.on("home", self.home_check)
+        self.on("switch_subway_left", self.subway_left)
+        self.on("switch_drop_target", self.drop_target)
 
     def on_enable(self):
         self.max_time = p.data["practice_timer"]
         self.titled = False
         self.expired = False
+        self.start_time = None
         self.update_time()
         self.enable_playfield()
         p.modes["trough"].eject()
@@ -96,6 +99,12 @@ class Mode(Handler):
     def popper(self):
         p.modes["playfield"].popper_eject(entering=True)
 
+    def subway_left(self):
+        p.modes["drop_target"].up()
+
+    def drop_target(self):
+        p.modes["drop_target"].down()
+
     def drain(self):
         p.modes["playfield"].ball_status()
         if not self.tilted and not self.expired:
@@ -116,4 +125,6 @@ class Mode(Handler):
     def done(self):
         self.disable()
         p.modes["attract"].restart()
+
+
 

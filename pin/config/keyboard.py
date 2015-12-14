@@ -23,23 +23,27 @@ from pin.lib.keyboard import event, switch
 
 def init():
     keyboard.register({
-        "d": switch("trough_4"),
-        "s": switch("saucer"),
-    "space": switch("start_button"),
-       "cs": switch("buy_extra_ball_button"),
-        "l": switch("ball_launch_button"),
         "1": switch("coin_left"),
         "7": switch("service_enter"),
         "8": switch("service_down"),
         "9": switch("service_up"),
         "0": switch("service_exit"),
+
+        "d": switch("trough_4"),
+        "l": switch("ball_launch_button"),
+        "p": switch("drop_target", active_only=True),
+        "m": switch("subway_center"),
+        "n": switch("subway_left"),
+        "s": switch("saucer"),
+       "cs": switch("buy_extra_ball_button"),
+        "x": switch("tilt_slam"),
+        "z": switch("tilt"),
+
+    "space": switch("start_button"),
         "[": switch("flipper_left"),
         "]": switch("flipper_right"),
         ",": switch("slingshot_left"),
         ".": switch("slingshot_right"),
-        "m": switch("subway_center"),
-        "n": switch("subway_left"),
-        "z": switch("tilt"),
-        "x": switch("tilt_slam"),
+
     })
 
