@@ -40,6 +40,19 @@ class Mode(Handler):
         self.left.auto_cancel()
         self.right.auto_cancel()
         self.upper.auto_cancel()
+        p.lamps["ramp_left_sign_bottom"].disable()
+
+    def enable_loop(self):
+        self.upper.auto_pulse()
+        p.lamps["ramp_left_sign_bottom"].patter()
+        p.notify("mode", "loop flipper enabled")
+        p.events.post("loop_flipper_enable")
+
+    def disable_loop(self):
+        self.upper.auto_cancel()
+        p.lamps["ramp_left_sign_bottom"].disable()
+        p.notify("mode-disabled", "loop flipper disabled")
+        p.events.post("loop_flipper_disable")
 
 
 def init():

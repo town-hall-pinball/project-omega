@@ -25,6 +25,7 @@ class Mode(Handler):
 
     tilted = False
     expired = False
+    magnets = True
 
     def setup(self):
         self.max_time = 0
@@ -53,6 +54,7 @@ class Mode(Handler):
         self.max_time = p.data["practice_timer"]
         self.titled = False
         self.expired = False
+        self.magnets = True
         self.start_time = None
         self.update_time()
         self.enable_playfield()
@@ -71,6 +73,7 @@ class Mode(Handler):
         p.modes["playfield"].enable(children=True)
         p.modes["kickback"].enable()
         p.modes["magnets"].enable()
+        p.modes["flippers"].enable_loop()
 
     def update_time(self):
         elapsed = 0
@@ -91,6 +94,14 @@ class Mode(Handler):
         self.auto_launch = True
 
     def saucer(self):
+        if self.magnets:
+            self.magnets = False
+            ui.notify("MAGNETS DISABLED", duration=2.0)
+            p.modes["magnets"].disable()
+        else:
+            self.magnets = True
+            ui.notify("MAGNETS ENABLED", duration=2.0)
+            p.modes["magnets"].enable()
         self.wait(2.0, self.eject_saucer)
 
     def eject_saucer(self):

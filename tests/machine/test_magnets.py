@@ -38,6 +38,8 @@ class TestMagnets(unittest.TestCase):
         self.assertEquals("patter", p.coils["magnet_left"].auto["schedule"])
         self.assertEquals("patter", p.coils["magnet_center"].auto["schedule"])
         self.assertEquals("patter", p.coils["magnet_right"].auto["schedule"])
+        self.assertEquals("enable",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
 
     def test_disable(self):
         self.mode.enable()
@@ -45,4 +47,19 @@ class TestMagnets(unittest.TestCase):
         self.assertFalse(p.coils["magnet_left"].auto)
         self.assertFalse(p.coils["magnet_center"].auto)
         self.assertFalse(p.coils["magnet_right"].auto)
+
+    def test_sign(self):
+        self.assertEquals("disable",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+        self.mode.enable()
+        self.assertEquals("enable",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+        p.modes["flippers"].enable_loop()
+        self.assertEquals("patter",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+        p.modes["flippers"].disable_loop()
+        fixtures.loop()
+        self.assertEquals("enable",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+
 
