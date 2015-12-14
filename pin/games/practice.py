@@ -24,6 +24,7 @@ from pin.lib.handler import Handler
 class Mode(Handler):
 
     tilted = False
+    expired = False
 
     def setup(self):
         self.max_time = 0
@@ -48,6 +49,8 @@ class Mode(Handler):
 
     def on_enable(self):
         self.max_time = p.data["practice_timer"]
+        self.titled = False
+        self.expired = False
         self.update_time()
         self.enable_playfield()
         p.modes["trough"].eject()
@@ -72,6 +75,9 @@ class Mode(Handler):
         remaining = self.max_time - elapsed
         if remaining < 0:
             remaining = 0
+            p.modes["playfield"].dead()
+            self.expired = True
+            p.timers.cancel(self.ticker)
         minutes = int(remaining / 60)
         seconds = int(remaining % 60)
         self.time.show("{}:{:02d}".format(minutes, seconds))
@@ -91,15 +97,16 @@ class Mode(Handler):
 
     def drain(self):
         p.modes["playfield"].ball_status()
-        if not self.tilted:
+        if not self.tilted and not self.expired:
             p.modes["trough"].eject()
 
     def tilt(self):
         p.modes["playfield"].dead()
         self.tilted = True
+        p.timers.cancel(self.ticker)
 
     def home_check(self):
-        if self.tilted:
+        if self.tilted or self.expired:
             self.game_over()
 
     def game_over(self):

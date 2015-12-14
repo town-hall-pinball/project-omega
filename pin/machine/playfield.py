@@ -50,6 +50,7 @@ class Mode(Handler):
         p.modes["flippers"].disable()
         p.modes["tilt"].disable()
         p.modes["slingshots"].disable()
+        p.modes["plunger"].disable()
 
     def is_home(self):
         in_trough = p.modes["trough"].counter.count()
