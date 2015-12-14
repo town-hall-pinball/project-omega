@@ -69,6 +69,9 @@ class Mode(Handler):
         if "disable" in rule:
             rule["disable"].deactivate()
             return
+        if "enable" in rule:
+            rule["enable"].activate()
+            return
 
         source = rule.get("from")
         target = rule.get("to")

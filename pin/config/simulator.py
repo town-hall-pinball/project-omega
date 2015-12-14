@@ -60,6 +60,9 @@ def init():
         "switch:popper_2=enable": [
             { "from": sw["popper_2"], "to": sw["popper"] }
         ],
+        "coil:drop_target_down=pulse": [
+            { "enable": sw["drop_target"] }
+        ],
         "coil:drop_target_up=pulse": [
             { "disable": sw["drop_target"] }
         ]

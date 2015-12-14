@@ -54,6 +54,7 @@ class Mode(Handler):
         self.update_time()
         self.enable_playfield()
         p.modes["trough"].eject()
+        p.modes["drop_target"].down()
 
     def on_disable(self):
         p.timers.cancel(self.ticker)

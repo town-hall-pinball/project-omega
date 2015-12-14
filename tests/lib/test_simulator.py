@@ -92,6 +92,15 @@ class TestSimulator(unittest.TestCase):
         fixtures.loop()
         self.assertFalse(switch.active)
 
+    def test_enable(self):
+        switch = p.switches["drop_target"]
+        switch.deactivate()
+        fixtures.loop()
+        self.assertFalse(switch.active)
+        p.coils["drop_target_down"].pulse()
+        fixtures.loop()
+        self.assertTrue(switch.active)
+
     def test_no_free_balls(self):
         p.switches["trough_4"].activate()
         fixtures.loop()

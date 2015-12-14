@@ -60,7 +60,6 @@ def init():
         "drop_target": {
             "label": "Drop Target",
             "device": "S51",
-            "tags": ["live"],
         },
         "flipper_left": {
             "label": "Flipper, Left",
