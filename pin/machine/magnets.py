@@ -24,7 +24,6 @@ from pin.lib.handler import Handler
 class Mode(Handler):
 
     def on_enable(self):
-        p.notify("mode", "Magnet assist")
         p.coils["magnet_left"].auto_patter(
                 p.switches["magnet_left"], 1, 1)
         p.coils["magnet_center"].auto_patter(
@@ -33,7 +32,6 @@ class Mode(Handler):
                 p.switches["magnet_right"], 1, 1)
 
     def on_disable(self):
-        p.notify("mode", "Magnets disabled")
         p.coils["magnet_left"].auto_cancel()
         p.coils["magnet_center"].auto_cancel()
         p.coils["magnet_right"].auto_cancel()

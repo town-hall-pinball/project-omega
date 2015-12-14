@@ -32,11 +32,9 @@ class Mode(Handler):
         self.on_switch("shooter_lane", self.auto_launch_check, 0.25)
 
     def on_enable(self):
-        p.notify("mode", "Plunger enabled")
         self.auto = False
 
     def on_disable(self):
-        p.notify("mode", "Plunger disabled")
         p.lamps["ball_launch_button"].disable()
 
     def shooter_lane_active(self):

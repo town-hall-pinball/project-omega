@@ -24,12 +24,10 @@ from pin.lib.handler import Handler
 class Mode(Handler):
 
     def on_enable(self):
-        p.notify("mode", "Slingshots enabled")
         p.coils["slingshot_left"].auto_pulse(p.switches["slingshot_left"])
         p.coils["slingshot_right"].auto_pulse(p.switches["slingshot_right"])
 
     def on_disable(self):
-        p.notify("mode", "Slingshots disabled")
         p.coils["slingshot_left"].auto_cancel()
         p.coils["slingshot_right"].auto_cancel()
 

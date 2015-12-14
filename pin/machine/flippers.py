@@ -33,12 +33,10 @@ class Mode(Handler):
         self.upper = p.flippers["right_up"]
 
     def on_enable(self):
-        p.notify("mode", "Flippers enabled")
         self.left.auto_pulse()
         self.right.auto_pulse()
 
     def on_disable(self):
-        p.notify("mode", "Flippers disabled")
         self.left.auto_cancel()
         self.right.auto_cancel()
         self.upper.auto_cancel()

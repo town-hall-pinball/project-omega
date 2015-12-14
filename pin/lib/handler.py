@@ -91,7 +91,7 @@ class Handler(object):
             return
         if self.enabled:
             return
-        log.debug("{} enabled".format(self.name))
+        p.notify("mode", "{} enabled".format(self.name))
         self.enabled = True
         if self.display:
             p.dmd.add(self.display, transition)
@@ -119,7 +119,7 @@ class Handler(object):
     def disable(self):
         if not self.enabled:
             return
-        log.debug("{} disabled".format(self.name))
+        p.notify("mode-disabled", "{} disabled".format(self.name))
         self.enabled = False
         if self.display:
             p.dmd.remove(self.display)
