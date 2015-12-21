@@ -49,6 +49,10 @@ class Mode(Handler):
         p.dmd.clear()
         self.selected.index = 0
         self.update()
+        p.mixer.play("game_select")
+
+    def on_disable(self):
+        p.mixer.stop()
 
     def previous(self):
         self.selected.previous()

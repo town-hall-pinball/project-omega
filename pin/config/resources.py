@@ -69,6 +69,7 @@ def load():
     resources.register_music(
         ("credits",         "music/Credits.ogg",       { "start_time": 2.25 }),
         ("introduction",    "music/Introduction.ogg",  { "start_time": 0.50 }),
+        ("game_select",     "music/game_select.ogg",   { "loop": True }),
         ("pinball_wizard",  "music/pinball_wizard.ogg",{ "start_time": 1.00 }),
     )
     resources.load_fonts(

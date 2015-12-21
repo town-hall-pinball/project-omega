@@ -37,10 +37,10 @@ base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "resources")
 
 class Music(object):
 
-    def __init__(self, path, start_time=0):
+    def __init__(self, path, loop=False, start_time=0):
         self.path = path
         self.start_time = start_time
-
+        self.loop = loop
 
 class Movie(object):
 
