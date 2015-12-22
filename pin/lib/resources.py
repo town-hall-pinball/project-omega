@@ -147,10 +147,10 @@ class BitmapFont(object):
             self.draw_char(frame, ch, xpos, width)
         else:
             frame.blit(self.bitmap, (xpos, 0), area=area)
-            if color:
-                actual = (0, 0, 0xff - color[2])
-                frame.fill(actual, (xpos, 0, width, self.char_size),
-                        special_flags=BLEND_SUB)
+        if color:
+            actual = (0, 0, 0xff - color[2])
+            frame.fill(actual, (xpos, 0, width, self.char_size),
+                    special_flags=BLEND_SUB)
         return self.widths[ch] + self.tracking
 
     def draw_char(self, frame, ch, xpos, width):
