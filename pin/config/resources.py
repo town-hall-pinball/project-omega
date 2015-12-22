@@ -68,7 +68,7 @@ def load():
         ("warning",             "sounds/warning.ogg")
     )
     resources.register_music(
-        ("credits",         "music/Credits.ogg",       { "start_time": 2.25 }),
+        ("credits",         "music/Credits.ogg",       { "start_time": 2.25, "loop": True}),
         ("introduction",    "music/Introduction.ogg",  { "start_time": 0.50 }),
         ("game_select",     "music/game_select.ogg",   { "loop": True }),
         ("pinball_wizard",  "music/pinball_wizard.ogg",{ "start_time": 1.00 }),

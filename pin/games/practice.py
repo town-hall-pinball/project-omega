@@ -60,6 +60,7 @@ class Mode(Handler):
         self.enable_playfield()
         p.modes["trough"].eject()
         p.modes["drop_target"].down()
+        p.mixer.play("credits")
 
     def on_disable(self):
         p.timers.cancel(self.ticker)
@@ -85,6 +86,7 @@ class Mode(Handler):
             p.modes["playfield"].dead()
             self.expired = True
             p.timers.cancel(self.ticker)
+            p.mixer.stop()
         minutes = int(remaining / 60)
         seconds = int(remaining % 60)
         self.time.show("{}:{:02d}".format(minutes, seconds))
@@ -124,6 +126,7 @@ class Mode(Handler):
     def tilt(self):
         p.modes["playfield"].dead()
         self.tilted = True
+        p.mixer.stop()
         p.timers.cancel(self.ticker)
 
     def home_check(self):
