@@ -30,7 +30,7 @@ class Mode(Handler):
     def setup(self):
         self.max_time = 0
         self.display = ui.Panel()
-        self.time = ui.Text("0:00", font="c128_16")
+        self.time = ui.Text("0:00", font="bm10w")
         self.display.add((self.time,))
         self.ticker = None
         self.start_time = None

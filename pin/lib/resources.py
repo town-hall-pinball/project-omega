@@ -20,8 +20,10 @@
 
 import os
 import re
+import json
 import logging
 import pygame
+from pygame.locals import *
 import struct
 
 from pin.lib import p, dmd, util
@@ -81,11 +83,96 @@ class Movie(object):
         return (p.dmd.width, p.dmd.height)
 
 
+class BitmapFont(object):
+
+    def __init__(self, path):
+        self.bitmap = load_dmd_animation(path)[0]
+        metrics_file = re.sub(r"\.dmd$", ".metrics.json", path)
+        with open(metrics_file) as fp:
+            self.info = json.load(fp)
+
+        self.info["left"] = self.info.get("left", 0)
+        self.info["left_override"] = self.info.get("left_override", {})
+        self.info["chars"] = self.info.get("chars", {})
+        self.tracking = self.info.get("tracking", 1)
+
+        self.widths = {}
+        self.lefts = {}
+        left = self.info["left"]
+        self.char_size = self.bitmap.get_width() / 10
+        for ch, width in self.info["widths"]:
+            if width > 0:
+                self.widths[ch] = width
+                self.lefts[ch] = self.info["left_override"].get(ch, left)
+
+
+    def metrics(self, text):
+        result = []
+        for char in text:
+            if char not in self.widths:
+                result += [(0, 0, 0, 0, 0)]
+            else:
+                result += [(0, self.widths[char], 0, self.char_size,
+                        self.widths[char] + self.tracking)]
+        return result
+
+    def get_ascent(self):
+        return self.char_size
+
+    def render(self, text, antialias=True, color=None, background=None):
+        width = 0
+        metrics = self.metrics(text)
+        width += reduce(lambda a, b: a + b[1], metrics, 0)
+        width += reduce(lambda a, b: a + b[4], metrics[:-1], 0)
+        frame = dmd.create_frame(width, self.char_size)
+
+        xpos = 0
+        for ch in text:
+            xpos += self.render_char(frame, ch, xpos, color)
+        return frame
+
+    def render_char(self, frame, ch, xpos, color):
+        if ch not in self.widths:
+            return 0
+        offset = ord(ch) - ord(' ')
+        if offset < 0 or offset >= 96:
+            offset = ord(' ')
+        x = self.char_size * (offset % 10)
+        y = self.char_size * (offset / 10)
+        width = self.widths[ch]
+        area = (x + self.lefts[ch], y, self.widths[ch], self.char_size)
+        #print "char", ch, "area", area, "width", width
+
+        if ch in self.info["chars"]:
+            self.draw_char(frame, ch, xpos, width)
+        else:
+            frame.blit(self.bitmap, (xpos, 0), area=area)
+        if color:
+            actual = (0, 0, 0xff - color[2])
+            frame.fill(actual, (xpos, 0, width, self.char_size),
+                    special_flags=BLEND_SUB)
+        return self.widths[ch] + self.tracking
+
+    def draw_char(self, frame, ch, xpos, width):
+        dots = dmd.create_dots(frame)
+        data = self.info["chars"][ch]
+        for y in xrange(self.char_size):
+            for x in xrange(width):
+                value = 0xff if data[y][x] == "*" else 0x0
+                dots[xpos + x,y] = (value, value, value, value)
+
+
 def load_fonts(*args):
-    for key, filename, size in args:
+    for arg in args:
+        key = arg[0]
+        filename = arg[1]
+        size = arg[2] if len(arg) == 3 else None
         path = os.path.join(base_dir, filename)
         log.debug("Loading font {}: {}".format(key, filename))
-        add("font", fonts, key, pygame.font.Font(path, size))
+        if filename.endswith(".dmd"):
+            add("font", fonts, key, BitmapFont(path))
+        else:
+            add("font", fonts, key, pygame.font.Font(path, size))
 
 def alias_fonts(*args):
     for source, target in args:
