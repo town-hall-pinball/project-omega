@@ -28,6 +28,7 @@ def init():
         "8": switch("service_down"),
         "9": switch("service_up"),
         "0": switch("service_exit"),
+       "\\":  event("simulator_reset"),
 
         "d": switch("trough_4"),
         "l": switch("ball_launch_button"),

@@ -135,3 +135,16 @@ class TestSimulator(unittest.TestCase):
         fixtures.loop()
         self.assertTrue(listener.called)
 
+    def test_reset(self):
+        p.switches["trough_2"].deactivate()
+        p.switches["trough_3"].deactivate()
+        p.switches["popper_2"].activate()
+        fixtures.loop()
+        p.now = 1
+        p.events.post("simulator_reset")
+        fixtures.loop()
+        self.assertTrue(p.switches["trough"].active)
+        self.assertTrue(p.switches["trough_2"].active)
+        self.assertTrue(p.switches["trough_3"].active)
+        self.assertTrue(p.switches["popper"].active)
+

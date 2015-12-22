@@ -32,6 +32,7 @@ class Mode(Handler):
         search.run()
         self.title.effect("blink", on=0.4, off=0.1, repeat=4)
         self.wait(3.0, self.disable)
+        p.mixer.play("warning")
 
     def on_disable(self):
         p.modes["attract"].enable()

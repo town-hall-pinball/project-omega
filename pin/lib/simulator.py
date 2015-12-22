@@ -20,7 +20,7 @@
 
 import logging
 
-from . import p
+from . import p, ui
 from .handler import Handler
 
 log = logging.getLogger("pin.sim")
@@ -37,6 +37,7 @@ class Mode(Handler):
         p.events.on("data_simulator_enabled", self.update)
         self.on("coil", self.handle_device)
         self.on("switch", self.handle_device)
+        self.on("simulator_reset", self.reset_request)
         self.update()
 
     def update(self):
@@ -47,15 +48,26 @@ class Mode(Handler):
 
     def on_enable(self):
         log.info("started")
+        self.reset()
+
+    def clear(self):
+        for switch in set(self.balls):
+            switch.deactivate()
+            self.balls.remove(switch)
+
+    def reset(self):
         for switch in initial:
             switch.activate()
             self.balls.add(switch)
 
+    def reset_request(self):
+        ui.notify("SIM RESET", duration=2.0)
+        self.clear()
+        self.wait(0, self.reset)
+
     def on_disable(self):
         log.info("stop")
-        for switch in set(self.balls):
-            switch.deactivate()
-            self.balls.remove(switch)
+        self.clear()
 
     def handle_device(self, device, state=None):
         condition = "{}:{}={}".format(device.type, device.name,
