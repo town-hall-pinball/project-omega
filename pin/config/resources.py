@@ -56,6 +56,7 @@ def load():
     )
     resources.load_sounds(
         ("boot",                "sounds/boot.ogg"),
+        ("tilt_warning",        "sounds/tilt_warning.ogg"),
         ("settings_cleared",    "sounds/settings_cleared.ogg"),
         ("service_cancel",      "sounds/service/cancel.ogg"),
         ("service_enter",       "sounds/service/enter.ogg"),

@@ -47,6 +47,7 @@ class Mode(Handler):
         if self.warnings > p.data["tilt_warnings"]:
             self.tilt()
         else:
+            p.mixer.play("tilt_warning")
             p.dmd.interrupt(p.displays["tilt_warning"])
 
     def tilt(self):
