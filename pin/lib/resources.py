@@ -92,6 +92,7 @@ class BitmapFont(object):
 
         self.info["left"] = self.info.get("left", 0)
         self.info["left_override"] = self.info.get("left_override", {})
+        self.info["chars"] = self.info.get("chars", {})
 
         self.widths = {}
         self.lefts = {}
@@ -139,8 +140,20 @@ class BitmapFont(object):
         width = self.widths[ch]
         area = (x + self.lefts[ch], y, self.widths[ch], self.char_size)
         #print "char", ch, "area", area, "width", width
-        frame.blit(self.bitmap, (xpos, 0), area=area)
+
+        if ch in self.info["chars"]:
+            self.draw_char(frame, ch, xpos, width)
+        else:
+            frame.blit(self.bitmap, (xpos, 0), area=area)
         return self.widths[ch] + 1
+
+    def draw_char(self, frame, ch, xpos, width):
+        dots = dmd.create_dots(frame)
+        data = self.info["chars"][ch]
+        for y in xrange(self.char_size):
+            for x in xrange(width):
+                value = 0xff if data[y][x] == "*" else 0x0
+                dots[xpos + x,y] = (value, value, value, value)
 
 
 def load_fonts(*args):
