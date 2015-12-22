@@ -117,6 +117,7 @@ class Mode(Handler):
     game_over = ui.Text("GAME OVER")
     anim = ui.Movie("x2")
     proc = ui.Image("p-roc")
+    first = True
 
     def setup(self):
         credits = p.displays["credits"].display
@@ -142,8 +143,10 @@ class Mode(Handler):
         self.light_show = util.LightShow("attract.light", 0.1, lights)
 
     def on_enable(self):
+        if self.first:
+            self.first = False
+            p.mixer.play("introduction")
         self.show.start()
-        p.mixer.play("introduction")
         self.mm3.enable()
         self.light_show.start()
 

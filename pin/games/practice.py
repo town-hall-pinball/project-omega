@@ -131,6 +131,7 @@ class Mode(Handler):
             self.game_over()
 
     def game_over(self):
+        p.mixer.play("introduction")
         ui.notify("GAME OVER", duration=5.0, callback=self.done)
 
     def done(self):
