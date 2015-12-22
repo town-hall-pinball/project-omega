@@ -23,6 +23,7 @@ import re
 import json
 import logging
 import pygame
+from pygame.locals import *
 import struct
 
 from pin.lib import p, dmd, util
@@ -127,10 +128,10 @@ class BitmapFont(object):
 
         xpos = 0
         for ch in text:
-            xpos += self.render_char(frame, ch, xpos)
+            xpos += self.render_char(frame, ch, xpos, color)
         return frame
 
-    def render_char(self, frame, ch, xpos):
+    def render_char(self, frame, ch, xpos, color):
         if ch not in self.widths:
             return 0
         offset = ord(ch) - ord(' ')
@@ -146,6 +147,10 @@ class BitmapFont(object):
             self.draw_char(frame, ch, xpos, width)
         else:
             frame.blit(self.bitmap, (xpos, 0), area=area)
+            if color:
+                actual = (0, 0, 0xff - color[2])
+                frame.fill(actual, (xpos, 0, width, self.char_size),
+                        special_flags=BLEND_SUB)
         return self.widths[ch] + self.tracking
 
     def draw_char(self, frame, ch, xpos, width):
