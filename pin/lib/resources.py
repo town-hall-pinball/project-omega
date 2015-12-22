@@ -93,6 +93,7 @@ class BitmapFont(object):
         self.info["left"] = self.info.get("left", 0)
         self.info["left_override"] = self.info.get("left_override", {})
         self.info["chars"] = self.info.get("chars", {})
+        self.tracking = self.info.get("tracking", 2)
 
         self.widths = {}
         self.lefts = {}
@@ -111,7 +112,7 @@ class BitmapFont(object):
                 result += [(0, 0, 0, 0, 0)]
             else:
                 result += [(0, self.widths[char], 0, self.char_size,
-                        self.widths[char] + 1)]
+                        self.widths[char] + self.tracking)]
         return result
 
     def get_ascent(self):
@@ -145,7 +146,7 @@ class BitmapFont(object):
             self.draw_char(frame, ch, xpos, width)
         else:
             frame.blit(self.bitmap, (xpos, 0), area=area)
-        return self.widths[ch] + 1
+        return self.widths[ch] + self.tracking
 
     def draw_char(self, frame, ch, xpos, width):
         dots = dmd.create_dots(frame)
