@@ -20,6 +20,7 @@
 
 import os
 import re
+import json
 import logging
 import pygame
 import struct
@@ -81,11 +82,78 @@ class Movie(object):
         return (p.dmd.width, p.dmd.height)
 
 
+class BitmapFont(object):
+
+    def __init__(self, path):
+        self.bitmap = load_dmd_animation(path)[0]
+        metrics_file = re.sub(r"\.dmd$", ".metrics.json", path)
+        with open(metrics_file) as fp:
+            self.info = json.load(fp)
+
+        self.info["left"] = self.info.get("left", 0)
+        self.info["left_override"] = self.info.get("left_override", {})
+
+        self.widths = {}
+        self.lefts = {}
+        left = self.info["left"]
+        self.char_size = self.bitmap.get_width() / 10
+        for ch, width in self.info["widths"]:
+            if width > 0:
+                self.widths[ch] = width
+                self.lefts[ch] = self.info["left_override"].get(ch, left)
+
+
+    def metrics(self, text):
+        result = []
+        for char in text:
+            if char not in self.widths:
+                result += [(0, 0, 0, 0, 0)]
+            else:
+                result += [(0, self.widths[char], 0, self.char_size,
+                        self.widths[char] + 1)]
+        return result
+
+    def get_ascent(self):
+        return self.char_size
+
+    def render(self, text, antialias=True, color=None, background=None):
+        width = 0
+        metrics = self.metrics(text)
+        width += reduce(lambda a, b: a + b[1], metrics, 0)
+        width += reduce(lambda a, b: a + b[4], metrics[:-1], 0)
+        frame = dmd.create_frame(width, self.char_size)
+
+        xpos = 0
+        for ch in text:
+            xpos += self.render_char(frame, ch, xpos)
+        return frame
+
+    def render_char(self, frame, ch, xpos):
+        if ch not in self.widths:
+            return 0
+        offset = ord(ch) - ord(' ')
+        if offset < 0 or offset >= 96:
+            offset = ord(' ')
+        x = self.char_size * (offset % 10)
+        y = self.char_size * (offset / 10)
+        width = self.widths[ch]
+        area = (x + self.lefts[ch], y, self.widths[ch], self.char_size)
+        #print "char", ch, "area", area, "width", width
+        frame.blit(self.bitmap, (xpos, 0), area=area)
+        return self.widths[ch] + 1
+
+
 def load_fonts(*args):
-    for key, filename, size in args:
+    for arg in args:
+        key = arg[0]
+        filename = arg[1]
+        size = arg[2] if len(arg) == 3 else None
         path = os.path.join(base_dir, filename)
         log.debug("Loading font {}: {}".format(key, filename))
-        add("font", fonts, key, pygame.font.Font(path, size))
+        if filename.endswith(".dmd"):
+            add("font", fonts, key, BitmapFont(path))
+        else:
+            add("font", fonts, key, pygame.font.Font(path, size))
 
 def alias_fonts(*args):
     for source, target in args:

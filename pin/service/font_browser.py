@@ -29,7 +29,7 @@ class Mode(Handler):
         self.fonts = util.Cycle(sorted(p.fonts.keys()))
         self.display = ui.Panel(name="font_viewer")
         self.label = ui.Text(top=0, right=0, font="r7", padding=[1, 1])
-        self.text = ui.Text(self.sample)
+        self.text = ui.Text(self.sample, fill=0x0)
         self.display.add([self.label, self.text])
 
         self.on("switch_service_enter", self.start)
