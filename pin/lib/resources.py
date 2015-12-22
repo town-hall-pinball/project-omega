@@ -94,7 +94,7 @@ class BitmapFont(object):
         self.info["left"] = self.info.get("left", 0)
         self.info["left_override"] = self.info.get("left_override", {})
         self.info["chars"] = self.info.get("chars", {})
-        self.tracking = self.info.get("tracking", 2)
+        self.tracking = self.info.get("tracking", 1)
 
         self.widths = {}
         self.lefts = {}

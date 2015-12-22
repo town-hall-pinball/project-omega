@@ -31,7 +31,7 @@ class Mode(Handler):
         self.display = ui.Panel(name="font_viewer")
         self.label = ui.Text(top=0, right=0, font="r7", padding=[1, 1])
         self.text = ui.Text(self.sample)
-        self.display.add([self.label, self.text])
+        self.display.add([self.text, self.label])
 
         self.on("switch_service_enter", self.start)
         self.on("switch_service_up", self.next)
