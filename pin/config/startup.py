@@ -72,6 +72,8 @@ def init(load_resources=True):
         "service.virtual_palette",
         "service.service",
 
+        "games.level7",
+        "games.simple",
         "games.practice",
     ))
     extra.init()

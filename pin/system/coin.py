@@ -34,13 +34,10 @@ class CreditsDisplay(object):
         p.events.on("data_credits", self.update)
 
     def update(self):
+        self.amount.show(util.credits_string())
+
         free_play = p.data["free_play"]
         credits = p.data["credits"]
-
-        if free_play:
-            self.amount.show("FREE PLAY")
-        else:
-            self.amount.show("CREDITS {:0.2f}".format(credits))
 
         if free_play or credits >= 1:
             self.message.show("PRESS START")
@@ -78,7 +75,8 @@ class Mode(Handler):
                     p.modes["pinball_missing"].enable()
                 else:
                     p.modes["game_menu"].enable()
-                    p.data["credits"] -= 1
+            else:
+                p.events.post("new_player")
         else:
             if p.modes["attract"].enabled:
                 self.show_credits()

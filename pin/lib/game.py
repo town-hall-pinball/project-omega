@@ -40,7 +40,16 @@ def create_player(index):
     return player
 
 
-class Game(Handler):
+class Base(Handler):
+
+    def setup(self):
+        self.handlers = [
+            p.modes["playfield"],
+            p.modes["plunger"],
+        ]
+
+
+class Game(Base):
 
     name = None
     active = False
@@ -51,7 +60,9 @@ class Game(Handler):
     live = False
 
     def setup(self):
+        super(Game, self).setup()
         self.on("drain", self.request_dead_ball_check)
+        self.on("new_player", self.new_player_check)
 
     def on_enable(self):
         if p.game:
@@ -61,10 +72,10 @@ class Game(Handler):
         self.order = util.Cycle()
         self.active = True
         self.ball = 1
-        self.add_player()
+        #self.add_player()
         p.players = self.players
-        p.player = self.players[0]
-        p.events.post("next_player")
+        #p.player = self.players[0]
+        #p.events.post("next_player")
         self.playfield_enable()
 
     def playfield_enable(self):
@@ -77,16 +88,25 @@ class Game(Handler):
     def playfield_disable(self):
         pass
 
-    def add_player(self):
+    def new_player_check(self):
         if self.ball == 1 and len(self.players) < self.max_players:
-            index = len(self.players)
-            player = create_player(index)
-            self.players += [player]
-            self.order.items += [player]
-            p.events.post("add_player", player)
-            p.notify("game", "Add Player {}".format(player["number"]))
-        else:
-            raise ValueError("Cannot add player")
+            self.add_player()
+
+    def add_player(self):
+        index = len(self.players)
+        if index >= self.max_players:
+            raise ValueError("Too many players")
+        player = create_player(index)
+        self.players += [player]
+        self.order.items += [player]
+        if player["number"] == 1:
+            p.player = player
+            p.events.post("next_player")
+        p.events.post("add_player", player)
+        p.notify("game", "Add Player {}".format(player["number"]))
+        if not p.data["free_play"]:
+            p.data["credits"] = p.data["credits"] - 1
+            p.data.save()
 
     def next_player(self):
         p.player = self.order.next()

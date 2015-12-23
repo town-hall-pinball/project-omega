@@ -45,6 +45,8 @@ class TestGame(unittest.TestCase):
         p.events.on("next_player", listener_next)
 
         self.game.enable()
+        p.events.post("new_player")
+
         p.events.dispatch()
         self.assertEquals(1, self.game.ball)
         self.assertTrue(self.game.active)
@@ -61,6 +63,7 @@ class TestGame(unittest.TestCase):
         p.events.on("add_player", listener_add)
         self.game.enable()
         self.game.add_player()
+        self.game.add_player()
         p.events.dispatch()
 
         self.assertEquals(2, listener_add.call_count)
@@ -72,6 +75,7 @@ class TestGame(unittest.TestCase):
         self.game.add_player()
         self.game.add_player()
         self.game.add_player()
+        self.game.add_player()
         with self.assertRaises(ValueError):
             self.game.add_player()
 
@@ -79,6 +83,7 @@ class TestGame(unittest.TestCase):
         listener_next = Mock()
         p.events.on("next_player", listener_next)
         self.game.enable()
+        self.game.add_player()
         self.game.next_player()
         p.events.dispatch()
 
@@ -89,6 +94,7 @@ class TestGame(unittest.TestCase):
     def test_next_player_multi(self):
         self.game.enable()
         self.game.add_player()
+        self.game.add_player()
         self.game.next_player()
         p.events.dispatch()
 
@@ -97,6 +103,7 @@ class TestGame(unittest.TestCase):
 
     def test_next_player_max(self):
         self.game.enable()
+        self.game.add_player()
         self.game.add_player()
         self.game.add_player()
         self.game.add_player()
@@ -114,6 +121,7 @@ class TestGame(unittest.TestCase):
         p.events.on("game_over", listener_over)
 
         self.game.enable()
+        self.game.add_player()
         self.game.next_player()
         self.game.next_player()
         self.game.next_player()

@@ -289,6 +289,18 @@ class Switch(Device):
             event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
             p.proc.artificial_events += [{"type": event, "value": self.number}]
 
+    def toggle(self):
+        if not self.active:
+            event = p.proc.SWITCH_OPENED if self.opto else p.proc.SWITCH_CLOSED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+            event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+        else:
+            event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+            event = p.proc.SWITCH_OPENED if self.opto else p.proc.SWITCH_CLOSED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+
     def is_closed(self):
         return self.active if not self.opto else not self.active
 

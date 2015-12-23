@@ -85,6 +85,8 @@ class Text(Component):
 
         if self.style["x_align"] == "center":
             self.offset_x = round((self.width / 2.0) - (text_width / 2.0))
+        if self.style["x_align"] == "right":
+            self.offset_x = self.width - text_width
         if self.style["y_align"] == "top":
             self.offset_y = text_height - self.height
         #print "text", self.style["text"], "base", base_height, "descent", descent, "text_height", text_height, "ascent", ascent, "fluff", fluff, self.style["text"]

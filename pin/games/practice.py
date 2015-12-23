@@ -19,9 +19,9 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p, ui
-from pin.lib.handler import Handler
+from pin.lib.game import Base
 
-class Mode(Handler):
+class Mode(Base):
 
     tilted = False
     expired = False
@@ -35,10 +35,6 @@ class Mode(Handler):
         self.ticker = None
         self.start_time = None
 
-        self.handlers = [
-            p.modes["playfield"],
-            p.modes["plunger"],
-        ]
 
         self.on("live", self.live_ball_check)
         self.on("enter_saucer", self.saucer)

@@ -104,7 +104,7 @@ class TestDisplay(unittest.TestCase):
                 self.display.message.style["text"])
 
     def test_initial(self):
-        self.assertEquals(self.get_text(), ("CREDITS 0.00", "INSERT COINS"))
+        self.assertEquals(self.get_text(), ("CREDITS 0", "INSERT COINS"))
 
     def test_free_play(self):
         p.data["free_play"] = True
@@ -122,7 +122,7 @@ class TestDisplay(unittest.TestCase):
         p.events.post("switch_coin_left")
         p.events.post("switch_coin_left")
         p.events.dispatch()
-        self.assertEquals(self.get_text(), ("CREDITS 1.00", "PRESS START"))
+        self.assertEquals(self.get_text(), ("CREDITS 1", "PRESS START"))
 
 
 class TestAttract(unittest.TestCase):
@@ -179,6 +179,14 @@ class TestLights(unittest.TestCase):
         p.data["credits"] = 2
         p.data["simulator_enabled"] = True
         p.switches["start_button"].activate()
+        fixtures.loop()
+        self.assertEquals("patter", p.lamps["start_button"].state["schedule"])
+
+    def test_game_start(self):
+        p.data["credits"] = 2
+        p.data["simulator_enabled"] = True
+        p.switches["start_button"].toggle()
+        p.switches["start_button"].toggle()
         fixtures.loop()
         self.assertEquals("enable", p.lamps["start_button"].state["schedule"])
 
