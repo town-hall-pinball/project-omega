@@ -137,7 +137,7 @@ class Game(Base):
             p.events.post("next_player")
             self.game_next_player()
 
-    def game_add_player(self):
+    def game_add_player(self, player):
         pass
 
     def next_player(self):
@@ -167,6 +167,9 @@ class Game(Base):
         p.events.trigger("game_over")
         p.notify("game", "Game Over")
         self.game_over()
+
+    def game_over(self):
+        pass
 
     def data(self, name):
         return p.data[self.name + "." + name]
