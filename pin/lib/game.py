@@ -48,6 +48,14 @@ class Base(Handler):
             p.modes["plunger"],
         ]
 
+    def on_enable(self):
+        if p.game:
+            raise ValueError("Game ({}) already running".format(p.game.name))
+        p.game = self
+
+    def on_disable(self):
+        p.game = None
+
 
 class Game(Base):
 
@@ -61,32 +69,15 @@ class Game(Base):
 
     def setup(self):
         super(Game, self).setup()
-        self.on("drain", self.request_dead_ball_check)
         self.on("new_player", self.new_player_check)
 
     def on_enable(self):
-        if p.game:
-            raise ValueError("Game ({}) already running".format(p.game.name))
-        p.game = self
+        super(Game, self).on_enable()
         self.players = []
         self.order = util.Cycle()
         self.active = True
         self.ball = 1
-        #self.add_player()
         p.players = self.players
-        #p.player = self.players[0]
-        #p.events.post("next_player")
-        self.playfield_enable()
-
-    def playfield_enable(self):
-        pass
-
-    def on_disable(self):
-        p.game = None
-        self.playfield_disable()
-
-    def playfield_disable(self):
-        pass
 
     def new_player_check(self):
         if self.ball == 1 and len(self.players) < self.max_players:
@@ -131,23 +122,9 @@ class Game(Base):
         p.events.trigger("game_over")
         p.notify("game", "Game Over")
 
-    def request_dead_ball_check(self):
-        self.wait(0.25, self.dead_ball_check)
-
-    def dead_ball_check(self):
-        ball.status()
-        if ball.dead():
-            self.live = False
-            p.notify("game", "Dead Ball")
-            p.events.trigger("dead_ball")
-
     def data(self, name):
         return p.data[self.name + "." + name]
 
-    def live_ball(self):
-        self.live = True
-        p.notify("game", "Live Ball")
-        p.events.post("live_ball")
 
 
 

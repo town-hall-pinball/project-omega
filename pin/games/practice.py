@@ -35,7 +35,6 @@ class Mode(Base):
         self.ticker = None
         self.start_time = None
 
-
         self.on("live", self.live_ball_check)
         self.on("enter_saucer", self.saucer)
         self.on("entering_popper", self.popper)
