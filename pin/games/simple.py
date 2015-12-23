@@ -30,6 +30,8 @@ class Mode(Game):
         self.display = self.scoreboard.display
         self.on("drain", self.drain)
         self.on("home", self.home)
+        self.on("switch_slingshot_left", self.slingshot)
+        self.on("switch_slingshot_right", self.slingshot)
 
     def game_start(self):
         pass
@@ -61,5 +63,8 @@ class Mode(Game):
     def game_over(self):
         self.disable()
         p.modes["attract"].game_over()
+
+    def slingshot(self):
+        self.score(10)
 
 

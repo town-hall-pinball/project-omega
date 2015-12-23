@@ -49,7 +49,8 @@ def reset():
     p.movies = resources.movies
     p.now = 0
     p.platform = platform
-    p.players = []
+    p.player = {"score": 0, "index": 0}
+    p.players = [{"score": 0, "index": 0}]
     p.proc = proc
     p.proc.api = virtual_proc
     p.sounds = resources.sounds

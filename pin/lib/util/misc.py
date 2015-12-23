@@ -18,10 +18,11 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p
 from copy import deepcopy
+import locale
 import fractions
 
+from pin.lib import p
 
 def to_list(value):
     return value if isinstance(value, list) or isinstance(value, tuple) else [value]

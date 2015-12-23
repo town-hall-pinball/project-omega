@@ -27,7 +27,7 @@ log = logging.getLogger("pin.game")
 class Player(dict):
 
     def __setitem__(self, key, value):
-        super(Data, self).__setitem__(key, value)
+        super(Player, self).__setitem__(key, value)
         p.events.post("player_{}".format(key))
 
 
@@ -173,6 +173,9 @@ class Game(Base):
 
     def data(self, name):
         return p.data[self.name + "." + name]
+
+    def score(self, amount):
+        p.player["score"] += amount
 
 
 

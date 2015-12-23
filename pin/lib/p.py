@@ -97,8 +97,8 @@ Example to see if the ``-q`` or ``--quiet`` option was passed in::
 
 proc = None
 platform = None
-player = None
-players = [{"score": 0}]
+player = {"score": 0, "index": 0}
+players = [{"score": 0, "index": 0}]
 namespace = None
 save = None
 service_menu = None

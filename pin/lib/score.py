@@ -22,6 +22,8 @@ from pin.lib import p, ui, util
 
 class Classic(object):
 
+    initial = True
+
     def __init__(self, handler):
         self.handler = handler
 
@@ -43,7 +45,16 @@ class Classic(object):
 
         self.handler.on("data_credits", self.update)
         self.handler.on("add_player", self.update)
-        self.handler.on("next_player", self.update)
+        self.handler.on("next_player", self.next_player)
+        self.handler.on("player_score", self.score)
+        self.update()
+
+    def next_player(self):
+        self.initial = True
+        self.update()
+
+    def score(self):
+        self.initial = False
         self.update()
 
     def update(self, *args, **kwargs):
@@ -72,6 +83,10 @@ class Classic(object):
             score = p.players[index]["score"]
             self.update_score_size(text, single, index)
             text.show(util.format_score(score))
+            if index == p.player["index"] and self.initial:
+                text.effect("blink", duration=0.15, repeat=True)
+            else:
+                text.effect_cancel()
         else:
             text.hide()
 

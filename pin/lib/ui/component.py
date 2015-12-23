@@ -74,6 +74,11 @@ class Component(object):
         if self.rendering:
             self.active_effect.start()
 
+    def effect_cancel(self):
+        if self.active_effect:
+            self.active_effect.stop()
+        self.active_effect = None
+
     def update(self, **style):
         self.style.update(style)
         if "padding" in style:
