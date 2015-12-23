@@ -23,11 +23,10 @@ from pin.lib.game import Base
 
 class Mode(Base):
 
-    tilted = False
     expired = False
     magnets = True
 
-    def setup(self):
+    def game_setup(self):
         self.max_time = 0
         self.display = ui.Panel()
         self.time = ui.Text("0:00", font="bm10w")
@@ -35,19 +34,15 @@ class Mode(Base):
         self.ticker = None
         self.start_time = None
 
-        self.on("live", self.live_ball_check)
         self.on("enter_saucer", self.saucer)
         self.on("entering_popper", self.popper)
         self.on("drain", self.drain)
-        self.on("tilt", self.tilt)
-        self.on("slam_tilt", self.tilt)
         self.on("home", self.home_check)
         self.on("switch_subway_left", self.subway_left)
         self.on("switch_drop_target", self.drop_target)
 
-    def on_enable(self):
+    def game_start(self):
         self.max_time = p.data["practice_timer"]
-        self.titled = False
         self.expired = False
         self.magnets = True
         self.start_time = None
@@ -57,13 +52,8 @@ class Mode(Base):
         p.modes["drop_target"].down()
         p.mixer.play("credits")
 
-    def on_disable(self):
+    def game_end(self):
         p.timers.cancel(self.ticker)
-
-    def live_ball_check(self):
-        if not self.start_time:
-            self.ticker = p.timers.tick(self.update_time)
-            self.start_time = p.now
 
     def enable_playfield(self):
         p.modes["playfield"].enable(children=True)
@@ -86,9 +76,10 @@ class Mode(Base):
         seconds = int(remaining % 60)
         self.time.show("{}:{:02d}".format(minutes, seconds))
 
-    def live_ball(self):
-        super(Mode, self).live_ball()
-        self.auto_launch = True
+    def game_live_ball(self):
+        if not self.start_time:
+            self.ticker = p.timers.tick(self.update_time)
+            self.start_time = p.now
 
     def saucer(self):
         if self.magnets:
@@ -118,10 +109,7 @@ class Mode(Base):
         if not self.tilted and not self.expired:
             p.modes["trough"].eject()
 
-    def tilt(self):
-        p.modes["playfield"].dead()
-        self.tilted = True
-        p.mixer.stop()
+    def game_tilt(self):
         p.timers.cancel(self.ticker)
 
     def home_check(self):

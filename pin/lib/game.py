@@ -42,19 +42,55 @@ def create_player(index):
 
 class Base(Handler):
 
+    tilted = False
+
     def setup(self):
         self.handlers = [
             p.modes["playfield"],
             p.modes["plunger"],
         ]
+        self.on("live", self.live_ball)
+        self.on("tilt", self.tilt)
+        self.on("slam_tilt", self.tilt)
+        self.game_setup()
+
+    def game_setup(self):
+        pass
 
     def on_enable(self):
         if p.game:
             raise ValueError("Game ({}) already running".format(p.game.name))
         p.game = self
+        self.tilted = False
+        p.events.post("game_start")
+        self.game_start()
+
+    def game_start(self):
+        pass
 
     def on_disable(self):
         p.game = None
+        self.game_end()
+
+    def game_end(self):
+        pass
+
+    def tilt(self):
+        p.modes["playfield"].dead()
+        self.tilted = True
+        p.mixer.stop()
+        self.game_tilt()
+
+    def game_tilt(self):
+        pass
+
+    def live_ball(self):
+        p.modes["plunger"].auto = True
+        self.game_live_ball()
+
+    def game_live_ball(self):
+        pass
+
 
 
 class Game(Base):
@@ -72,12 +108,12 @@ class Game(Base):
         self.on("new_player", self.new_player_check)
 
     def on_enable(self):
-        super(Game, self).on_enable()
         self.players = []
         self.order = util.Cycle()
         self.active = True
         self.ball = 1
         p.players = self.players
+        super(Game, self).on_enable()
 
     def new_player_check(self):
         if self.ball == 1 and len(self.players) < self.max_players:
@@ -90,14 +126,19 @@ class Game(Base):
         player = create_player(index)
         self.players += [player]
         self.order.items += [player]
-        if player["number"] == 1:
-            p.player = player
-            p.events.post("next_player")
         p.events.post("add_player", player)
         p.notify("game", "Add Player {}".format(player["number"]))
         if not p.data["free_play"]:
             p.data["credits"] = p.data["credits"] - 1
             p.data.save()
+        self.game_add_player(player)
+        if player["number"] == 1:
+            p.player = player
+            p.events.post("next_player")
+            self.game_next_player()
+
+    def game_add_player(self):
+        pass
 
     def next_player(self):
         p.player = self.order.next()
@@ -112,6 +153,10 @@ class Game(Base):
                 p.events.post("next_ball")
             p.notify("game", "Ball {}, Player {}".format(
                     self.ball, p.player["number"]))
+            self.game_next_player()
+
+    def game_next_player(self):
+        pass
 
     def end_of_turn(self):
         p.events.post("end_of_turn")
@@ -121,6 +166,7 @@ class Game(Base):
         self.ball = 0
         p.events.trigger("game_over")
         p.notify("game", "Game Over")
+        self.game_over()
 
     def data(self, name):
         return p.data[self.name + "." + name]

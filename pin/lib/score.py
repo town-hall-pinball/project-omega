@@ -40,10 +40,11 @@ class Classic(object):
         self.display.add((self.player, self.players[0], self.players[1],
                 self.players[2], self.players[3], self.ball,
                 self.credits_right, self.credits_center))
-        self.update()
 
         self.handler.on("data_credits", self.update)
         self.handler.on("add_player", self.update)
+        self.handler.on("next_player", self.update)
+        self.update()
 
     def update(self, *args, **kwargs):
         self.update_score(self.player, 0, single=True)
@@ -99,8 +100,4 @@ class Classic(object):
                 text.update(font="bm5")
             else:
                 text.update(font="bm5n")
-
-
-
-
 

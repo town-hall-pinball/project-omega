@@ -23,8 +23,43 @@ from pin.lib.game import Game
 
 class Mode(Game):
 
-    def setup(self):
-        super(Mode, self).setup()
+    draining = False
+
+    def game_setup(self):
         self.scoreboard = score.Classic(self)
         self.display = self.scoreboard.display
+        self.on("drain", self.drain)
+        self.on("home", self.home)
+
+    def game_start(self):
+        pass
+
+    def game_add_player(self, player):
+        player.update({
+            "kickback": True
+        })
+
+    def game_next_player(self):
+        self.draining = False
+        p.modes["playfield"].enable(children=True)
+        if p.player["kickback"]:
+            p.modes["kickback"].enable()
+        p.modes["magnets"].enable()
+        p.modes["trough"].eject()
+        p.modes["drop_target"].down()
+        p.mixer.play("credits")
+
+    def drain(self):
+        self.draining = True
+        p.modes["plunger"].auto = False
+        p.mixer.stop()
+
+    def home(self):
+        if self.draining:
+            self.next_player()
+
+    def game_over(self):
+        self.disable()
+        p.modes["attract"].game_over()
+
 

@@ -63,6 +63,7 @@ class Mode(Handler):
         self.on("data_credits",             self.update_buttons)
         self.on("mode_service",             self.update_service)
         self.on("mode_game_menu_active",    self.update_buttons)
+        self.on("game_start",               self.update_buttons)
 
     def on_enable(self):
         self.update_buttons()
@@ -126,7 +127,7 @@ class Mode(Handler):
         p.data.save()
 
     def update_buttons(self):
-        if p.game or p.modes["game_menu"].enabled:
+        if self.can_start() and p.game:
             p.lamps["start_button"].enable()
         elif self.can_start() and not self.service:
             p.lamps["start_button"].patter(on=127, off=127)
