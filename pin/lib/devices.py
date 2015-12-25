@@ -179,7 +179,7 @@ class Coil(Driver):
         self.type = "coil"
         self.auto = None
 
-    def auto_pulse(self, switch, pulse_length=None):
+    def auto_pulse(self, switch, pulse_length=None, notify=False):
         if self.auto:
             raise ValueError("Coil already in auto mode")
         pulse_length = pulse_length or self.default_pulse_length
@@ -194,7 +194,7 @@ class Coil(Driver):
         ]
         event = "open_debounced" if switch.opto else "closed_debounced"
         p.proc.api.switch_update_rule(switch.number, event, {
-            "notifyHost": False,
+            "notifyHost": notify,
             "reloadActive": False
         }, on_drivers, True)
 

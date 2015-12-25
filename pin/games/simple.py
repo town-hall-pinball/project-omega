@@ -27,7 +27,12 @@ scores = {
     "saucer_little_points":         2500,
     "saucer_big_points":          100000,
     "loop_base":                  200000,
-    "loop_each":                   12500,
+    "loop_each":                   15000,
+    "kickback":                     2725,
+    "outlane":                      1250,
+    "inlane":                       1220,
+    "standup_active":               7500,
+    "standup_inactive":             1100,
 }
 
 class Mode(Game):
@@ -48,6 +53,12 @@ class Mode(Game):
         self.on("drop_target", self.drop_target_hit)
         self.on("loop", self.loop)
         self.on("loop_exit", self.loop_exit)
+        self.on("switch_kickback", self.kickback)
+        self.on("switch_outlane_right", self.outlane)
+        self.on("switch_return_left", self.inlane)
+        self.on("switch_return_right", self.inlane)
+        self.on("switch_standup_target_top", self.standup_top)
+        self.on("switch_standup_target_bottom", self.standup_bottom)
 
     def game_start(self):
         pass
@@ -59,11 +70,15 @@ class Mode(Game):
             "saucer_big_points": False,
             "drop_target_locked": False,
             "loop_enabled": False,
-            "loops": 0,
+            "loops_this_turn": 0,
+            "loops_total": 0,
+            "standup_top": False,
+            "standup_bottom": False,
         })
 
     def game_next_player(self):
         self.draining = False
+
         p.modes["playfield"].enable(children=True)
         p.modes["magnets"].enable()
         p.modes["trough"].eject()
@@ -75,6 +90,7 @@ class Mode(Game):
             p.modes["kickback"].enable()
         if p.player["loop_enabled"]:
             self.enable_loop()
+        p.player["loops_this_turn"] = 0
 
     def slingshot(self):
         self.score(scores["slingshot"])
@@ -132,16 +148,65 @@ class Mode(Game):
 
     def loop(self):
         self.looping = True
-        score = scores["loop_base"] + (scores["loop_each"] * p.player["loops"])
+        score = scores["loop_base"] + (scores["loop_each"] *
+                p.player["loops_this_turn"])
+        self.score(score)
         fscore = util.format_score(score)
         ui.notify(("LOOP", fscore), duration=2.0)
-        p.player["loops"] += 1
+        p.player["loops_this_turn"] += 1
+        p.player["loops_total"] += 1
 
     def loop_exit(self):
         if self.looping:
             self.looping = False
             self.disable_loop()
             self.drop_target_unlock()
+
+    def kickback(self):
+        if p.modes["kickback"].enabled:
+            self.score(scores["kickback"])
+            p.modes["kickback"].disable()
+            p.player["kickback"] = False
+            self.enable_standups()
+        else:
+            self.outlane()
+
+    def enable_standups(self):
+        p.lamps["standup_target_top"].enable()
+        p.lamps["standup_target_bottom"].enable()
+        p.player["standup_top"] = False
+        p.player["standup_bottom"] = False
+
+    def standup_top(self):
+        if not p.player["kickback"] and not p.player["standup_top"]:
+            p.player["standup_top"] = True
+            p.lamps["standup_target_top"].disable()
+            self.check_enable_kickback()
+            self.score(scores["standup_active"])
+        else:
+            self.score(scores["standup_inactive"])
+
+    def standup_bottom(self):
+        if not p.player["kickback"] and not p.player["standup_bottom"]:
+            p.player["standup_bottom"] = True
+            p.lamps["standup_target_bottom"].disable()
+            self.check_enable_kickback()
+            self.score(scores["standup_active"])
+        else:
+            self.score(scores["standup_inactive"])
+
+    def check_enable_kickback(self):
+        if p.player["standup_top"] and p.player["standup_bottom"]:
+            ui.notify(("KICKBACK", "ENABLED"), duration=2.0)
+            p.modes["kickback"].enable()
+            p.player["kickback"] = True
+
+    def outlane(self):
+        self.score(scores["outlane"])
+        p.mixer.stop()
+
+    def inlane(self):
+        self.score(scores["inlane"])
 
     def drain(self):
         self.draining = True

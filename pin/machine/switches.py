@@ -204,7 +204,7 @@ def init():
             "device": "S56",
             "tags": ["live"],
         },
-        "startup_target_top": {
+        "standup_target_top": {
             "label": "Standup Target, Top",
             "device": "S57",
             "tags": ["live"],

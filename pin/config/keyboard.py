@@ -31,6 +31,7 @@ def init():
        "\\":  event("simulator_reset"),
 
         "d": switch("trough_4"),
+        "k": switch("kickback"),
         "l": switch("ball_launch_button"),
         "o":  event("loop"),
        "co":  event("loop_exit"),
@@ -45,8 +46,13 @@ def init():
     "space": switch("start_button"),
         "[": switch("flipper_left"),
         "]": switch("flipper_right"),
-        ",": switch("slingshot_left"),
-        ".": switch("slingshot_right"),
-
+        ",": switch("return_left"),
+        ".": switch("return_right"),
+       "s,": switch("slingshot_left"),
+       "s.": switch("slingshot_right"),
+       "c,": switch("kickback"),
+       "c.": switch("outlane_right"),
+        "-": switch("standup_target_top"),
+        "=": switch("standup_target_bottom"),
     })
 
