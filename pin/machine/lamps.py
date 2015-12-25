@@ -188,7 +188,8 @@ def init():
         },
         "saucer_arrow_1": {
             "label": "Saucer, Arrow 1",
-            "device": "L61"
+            "device": "L61",
+            "notes": "Tube"
         },
         "saucer_arrow_2": {
             "label": "Saucer, Arrow 2",
@@ -196,7 +197,8 @@ def init():
         },
         "scoop_left_arrow_1": {
             "label": "Scoop, Left Arrow 1",
-            "device": "L45"
+            "device": "L45",
+            "notes": "Skydive",
         },
         "scoop_left_arrow_2": {
             "label": "Scoop, Left Arrow 2",

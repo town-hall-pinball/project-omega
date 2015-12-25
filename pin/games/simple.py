@@ -18,12 +18,14 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, score, ui
+from pin.lib import p, score, ui, util
 from pin.lib.game import Game
 
 scores = {
-    "slingshot":            10,
-    "subway_left":        1000,
+    "slingshot":                      10,
+    "subway_left":                  1000,
+    "saucer_little_points":        10000,
+    "saucer_big_points":          100000,
 }
 
 class Mode(Game):
@@ -38,6 +40,9 @@ class Mode(Game):
         self.on("switch_slingshot_left", self.slingshot)
         self.on("switch_slingshot_right", self.slingshot)
         self.on("switch_subway_left", self.subway_left)
+        self.on("enter_saucer", self.saucer)
+        self.on("entering_popper", self.popper)
+        self.on("drop_target", self.drop_target_hit)
 
     def game_start(self):
         pass
@@ -46,6 +51,8 @@ class Mode(Game):
         player.update({
             "kickback": True,
             "saucers": 0,
+            "saucer_big_points": False,
+            "drop_target_locked": False,
         })
 
     def game_next_player(self):
@@ -57,13 +64,50 @@ class Mode(Game):
         p.modes["trough"].eject()
         p.modes["drop_target"].down()
         p.mixer.play("credits")
+        p.lamps["scoop_left_arrow_1"].patter()
 
     def slingshot(self):
         self.score(scores["slingshot"])
 
+    def popper(self):
+        p.modes["playfield"].popper_eject(entering=True)
+
     def subway_left(self):
         self.score(scores["subway_left"])
+        self.drop_target_lock()
+        self.enable_saucer_big_points()
+
+    def drop_target_lock(self):
+        p.player["drop_target_locked"] = True
         p.modes["drop_target"].up()
+        p.lamps["scoop_left_arrow_1"].disable()
+
+    def drop_target_unlock(self):
+        p.player["drop_target_locked"] = False
+        p.lamps["scoop_left_arrow_1"].enable()
+
+    def drop_target_hit(self):
+        if not p.player["drop_target_locked"]:
+            p.modes["drop_target"].down()
+            p.lamps["scoop_left_arrow_1"].patter()
+
+    def enable_saucer_big_points(self):
+        p.player["saucer_big_points"] = True
+        p.lamps["saucer_arrow_1"].patter()
+
+    def disable_saucer_big_points(self):
+        p.player["saucer_big_points"] = False
+        p.lamps["saucer_arrow_1"].disable()
+
+    def saucer(self):
+        if p.player["saucer_big_points"]:
+            score = util.format_score(scores["saucer_big_points"])
+            ui.notify(("SAUCER", score), duration=2.0)
+            self.score(scores["saucer_big_points"])
+            self.disable_saucer_big_points()
+        else:
+            self.score(scores["saucer_little_points"])
+        self.wait(2.0, p.modes["saucer"].eject)
 
     def drain(self):
         self.draining = True

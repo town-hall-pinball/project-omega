@@ -35,7 +35,7 @@ def init():
         "p": switch("drop_target", active_only=True),
         "m": switch("subway_center"),
         "n": switch("subway_left"),
-        "s": switch("saucer"),
+        "s": switch("saucer", active_only=True),
        "cs": switch("buy_extra_ball_button"),
         "x": switch("tilt_slam"),
         "z": switch("tilt"),

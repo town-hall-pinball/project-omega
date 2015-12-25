@@ -65,5 +65,9 @@ def init():
         ],
         "coil:drop_target_up=pulse": [
             { "disable": sw["drop_target"] }
-        ]
+        ],
+        "coil:saucer=pulse": [
+            { "disable": sw["saucer"] }
+        ],
+
     }

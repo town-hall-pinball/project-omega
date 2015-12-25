@@ -54,9 +54,10 @@ class Notice(Panel):
             self.callback()
 
 
-def notify(message, duration=2.0, callback=None):
+def notify(messages, duration=2.0, callback=None):
     panel = Notice(duration=duration, callback=callback)
-    panel.add(Text(message))
+    for message in util.to_list(messages):
+        panel.add(Text(message, font="bm6"))
     p.dmd.enqueue(panel)
 
 def message(message, duration=None, callback=None):
