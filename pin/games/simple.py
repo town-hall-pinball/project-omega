@@ -24,13 +24,16 @@ from pin.lib.game import Game
 scores = {
     "slingshot":                      10,
     "subway_left":                  1000,
-    "saucer_little_points":        10000,
+    "saucer_little_points":         2500,
     "saucer_big_points":          100000,
+    "loop_base":                  200000,
+    "loop_each":                   12500,
 }
 
 class Mode(Game):
 
     draining = False
+    looping = False
 
     def game_setup(self):
         self.scoreboard = score.Classic(self)
@@ -43,6 +46,8 @@ class Mode(Game):
         self.on("enter_saucer", self.saucer)
         self.on("entering_popper", self.popper)
         self.on("drop_target", self.drop_target_hit)
+        self.on("loop", self.loop)
+        self.on("loop_exit", self.loop_exit)
 
     def game_start(self):
         pass
@@ -53,18 +58,23 @@ class Mode(Game):
             "saucers": 0,
             "saucer_big_points": False,
             "drop_target_locked": False,
+            "loop_enabled": False,
+            "loops": 0,
         })
 
     def game_next_player(self):
         self.draining = False
         p.modes["playfield"].enable(children=True)
-        if p.player["kickback"]:
-            p.modes["kickback"].enable()
         p.modes["magnets"].enable()
         p.modes["trough"].eject()
         p.modes["drop_target"].down()
         p.mixer.play("credits")
         p.lamps["scoop_left_arrow_1"].patter()
+
+        if p.player["kickback"]:
+            p.modes["kickback"].enable()
+        if p.player["loop_enabled"]:
+            self.enable_loop()
 
     def slingshot(self):
         self.score(scores["slingshot"])
@@ -76,6 +86,7 @@ class Mode(Game):
         self.score(scores["subway_left"])
         self.drop_target_lock()
         self.enable_saucer_big_points()
+        self.enable_loop()
 
     def drop_target_lock(self):
         p.player["drop_target_locked"] = True
@@ -101,13 +112,36 @@ class Mode(Game):
 
     def saucer(self):
         if p.player["saucer_big_points"]:
-            score = util.format_score(scores["saucer_big_points"])
-            ui.notify(("SAUCER", score), duration=2.0)
-            self.score(scores["saucer_big_points"])
+            score = scores["saucer_big_points"]
+            fscore = util.format_score(score)
+            ui.notify(("SAUCER", fscore), duration=2.0)
+            self.score(score)
+            p.player["saucers"] += 1
             self.disable_saucer_big_points()
         else:
             self.score(scores["saucer_little_points"])
         self.wait(2.0, p.modes["saucer"].eject)
+
+    def enable_loop(self):
+        p.player["loop_enabled"] = True
+        p.modes["flippers"].enable_loop()
+
+    def disable_loop(self):
+        p.player["loop_enabled"] = False
+        p.modes["flippers"].disable_loop()
+
+    def loop(self):
+        self.looping = True
+        score = scores["loop_base"] + (scores["loop_each"] * p.player["loops"])
+        fscore = util.format_score(score)
+        ui.notify(("LOOP", fscore), duration=2.0)
+        p.player["loops"] += 1
+
+    def loop_exit(self):
+        if self.looping:
+            self.looping = False
+            self.disable_loop()
+            self.drop_target_unlock()
 
     def drain(self):
         self.draining = True

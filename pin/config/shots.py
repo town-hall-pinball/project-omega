@@ -43,5 +43,13 @@ def init():
         ],
         "drain": [
             {  "eq": sw["trough_4"] }
+        ],
+        "loop": [
+            {  "eq": sw["ramp_left_middle"] },
+            {  "eq": sw["magnet_left"] },
+        ],
+        "loop_exit": [
+            {  "eq": sw["ramp_left_middle"] },
+            { "neq": sw["magnet_left"]}
         ]
     }

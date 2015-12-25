@@ -58,7 +58,7 @@ def notify(messages, duration=2.0, callback=None):
     panel = Notice(duration=duration, callback=callback)
     for message in util.to_list(messages):
         panel.add(Text(message, font="bm6"))
-    p.dmd.enqueue(panel)
+    p.dmd.interrupt(panel)
 
 def message(message, duration=None, callback=None):
     panel = Notice(duration=duration, callback=callback)

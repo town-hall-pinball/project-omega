@@ -32,6 +32,8 @@ def init():
 
         "d": switch("trough_4"),
         "l": switch("ball_launch_button"),
+        "o":  event("loop"),
+       "co":  event("loop_exit"),
         "p": switch("drop_target", active_only=True),
         "m": switch("subway_center"),
         "n": switch("subway_left"),
