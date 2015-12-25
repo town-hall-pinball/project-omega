@@ -21,6 +21,11 @@
 from pin.lib import p, score, ui
 from pin.lib.game import Game
 
+scores = {
+    "slingshot":            10,
+    "subway_left":        1000,
+}
+
 class Mode(Game):
 
     draining = False
@@ -32,13 +37,15 @@ class Mode(Game):
         self.on("home", self.home)
         self.on("switch_slingshot_left", self.slingshot)
         self.on("switch_slingshot_right", self.slingshot)
+        self.on("switch_subway_left", self.subway_left)
 
     def game_start(self):
         pass
 
     def game_add_player(self, player):
         player.update({
-            "kickback": True
+            "kickback": True,
+            "saucers": 0,
         })
 
     def game_next_player(self):
@@ -50,6 +57,13 @@ class Mode(Game):
         p.modes["trough"].eject()
         p.modes["drop_target"].down()
         p.mixer.play("credits")
+
+    def slingshot(self):
+        self.score(scores["slingshot"])
+
+    def subway_left(self):
+        self.score(scores["subway_left"])
+        p.modes["drop_target"].up()
 
     def drain(self):
         self.draining = True
@@ -64,7 +78,5 @@ class Mode(Game):
         self.disable()
         p.modes["attract"].game_over()
 
-    def slingshot(self):
-        self.score(10)
 
 

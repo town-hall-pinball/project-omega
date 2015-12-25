@@ -83,7 +83,7 @@ class Classic(object):
             score = p.players[index]["score"]
             self.update_score_size(text, single, index)
             text.show(util.format_score(score))
-            if index == p.player["index"] and self.initial:
+            if index == p.player["index"] and self.initial and p.game:
                 text.effect("blink", duration=0.15, repeat=True)
             else:
                 text.effect_cancel()
