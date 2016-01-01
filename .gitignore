@@ -9,3 +9,4 @@ os/ext/dist
 .DS_Store
 pin/debug.py
 resources/extra/*
+Autosave
