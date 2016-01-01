@@ -31,19 +31,18 @@ class TestTrough(unittest.TestCase):
         self.trough = p.modes["trough"]
         self.trough.enable()
 
-    def test_feed(self):
-        live = Mock()
-        p.events.on("live_ball", live)
-        self.trough.feed()
+    def test_eject(self):
+        listener = Mock()
+        p.events.on("trough_ejected", listener)
+        self.trough.eject()
         p.switches["shooter_lane"].activate()
         fixtures.loop()
         p.now = 0.5
         fixtures.loop()
-        self.assertTrue(live.called)
+        self.assertTrue(listener.called)
 
     def test_disable(self):
         # Coverage only test
         self.trough.disable()
-
 
 

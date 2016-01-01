@@ -34,8 +34,9 @@ def play(sound_name, channel="master", duration=0):
         p.notify("music", sound_name)
         music = p.music[sound_name]
         if not p.options["quiet"]:
+            loops = -1 if music.loop else 0
             pygame.mixer.music.load(music.path)
-            pygame.mixer.music.play(0, music.start_time)
+            pygame.mixer.music.play(loops, music.start_time)
     else:
         if channel not in channels:
             log.debug("Creating mixer channel: {}".format(channel))

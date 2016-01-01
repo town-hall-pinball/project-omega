@@ -82,21 +82,26 @@ class Handler(object):
         if ident:
             if ident in self.timers:
                 self.timers.remove(ident)
-            p.timers.clear(ident)
+            p.timers.cancel(ident)
 
 
-    def enable(self, enabled=True, transition=None):
+    def enable(self, enabled=True, transition=None, children=False):
         if not enabled:
             self.disable()
             return
         if self.enabled:
             return
-        log.debug("{} enabled".format(self.name))
+        p.notify("mode", "{} enabled".format(self.name))
         self.enabled = True
         if self.display:
             p.dmd.add(self.display, transition)
         self.register()
         self.on_enable()
+
+        if children:
+            for handler in self.handlers:
+                handler.enable()
+
         p.events.post("mode_{}_enable".format(self.name))
         p.events.post("mode_{}".format(self.name), True)
 
@@ -114,7 +119,7 @@ class Handler(object):
     def disable(self):
         if not self.enabled:
             return
-        log.debug("{} disabled".format(self.name))
+        p.notify("mode-disabled", "{} disabled".format(self.name))
         self.enabled = False
         if self.display:
             p.dmd.remove(self.display)
@@ -177,7 +182,7 @@ class Handler(object):
             for i in infos:
                 p.events.off_switch(event, i["listener"])
         for ident in self.timers:
-            p.timers.clear(ident)
+            p.timers.cancel(ident)
 
 
 

@@ -42,6 +42,11 @@ class Data(dict):
     running
     """
 
+    silent = False
+
+    def __init__(self):
+        super(Data, self).__init__()
+
     def load(self, defaults):
         """
         Loads the dictonary with values stored in ``var/data.json``. Values
@@ -57,7 +62,9 @@ class Data(dict):
             with open(path) as fp:
                 saved = json.load(fp)
                 saved["cleared"] = False
+                self.silent = True
                 util.dict_merge(self, saved)
+                self.silent = False
         except Exception as ie:
             log.error("Unable to load data file: {}".format(ie))
 
@@ -67,20 +74,20 @@ class Data(dict):
         cannot be saved, the dictonary contains a `save_failure` key with
         the value of `True`.
         """
-        if self.read_only:
-            return
-        log.debug("Saving data to {}".format(path))
-        try:
-            with open(path, "w") as fp:
-                json.dump(self, fp)
-                data.pop("save_failure", None)
-        except Exception as ie:
-            log.error("Unable to save data file: {}".format(ie))
-            data["save_failure"] = True
+        if not self.read_only:
+            log.debug("Saving data to {}".format(path))
+            try:
+                with open(path, "w") as fp:
+                    json.dump(self, fp)
+                    data.pop("save_failure", None)
+            except Exception as ie:
+                log.error("Unable to save data file: {}".format(ie))
+                data["save_failure"] = True
 
     def __setitem__(self, key, value):
         super(Data, self).__setitem__(key, value)
-        p.events.post("data_{}".format(key))
+        if not self.silent:
+            p.events.post("data_{}".format(key))
 
     def reset(self, defaults):
         """
@@ -89,8 +96,9 @@ class Data(dict):
         """
         log.debug("Resetting data to defaults")
         self.clear()
+        self.silent = True
         util.dict_merge(self, defaults)
-
+        self.silent = False
 
 data = Data()
 

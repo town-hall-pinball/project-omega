@@ -29,7 +29,7 @@ switch_timings = {}
 queue = []
 log = logging.getLogger("pin.event")
 
-def on(event, listener):
+def on(event, listener, priority=False):
     """
     Register the `listener` function to be called when an `event` is
     posted. Any additional `*args` and `**kwargs` passed when posting
@@ -37,7 +37,10 @@ def on(event, listener):
     """
     if event not in listeners:
         listeners[event] = []
-    listeners[event].append(listener)
+    if not priority:
+        listeners[event].append(listener)
+    else:
+        listeners[event].insert(0, listener)
 
 def off(event, listener):
     """
@@ -100,6 +103,7 @@ def reset():
 def on_switch(name, listener, duration=0, active=True):
     # FIXME: Should duration and active be a part of the hashed name?
     info = switch_timings.get(name, {
+        "name": name,
         "change_to": None,
         "change_time": 0,
         "last_notice": 0,

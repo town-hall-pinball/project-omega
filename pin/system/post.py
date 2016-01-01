@@ -20,6 +20,7 @@
 
 import logging
 
+from pin import machine
 from pin.lib import p, ui
 from pin.lib.ui import effects
 from pin.lib.handler import Handler
@@ -32,6 +33,7 @@ class Mode(Handler):
     def setup(self):
         self.timer = None
         self.panel = None
+        machine.user_bypass(self, self.done)
 
     def on_enable(self):
         if p.data.get("cleared", False):
@@ -56,5 +58,6 @@ class Mode(Handler):
         p.modes["banner"].enable()
 
     def done(self):
+        self.cancel(self.timer)
         self.disable()
 

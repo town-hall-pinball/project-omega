@@ -23,6 +23,7 @@ import logging
 def init():
     loggers = [
         #"pin.coil",
+        #"pin.eject",
         #"pin.gi",
         #"pin.lamp",
         #"pin.switch",

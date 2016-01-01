@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, brand, ui, util
+from pin.lib import p, brand, score, ui, util
 from pin.lib.ui.transitions import SlideIn, SlideOut
 from pin.lib.handler import Handler
 
@@ -114,23 +114,25 @@ class Mode(Handler):
     thp = ui.Image("thp_logo")
     presents = ui.Text("PRESENTS")
     title = ui.Text(brand.name, font="t5exb")
-    game_over = ui.Text("GAME OVER")
+    no_game = ui.Text("GAME OVER")
     anim = ui.Movie("x2")
     proc = ui.Image("p-roc")
+    first = True
 
     def setup(self):
         credits = p.displays["credits"].display
-        #score = p.displays["main_score"].display
+        self.scoreboard = score.Classic(self)
 
         self.show = ui.Slides("attract.show", self, (
             #(score,                 3.0),
-            (self.thp,              3.0),
-            (self.presents,         3.0, SlideIn(direction="left")),
-            (self.title,            3.0),
-            (self.game_over,        6.0),
-            (credits,               3.0),
-            (self.anim,             None),
-            (self.proc,             3.0)),
+            (self.thp,                  3.0),
+            (self.presents,             3.0, SlideIn(direction="left")),
+            (self.title,                3.0),
+            (self.no_game,              6.0),
+            (credits,                   3.0),
+            (self.scoreboard.display,   6.0),
+            (self.anim,                 None),
+            (self.proc,                 3.0)),
             repeat=True)
         self.on("switch_service_enter", self.start_service_mode)
         self.on("switch_flipper_left", self.show.next)
@@ -142,8 +144,10 @@ class Mode(Handler):
         self.light_show = util.LightShow("attract.light", 0.1, lights)
 
     def on_enable(self):
+        if self.first:
+            self.first = False
+            p.mixer.play("introduction")
         self.show.start()
-        p.mixer.play("introduction")
         self.mm3.enable()
         self.light_show.start()
 
@@ -168,6 +172,15 @@ class Mode(Handler):
             self.disable()
             p.modes["mm3"].enable()
 
+    def restart(self):
+        self.show.index = 0
+        self.enable()
+
+    def game_over(self):
+        p.mixer.play("introduction")
+        self.show.index = 3
+        self.enable()
+        self.scoreboard.update()
 
 
 

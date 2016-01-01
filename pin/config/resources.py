@@ -56,6 +56,7 @@ def load():
     )
     resources.load_sounds(
         ("boot",                "sounds/boot.ogg"),
+        ("tilt_warning",        "sounds/tilt_warning.ogg"),
         ("settings_cleared",    "sounds/settings_cleared.ogg"),
         ("service_cancel",      "sounds/service/cancel.ogg"),
         ("service_enter",       "sounds/service/enter.ogg"),
@@ -67,8 +68,9 @@ def load():
         ("warning",             "sounds/warning.ogg")
     )
     resources.register_music(
-        ("credits",         "music/Credits.ogg",       { "start_time": 2.25 }),
+        ("credits",         "music/Credits.ogg",       { "start_time": 2.25, "loop": True}),
         ("introduction",    "music/Introduction.ogg",  { "start_time": 0.50 }),
+        ("game_select",     "music/game_select.ogg",   { "loop": True }),
         ("pinball_wizard",  "music/pinball_wizard.ogg",{ "start_time": 1.00 }),
     )
     resources.load_fonts(
@@ -85,6 +87,22 @@ def load():
         ("a5",      "fonts/pf_arma_five.ttf", 8),
         ("c128",    "fonts/PetMe128.ttf", 8),
         ("c128_16", "fonts/PetMe128.ttf", 16),
+
+        ("bm3",     "fonts/bitmap/bm3.dmd"),
+        ("bm3n",    "fonts/bitmap/bm3n.dmd"),
+        ("bm3w",    "fonts/bitmap/bm3w.dmd"),
+        ("bm5",     "fonts/bitmap/bm5.dmd"),
+        ("bm5n",    "fonts/bitmap/bm5n.dmd"),
+        ("bm5w",    "fonts/bitmap/bm5w.dmd"),
+        ("bm6",     "fonts/bitmap/bm6.dmd"),
+        ("bm8",     "fonts/bitmap/bm8.dmd"),
+        ("bm8n",    "fonts/bitmap/bm8n.dmd"),
+        ("bm8w",    "fonts/bitmap/bm8w.dmd"),
+        ("bm10",    "fonts/bitmap/bm10.dmd"),
+        ("bm10n",   "fonts/bitmap/bm10n.dmd"),
+        ("bm10w",   "fonts/bitmap/bm10w.dmd"),
+        ("bmsf",    "fonts/bitmap/bmsf.dmd"),
+
     )
     resources.alias_fonts(
         ("r7b",     "title")

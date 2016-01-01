@@ -19,32 +19,30 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p
-from pin.lib.eject import Eject
+from pin.lib.util import BallCounter, Eject
 from pin.lib.handler import Handler
 
 class Mode(Handler):
 
-    live = False
-
     def setup(self):
         self.on_switch("shooter_lane", self.shooter_lane, 0.25)
-        self.trough = Eject(self, p.coils["trough"])
+        self.coil = Eject(self, p.coils["trough"])
+        self.counter = BallCounter(self, "trough", [
+            p.switches["trough"],
+            p.switches["trough_2"],
+            p.switches["trough_3"],
+            p.switches["trough_4"]
+        ])
+        self.on("switch_trough_4", self.drain)
 
-    def on_enable(self):
-        p.notify("mode", "Trough enabled")
-        self.live = False
-
-    def on_disable(self):
-        p.notify("mode", "Trough disabled")
-
-    def feed(self):
-        p.notify("mode", "Trough feed")
-        self.trough.eject()
+    def eject(self):
+        self.coil.eject()
 
     def shooter_lane(self):
-        if not self.live:
-            p.notify("mode", "Live ball")
-            p.events.trigger("live_ball")
-        self.live = True
-        self.trough.success()
+        self.coil.success()
+
+    def drain(self):
+        p.notify("game", "Drain")
+        p.events.post("drain")
+
 

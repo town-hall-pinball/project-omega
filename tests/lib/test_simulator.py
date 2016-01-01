@@ -92,6 +92,15 @@ class TestSimulator(unittest.TestCase):
         fixtures.loop()
         self.assertFalse(switch.active)
 
+    def test_enable(self):
+        switch = p.switches["drop_target"]
+        switch.deactivate()
+        fixtures.loop()
+        self.assertFalse(switch.active)
+        p.coils["drop_target_down"].pulse()
+        fixtures.loop()
+        self.assertTrue(switch.active)
+
     def test_no_free_balls(self):
         p.switches["trough_4"].activate()
         fixtures.loop()
@@ -103,16 +112,39 @@ class TestSimulator(unittest.TestCase):
 
     def test_ball_not_at_source(self):
         p.coils["popper"].pulse()
+        p.now = 1
         fixtures.loop()
         self.assertEquals(1, self.sim.free)
+        p.now = 2
+        fixtures.loop()
         p.coils["popper"].pulse()
+        p.now = 3
+        fixtures.loop()
         self.assertEquals(1, self.sim.free)
 
     def test_switch_hit(self):
         listener = Mock()
         p.events.on("switch_slingshot_left", listener)
         p.coils["trough"].pulse()
+        p.now = 1
+        fixtures.loop()
         p.coils["auto_plunger"].pulse()
+        p.now = 2
+        fixtures.loop()
+        p.now = 3
         fixtures.loop()
         self.assertTrue(listener.called)
+
+    def test_reset(self):
+        p.switches["trough_2"].deactivate()
+        p.switches["trough_3"].deactivate()
+        p.switches["popper_2"].activate()
+        fixtures.loop()
+        p.now = 1
+        p.events.post("simulator_reset")
+        fixtures.loop()
+        self.assertTrue(p.switches["trough"].active)
+        self.assertTrue(p.switches["trough_2"].active)
+        self.assertTrue(p.switches["trough_3"].active)
+        self.assertTrue(p.switches["popper"].active)
 

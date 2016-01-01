@@ -58,8 +58,8 @@ class TestTimers(unittest.TestCase):
         callback = Mock()
         ident1 = timers.wait(1.0, callback)
         ident2 = timers.tick(callback)
-        timers.clear(ident1)
-        timers.clear(ident2)
+        timers.cancel(ident1)
+        timers.cancel(ident2)
         p.now = 2.0
         timers.service()
         self.assertFalse(callback.called)

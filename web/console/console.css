@@ -303,6 +303,10 @@ html, body {
     color: #aaf;
 }
 
+.mode-disabled {
+    color: #888;
+}
+
 .left {
     float: left;
 }

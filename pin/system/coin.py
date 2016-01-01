@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p, ball, ui, util
+from pin.lib import p, ui, util
 from pin.lib.handler import Handler
 
 class CreditsDisplay(object):
@@ -34,13 +34,10 @@ class CreditsDisplay(object):
         p.events.on("data_credits", self.update)
 
     def update(self):
+        self.amount.show(util.credits_string())
+
         free_play = p.data["free_play"]
         credits = p.data["credits"]
-
-        if free_play:
-            self.amount.show("FREE PLAY")
-        else:
-            self.amount.show("CREDITS {:0.2f}".format(credits))
 
         if free_play or credits >= 1:
             self.message.show("PRESS START")
@@ -66,6 +63,7 @@ class Mode(Handler):
         self.on("data_credits",             self.update_buttons)
         self.on("mode_service",             self.update_service)
         self.on("mode_game_menu_active",    self.update_buttons)
+        self.on("game_start",               self.update_buttons)
 
     def on_enable(self):
         self.update_buttons()
@@ -74,11 +72,12 @@ class Mode(Handler):
         if self.can_start():
             if p.modes["attract"].enabled:
                 p.modes["attract"].disable()
-                if ball.missing():
+                if not p.modes["playfield"].is_home():
                     p.modes["pinball_missing"].enable()
                 else:
                     p.modes["game_menu"].enable()
-                    p.data["credits"] -= 1
+            else:
+                p.events.post("new_player")
         else:
             if p.modes["attract"].enabled:
                 self.show_credits()
@@ -128,7 +127,7 @@ class Mode(Handler):
         p.data.save()
 
     def update_buttons(self):
-        if p.game or p.modes["game_menu"].enabled:
+        if self.can_start() and p.game:
             p.lamps["start_button"].enable()
         elif self.can_start() and not self.service:
             p.lamps["start_button"].patter(on=127, off=127)

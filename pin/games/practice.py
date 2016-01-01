@@ -19,38 +19,47 @@
 # DEALINGS IN THE SOFTWARE.
 
 from pin.lib import p, ui
-from pin.lib.handler import Handler
-from pin.config.game import Game as BaseGame
+from pin.lib.game import Base
 
-class Mode(BaseGame):
+class Mode(Base):
 
-    def setup(self):
-        super(Mode, self).setup()
-        self.max_players = 1
+    expired = False
+    magnets = True
+
+    def game_setup(self):
         self.max_time = 0
         self.display = ui.Panel()
-        self.time = ui.Text("0:00", font="c128_16")
+        self.time = ui.Text("0:00", font="bm10w")
         self.display.add((self.time,))
         self.ticker = None
         self.start_time = None
 
-        self.on("live_ball", self.live_ball_check)
-        self.on_switch("saucer", self.saucer, 1.0)
+        self.on("enter_saucer", self.saucer)
+        self.on("entering_popper", self.popper)
+        self.on("drain", self.drain)
+        self.on("home", self.home_check)
+        self.on("switch_subway_left", self.subway_left)
+        self.on("switch_drop_target", self.drop_target)
 
-    def on_enable(self):
-        super(Mode, self).on_enable()
-        self.trough.enable()
-        self.trough.feed()
+    def game_start(self):
         self.max_time = p.data["practice_timer"]
+        self.expired = False
+        self.magnets = True
+        self.start_time = None
         self.update_time()
+        self.enable_playfield()
+        p.modes["trough"].eject()
+        p.modes["drop_target"].down()
+        p.mixer.play("credits")
 
-    def on_disable(self):
+    def game_end(self):
         p.timers.cancel(self.ticker)
 
-    def live_ball_check(self):
-        if not self.start_time:
-            self.ticker = p.timers.tick(self.update_time)
-            self.start_time = p.now
+    def enable_playfield(self):
+        p.modes["playfield"].enable(children=True)
+        p.modes["kickback"].enable()
+        p.modes["magnets"].enable()
+        p.modes["flippers"].enable_loop()
 
     def update_time(self):
         elapsed = 0
@@ -59,22 +68,61 @@ class Mode(BaseGame):
         remaining = self.max_time - elapsed
         if remaining < 0:
             remaining = 0
+            p.modes["playfield"].dead()
+            self.expired = True
+            p.timers.cancel(self.ticker)
+            p.mixer.stop()
         minutes = int(remaining / 60)
         seconds = int(remaining % 60)
         self.time.show("{}:{:02d}".format(minutes, seconds))
 
-
-    def live_ball(self):
-        super(Mode, self).live_ball()
-        self.auto_launch = True
-
-        self.flippers.enable()
-        self.kickback.enable()
-        self.magnets.enable()
-        self.plunger.enable()
-        self.slingshots.enable()
+    def game_live_ball(self):
+        if not self.start_time:
+            self.ticker = p.timers.tick(self.update_time)
+            self.start_time = p.now
 
     def saucer(self):
-        p.captures["saucer"].eject()
+        if self.magnets:
+            self.magnets = False
+            ui.notify("MAGNETS DISABLED", duration=2.0)
+            p.modes["magnets"].disable()
+        else:
+            self.magnets = True
+            ui.notify("MAGNETS ENABLED", duration=2.0)
+            p.modes["magnets"].enable()
+        self.wait(2.0, self.eject_saucer)
+
+    def eject_saucer(self):
+        p.modes["saucer"].eject()
+
+    def popper(self):
+        p.modes["playfield"].popper_eject(entering=True)
+
+    def subway_left(self):
+        p.modes["drop_target"].up()
+
+    def drop_target(self):
+        p.modes["drop_target"].down()
+
+    def drain(self):
+        p.modes["playfield"].ball_status()
+        if not self.tilted and not self.expired:
+            p.modes["trough"].eject()
+
+    def game_tilt(self):
+        p.timers.cancel(self.ticker)
+
+    def home_check(self):
+        if self.tilted or self.expired:
+            self.game_over()
+
+    def game_over(self):
+        p.mixer.play("introduction")
+        ui.notify("GAME OVER", duration=5.0, callback=self.done)
+
+    def done(self):
+        self.disable()
+        p.modes["attract"].restart()
+
 
 

@@ -23,20 +23,21 @@
 $(function() {
 
     var famap = {
-        "coil":     "fa-database",
-        "flasher":  "fa-bolt",
-        "gi":       "fa-lightbulb-o",
-        "lamp":     "fa-lightbulb-o",
-        "switch":   "fa-minus-square-o",
-        "flippers": "fa-arrows-h",
-        "mode":     "fa-flag",
+        "coil":         "fa-database",
+        "flasher":      "fa-bolt",
+        "gi":           "fa-lightbulb-o",
+        "lamp":         "fa-lightbulb-o",
+        "switch":       "fa-minus-square-o",
+        "flippers":     "fa-arrows-h",
 
-        "game":     "fa-info-circle",
-        "music":    "fa-music",
-        "sound":    "fa-volume-up",
-        "local":    "fa-info-circle",
-        "error":    "fa-exclamation-triangle",
-        "simulate": "fa-play"
+        "mode":             "fa-flag",
+        "mode-disabled":    "fa-flag",
+        "game":             "fa-info-circle",
+        "music":            "fa-music",
+        "sound":            "fa-volume-up",
+        "local":            "fa-info-circle",
+        "error":            "fa-exclamation-triangle",
+        "simulate":         "fa-play"
     }
 
     var status;

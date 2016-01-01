@@ -74,6 +74,11 @@ class Component(object):
         if self.rendering:
             self.active_effect.start()
 
+    def effect_cancel(self):
+        if self.active_effect:
+            self.active_effect.stop()
+        self.active_effect = None
+
     def update(self, **style):
         self.style.update(style)
         if "padding" in style:
@@ -91,13 +96,13 @@ class Component(object):
         self.enabled = True
         self.invalidate()
         if duration:
-            p.timers.clear(self.show_timer)
+            p.timers.cancel(self.show_timer)
             self.show_timer = p.timers.wait(duration, self.hide)
 
     def hide(self):
         self.enabled = False
         self.invalidate()
-        p.timers.clear(self.show_timer)
+        p.timers.cancel(self.show_timer)
 
     def invalidate(self):
         self.dirty = True

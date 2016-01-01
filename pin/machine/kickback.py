@@ -24,9 +24,9 @@ from pin.lib.handler import Handler
 class Mode(Handler):
 
     def on_enable(self):
-        p.notify("mode", "Kickback enabled")
-        p.coils["kickback"].auto_pulse(p.switches["kickback"])
+        p.coils["kickback"].auto_pulse(p.switches["kickback"], notify=True)
+        p.lamps["kickback"].enable()
 
     def on_disable(self):
-        p.notify("mode", "Kickback disabled")
         p.coils["kickback"].auto_cancel()
+        p.lamps["kickback"].disable()

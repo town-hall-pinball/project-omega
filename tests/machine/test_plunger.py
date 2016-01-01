@@ -56,13 +56,13 @@ class TestPlunger(unittest.TestCase):
             self.assertTrue(launch.called)
 
     def test_manual_launch_not_ready(self):
-        with patch.object(self.mode, "launch") as launch:
+        with patch.object(self.mode, "eject") as launch:
             p.switches["ball_launch_button"].activate()
             fixtures.loop()
             self.assertFalse(launch.called)
 
     def test_auto_launch(self):
-        with patch.object(self.mode, "launch") as launch:
+        with patch.object(self.mode, "eject") as launch:
             self.mode.auto = True
             p.switches["shooter_lane"].activate()
             fixtures.loop()
@@ -71,7 +71,7 @@ class TestPlunger(unittest.TestCase):
             self.assertTrue(launch.called)
 
     def test_no_auto_launch(self):
-        with patch.object(self.mode, "launch") as launch:
+        with patch.object(self.mode, "eject") as launch:
             p.switches["shooter_lane"].activate()
             fixtures.loop()
             p.now = 1

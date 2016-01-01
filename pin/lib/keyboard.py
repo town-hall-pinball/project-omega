@@ -65,12 +65,15 @@ def event(name, *args, **kwargs):
 
 def switch(name, *args, **kwargs):
     switch = p.switches[name]
+    active_only = kwargs.get("active_only", False)
 
     def active():
         event = p.proc.SWITCH_OPENED if switch.opto else p.proc.SWITCH_CLOSED
         p.proc.artificial_events += [{"type": event, "value": switch.number}]
 
     def inactive():
+        if active_only:
+            return
         event = p.proc.SWITCH_CLOSED if switch.opto else p.proc.SWITCH_OPENED
         p.proc.artificial_events += [{"type": event, "value": switch.number}]
 

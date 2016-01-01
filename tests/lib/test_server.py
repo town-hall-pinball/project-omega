@@ -76,7 +76,7 @@ class TestWebSocketHandler(unittest.TestCase):
         fixtures.loop()
         self.assertTrue(listener.called)
 
-    @patch("pin.lib.ball.search")
+    @patch("pin.lib.search.run")
     def test_ball_search(self, mock):
         self.ws.received_message('{ "command": "ball_search" }')
         fixtures.loop()

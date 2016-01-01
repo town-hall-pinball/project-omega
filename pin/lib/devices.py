@@ -179,7 +179,7 @@ class Coil(Driver):
         self.type = "coil"
         self.auto = None
 
-    def auto_pulse(self, switch, pulse_length=None):
+    def auto_pulse(self, switch, pulse_length=None, notify=False):
         if self.auto:
             raise ValueError("Coil already in auto mode")
         pulse_length = pulse_length or self.default_pulse_length
@@ -194,7 +194,7 @@ class Coil(Driver):
         ]
         event = "open_debounced" if switch.opto else "closed_debounced"
         p.proc.api.switch_update_rule(switch.number, event, {
-            "notifyHost": False,
+            "notifyHost": notify,
             "reloadActive": False
         }, on_drivers, True)
 
@@ -260,6 +260,7 @@ class Switch(Device):
         self.debounce = self.number < 192
         self.opto = config.get("opto", False)
         self.active = False
+        self.timestamp = 0
 
     def enable(self, enable=True):
         if self.debounce:
@@ -288,6 +289,18 @@ class Switch(Device):
             event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
             p.proc.artificial_events += [{"type": event, "value": self.number}]
 
+    def toggle(self):
+        if not self.active:
+            event = p.proc.SWITCH_OPENED if self.opto else p.proc.SWITCH_CLOSED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+            event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+        else:
+            event = p.proc.SWITCH_CLOSED if self.opto else p.proc.SWITCH_OPENED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+            event = p.proc.SWITCH_OPENED if self.opto else p.proc.SWITCH_CLOSED
+            p.proc.artificial_events += [{"type": event, "value": self.number}]
+
     def is_closed(self):
         return self.active if not self.opto else not self.active
 
@@ -301,6 +314,10 @@ class Switch(Device):
             self.active = self.opto
         else:
             raise ValueError("Invalid state: {}".format(state))
+
+    def elapsed(self):
+        return p.now - self.timestamp
+
 
 class Flipper(Device):
 

@@ -121,6 +121,18 @@ class TestKeyboard(unittest.TestCase):
 
     @patch("pygame.event.get")
     @patch("pygame.key.name")
+    def test_switch_inactive_active_only(self, name, events):
+        name.return_value = "a"
+        events.return_value = [pygame.event.Event(pygame.locals.KEYUP, {
+            "key": pygame.locals.K_a,
+        })]
+        keyboard.register({"a": keyboard.switch("start_button",
+                active_only=True)})
+        keyboard.process()
+        self.assertEquals(0, len(p.proc.artificial_events))
+
+    @patch("pygame.event.get")
+    @patch("pygame.key.name")
     def test_opto_active(self, name, events):
         name.return_value = "a"
         events.return_value = [pygame.event.Event(pygame.locals.KEYDOWN, {

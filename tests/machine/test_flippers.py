@@ -37,8 +37,35 @@ class TestFlippers(unittest.TestCase):
 
     def test_disable(self):
         self.mode.enable()
-        self.mode.upper.auto_pulse()
+        self.mode.enable_loop()
         self.mode.disable()
         self.assertFalse(self.mode.left.auto)
         self.assertFalse(self.mode.right.auto)
         self.assertFalse(self.mode.upper.auto)
+
+    def test_enable_loop(self):
+        self.mode.enable_loop()
+        self.assertTrue(self.mode.upper.auto)
+        self.assertEquals("patter",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+
+    def test_disable_loop(self):
+        self.mode.enable_loop()
+        self.assertTrue(self.mode.upper.auto)
+        fixtures.loop()
+        self.mode.disable_loop()
+        self.assertFalse(self.mode.upper.auto)
+        self.assertEquals("disable",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+
+    def test_magnets_enable(self):
+        self.mode.enable()
+        self.mode.enable_loop()
+        self.assertTrue(self.mode.upper.auto)
+        self.assertEquals("patter",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+        p.modes["magnets"].enable()
+        fixtures.loop()
+        self.assertEquals("patter",
+                p.lamps["ramp_left_sign_bottom"].state["schedule"])
+

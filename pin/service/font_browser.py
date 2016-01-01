@@ -25,12 +25,13 @@ from ..lib import p, ui, util
 class Mode(Handler):
 
     def setup(self):
-        self.sample = ".,1234567890:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        self.template = ".,1234567890:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        self.sample = ""
         self.fonts = util.Cycle(sorted(p.fonts.keys()))
         self.display = ui.Panel(name="font_viewer")
         self.label = ui.Text(top=0, right=0, font="r7", padding=[1, 1])
         self.text = ui.Text(self.sample)
-        self.display.add([self.label, self.text])
+        self.display.add([self.text, self.label])
 
         self.on("switch_service_enter", self.start)
         self.on("switch_service_up", self.next)
@@ -66,6 +67,13 @@ class Mode(Handler):
     def update(self):
         key = self.fonts.get()
         self.label.show(key)
+        font = p.fonts[key]
+        new_text = []
+        for ch in self.template:
+            if font.metrics(ch)[0][1] != 0:
+                new_text += [ch]
+        self.sample = "".join(new_text)
+        self.text.show(self.sample)
         self.text.update(font=key)
 
     def flipper_left_down(self):
@@ -98,6 +106,7 @@ class Mode(Handler):
     def exit(self):
         self.disable()
 
-    def select(self, font):
-        self.fonts.select(font)
+    def select(self, font_name):
+        self.fonts.select(font_name)
         self.update()
+

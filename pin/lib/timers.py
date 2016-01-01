@@ -53,7 +53,7 @@ def tick(callback):
     tickers[ident] = callback
     return ident
 
-def clear(ident):
+def cancel(ident):
     """
     Unregister a callback that was assigned with the identifier, `ident`
     """

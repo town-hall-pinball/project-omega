@@ -23,17 +23,24 @@ from pin.lib.handler import Handler
 
 class Mode(Handler):
 
+    def setup(self):
+        self.on("loop_flipper_disable", self.adjust_lamp)
+
     def on_enable(self):
-        p.notify("mode", "Magnet assist")
         p.coils["magnet_left"].auto_patter(
                 p.switches["magnet_left"], 1, 1)
         p.coils["magnet_center"].auto_patter(
                 p.switches["magnet_center"], 1, 1)
         p.coils["magnet_right"].auto_patter(
                 p.switches["magnet_right"], 1, 1)
+        p.lamps["ramp_left_sign_bottom"].enable()
 
     def on_disable(self):
-        p.notify("mode", "Magnets disabled")
         p.coils["magnet_left"].auto_cancel()
         p.coils["magnet_center"].auto_cancel()
         p.coils["magnet_right"].auto_cancel()
+        p.lamps["ramp_left_sign_bottom"].disable()
+
+    def adjust_lamp(self):
+        p.lamps["ramp_left_sign_bottom"].enable()
+

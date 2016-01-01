@@ -60,7 +60,6 @@ def init():
         "drop_target": {
             "label": "Drop Target",
             "device": "S51",
-            "tags": ["live"],
         },
         "flipper_left": {
             "label": "Flipper, Left",
@@ -119,7 +118,6 @@ def init():
             "label": "Popper",
             "device": "S41",
             "opto": True,
-            "tags": ["live"],
         },
         "popper_2": {
             "label": "Popper, #2",
@@ -206,7 +204,7 @@ def init():
             "device": "S56",
             "tags": ["live"],
         },
-        "startup_target_top": {
+        "standup_target_top": {
             "label": "Standup Target, Top",
             "device": "S57",
             "tags": ["live"],

@@ -38,7 +38,8 @@ settings = {
     "simulator_enabled": False,
     "tilt_warnings": 2,
 
-    "main.balls": 3
+    "main.balls": 3,
+    "simple.balls": 3
 }
 """
 Dictonary of defaults to be used if the persistant state in ``var/data.json``

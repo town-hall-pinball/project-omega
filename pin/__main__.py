@@ -19,6 +19,7 @@
 # DEALINGS IN THE SOFTWARE.
 
 import argparse
+import locale
 import logging
 import logging.handlers
 import os
@@ -83,6 +84,7 @@ def init_logging():
     return root
 
 def init():
+    locale.setlocale(locale.LC_ALL, '')
     p.data.load(p.defaults)
     p.data.save()
     if p.options["virtual"]:
@@ -95,9 +97,6 @@ def init():
     p.proc.init()
 
 def bind():
-    from pin.lib import ball
-    p.captures = ball.captures
-
     from pin.lib.data import data
     p.data = data
 

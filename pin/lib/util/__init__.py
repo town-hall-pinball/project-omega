@@ -18,7 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+from .ball_counter import *
 from .cycle import *
+from .eject import *
 from .magic import *
 from .misc import *
 from .show import *

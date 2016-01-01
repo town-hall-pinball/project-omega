@@ -32,9 +32,9 @@ def init(load_resources=True):
         extra.load()
 
     p.load_modes((
-        "lib.ball",
         "lib.server",
         "lib.simulator",
+        "lib.tilt",
 
         "system.coin",
         "system.attract",
@@ -44,13 +44,16 @@ def init(load_resources=True):
         "system.pinball_missing",
         "system.post",
 
+        "machine.drop_target",
         "machine.flippers",
         "machine.kickback",
         "machine.magnets",
         "machine.plunger",
+        "machine.popper",
         "machine.saucer",
         "machine.slingshots",
         "machine.trough",
+        "machine.playfield",
 
         "service.coils_test",
         "service.flashers_all_test",
@@ -69,6 +72,8 @@ def init(load_resources=True):
         "service.virtual_palette",
         "service.service",
 
+        "games.level7",
+        "games.simple",
         "games.practice",
     ))
     extra.init()

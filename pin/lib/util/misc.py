@@ -19,8 +19,10 @@
 # DEALINGS IN THE SOFTWARE.
 
 from copy import deepcopy
+import locale
 import fractions
 
+from pin.lib import p
 
 def to_list(value):
     return value if isinstance(value, list) or isinstance(value, tuple) else [value]
@@ -77,4 +79,19 @@ def fraction(value):
     return str(whole) + " " + str(numerator) + "/" + str(fraction.denominator)
 
 
+def format_score(score):
+    if score == 0:
+        return "00"
+    return locale.format("%d", score, True)
+
+
+def credits_string():
+    free_play = p.data["free_play"]
+    credits = p.data["credits"]
+    if free_play:
+        return "FREE PLAY"
+    if abs(credits - int(credits)) < 0.001:
+        return "CREDITS {}".format(int(credits))
+    else:
+        return "CREDITS {:0.2f}".format(credits)
 

@@ -18,16 +18,17 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+from pin import machine
 from pin.lib import p, brand, ui
 from pin.lib.handler import Handler
+
 from . import attract
 
 class Mode(Handler):
 
     def setup(self):
         self.display = ui.Notice(
-            name="banner",
-            callback=self.done
+            name="banner"
         )
         self.title = ui.Text(
             brand.name,
@@ -42,12 +43,7 @@ class Mode(Handler):
             font="t5cpb"
         )
         self.display.add((self.title, self.version, self.release))
-
-        self.on("switch_flipper_left", self.bypass)
-        self.on("switch_flipper_right", self.bypass)
-        self.on("switch_start_button", self.bypass)
-        self.on("switch_service_enter", self.bypass)
-        self.on("switch_service_exit", self.bypass)
+        machine.user_bypass(self, self.bypass)
 
     def on_enable(self):
         p.mixer.play("boot")

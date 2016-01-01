@@ -55,7 +55,7 @@ class Mode(Handler):
                 raise ValueError("Invalid rule in {}: {}".format(shot_name,
                         rule))
         log.debug("+ {}".format(shot_name))
-        p.events.trigger(shot_name)
+        p.events.post(shot_name)
 
     def on_enable(self):
         self.history.clear()

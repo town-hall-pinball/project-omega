@@ -18,61 +18,52 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-from pin.lib import p
-from pin.lib.eject import Eject
-
 import unittest
-from tests import fixtures
-from mock import Mock
 
-class TestEject(unittest.TestCase):
+from pin.lib import p
+from tests import fixtures
+
+import logging
+log = logging.getLogger("pin")
+
+class TestPlayfield(unittest.TestCase):
 
     def setUp(self):
         fixtures.reset()
-        self.saucer = Eject(p.modes["saucer"], p.coils["saucer"])
-        p.modes["saucer"].enable()
+        self.playfield = p.modes["playfield"]
+        self.playfield.enable(children=True)
+        p.modes["simulator"].enable()
 
-    def test_retry(self):
-        success = Mock()
-        retry = Mock()
-        p.events.on("saucer_retry", retry)
-        p.events.on("saucer_ejected", success)
-        self.saucer.eject()
-        p.now = 4
+    def test_live(self):
+        p.modes["trough"].eject()
+        p.now = 1
         fixtures.loop()
-        self.assertFalse(success.called)
-        self.assertTrue(retry.called)
-
-    def test_success(self):
-        success = Mock()
-        retry = Mock()
-        p.events.on("saucer_retry", retry)
-        p.events.on("saucer_ejected", success)
-        self.saucer.eject()
+        p.switches["ball_launch_button"].activate()
+        p.now = 2
         fixtures.loop()
-        self.saucer.success()
-        fixtures.loop()
-        p.now = 4
-        fixtures.loop()
-        self.assertTrue(success.called)
-        self.assertFalse(retry.called)
-
-    def test_failure(self):
-        failed = Mock()
-        p.events.on("saucer_failed", failed)
-        self.saucer.max_attempts = 2
-        self.saucer.eject()
-        fixtures.loop()
-        self.assertEquals(1, self.saucer.attempts)
-        self.assertFalse(failed.called)
         p.now = 3
         fixtures.loop()
-        self.assertEquals(2, self.saucer.attempts)
-        self.assertFalse(failed.called)
-        p.now = 6
+        p.now = 4
         fixtures.loop()
-        self.assertEquals(2, self.saucer.attempts)
-        self.assertTrue(failed.called)
+        self.assertTrue(self.playfield.live)
 
+
+    def test_dead(self):
+        p.modes["trough"].eject()
+        p.now = 1
+        fixtures.loop()
+        p.switches["ball_launch_button"].activate()
+        p.now = 2
+        fixtures.loop()
+        p.now = 3
+        fixtures.loop()
+        p.now = 4
+        fixtures.loop()
+        self.assertTrue(self.playfield.live)
+        p.switches["trough_4"].activate()
+        fixtures.loop()
+        p.now = 5
+        fixtures.loop()
+        self.assertFalse(self.playfield.live)
 
 

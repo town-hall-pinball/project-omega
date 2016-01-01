@@ -25,7 +25,7 @@ from .text import Text
 
 class Notice(Panel):
 
-    def __init__(self, duration=2.0, callback=None,
+    def __init__(self, duration=None, callback=None,
             defaults=None, **style):
         defaults = defaults or {}
         style["duration"] = duration
@@ -40,32 +40,31 @@ class Notice(Panel):
         super(Notice, self).add(components)
         valign(self.children)
 
-    def enqueue(self):
-        p.dmd.enqueue(self.name, self)
+    def on_render_start(self):
+        if self.style["duration"]:
+            self.timer = p.timers.wait(self.style["duration"], self.done)
 
-    def render_started(self):
-        super(Notice, self).render_started()
-        self.timer = p.timers.wait(self.style["duration"], self.done)
-
-    def render_stopped(self):
-        super(Notice, self).render_stopped()
-        p.timers.clear(self.timer)
-
-    def render_restarted(self):
-        super(Notice, self).render_restarted()
-        p.timers.clear(self.timer)
-        self.timer = p.timers.wait(self.style["duration"], self.done)
+    def on_render_stopped(self):
+        p.timers.cancel(self.timer)
 
     def done(self):
-        p.timers.clear(self.timer)
-        p.dmd.remove(self.name)
+        p.timers.cancel(self.timer)
+        p.dmd.remove(self)
         if self.callback:
             self.callback()
 
 
-def notify(message, duration=2.0, callback=None):
+def notify(messages, duration=2.0, callback=None):
+    panel = Notice(duration=duration, callback=callback)
+    for message in util.to_list(messages):
+        panel.add(Text(message, font="bm6"))
+    p.dmd.interrupt(panel)
+
+def message(message, duration=None, callback=None):
     panel = Notice(duration=duration, callback=callback)
     panel.add(Text(message))
-    panel.enqueue()
+    return panel
+
+
 
 

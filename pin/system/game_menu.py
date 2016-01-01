@@ -23,8 +23,10 @@ from pin.lib.ui import effects
 from pin.lib.handler import Handler
 
 game_list = [
+    { "name": "Simple",         "mode": "simple"   },
+    { "name": "Level Seven",    "mode": "level7"   },
     { "name": "Practice",       "mode": "practice" },
-    { "name": "Classic",        "mode": "classic"  },
+    { "name": "Classic",        "mode": "attract"  },
     { "name": brand.name,       "mode": "attract"  },
 ]
 
@@ -49,6 +51,10 @@ class Mode(Handler):
         p.dmd.clear()
         self.selected.index = 0
         self.update()
+        p.mixer.play("game_select")
+
+    def on_disable(self):
+        p.mixer.stop()
 
     def previous(self):
         self.selected.previous()

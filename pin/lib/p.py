@@ -22,8 +22,6 @@ import importlib
 import logging
 import time
 
-captures = None
-
 coils = None
 """
 Dictionary of :py:class:`pin.devices.Coil` objects keyed by identifier.
@@ -99,8 +97,8 @@ Example to see if the ``-q`` or ``--quiet`` option was passed in::
 
 proc = None
 platform = None
-player = None
-players = None
+player = {"score": 0, "index": 0}
+players = [{"score": 0, "index": 0}]
 namespace = None
 save = None
 service_menu = None
@@ -141,4 +139,6 @@ def notify(mtype, message):
     logging.getLogger("pin.notice").debug(message)
     events.post("notice", mtype, message)
 
+def debug(message):
+    logging.getLogger("pin").debug(message)
 

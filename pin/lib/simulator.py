@@ -20,7 +20,7 @@
 
 import logging
 
-from . import p
+from . import p, ui
 from .handler import Handler
 
 log = logging.getLogger("pin.sim")
@@ -37,6 +37,7 @@ class Mode(Handler):
         p.events.on("data_simulator_enabled", self.update)
         self.on("coil", self.handle_device)
         self.on("switch", self.handle_device)
+        self.on("simulator_reset", self.reset_request)
         self.update()
 
     def update(self):
@@ -47,15 +48,26 @@ class Mode(Handler):
 
     def on_enable(self):
         log.info("started")
+        self.reset()
+
+    def clear(self):
+        for switch in set(self.balls):
+            switch.deactivate()
+            self.balls.remove(switch)
+
+    def reset(self):
         for switch in initial:
             switch.activate()
             self.balls.add(switch)
 
+    def reset_request(self):
+        ui.notify("SIM RESET", duration=2.0)
+        self.clear()
+        self.wait(0, self.reset)
+
     def on_disable(self):
         log.info("stop")
-        for switch in set(self.balls):
-            switch.deactivate()
-            self.balls.remove(switch)
+        self.clear()
 
     def handle_device(self, device, state=None):
         condition = "{}:{}={}".format(device.type, device.name,
@@ -69,9 +81,14 @@ class Mode(Handler):
         if "disable" in rule:
             rule["disable"].deactivate()
             return
+        if "enable" in rule:
+            rule["enable"].activate()
+            return
 
         source = rule.get("from")
         target = rule.get("to")
+
+        #log.debug("from {}, to {}, free {}".format(source, target, self.free))
 
         # Is a free ball the source? Is one available?
         if not source and self.free == 0:
@@ -81,12 +98,12 @@ class Mode(Handler):
         # Is the ball actually at the source location?
         if source and source not in self.balls:
             # Free ball on playfield?
-            if self.free > 0:
-                source = None # Grab from playfield
-            else:
-                log.warn("Ball not at {} and no free ball to acquire".format(
-                        source.name))
-                return
+            #if self.free > 0:
+            #    source = None # Grab from playfield
+            #else:
+            #    log.warn("Ball not at {} and no free ball to acquire".format(
+            #            source.name))
+            return
 
         # Is the target location blocked by a ball?
         if target in self.balls:
@@ -115,7 +132,8 @@ class Mode(Handler):
 
         if target:
             self.balls.add(target)
-            target.activate()
+            if not target.active:
+                target.activate()
             p.proc.process()
             p.events.dispatch()
         else:
@@ -123,8 +141,8 @@ class Mode(Handler):
 
         switch_hit = rule.get("hit")
         if switch_hit:
-            switch_hit.activate()
-            switch_hit.deactivate()
+            p.timers.wait(0.05, switch_hit.activate)
+            p.timers.wait(0.10, switch_hit.deactivate)
 
 
 
