@@ -44,9 +44,9 @@ class Mode(Handler):
         p.events.post("sleep")
         p.notify("mode", "Sleep")
         for gi in p.gi.values():
-            # TODO: Some hard-coded value for now, configure brightness level
-            # in service mode.
-            gi.patter(100, 20)
+            # WPC doesn't like patter values for dimming.
+            # http://www.pinballcontrollers.com/forum/index.php?topic=452.0
+            gi.disable()
 
     def wake(self):
         p.events.post("wake")
