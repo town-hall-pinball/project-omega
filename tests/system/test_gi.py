@@ -36,14 +36,14 @@ class TestGI(unittest.TestCase):
         self.assertEquals("enable", p.gi["gi01"].state["schedule"])
         p.now = 10 * 60
         fixtures.loop()
-        self.assertEquals("patter", p.gi["gi01"].state["schedule"])
+        self.assertEquals("disable", p.gi["gi01"].state["schedule"])
 
     def test_wake(self):
         fixtures.loop()
         self.assertEquals("enable", p.gi["gi01"].state["schedule"])
         p.now = 10 * 60
         fixtures.loop()
-        self.assertEquals("patter", p.gi["gi01"].state["schedule"])
+        self.assertEquals("disable", p.gi["gi01"].state["schedule"])
         p.switches["start_button"].activate()
         fixtures.loop()
         self.assertEquals("enable", p.gi["gi01"].state["schedule"])
