@@ -174,6 +174,9 @@ class Component(object):
         for child in self.children:
             child.on_render()
 
+        if self.active_effect:
+            self.active_effect.post_render(target)
+
     def on_render(self):
         pass
 

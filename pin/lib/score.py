@@ -85,6 +85,8 @@ class Classic(object):
             text.show(util.format_score(score))
             if index == p.player["index"] and self.initial and p.game:
                 text.effect("blink", duration=0.15, repeat=True)
+            elif index == p.player["index"] and p.game:
+                text.effect("laser")
             else:
                 text.effect_cancel()
         else:

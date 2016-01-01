@@ -18,24 +18,32 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+from pygame.locals import *
 from ... import p, util
+from .effect import Effect
 
-class Effect(util.Show):
+class Laser(Effect):
 
-    def __init__(self, name, target, timings, repeat=False, once=False):
-        super(Effect, self).__init__(name, timings, repeat)
+    def __init__(self, target, duration=0.1, wait=2.0):
+        durations = [duration] * target.height
+        durations += [wait]
+        super(Laser, self).__init__("laser", target, durations, repeat=True,
+                once=False)
         self.target = target
-        self.once = once
 
-    def on_stop(self):
-        if self.once:
-            self.target.active_effect = None
-        self.on_finish()
+    def action(self, *args, **kwargs):
+        print "hello"
+        self.target.invalidate()
 
-    def on_finish(self):
-        pass
+    def post_render(self, frame):
+        width = frame.get_width()
+        height = frame.get_height()
+        print "lasering", self.index, height, self.target
+        if self.index <= height:
+            if self.index - 1 >= 0:
+                frame.fill(0x8, (0, self.index - 1, width, 1), BLEND_SUB)
+            frame.fill(0x0, (0, self.index, width, 1))
+            if self.index + 1 < height:
+                frame.fill(0x8, (0, self.index + 1, width, 1), BLEND_SUB)
 
-    def post_render(self):
-        pass
-
-
+p.effects["laser"] = Laser
