@@ -28,12 +28,12 @@ name = "Project Omega"
 Offical name of this game.
 """
 
-version = "Alpha 6"
+version = "Alpha 7"
 """
 Version string.
 """
 
-release = "Nov 22 2015"
+release = "Jan 1 2016"
 """
 Release string.
 """
