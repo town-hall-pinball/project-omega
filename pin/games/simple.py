@@ -33,6 +33,7 @@ scores = {
     "inlane":                       1220,
     "standup_active":               7500,
     "standup_inactive":             1100,
+    "spinner":                       100,
 }
 
 class Mode(Game):
@@ -59,6 +60,7 @@ class Mode(Game):
         self.on("switch_return_right", self.inlane)
         self.on("switch_standup_target_top", self.standup_top)
         self.on("switch_standup_target_bottom", self.standup_bottom)
+        self.on("switch_spinner", self.spinner)
 
     def game_start(self):
         pass
@@ -200,6 +202,9 @@ class Mode(Game):
             ui.notify(("KICKBACK", "ENABLED"), duration=2.0)
             p.modes["kickback"].enable()
             p.player["kickback"] = True
+
+    def spinner(self):
+        self.score(scores["spinner"])
 
     def outlane(self):
         self.score(scores["outlane"])

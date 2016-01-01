@@ -28,11 +28,12 @@ class Mode(Handler):
 
     def on_enable(self):
         p.coils["magnet_left"].auto_patter(
-                p.switches["magnet_left"], 1, 1)
+                p.switches["magnet_left"], 1, 1, notify=True)
         p.coils["magnet_center"].auto_patter(
-                p.switches["magnet_center"], 1, 1)
+                p.switches["magnet_center"], 1, 1, notify=True)
         p.coils["magnet_right"].auto_patter(
-                p.switches["magnet_right"], 1, 1)
+                p.switches["magnet_right"], 1, 1, notify=True)
+
         p.lamps["ramp_left_sign_bottom"].enable()
 
     def on_disable(self):

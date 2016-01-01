@@ -198,7 +198,7 @@ class Coil(Driver):
             "reloadActive": False
         }, on_drivers, True)
 
-    def auto_patter(self, switch, on=None, off=None):
+    def auto_patter(self, switch, on=None, off=None, notify=False):
         if self.auto:
             raise ValueError("Coil already in auto mode")
         on = on or self.default_patter_length
@@ -215,9 +215,50 @@ class Coil(Driver):
         ]
         event = "open_debounced" if switch.opto else "closed_debounced"
         p.proc.api.switch_update_rule(switch.number, event, {
-            "notifyHost": False,
+            "notifyHost": notify,
             "reloadActive": False
         }, on_drivers, True)
+
+        off_drivers = [
+            p.proc.api.driver_state_disable(coil_state)
+        ]
+        event = "closed_debounced" if switch.opto else "open_debounced"
+        p.proc.api.switch_update_rule(switch.number, event, {
+            "notifyHost": notify,
+            "reloadActive": False,
+        }, off_drivers, False)
+
+    def auto_pulsed_patter(self, switch, on=None, off=None, notify=False):
+        if self.auto:
+            raise ValueError("Coil already in auto mode")
+        on = on or self.default_patter_length
+        off = off or self.default_patter_length
+        self.auto = {
+            "switch_name": switch.name,
+            "schedule": "pulsed_patter",
+            "patter_on_length": on,
+            "patter_off_length": off
+        }
+        coil_state = p.proc.api.driver_get_state(self.number)
+
+        on_drivers = [
+            p.proc.api.driver_state_pulsed_patter(coil_state, on, off, 0, 0),
+        ]
+        event = "open_debounced" if switch.opto else "closed_debounced"
+        p.proc.api.switch_update_rule(switch.number, event, {
+            "notifyHost": notify,
+            "reloadActive": False
+        }, on_drivers, True)
+
+        off_drivers = [
+            p.proc.api.driver_state_disable(coil_state)
+        ]
+        event = "closed_debounced" if switch.opto else "open_debounced"
+        p.proc.api.switch_update_rule(switch.number, event, {
+            "notifyHost": notify,
+            "reloadActive": False,
+        }, off_drivers, False)
+
 
     def auto_cancel(self):
         if not self.auto:
