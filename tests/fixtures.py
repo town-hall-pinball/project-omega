@@ -30,6 +30,8 @@ from pin.lib.virtual import proc as virtual_proc
 from mock import MagicMock as Mock, patch
 import pygame
 
+load_resources = True
+
 def reset():
     p.defaults = default.settings
 
@@ -74,7 +76,7 @@ def reset():
 
     p.mixer.reset()
     devices.reset()
-    resources.reset()
+    #resources.reset()
     p.proc.reset()
     p.dmd.reset()
 
@@ -102,8 +104,12 @@ def reset():
 
     machine.init()
     config.init()
+
+    global load_resources
     with patch("pin.lib.resources.load_dmd_animation") as load_patch:
-        startup.init()
+        #startup.init()
+        startup.init(load_resources)
+        load_resources = False
 
     p.modes["shots"].enable()
 
