@@ -307,6 +307,14 @@ class Switch(Device):
     def is_opened(self):
         return not self.is_closed()
 
+    def update_state(self, state):
+        if state in (1, 3): # Closed
+            self.active = not self.opto
+        elif state in (2, 4): # Open
+            self.active = self.opto
+        else:
+            raise ValueError("Invalid state: {}".format(state))
+
     def elapsed(self):
         return p.now - self.timestamp
 
@@ -421,4 +429,13 @@ def reset():
     lamps.clear()
     switches.clear()
     switch_numbers.clear()
+
+def update_switch_states():
+    states = p.proc.api.switch_get_states()
+    for i, state in enumerate(states):
+        if i in switch_numbers:
+            switch_numbers[i].update_state(state)
+
+
+
 
