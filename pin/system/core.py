@@ -28,7 +28,8 @@ class Mode(Handler):
     def setup(self):
         self.handlers += [
             p.modes["coin"],
-            p.modes["shots"]
+            p.modes["gi"],
+            p.modes["shots"],
         ]
 
     def on_enable(self):
@@ -39,5 +40,6 @@ class Mode(Handler):
 def init():
     p.load_modes({
         "system.coin",
+        "system.gi",
         "lib.shots",
     })

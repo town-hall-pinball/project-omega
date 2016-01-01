@@ -18,32 +18,32 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-settings = {
-    "cleared": True,
-    "coin_left": 0.25,
-    "coin_center": 0.25,
-    "coin_right": 0.25,
-    "coin_fourth": 1.00,
-    "credits": 0,
-    "earnings": 0,
-    "free_play": False,
-    "max_credits": 99,
-    "paid_credits": 0,
-    "power_save_timer": 60 * 5,
-    "pricing": 0.50,
-    "practice_timer": 180,
-    "server_enabled": False,
-    "server_publish_events": True,
-    "server_remote_control": True,
-    "service_credits": 0,
-    "simulator_enabled": False,
-    "tilt_warnings": 2,
+from pin.lib import p
 
-    "main.balls": 3,
-    "simple.balls": 3
-}
-"""
-Dictonary of defaults to be used if the persistant state in ``var/data.json``
-is not available
-"""
+import unittest
+from tests import fixtures
+from mock import Mock
 
+class TestGI(unittest.TestCase):
+
+    def setUp(self):
+        fixtures.reset()
+        p.modes["gi"].enable()
+        p.gi["gi01"].enable()
+
+    def test_power_save(self):
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+        p.now = 10 * 60
+        fixtures.loop()
+        self.assertEquals("disable", p.gi["gi01"].state["schedule"])
+
+    def test_wake(self):
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+        p.now = 10 * 60
+        fixtures.loop()
+        self.assertEquals("disable", p.gi["gi01"].state["schedule"])
+        p.switches["start_button"].activate()
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
