@@ -64,14 +64,19 @@ class TestPractice(unittest.TestCase):
         self.assertTrue(self.mode.magnets)
 
     def test_time_display(self):
-        p.switches["ball_launch_button"].activate()
-        fixtures.loop()
-        p.now = 2.0
-        fixtures.loop()
+        fixtures.launch()
         self.assertEquals("3:00", self.mode.time.style["text"])
-        p.now = 4.0
+        p.now += 2
         fixtures.loop()
         self.assertEquals("2:58", self.mode.time.style["text"])
 
+    def test_game_end(self):
+        fixtures.launch()
+        self.assertTrue(p.modes["flippers"].enabled)
+        p.now += 3 * 60.0
+        fixtures.loop()
+        self.assertFalse(p.modes["flippers"].enabled)
+        fixtures.drain()
+        self.assertFalse(p.game)
 
 

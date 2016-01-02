@@ -54,6 +54,7 @@ class Mode(Base):
 
     def game_end(self):
         p.timers.cancel(self.ticker)
+        p.modes["attract"].game_over()
 
     def enable_playfield(self):
         p.modes["playfield"].enable(children=True)
@@ -66,7 +67,7 @@ class Mode(Base):
         if self.start_time:
             elapsed = p.now - self.start_time
         remaining = self.max_time - elapsed
-        if remaining < 0:
+        if remaining <= 0:
             remaining = 0
             p.modes["playfield"].dead()
             self.expired = True
@@ -114,15 +115,7 @@ class Mode(Base):
 
     def home_check(self):
         if self.tilted or self.expired:
-            self.game_over()
-
-    def game_over(self):
-        p.mixer.play("introduction")
-        ui.notify("GAME OVER", duration=5.0, callback=self.done)
-
-    def done(self):
-        self.disable()
-        p.modes["attract"].restart()
+            self.disable()
 
 
 

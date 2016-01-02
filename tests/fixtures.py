@@ -18,6 +18,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+import logging
+
 from pin import config, machine
 from pin.lib import (
     p, dmd, devices, events, keyboard, resources, mixer, proc, shots,
@@ -117,7 +119,8 @@ def reset():
 class LoopError(Exception):
     pass
 
-def loop():
+def loop(message=""):
+    p.debug("fixtures.loop({}) begin".format(message))
     with patch("pin.lib.p.proc.api.get_events") as get_events:
         get_events.return_value = []
         done = False
@@ -131,7 +134,25 @@ def loop():
             if len(p.events.queue) == 0:
                 done = True
             loops += 1
+    p.debug("fixtures.loop({}) end".format(message))
 
+
+def launch():
+    p.now = 1.0 # Ball from trough to shooter lane
+    loop()
+    p.switches["ball_launch_button"].activate()
+    p.now = 2.0
+    loop()
+    p.now = 3.0 # Slingshot hit
+    loop()
+    p.now = 4.0 # Live ball
+    loop()
+
+def drain():
+    p.switches["trough_4"].activate()
+    loop()
+    p.now += 1
+    loop()
 
 class NullHandler(Handler):
 
