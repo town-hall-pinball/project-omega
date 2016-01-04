@@ -37,9 +37,9 @@ class TestPractice(unittest.TestCase):
         #p.switches["ball_launch_button"].activate()
         #fixtures.loop()
         p.switches["saucer"].activate()
-        fixtures.loop()
-        p.now = 1.0
-        fixtures.loop()
+        fixtures.loop("saucer")
+        p.now += 1.0
+        fixtures.loop("saucer_eject")
         self.assertFalse(self.mode.magnets)
 
     def test_saucer_reenable_magnets(self):
@@ -48,20 +48,20 @@ class TestPractice(unittest.TestCase):
         fixtures.launch()
         p.switches["saucer"].activate()
         fixtures.loop()
-        p.now = 1.0
+        p.now += 1.0
         fixtures.loop()
         self.assertFalse(self.mode.magnets)
 
-        p.now = 2.0
+        p.now += 1.0
         fixtures.loop()
         p.switches["saucer"].deactivate()
-        p.now = 3.0
+        p.now += 1.0
         fixtures.loop()
 
-        p.now = 4.0
+        p.now += 1.0
         p.switches["saucer"].activate()
         fixtures.loop()
-        p.now = 5.0
+        p.now += 1.0
         fixtures.loop()
         self.assertTrue(self.mode.magnets)
 
