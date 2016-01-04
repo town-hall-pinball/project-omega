@@ -24,6 +24,7 @@ from pin.lib.handler import Handler
 class Mode(Handler):
 
     timer = None
+    sleeping = False
 
     def setup(self):
         self.on("switch", self.switch)
@@ -47,10 +48,13 @@ class Mode(Handler):
             # WPC doesn't like patter values for dimming.
             # http://www.pinballcontrollers.com/forum/index.php?topic=452.0
             gi.disable()
+            self.sleeping = True
 
     def wake(self):
-        p.events.post("wake")
-        p.notify("mode", "Wake")
-        for gi in p.gi.values():
-            gi.enable()
+        if self.sleeping:
+            self.sleeping = False
+            p.events.post("wake")
+            p.notify("mode", "Wake")
+            for gi in p.gi.values():
+                gi.enable()
 

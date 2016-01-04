@@ -139,14 +139,14 @@ def loop(message=""):
 
 def launch():
     p.now = 1.0 # Ball from trough to shooter lane
-    loop()
+    loop("launch:eject_trough")
     p.switches["ball_launch_button"].activate()
     p.now = 2.0
-    loop()
+    loop("launch:eject_plunger")
     p.now = 3.0 # Slingshot hit
-    loop()
+    loop("launch:slingshot")
     p.now = 4.0 # Live ball
-    loop()
+    loop("launch:live")
 
 def drain():
     p.switches["trough_4"].activate()
