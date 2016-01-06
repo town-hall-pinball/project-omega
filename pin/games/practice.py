@@ -112,6 +112,7 @@ class Mode(Base):
 
     def game_tilt(self):
         p.timers.cancel(self.ticker)
+        self.ticker = None
 
     def home_check(self):
         if self.tilted or self.expired:

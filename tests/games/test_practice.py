@@ -22,7 +22,7 @@ from pin.lib import p
 
 import unittest
 from tests import fixtures
-from mock import patch
+from mock import patch, Mock
 
 class TestPractice(unittest.TestCase):
 
@@ -71,6 +71,53 @@ class TestPractice(unittest.TestCase):
         p.now += 2
         fixtures.loop()
         self.assertEquals("2:58", self.mode.time.style["text"])
+
+    def test_popper(self):
+        listener = Mock()
+        p.events.on("coil_popper", listener)
+        fixtures.launch()
+        p.events.post("switch_subway_center")
+        fixtures.loop()
+        p.now += 1
+        fixtures.loop()
+        self.assertTrue(listener.called)
+
+    def test_drop_target_up(self):
+        p.modes["drop_target"].down()
+        fixtures.loop()
+        fixtures.launch()
+        listener = Mock()
+        p.events.on("coil_drop_target_up", listener)
+        p.switches["subway_left"].activate()
+        fixtures.loop()
+        self.assertTrue(listener.called)
+
+    def test_launch_after_drain(self):
+        fixtures.launch()
+        listener = Mock()
+        p.events.on("coil_auto_plunger", listener)
+        p.switches["trough_4"].activate()
+        fixtures.loop()
+        p.now += 1
+        fixtures.loop()
+        self.assertTrue(listener.called)
+
+    def test_no_launch_after_tilted_drain(self):
+        fixtures.launch()
+        listener = Mock()
+        p.events.on("coil_auto_plunger", listener)
+        p.modes["practice"].tilted = True
+        p.switches["trough_4"].activate()
+        fixtures.loop()
+        p.now += 1
+        fixtures.loop()
+        self.assertFalse(listener.called)
+
+    def test_tilt(self):
+        fixtures.launch()
+        self.assertTrue(p.modes["practice"].ticker)
+        p.modes["practice"].tilt()
+        self.assertFalse(p.modes["practice"].ticker)
 
     def test_game_end(self):
         fixtures.launch()
