@@ -73,7 +73,6 @@ def init(load_resources=True):
         "service.service",
 
         "games.level7",
-        "games.simple",
         "games.practice",
     ))
     extra.init()

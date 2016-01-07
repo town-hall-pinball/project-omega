@@ -23,7 +23,6 @@ from pin.lib.ui import effects
 from pin.lib.handler import Handler
 
 game_list = [
-    { "name": "Simple",         "mode": "simple"   },
     { "name": "Level Seven",    "mode": "level7"   },
     { "name": "Practice",       "mode": "practice" },
     { "name": "Classic",        "mode": "attract"  },
