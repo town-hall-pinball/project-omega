@@ -47,3 +47,24 @@ class TestGI(unittest.TestCase):
         p.switches["start_button"].activate()
         fixtures.loop()
         self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+
+    def test_no_power_save_in_game(self):
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+        p.events.post("game_start")
+        p.now = 10 * 60
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+
+    def test_power_save_after_game(self):
+        fixtures.loop()
+        self.assertEquals("enable", p.gi["gi01"].state["schedule"])
+        p.events.post("game_start")
+        p.now = 10 * 60
+        fixtures.loop()
+        p.events.post("game_over")
+        fixtures.loop()
+        p.now += 10 * 60
+        fixtures.loop()
+        self.assertEquals("disable", p.gi["gi01"].state["schedule"])
+

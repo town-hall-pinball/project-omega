@@ -70,6 +70,7 @@ class Base(Handler):
 
     def on_disable(self):
         p.game = None
+        p.events.post("game_over")
         self.game_end()
 
     def game_end(self):
