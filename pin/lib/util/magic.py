@@ -20,13 +20,15 @@
 
 import logging
 from ..handler import Handler
+from .misc import to_list
 
 log = logging.getLogger("pin.magic")
 
 class MagicSequence(Handler):
 
-    def __init__(self, name, switches, callback):
+    def __init__(self, name, switches, callback, ignore=None):
         self.switches = switches
+        self.ignore = to_list(ignore) if ignore else []
         self.callback = callback
         self.index = 0
         super(MagicSequence, self).__init__(name)
@@ -36,6 +38,9 @@ class MagicSequence(Handler):
 
     def check(self, switch, active):
         if not active:
+            return
+        if switch.name in self.ignore:
+            log.debug("ignore")
             return
         if switch.name != self.switches[self.index]:
             if self.index != 0:

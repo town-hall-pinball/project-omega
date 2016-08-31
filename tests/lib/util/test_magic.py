@@ -42,6 +42,15 @@ class TestMagic(unittest.TestCase):
         p.events.dispatch()
         self.assertTrue(self.listener.called)
 
+    def test_trigger_ignore(self):
+        self.magic.ignore = ["flipper_right_up"]
+        p.events.post("switch", p.switches["flipper_left"], True)
+        p.events.post("switch", p.switches["flipper_right"], True)
+        p.events.post("switch", p.switches["flipper_right_up"], True)
+        p.events.post("switch", p.switches["flipper_left"], True)
+        fixtures.loop()
+        self.assertTrue(self.listener.called)
+
     def test_abort(self):
         p.events.post("switch", p.switches["flipper_left"], True)
         p.events.post("switch", p.switches["flipper_right"], True)
