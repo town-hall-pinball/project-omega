@@ -24,12 +24,5 @@ Go forth and explore:
 
 http://project-omega.readthedocs.org/en/latest
 
-Visit our blog for news, updates, and videos:
-
-http://townhallpinball.org
-
-## Contact
-
-We can be reached at `admin@townhallpinball.org`
 
 
