@@ -27,6 +27,8 @@ class Mode(Handler):
     sleeping = False
 
     def setup(self):
+        p.events.on("game_over", self.enable)
+        self.on("game_start", self.disable)
         self.on("switch", self.switch)
         self.on("data_power_save_timer", self.reset_timer)
 
